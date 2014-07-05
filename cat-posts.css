@@ -10,35 +10,35 @@ Version: 4.0
 	font-size: 12px;	
 	line-height: 18px;
 }
-.cat-post-widget p{
+.cat-post-widget p {
 	margin-bottom: 0;
 }
-.cat-post-widget .post-title{
+.cat-post-widget .post-title {
 	font-size: 15px;	
 	font-weight: bold;
 }
-.cat-post-widget .post-date{
+.cat-post-widget .post-date {
 	font-style: italic;
 	margin-bottom: 0;
 }
-.cat-post-widget img{
-	float: left;
+.cat-post-widget img {
+	float: left; 
 	margin: 5px 10px 0 0;
 }
-.cat-post-widget ul li{
+.cat-post-widget ul li {
 	list-style: none;
 	list-style-type: none;
 	margin: 3px 0;
 	padding: 3px 0;
 	border-bottom: 1px solid #ccc;
 }
-.cat-post-widget ul li:last-child{
+.cat-post-widget ul li:last-child {
 	border-bottom: none;
 }
-.cat-post-widget .more-link{
+.cat-post-widget .more-link {
 	display: inline;
 }
-.cat-post-widget .post-entry{ 
+.cat-post-widget .post-entry { 
    padding: 0 0 5px 0;
    overflow: hidden;
 }
