@@ -26,11 +26,11 @@ Version: 4.0
 	margin: 5px 10px 0 0;
 }
 .cat-post-widget ul li {
+	border-bottom: 1px solid #ccc;
 	list-style: none;
 	list-style-type: none;
 	margin: 3px 0;
 	padding: 3px 0;
-	border-bottom: 1px solid #ccc;
 }
 .cat-post-widget ul li:last-child {
 	border-bottom: none;
@@ -39,8 +39,8 @@ Version: 4.0
 	display: inline;
 }
 .cat-post-widget .post-entry { 
-   padding: 0 0 5px 0;
-   overflow: hidden;
+   	overflow: hidden;
+   	padding: 0 0 5px 0;
 }
 .cat-post-widget .comment-num {
 }
