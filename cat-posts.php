@@ -5,7 +5,7 @@ Plugin URI: https://wordpress.org/plugins/category-posts/
 Description: Adds a widget that shows the most recent posts from a single category.
 Author: Mrinal Kanti Roy
 Version: 4.0
-Author URI: http://mkrdip.me
+Author URI: http://profiles.wordpress.org/mkrdip/
 */
 
 // don't call the file directly
