@@ -77,14 +77,23 @@ class CategoryPosts extends WP_Widget {
 		$sort_by = 'date';
 		$sort_order = 'DESC';
 	  }
-		
+
 		// Get array of post info.
-	  $cat_posts = new WP_Query(
-		"showposts=" . $instance["num"] . 
-		"&cat=" . $instance["cat"] .
-		"&orderby=" . $sort_by .
-		"&order=" . $sort_order
-	  );
+	  if ( $instance['except_cat'] ) {
+		  $cat_posts = new WP_Query(
+			"showposts=" . $instance["num"] . 
+			"&cat=" . -$instance["cat"] .
+			"&orderby=" . $sort_by .
+			"&order=" . $sort_order
+		  );
+	   } else {
+		  $cat_posts = new WP_Query(
+			"showposts=" . $instance["num"] . 
+			"&cat=" . $instance["cat"] .
+			"&orderby=" . $sort_by .
+			"&order=" . $sort_order
+		  );
+	   }
 
 		// Excerpt length filter
 		$new_excerpt_length = create_function('$length', "return " . $instance["excerpt_length"] . ";");
@@ -180,6 +189,7 @@ class CategoryPosts extends WP_Widget {
 		$instance = wp_parse_args( ( array ) $instance, array(
 			'title'          => __( '' ),
 			'cat'			 => __( '' ),
+			'except_cat'	 => __( '' ),
 			'num'            => __( '' ),
 			'sort_by'        => __( '' ),
 			'asc_sort_order' => __( '' ),
@@ -195,6 +205,7 @@ class CategoryPosts extends WP_Widget {
 
 		$title          = $instance['title'];
 		$cat 			= $instance['cat'];
+		$except_cat 	= $instance['except_cat'];
 		$num            = $instance['num'];
 		$sort_by        = $instance['sort_by'];
 		$asc_sort_order = $instance['asc_sort_order'];
@@ -221,6 +232,16 @@ class CategoryPosts extends WP_Widget {
 					<?php wp_dropdown_categories( array( 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"] ) ); ?>
 				</label>
 			</p>
+
+			<p>
+				<label for="<?php echo $this->get_field_id("except_cat"); ?>">
+        			<input type="checkbox" class="checkbox" 
+          				id="<?php echo $this->get_field_id("except_cat"); ?>" 
+          				name="<?php echo $this->get_field_name("except_cat"); ?>"
+         				<?php checked( (bool) $instance["except_cat"], true ); ?> />
+						<?php _e( 'Except this category' ); ?>
+				</label>
+    		</p>
 			
 			<p>
 				<label for="<?php echo $this->get_field_id("num"); ?>">
