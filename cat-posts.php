@@ -130,7 +130,10 @@ class CategoryPosts extends WP_Widget {
 				<?php endif; ?>
 							
 				<?php if ( isset( $instance['excerpt'] ) ) : ?>
-				<?php the_excerpt(); ?> 
+				<?php 
+					global $more; 
+					$more = 0;    
+					the_content('read more…'); ?> 
 				<?php endif; ?>
 				
 				<?php if ( isset( $instance['comment_num'] ) ) : ?>
