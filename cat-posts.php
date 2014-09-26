@@ -66,25 +66,25 @@ class CategoryPosts extends WP_Widget {
 		if( !$instance["title"] ) {
 			$category_info = get_category($instance["cat"]);
 			$instance["title"] = $category_info->name;
-	  }
+		}
 
-	  $valid_sort_orders = array('date', 'title', 'comment_count', 'rand');
-	  if ( in_array($instance['sort_by'], $valid_sort_orders) ) {
-		$sort_by = $instance['sort_by'];
-		$sort_order = (bool) isset( $instance['asc_sort_order'] ) ? 'ASC' : 'DESC';
-	  } else {
-		// by default, display latest first
-		$sort_by = 'date';
-		$sort_order = 'DESC';
-	  }
-		
+		$valid_sort_orders = array('date', 'title', 'comment_count', 'rand');
+		if ( in_array($instance['sort_by'], $valid_sort_orders) ) {
+			$sort_by = $instance['sort_by'];
+			$sort_order = (bool) isset( $instance['asc_sort_order'] ) ? 'ASC' : 'DESC';
+		} else {
+			// by default, display latest first
+			$sort_by = 'date';
+			$sort_order = 'DESC';
+		}
+
 		// Get array of post info.
-	  $cat_posts = new WP_Query(
-		"showposts=" . $instance["num"] . 
-		"&cat=" . $instance["cat"] .
-		"&orderby=" . $sort_by .
-		"&order=" . $sort_order
-	  );
+		$cat_posts = new WP_Query(
+			"showposts=" . $instance["num"] . 
+			"&cat=" . $instance["cat"] .
+			"&orderby=" . $sort_by .
+			"&order=" . $sort_order
+		);
 
 		// Excerpt length filter
 		$new_excerpt_length = create_function('$length', "return " . $instance["excerpt_length"] . ";");
@@ -179,11 +179,11 @@ class CategoryPosts extends WP_Widget {
 	function form($instance) {
 		$instance = wp_parse_args( ( array ) $instance, array(
 			'title'          => __( '' ),
-			'cat'			 => __( '' ),
+			'cat'            => __( '' ),
 			'num'            => __( '' ),
 			'sort_by'        => __( '' ),
 			'asc_sort_order' => __( '' ),
-			'title_link'	 => __( '' ),
+			'title_link'     => __( '' ),
 			'excerpt'        => __( '' ),
 			'excerpt_length' => __( '' ),
 			'comment_num'    => __( '' ),
@@ -194,11 +194,11 @@ class CategoryPosts extends WP_Widget {
 		) );
 
 		$title          = $instance['title'];
-		$cat 			= $instance['cat'];
+		$cat            = $instance['cat'];
 		$num            = $instance['num'];
 		$sort_by        = $instance['sort_by'];
 		$asc_sort_order = $instance['asc_sort_order'];
-		$title_link		= $instance['title_link'];		
+		$title_link     = $instance['title_link'];		
 		$excerpt        = $instance['excerpt'];
 		$excerpt_length = $instance['excerpt_length'];
 		$comment_num    = $instance['comment_num'];
@@ -233,10 +233,10 @@ class CategoryPosts extends WP_Widget {
 				<label for="<?php echo $this->get_field_id("sort_by"); ?>">
 					<?php _e('Sort by'); ?>:
 					<select id="<?php echo $this->get_field_id("sort_by"); ?>" name="<?php echo $this->get_field_name("sort_by"); ?>">
-					  <option value="date"<?php selected( $instance["sort_by"], "date" ); ?>>Date</option>
-					  <option value="title"<?php selected( $instance["sort_by"], "title" ); ?>>Title</option>
-					  <option value="comment_count"<?php selected( $instance["sort_by"], "comment_count" ); ?>>Number of comments</option>
-					  <option value="rand"<?php selected( $instance["sort_by"], "rand" ); ?>>Random</option>
+						<option value="date"<?php selected( $instance["sort_by"], "date" ); ?>>Date</option>
+						<option value="title"<?php selected( $instance["sort_by"], "title" ); ?>>Title</option>
+						<option value="comment_count"<?php selected( $instance["sort_by"], "comment_count" ); ?>>Number of comments</option>
+						<option value="rand"<?php selected( $instance["sort_by"], "rand" ); ?>>Random</option>
 					</select>
 				</label>
 			</p>
@@ -244,9 +244,9 @@ class CategoryPosts extends WP_Widget {
 			<p>
 				<label for="<?php echo $this->get_field_id("asc_sort_order"); ?>">
 					<input type="checkbox" class="checkbox" 
-					  id="<?php echo $this->get_field_id("asc_sort_order"); ?>" 
-					  name="<?php echo $this->get_field_name("asc_sort_order"); ?>"
-					  <?php checked( (bool) $instance["asc_sort_order"], true ); ?> />
+						id="<?php echo $this->get_field_id("asc_sort_order"); ?>" 
+						name="<?php echo $this->get_field_name("asc_sort_order"); ?>"
+						<?php checked( (bool) $instance["asc_sort_order"], true ); ?> />
 							<?php _e( 'Reverse sort order (ascending)' ); ?>
 				</label>
 			</p>
