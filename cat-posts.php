@@ -146,7 +146,8 @@ class CategoryPosts extends WP_Widget {
 
 		remove_filter('excerpt_length', $new_excerpt_length);
 		
-		wp_reset_postdata();
+		if (function_exists ('wp_reset_postdata')) //wp_reset_postdata only exists in WordPress >3.0.0
+			wp_reset_postdata();
 	
 	}
 
