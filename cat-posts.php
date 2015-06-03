@@ -57,74 +57,78 @@ class CategoryPosts extends WP_Widget {
 	function widget($args, $instance) {
 		global $post;
 		$post_old = $post; // Save the post object.
-		
-		extract( $args );
-		
-		$sizes = get_option('mkrdip_cat_post_thumb_sizes');
-		
-		// If not title, use the name of the category.
-		if( !$instance["title"] ) {
-			$category_info = get_category($instance["cat"]);
-			$instance["title"] = $category_info->name;
-	  }
 
-	  $valid_sort_orders = array('date', 'title', 'comment_count', 'rand');
-	  if ( in_array($instance['sort_by'], $valid_sort_orders) ) {
-		$sort_by = $instance['sort_by'];
-		$sort_order = (bool) isset( $instance['asc_sort_order'] ) ? 'ASC' : 'DESC';
-	  } else {
-		// by default, display latest first
-		$sort_by = 'date';
-		$sort_order = 'DESC';
-	  }
+		extract( $args );
+
+		$sizes = get_option('mkrdip_cat_post_thumb_sizes');
+
+		$valid_sort_orders = array('date', 'title', 'comment_count', 'rand');
+		if ( in_array($instance['sort_by'], $valid_sort_orders) ) {
+			$sort_by = $instance['sort_by'];
+			$sort_order = (bool) isset( $instance['asc_sort_order'] ) ? 'ASC' : 'DESC';
+		} else {
+			// by default, display latest first
+			$sort_by = 'date';
+			$sort_order = 'DESC';
+		}
 
 		// Get array of post info.
-	  if ( $instance['except_cat'] ) {
-		  $cat_posts = new WP_Query(
+		if ( $instance['except_cat'] ) {
+			$cat_posts = new WP_Query(
 			"showposts=" . $instance["num"] . 
 			"&cat=" . -$instance["cat"] .
 			"&orderby=" . $sort_by .
 			"&order=" . $sort_order
-		  );
-	   } else {
-		  $cat_posts = new WP_Query(
+			);
+		} else {
+			$cat_posts = new WP_Query(
 			"showposts=" . $instance["num"] . 
 			"&cat=" . $instance["cat"] .
 			"&orderby=" . $sort_by .
 			"&order=" . $sort_order
-		  );
-	   }
+			);
+		}
 
 		// Excerpt length filter
 		$new_excerpt_length = create_function('$length', "return " . $instance["excerpt_length"] . ";");
 		if ( $instance["excerpt_length"] > 0 )
 			add_filter('excerpt_length', $new_excerpt_length);
-		
+
 		echo $before_widget;
-		
+
 		// Widget title
-		echo $before_title;
-		if( isset( $instance["title_link"] ) )
-			echo '<a href="' . get_category_link($instance["cat"]) . '">' . $instance["title"] . '</a>';
-		else
-			echo $instance["title"];
-		echo $after_title;
+		if( !$instance['except_cat'] || $instance["title"] ) {
+			// If not title, use the name of the category.
+
+			if( !$instance["title"] ) {
+				$category_info = get_category($instance["cat"]);
+				$instance["title"] = $category_info->name;
+			}
+
+			echo $before_title;
+			if( $instance["title_link"] && !$instance['except_cat'] ) {
+				echo '<a href="' . get_category_link($instance["cat"]) . '">' . $instance["title"] . '</a>';
+			} else {
+				echo $instance["title"];
+			}
+			echo $after_title;
+		}
 
 		// Post list
 		echo "<ul>\n";
-		
+
 		while ( $cat_posts->have_posts() )
 		{
 			$cat_posts->the_post();
 		?>
 			<li class="cat-post-item">
 				<a class="post-title" href="<?php the_permalink(); ?>" rel="bookmark" title="Permanent link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a>
-				
+
 
 				<?php if ( isset( $instance['date'] ) ) : ?>
 				<p class="post-date"><?php the_time("j M Y"); ?></p>
 				<?php endif; ?>
-				
+
 				<?php
 					if (
 						function_exists('the_post_thumbnail') &&
@@ -137,26 +141,26 @@ class CategoryPosts extends WP_Widget {
 					<?php the_post_thumbnail( 'cat_post_thumb_size'.$this->id ); ?>
 					</a>
 				<?php endif; ?>
-							
+
 				<?php if ( isset( $instance['excerpt'] ) ) : ?>
 				<?php the_excerpt(); ?> 
 				<?php endif; ?>
-				
+
 				<?php if ( isset( $instance['comment_num'] ) ) : ?>
 				<p class="comment-num">(<?php comments_number(); ?>)</p>
 				<?php endif; ?>
 			</li>
 			<?php
 		}
-		
+
 		echo "</ul>\n";
-		
+
 		echo $after_widget;
 
 		remove_filter('excerpt_length', $new_excerpt_length);
-		
+
 		wp_reset_postdata();
-	
+
 	}
 
 	/**
@@ -168,14 +172,14 @@ class CategoryPosts extends WP_Widget {
 	 */
 	function update($new_instance, $old_instance) {
 		$sizes = get_option('mkrdip_cat_post_thumb_sizes');
-			
+
 		if ( !$sizes ) {
 			$sizes = array();
 		}
-		
+
 		$sizes[$this->id] = array($new_instance['thumb_w'], $new_instance['thumb_h']);
 		update_option('mkrdip_cat_post_thumb_sizes', $sizes);
-				
+
 		return $new_instance;
 	}
 
@@ -188,12 +192,12 @@ class CategoryPosts extends WP_Widget {
 	function form($instance) {
 		$instance = wp_parse_args( ( array ) $instance, array(
 			'title'          => __( '' ),
-			'cat'			 => __( '' ),
-			'except_cat'	 => __( '' ),
+			'cat'            => __( '' ),
+			'except_cat'     => __( '' ),
 			'num'            => __( '' ),
 			'sort_by'        => __( '' ),
 			'asc_sort_order' => __( '' ),
-			'title_link'	 => __( '' ),
+			'title_link'     => __( '' ),
 			'excerpt'        => __( '' ),
 			'excerpt_length' => __( '' ),
 			'comment_num'    => __( '' ),
@@ -204,12 +208,12 @@ class CategoryPosts extends WP_Widget {
 		) );
 
 		$title          = $instance['title'];
-		$cat 			= $instance['cat'];
-		$except_cat 	= $instance['except_cat'];
+		$cat            = $instance['cat'];
+		$except_cat     = $instance['except_cat'];
 		$num            = $instance['num'];
 		$sort_by        = $instance['sort_by'];
 		$asc_sort_order = $instance['asc_sort_order'];
-		$title_link		= $instance['title_link'];		
+		$title_link     = $instance['title_link'];
 		$excerpt        = $instance['excerpt'];
 		$excerpt_length = $instance['excerpt_length'];
 		$comment_num    = $instance['comment_num'];
@@ -217,7 +221,7 @@ class CategoryPosts extends WP_Widget {
 		$thumb          = $instance['thumb'];
 		$thumb_w        = $instance['thumb_w'];
 		$thumb_h        = $instance['thumb_h'];
-				
+
 			?>
 			<p>
 				<label for="<?php echo $this->get_field_id("title"); ?>">
@@ -225,7 +229,7 @@ class CategoryPosts extends WP_Widget {
 					<input class="widefat" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo esc_attr($instance["title"]); ?>" />
 				</label>
 			</p>
-			
+
 			<p>
 				<label>
 					<?php _e( 'Category' ); ?>:
@@ -235,14 +239,14 @@ class CategoryPosts extends WP_Widget {
 
 			<p>
 				<label for="<?php echo $this->get_field_id("except_cat"); ?>">
-        			<input type="checkbox" class="checkbox" 
-          				id="<?php echo $this->get_field_id("except_cat"); ?>" 
-          				name="<?php echo $this->get_field_name("except_cat"); ?>"
-         				<?php checked( (bool) $instance["except_cat"], true ); ?> />
+					<input type="checkbox" class="checkbox" 
+						id="<?php echo $this->get_field_id("except_cat"); ?>" 
+						name="<?php echo $this->get_field_name("except_cat"); ?>"
+						<?php checked( (bool) $instance["except_cat"], true ); ?> />
 						<?php _e( 'Except this category' ); ?>
 				</label>
-    		</p>
-			
+			</p>
+
 			<p>
 				<label for="<?php echo $this->get_field_id("num"); ?>">
 					<?php _e('Number of posts to show'); ?>:
@@ -254,20 +258,20 @@ class CategoryPosts extends WP_Widget {
 				<label for="<?php echo $this->get_field_id("sort_by"); ?>">
 					<?php _e('Sort by'); ?>:
 					<select id="<?php echo $this->get_field_id("sort_by"); ?>" name="<?php echo $this->get_field_name("sort_by"); ?>">
-					  <option value="date"<?php selected( $instance["sort_by"], "date" ); ?>>Date</option>
-					  <option value="title"<?php selected( $instance["sort_by"], "title" ); ?>>Title</option>
-					  <option value="comment_count"<?php selected( $instance["sort_by"], "comment_count" ); ?>>Number of comments</option>
-					  <option value="rand"<?php selected( $instance["sort_by"], "rand" ); ?>>Random</option>
+						<option value="date"<?php selected( $instance["sort_by"], "date" ); ?>>Date</option>
+						<option value="title"<?php selected( $instance["sort_by"], "title" ); ?>>Title</option>
+						<option value="comment_count"<?php selected( $instance["sort_by"], "comment_count" ); ?>>Number of comments</option>
+						<option value="rand"<?php selected( $instance["sort_by"], "rand" ); ?>>Random</option>
 					</select>
 				</label>
 			</p>
-			
+
 			<p>
 				<label for="<?php echo $this->get_field_id("asc_sort_order"); ?>">
 					<input type="checkbox" class="checkbox" 
-					  id="<?php echo $this->get_field_id("asc_sort_order"); ?>" 
-					  name="<?php echo $this->get_field_name("asc_sort_order"); ?>"
-					  <?php checked( (bool) $instance["asc_sort_order"], true ); ?> />
+						id="<?php echo $this->get_field_id("asc_sort_order"); ?>" 
+						name="<?php echo $this->get_field_name("asc_sort_order"); ?>"
+						<?php checked( (bool) $instance["asc_sort_order"], true ); ?> />
 							<?php _e( 'Reverse sort order (ascending)' ); ?>
 				</label>
 			</p>
@@ -278,14 +282,14 @@ class CategoryPosts extends WP_Widget {
 					<?php _e( 'Make widget title link' ); ?>
 				</label>
 			</p>
-			
+
 			<p>
 				<label for="<?php echo $this->get_field_id("excerpt"); ?>">
 					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt"); ?>" name="<?php echo $this->get_field_name("excerpt"); ?>"<?php checked( (bool) $instance["excerpt"], true ); ?> />
 					<?php _e( 'Show post excerpt' ); ?>
 				</label>
 			</p>
-			
+
 			<p>
 				<label for="<?php echo $this->get_field_id("excerpt_length"); ?>">
 					<?php _e( 'Excerpt length (in words):' ); ?>
@@ -299,14 +303,14 @@ class CategoryPosts extends WP_Widget {
 					<?php _e( 'Show number of comments' ); ?>
 				</label>
 			</p>
-			
+
 			<p>
 				<label for="<?php echo $this->get_field_id("date"); ?>">
 					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("date"); ?>"<?php checked( (bool) $instance["date"], true ); ?> />
 					<?php _e( 'Show post date' ); ?>
 				</label>
 			</p>
-			
+
 			<?php if ( function_exists('the_post_thumbnail') && current_theme_supports("post-thumbnails") ) : ?>
 			<p>
 				<label for="<?php echo $this->get_field_id("thumb"); ?>">
