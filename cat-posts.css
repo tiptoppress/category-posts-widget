@@ -15,7 +15,10 @@ Version: 4.0
 }
 .cat-post-widget .post-title {
 	font-size: 15px;	
+}
+.cat-post-widget .current-post {
 	font-weight: bold;
+	text-transform: uppercase;
 }
 .cat-post-widget .post-date {
 	font-style: italic;
