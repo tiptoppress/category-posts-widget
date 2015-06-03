@@ -122,7 +122,11 @@ class CategoryPosts extends WP_Widget {
 			$cat_posts->the_post();
 		?>
 			<li class="cat-post-item">
-				<a class="post-title" href="<?php the_permalink(); ?>" rel="bookmark" title="Permanent link to <?php the_title_attribute(); ?>"><?php the_title(); ?></a>
+				<?php if ( !is_single( get_the_title() ) ) : ?>
+					<a class="post-title" href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?></a>
+				<?php else : ?>
+					<a class="post-title current-post" href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?></a>
+				<?php endif; ?>
 
 
 				<?php if ( isset( $instance['date'] ) ) : ?>
