@@ -80,6 +80,10 @@ class CategoryPosts extends WP_Widget {
 			"&orderby=" . $sort_by .
 			"&order=" . $sort_order
 			);
+			if ( $instance["cat"] == 0 ) {
+				// show none
+				$cat_posts->init();
+			}			
 		} else {
 			$cat_posts = new WP_Query(
 			"showposts=" . $instance["num"] . 
@@ -97,9 +101,13 @@ class CategoryPosts extends WP_Widget {
 		echo $before_widget;
 
 		// Widget title
-		if( !$instance['except_cat'] || $instance["title"] ) {
+		if( $instance["cat"] == 0 && !$instance["title"] ) {
+		
+		// For 'all categories' the title must be present
+		
+		} elseif( !$instance['except_cat'] || $instance["title"] ) {
+			
 			// If not title, use the name of the category.
-
 			if( !$instance["title"] ) {
 				$category_info = get_category($instance["cat"]);
 				$instance["title"] = $category_info->name;
@@ -237,7 +245,7 @@ class CategoryPosts extends WP_Widget {
 			<p>
 				<label>
 					<?php _e( 'Category' ); ?>:
-					<?php wp_dropdown_categories( array( 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"] ) ); ?>
+					<?php wp_dropdown_categories( array( 'show_option_all' => 'all categories', 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"] ) ); ?>
 				</label>
 			</p>
 
