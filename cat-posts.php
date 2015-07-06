@@ -140,6 +140,9 @@ class CategoryPosts extends WP_Widget {
 				<?php if ( isset( $instance['comment_num'] ) ) : ?>
 				<p class="comment-num">(<?php comments_number(); ?>)</p>
 				<?php endif; ?>
+				<?php if( isset( $instance["readmore"] ) ):?>
+				<a class="readmore" href="<?php the_permalink(); ?>" rel="bookmark" title="readmore <?php the_title_attribute(); ?>">Readmore</a>
+				<?php endif;?>
 			</li>
 			<?php
 		}
@@ -206,6 +209,7 @@ class CategoryPosts extends WP_Widget {
 		$title_link     = $instance['title_link'];
 		$excerpt        = $instance['excerpt'];
 		$excerpt_length = $instance['excerpt_length'];
+		$readmore       = $instance['readmore'];
 		$comment_num    = $instance['comment_num'];
 		$date           = $instance['date'];
 		$thumb          = $instance['thumb'];
@@ -269,6 +273,13 @@ class CategoryPosts extends WP_Widget {
 				</label>
 				<input style="text-align: center;" type="text" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" size="3" />
 			</p>
+			<p>
+				<label for="<?php echo $this->get_field_id("readmore"); ?>">
+					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("readmore"); ?>" name="<?php echo $this->get_field_name("readmore"); ?>"<?php checked( (bool) $instance["readmore"], true ); ?> />
+					<?php _e( 'Show readmore' ); ?>
+				</label>
+			</p>
+			
 			<p>
 				<label for="<?php echo $this->get_field_id("comment_num"); ?>">
 					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("comment_num"); ?>" name="<?php echo $this->get_field_name("comment_num"); ?>"<?php checked( (bool) $instance["comment_num"], true ); ?> />
