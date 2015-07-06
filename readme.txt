@@ -1,9 +1,9 @@
 === Category Posts Widget ===
 Contributors: mkrdip
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=mkrdip%40yahoo%2ecom&lc=US&item_name=Category%20Posts%20Widget&item_number=02&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
+Donate link: http://mkrdip.me/donate
 Tags: category, posts, widget, single category widget, posts widget, category recent posts
 Requires at least: 2.8
-Tested up to: 3.9.1
+Tested up to: 4.2.2
 Stable tag: 4.0
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
