@@ -61,6 +61,11 @@ class CategoryPosts extends WP_Widget {
 		extract( $args );
 
 		$sizes = get_option('mkrdip_cat_post_thumb_sizes');
+		
+		// If not title, use the name of the category.
+		if( !$instance["title"] ) {
+			$category_info = get_category($instance["cat"]);
+			$instance["title"] = $category_info->name;		
 
 		$valid_sort_orders = array('date', 'title', 'comment_count', 'rand');
 		if ( in_array($instance['sort_by'], $valid_sort_orders) ) {
@@ -73,25 +78,12 @@ class CategoryPosts extends WP_Widget {
 		}
 
 		// Get array of post info.
-		if ( $instance['except_cat'] ) {
-			$cat_posts = new WP_Query(
-			"showposts=" . $instance["num"] . 
-			"&cat=" . -$instance["cat"] .
-			"&orderby=" . $sort_by .
-			"&order=" . $sort_order
-			);
-			if ( $instance["cat"] == 0 ) {
-				// show none
-				$cat_posts->init();
-			}			
-		} else {
-			$cat_posts = new WP_Query(
+		$cat_posts = new WP_Query(
 			"showposts=" . $instance["num"] . 
 			"&cat=" . $instance["cat"] .
 			"&orderby=" . $sort_by .
 			"&order=" . $sort_order
-			);
-		}
+		);
 
 		// Excerpt length filter
 		$new_excerpt_length = create_function('$length', "return " . $instance["excerpt_length"] . ";");
@@ -101,26 +93,13 @@ class CategoryPosts extends WP_Widget {
 		echo $before_widget;
 
 		// Widget title
-		if( $instance["cat"] == 0 && !$instance["title"] ) {
-		
-		// For 'all categories' the title must be present
-		
-		} elseif( !$instance['except_cat'] || $instance["title"] ) {
-			
-			// If not title, use the name of the category.
-			if( !$instance["title"] ) {
-				$category_info = get_category($instance["cat"]);
-				$instance["title"] = $category_info->name;
-			}
-
-			echo $before_title;
-			if( $instance["title_link"] && !$instance['except_cat'] ) {
-				echo '<a href="' . get_category_link($instance["cat"]) . '">' . $instance["title"] . '</a>';
-			} else {
-				echo $instance["title"];
-			}
-			echo $after_title;
+		echo $before_title;
+		if( $instance["title_link"] ) {
+			echo '<a href="' . get_category_link($instance["cat"]) . '">' . $instance["title"] . '</a>';
+		} else {
+			echo $instance["title"];
 		}
+		echo $after_title;
 
 		// Post list
 		echo "<ul>\n";
@@ -205,7 +184,6 @@ class CategoryPosts extends WP_Widget {
 		$instance = wp_parse_args( ( array ) $instance, array(
 			'title'          => __( '' ),
 			'cat'            => __( '' ),
-			'except_cat'     => __( '' ),
 			'num'            => __( '' ),
 			'sort_by'        => __( '' ),
 			'asc_sort_order' => __( '' ),
@@ -221,7 +199,6 @@ class CategoryPosts extends WP_Widget {
 
 		$title          = $instance['title'];
 		$cat            = $instance['cat'];
-		$except_cat     = $instance['except_cat'];
 		$num            = $instance['num'];
 		$sort_by        = $instance['sort_by'];
 		$asc_sort_order = $instance['asc_sort_order'];
@@ -241,31 +218,18 @@ class CategoryPosts extends WP_Widget {
 					<input class="widefat" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo esc_attr($instance["title"]); ?>" />
 				</label>
 			</p>
-
 			<p>
 				<label>
 					<?php _e( 'Category' ); ?>:
-					<?php wp_dropdown_categories( array( 'show_option_all' => 'all categories', 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"] ) ); ?>
+					<?php wp_dropdown_categories( array( 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"] ) ); ?>
 				</label>
 			</p>
-
-			<p>
-				<label for="<?php echo $this->get_field_id("except_cat"); ?>">
-					<input type="checkbox" class="checkbox" 
-						id="<?php echo $this->get_field_id("except_cat"); ?>" 
-						name="<?php echo $this->get_field_name("except_cat"); ?>"
-						<?php checked( (bool) $instance["except_cat"], true ); ?> />
-						<?php _e( 'Except this category' ); ?>
-				</label>
-			</p>
-
 			<p>
 				<label for="<?php echo $this->get_field_id("num"); ?>">
 					<?php _e('Number of posts to show'); ?>:
 					<input style="text-align: center;" id="<?php echo $this->get_field_id("num"); ?>" name="<?php echo $this->get_field_name("num"); ?>" type="text" value="<?php echo absint($instance["num"]); ?>" size='3' />
 				</label>
 			</p>
-
 			<p>
 				<label for="<?php echo $this->get_field_id("sort_by"); ?>">
 					<?php _e('Sort by'); ?>:
@@ -277,7 +241,6 @@ class CategoryPosts extends WP_Widget {
 					</select>
 				</label>
 			</p>
-
 			<p>
 				<label for="<?php echo $this->get_field_id("asc_sort_order"); ?>">
 					<input type="checkbox" class="checkbox" 
@@ -287,42 +250,36 @@ class CategoryPosts extends WP_Widget {
 							<?php _e( 'Reverse sort order (ascending)' ); ?>
 				</label>
 			</p>
-
 			<p>
 				<label for="<?php echo $this->get_field_id("title_link"); ?>">
 					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("title_link"); ?>" name="<?php echo $this->get_field_name("title_link"); ?>"<?php checked( (bool) $instance["title_link"], true ); ?> />
 					<?php _e( 'Make widget title link' ); ?>
 				</label>
 			</p>
-
 			<p>
 				<label for="<?php echo $this->get_field_id("excerpt"); ?>">
 					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt"); ?>" name="<?php echo $this->get_field_name("excerpt"); ?>"<?php checked( (bool) $instance["excerpt"], true ); ?> />
 					<?php _e( 'Show post excerpt' ); ?>
 				</label>
 			</p>
-
 			<p>
 				<label for="<?php echo $this->get_field_id("excerpt_length"); ?>">
 					<?php _e( 'Excerpt length (in words):' ); ?>
 				</label>
 				<input style="text-align: center;" type="text" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" size="3" />
 			</p>
-			
 			<p>
 				<label for="<?php echo $this->get_field_id("comment_num"); ?>">
 					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("comment_num"); ?>" name="<?php echo $this->get_field_name("comment_num"); ?>"<?php checked( (bool) $instance["comment_num"], true ); ?> />
 					<?php _e( 'Show number of comments' ); ?>
 				</label>
 			</p>
-
 			<p>
 				<label for="<?php echo $this->get_field_id("date"); ?>">
 					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("date"); ?>"<?php checked( (bool) $instance["date"], true ); ?> />
 					<?php _e( 'Show post date' ); ?>
 				</label>
 			</p>
-
 			<?php if ( function_exists('the_post_thumbnail') && current_theme_supports("post-thumbnails") ) : ?>
 			<p>
 				<label for="<?php echo $this->get_field_id("thumb"); ?>">
