@@ -48,9 +48,9 @@ add_action( 'init', 'category_posts_add_image_size' );
  */
 class CategoryPosts extends WP_Widget {
 
-	function CategoryPosts() {
+	function __construct() {
 		$widget_ops = array('classname' => 'cat-post-widget', 'description' => __('List single category posts'));
-		$this->WP_Widget('category-posts', __('Category Posts'), $widget_ops);
+		parent::__construct('category-posts', __('Category Posts'), $widget_ops);
 	}
 
 	// Displays category posts widget on blog.
