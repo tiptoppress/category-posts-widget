@@ -65,7 +65,8 @@ class CategoryPosts extends WP_Widget {
 		// If not title, use the name of the category.
 		if( !$instance["title"] ) {
 			$category_info = get_category($instance["cat"]);
-			$instance["title"] = $category_info->name;		
+			$instance["title"] = $category_info->name;
+		}
 
 		$valid_sort_orders = array('date', 'title', 'comment_count', 'rand');
 		if ( in_array($instance['sort_by'], $valid_sort_orders) ) {
@@ -108,16 +109,17 @@ class CategoryPosts extends WP_Widget {
 		{
 			$cat_posts->the_post();
 		?>
-			<li class="cat-post-item">
-				<?php if ( !is_single( get_the_title() ) ) : ?>
-					<a class="post-title" href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?></a>
-				<?php else : ?>
-					<a class="post-title current-post" href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?></a>
-				<?php endif; ?>
-
+			<li class="<?php if( !$instance['disable_css'] ) {
+				echo "cat-post-item";
+				if ( is_single(get_the_title()) ) { echo " cat-post-current"; }
+			} ?>">
+				<a class="post-title <?php if( !$instance['disable_css'] ) { echo " cat-post-title"; } ?>" 
+					href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?></a>
 
 				<?php if ( isset( $instance['date'] ) ) : ?>
-				<p class="post-date"><?php the_time("j M Y"); ?></p>
+					<p class="post-date <?php if( !$instance['disable_css'] ) { echo " cat-post-date"; } ?>">
+					<?php the_time("j M Y"); ?>
+					</p>
 				<?php endif; ?>
 
 				<?php
@@ -128,7 +130,8 @@ class CategoryPosts extends WP_Widget {
 						has_post_thumbnail()
 					) :
 				?>
-					<a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
+					<a <?php if( !$instance['disable_css'] ) { echo "class=\"cat-post-thumbnail\""; } ?>
+						href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
 					<?php the_post_thumbnail( 'cat_post_thumb_size'.$this->id ); ?>
 					</a>
 				<?php endif; ?>
@@ -138,7 +141,9 @@ class CategoryPosts extends WP_Widget {
 				<?php endif; ?>
 
 				<?php if ( isset( $instance['comment_num'] ) ) : ?>
-				<p class="comment-num">(<?php comments_number(); ?>)</p>
+				<p class="comment-num <?php if( !$instance['disable_css'] ) { echo "cat-post-comment-num"; } ?>">
+				(<?php comments_number(); ?>)
+				</p>
 				<?php endif; ?>
 			</li>
 			<?php
@@ -195,7 +200,8 @@ class CategoryPosts extends WP_Widget {
 			'date'           => __( '' ),
 			'thumb'          => __( '' ),
 			'thumb_w'        => __( '' ),
-			'thumb_h'        => __( '' )
+			'thumb_h'        => __( '' ),
+			'disable_css'    => __( '' )
 		) );
 
 		$title          = $instance['title'];
@@ -211,6 +217,7 @@ class CategoryPosts extends WP_Widget {
 		$thumb          = $instance['thumb'];
 		$thumb_w        = $instance['thumb_w'];
 		$thumb_h        = $instance['thumb_h'];
+		$disable_css    = $instance['disable_css'];
 
 			?>
 			<p>
@@ -282,26 +289,31 @@ class CategoryPosts extends WP_Widget {
 				</label>
 			</p>
 			<?php if ( function_exists('the_post_thumbnail') && current_theme_supports("post-thumbnails") ) : ?>
-			<p>
-				<label for="<?php echo $this->get_field_id("thumb"); ?>">
-					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumb"); ?>" name="<?php echo $this->get_field_name("thumb"); ?>"<?php checked( (bool) $instance["thumb"], true ); ?> />
-					<?php _e( 'Show post thumbnail' ); ?>
-				</label>
-			</p>
-			<p>
-				<label>
-					<?php _e('Thumbnail dimensions (in pixels)'); ?>:<br />
-					<label for="<?php echo $this->get_field_id("thumb_w"); ?>">
-						Width: <input class="widefat" style="width:30%;" type="text" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo $instance["thumb_w"]; ?>" />
+				<p>
+					<label for="<?php echo $this->get_field_id("thumb"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumb"); ?>" name="<?php echo $this->get_field_name("thumb"); ?>"<?php checked( (bool) $instance["thumb"], true ); ?> />
+						<?php _e( 'Show post thumbnail' ); ?>
 					</label>
-					
-					<label for="<?php echo $this->get_field_id("thumb_h"); ?>">
-						Height: <input class="widefat" style="width:30%;" type="text" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo $instance["thumb_h"]; ?>" />
+				</p>
+				<p>
+					<label>
+						<?php _e('Thumbnail dimensions (in pixels)'); ?>:<br />
+						<label for="<?php echo $this->get_field_id("thumb_w"); ?>">
+							Width: <input class="widefat" style="width:30%;" type="text" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo $instance["thumb_w"]; ?>" />
+						</label>
+						
+						<label for="<?php echo $this->get_field_id("thumb_h"); ?>">
+							Height: <input class="widefat" style="width:30%;" type="text" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo $instance["thumb_h"]; ?>" />
+						</label>
 					</label>
-				</label>
-			</p>
+				</p>
 			<?php endif; ?>
-
+			<p>
+				<label for="<?php echo $this->get_field_id("disable_css"); ?>">
+					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_css"); ?>" name="<?php echo $this->get_field_name("disable_css"); ?>"<?php checked( (bool) $instance["disable_css"], true ); ?> />
+					<?php _e( 'Disable widget CSS' ); ?>
+				</label>
+			</p>
 			<?php
 
 		}
