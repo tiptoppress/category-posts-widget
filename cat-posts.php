@@ -109,15 +109,15 @@ class CategoryPosts extends WP_Widget {
 		{
 			$cat_posts->the_post();
 		?>
-			<li class="<?php if( !$instance['disable_css'] ) {
+			<li class="<?php if( !isset( $instance['disable_css'] ) ) {
 				echo "cat-post-item";
-				if ( is_single(get_the_title()) ) { echo " cat-post-current"; }
+				if ( is_single(get_the_title() ) ) { echo " cat-post-current"; }
 			} ?>">
-				<a class="post-title <?php if( !$instance['disable_css'] ) { echo " cat-post-title"; } ?>" 
+				<a class="post-title <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-title"; } ?>" 
 					href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?></a>
 
 				<?php if ( isset( $instance['date'] ) ) : ?>
-					<p class="post-date <?php if( !$instance['disable_css'] ) { echo " cat-post-date"; } ?>">
+					<p class="post-date <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-date"; } ?>">
 					<?php the_time("j M Y"); ?>
 					</p>
 				<?php endif; ?>
@@ -130,7 +130,7 @@ class CategoryPosts extends WP_Widget {
 						has_post_thumbnail()
 					) :
 				?>
-					<a <?php if( isset ( $instance['disable_css'] ) ) { echo "class=\"cat-post-thumbnail\""; } ?>
+					<a <?php if( isset( $instance['disable_css'] ) ) { echo "class=\"cat-post-thumbnail\""; } ?>
 						href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
 					<?php the_post_thumbnail( 'cat_post_thumb_size'.$this->id ); ?>
 					</a>
@@ -141,7 +141,7 @@ class CategoryPosts extends WP_Widget {
 				<?php endif; ?>
 
 				<?php if ( isset( $instance['comment_num'] ) ) : ?>
-				<p class="comment-num <?php if( !$instance['disable_css'] ) { echo "cat-post-comment-num"; } ?>">
+				<p class="comment-num <?php if( !isset( $instance['disable_css'] ) ) { echo "cat-post-comment-num"; } ?>">
 				(<?php comments_number(); ?>)
 				</p>
 				<?php endif; ?>
