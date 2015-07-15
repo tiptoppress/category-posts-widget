@@ -109,10 +109,11 @@ class CategoryPosts extends WP_Widget {
 		{
 			$cat_posts->the_post();
 		?>
-			<li class="<?php if( !isset( $instance['disable_css'] ) ) {
-				echo "cat-post-item";
+			<li <?php if( !isset( $instance['disable_css'] ) ) {
+				echo "class=\"cat-post-item";
 				if ( is_single(get_the_title() ) ) { echo " cat-post-current"; }
-			} ?>">
+				echo "\"";
+			} ?> >
 				<a class="post-title <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-title"; } ?>" 
 					href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?></a>
 
