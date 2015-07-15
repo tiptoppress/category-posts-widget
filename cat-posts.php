@@ -95,7 +95,7 @@ class CategoryPosts extends WP_Widget {
 
 		// Widget title
 		echo $before_title;
-		if( $instance["title_link"] ) {
+		if( isset ( $instance["title_link"] ) ) {
 			echo '<a href="' . get_category_link($instance["cat"]) . '">' . $instance["title"] . '</a>';
 		} else {
 			echo $instance["title"];
@@ -130,7 +130,7 @@ class CategoryPosts extends WP_Widget {
 						has_post_thumbnail()
 					) :
 				?>
-					<a <?php if( !$instance['disable_css'] ) { echo "class=\"cat-post-thumbnail\""; } ?>
+					<a <?php if( isset ( $instance['disable_css'] ) ) { echo "class=\"cat-post-thumbnail\""; } ?>
 						href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
 					<?php the_post_thumbnail( 'cat_post_thumb_size'.$this->id ); ?>
 					</a>
