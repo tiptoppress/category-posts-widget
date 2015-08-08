@@ -56,6 +56,13 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 ## Changelog ##
 
+4.1.0
+
+* Added PHP5 Constructor 
+* Added Option to allow/disallow widget CSS
+* Now, compatible with WordPress 4.3
+* Meet new plugin author [kometschuh](https://profiles.wordpress.org/kometschuh)
+
 4.0 
 
 * Added CSS file for post styling 
