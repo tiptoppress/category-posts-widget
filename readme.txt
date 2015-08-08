@@ -1,5 +1,5 @@
 === Category Posts Widget ===
-Contributors: mkrdip
+Contributors: mkrdip, Kometschuh
 Donate link: http://mkrdip.me/donate
 Tags: category, posts, widget, single category widget, posts widget, category recent posts
 Requires at least: 2.8
@@ -62,6 +62,12 @@ Automatic installation is the easiest option as WordPress handles the file trans
 2. Front end of the widget using a default WordPress Theme.
 
 == Changelog ==
+
+4.1.0
+
+* Added PHP5 Construtor 
+* Added Option to allow/disallow widget CSS
+* Now, compaitble with WordPress 4.3
 
 4.0 
 
