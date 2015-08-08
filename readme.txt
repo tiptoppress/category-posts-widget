@@ -1,5 +1,5 @@
 === Category Posts Widget ===
-Contributors: mkrdip, Kometschuh
+Contributors: mkrdip, kometschuh
 Donate link: http://mkrdip.me/donate
 Tags: category, posts, widget, single category widget, posts widget, category recent posts
 Requires at least: 2.8
