@@ -9,7 +9,8 @@ Version: 4.1.0
 	line-height: 18px;
 }
 .cat-post-title {
-	font-size: 15px;	
+	font-size: 14px;
+    font-weight: bold;	
 }
 .cat-post-current a {
 	font-weight: bold;
@@ -21,7 +22,13 @@ Version: 4.1.0
 }
 .cat-post-thumbnail img {
 	float: left; 
-	margin: 5px 10px 0 0;
+	margin: 5px 10px 5px 3px;
+}
+.cat-post-widget img {
+	float: left;
+}
+.cat-post-widget .post-thumbail{
+    overflow: auto;
 }
 .cat-post-item {
 	border-bottom: 1px solid #ccc;

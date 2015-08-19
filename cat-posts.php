@@ -122,7 +122,8 @@ class CategoryPosts extends WP_Widget {
 					<?php the_time("j M Y"); ?>
 					</p>
 				<?php endif; ?>
-
+                
+				<div class="post-thumbail">
 				<?php
 					if (
 						function_exists('the_post_thumbnail') &&
@@ -138,9 +139,10 @@ class CategoryPosts extends WP_Widget {
 				<?php endif; ?>
 
 				<?php if ( isset( $instance['excerpt'] ) ) : ?>
-				<?php the_excerpt(); ?> 
+				<p class="entry-summary"><?php the_excerpt(); ?></p> 
 				<?php endif; ?>
-
+				</div>
+                
 				<?php if ( isset( $instance['comment_num'] ) ) : ?>
 				<p class="comment-num <?php if( !isset( $instance['disable_css'] ) ) { echo "cat-post-comment-num"; } ?>">
 				(<?php comments_number(); ?>)
