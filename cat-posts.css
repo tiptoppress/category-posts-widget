@@ -21,7 +21,7 @@ Version: 4.1.0
 }
 .cat-post-thumbnail img {
 	float: left; 
-	margin: 5px 10px 0 0;
+	margin: 5px 10px 5px 0;
 }
 .cat-post-item {
 	border-bottom: 1px solid #ccc;
@@ -29,6 +29,11 @@ Version: 4.1.0
 	list-style-type: none;
 	margin: 3px 0;
 	padding: 3px 0;
+}
+.cat-post-item:before, 
+.cat-post-item:after {
+	content: "";
+	display: table;
 }
 .cat-post-item:last-child {
 	border-bottom: none;
