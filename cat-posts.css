@@ -34,6 +34,7 @@ Version: 4.1.0
 .cat-post-item:after {
 	content: "";
 	display: table;
+	clear: both;
 }
 .cat-post-item:last-child {
 	border-bottom: none;
