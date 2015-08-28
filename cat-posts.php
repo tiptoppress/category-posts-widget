@@ -107,44 +107,42 @@ class CategoryPosts extends WP_Widget {
 
 		while ( $cat_posts->have_posts() )
 		{
-			$cat_posts->the_post();
-		?>
+			$cat_posts->the_post(); ?>
+			
 			<li <?php if( !isset( $instance['disable_css'] ) ) {
-				echo "class=\"cat-post-item";
-				if ( is_single(get_the_title() ) ) { echo " cat-post-current"; }
-				echo "\"";
-			} ?> >
+					echo "class=\"cat-post-item";
+						if ( is_single(get_the_title() ) ) { echo " cat-post-current"; }
+					echo "\"";
+				} ?> >
+				
 				<a class="post-title <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-title"; } ?>" 
-					href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?></a>
+					href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?>
+				</a>
 
 				<?php if ( isset( $instance['date'] ) ) : ?>
 					<p class="post-date <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-date"; } ?>">
-					<?php the_time("j M Y"); ?>
+						<?php the_time("j M Y"); ?>
 					</p>
-				<?php endif; ?>
+				<?php endif;
 
-				<?php
-					if (
-						function_exists('the_post_thumbnail') &&
+				if ( function_exists('the_post_thumbnail') &&
 						current_theme_supports("post-thumbnails") &&
 						isset( $instance["thumb"] ) &&
-						has_post_thumbnail()
-					) :
-				?>
+						has_post_thumbnail() ) : ?>
 					<a <?php if( !isset( $instance['disable_css'] ) ) { echo "class=\"cat-post-thumbnail\""; } ?>
 						href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
-					<?php the_post_thumbnail( 'cat_post_thumb_size'.$this->id ); ?>
+						<?php the_post_thumbnail( 'cat_post_thumb_size'.$this->id ); ?>
 					</a>
-				<?php endif; ?>
+				<?php endif;
+					
+				if ( isset( $instance['excerpt'] ) ) : 
+					the_excerpt();
+				endif;
 
-				<?php if ( isset( $instance['excerpt'] ) ) : ?>
-				<?php the_excerpt(); ?> 
-				<?php endif; ?>
-
-				<?php if ( isset( $instance['comment_num'] ) ) : ?>
-				<p class="comment-num <?php if( !isset( $instance['disable_css'] ) ) { echo "cat-post-comment-num"; } ?>">
-				(<?php comments_number(); ?>)
-				</p>
+				if ( isset( $instance['comment_num'] ) ) : ?>
+					<p class="comment-num <?php if( !isset( $instance['disable_css'] ) ) { echo "cat-post-comment-num"; } ?>">
+						(<?php comments_number(); ?>)
+					</p>
 				<?php endif; ?>
 			</li>
 			<?php
@@ -158,7 +156,6 @@ class CategoryPosts extends WP_Widget {
 
 		if (function_exists ('wp_reset_postdata')) //wp_reset_postdata only exists in WordPress >3.0.0
 			wp_reset_postdata();
-
 	}
 
 	/**
@@ -220,105 +217,103 @@ class CategoryPosts extends WP_Widget {
 		$thumb_h        = $instance['thumb_h'];
 		$disable_css    = $instance['disable_css'];
 
-			?>
+		?>
+		<p>
+			<label for="<?php echo $this->get_field_id("title"); ?>">
+				<?php _e( 'Title' ); ?>:
+				<input class="widefat" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo esc_attr($instance["title"]); ?>" />
+			</label>
+		</p>
+		<p>
+			<label>
+				<?php _e( 'Category' ); ?>:
+				<?php wp_dropdown_categories( array( 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"] ) ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("num"); ?>">
+				<?php _e('Number of posts to show'); ?>:
+				<input style="text-align: center;" id="<?php echo $this->get_field_id("num"); ?>" name="<?php echo $this->get_field_name("num"); ?>" type="text" value="<?php echo absint($instance["num"]); ?>" size='3' />
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("sort_by"); ?>">
+				<?php _e('Sort by'); ?>:
+				<select id="<?php echo $this->get_field_id("sort_by"); ?>" name="<?php echo $this->get_field_name("sort_by"); ?>">
+					<option value="date"<?php selected( $instance["sort_by"], "date" ); ?>>Date</option>
+					<option value="title"<?php selected( $instance["sort_by"], "title" ); ?>>Title</option>
+					<option value="comment_count"<?php selected( $instance["sort_by"], "comment_count" ); ?>>Number of comments</option>
+					<option value="rand"<?php selected( $instance["sort_by"], "rand" ); ?>>Random</option>
+				</select>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("asc_sort_order"); ?>">
+				<input type="checkbox" class="checkbox" 
+					id="<?php echo $this->get_field_id("asc_sort_order"); ?>" 
+					name="<?php echo $this->get_field_name("asc_sort_order"); ?>"
+					<?php checked( (bool) $instance["asc_sort_order"], true ); ?> />
+						<?php _e( 'Reverse sort order (ascending)' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("title_link"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("title_link"); ?>" name="<?php echo $this->get_field_name("title_link"); ?>"<?php checked( (bool) $instance["title_link"], true ); ?> />
+				<?php _e( 'Make widget title link' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("excerpt"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt"); ?>" name="<?php echo $this->get_field_name("excerpt"); ?>"<?php checked( (bool) $instance["excerpt"], true ); ?> />
+				<?php _e( 'Show post excerpt' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("excerpt_length"); ?>">
+				<?php _e( 'Excerpt length (in words):' ); ?>
+			</label>
+			<input style="text-align: center;" type="text" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" size="3" />
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("comment_num"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("comment_num"); ?>" name="<?php echo $this->get_field_name("comment_num"); ?>"<?php checked( (bool) $instance["comment_num"], true ); ?> />
+				<?php _e( 'Show number of comments' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("date"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("date"); ?>"<?php checked( (bool) $instance["date"], true ); ?> />
+				<?php _e( 'Show post date' ); ?>
+			</label>
+		</p>
+		<?php if ( function_exists('the_post_thumbnail') && current_theme_supports("post-thumbnails") ) : ?>
 			<p>
-				<label for="<?php echo $this->get_field_id("title"); ?>">
-					<?php _e( 'Title' ); ?>:
-					<input class="widefat" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo esc_attr($instance["title"]); ?>" />
+				<label for="<?php echo $this->get_field_id("thumb"); ?>">
+					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumb"); ?>" name="<?php echo $this->get_field_name("thumb"); ?>"<?php checked( (bool) $instance["thumb"], true ); ?> />
+					<?php _e( 'Show post thumbnail' ); ?>
 				</label>
 			</p>
 			<p>
 				<label>
-					<?php _e( 'Category' ); ?>:
-					<?php wp_dropdown_categories( array( 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"] ) ); ?>
-				</label>
-			</p>
-			<p>
-				<label for="<?php echo $this->get_field_id("num"); ?>">
-					<?php _e('Number of posts to show'); ?>:
-					<input style="text-align: center;" id="<?php echo $this->get_field_id("num"); ?>" name="<?php echo $this->get_field_name("num"); ?>" type="text" value="<?php echo absint($instance["num"]); ?>" size='3' />
-				</label>
-			</p>
-			<p>
-				<label for="<?php echo $this->get_field_id("sort_by"); ?>">
-					<?php _e('Sort by'); ?>:
-					<select id="<?php echo $this->get_field_id("sort_by"); ?>" name="<?php echo $this->get_field_name("sort_by"); ?>">
-						<option value="date"<?php selected( $instance["sort_by"], "date" ); ?>>Date</option>
-						<option value="title"<?php selected( $instance["sort_by"], "title" ); ?>>Title</option>
-						<option value="comment_count"<?php selected( $instance["sort_by"], "comment_count" ); ?>>Number of comments</option>
-						<option value="rand"<?php selected( $instance["sort_by"], "rand" ); ?>>Random</option>
-					</select>
-				</label>
-			</p>
-			<p>
-				<label for="<?php echo $this->get_field_id("asc_sort_order"); ?>">
-					<input type="checkbox" class="checkbox" 
-						id="<?php echo $this->get_field_id("asc_sort_order"); ?>" 
-						name="<?php echo $this->get_field_name("asc_sort_order"); ?>"
-						<?php checked( (bool) $instance["asc_sort_order"], true ); ?> />
-							<?php _e( 'Reverse sort order (ascending)' ); ?>
-				</label>
-			</p>
-			<p>
-				<label for="<?php echo $this->get_field_id("title_link"); ?>">
-					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("title_link"); ?>" name="<?php echo $this->get_field_name("title_link"); ?>"<?php checked( (bool) $instance["title_link"], true ); ?> />
-					<?php _e( 'Make widget title link' ); ?>
-				</label>
-			</p>
-			<p>
-				<label for="<?php echo $this->get_field_id("excerpt"); ?>">
-					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt"); ?>" name="<?php echo $this->get_field_name("excerpt"); ?>"<?php checked( (bool) $instance["excerpt"], true ); ?> />
-					<?php _e( 'Show post excerpt' ); ?>
-				</label>
-			</p>
-			<p>
-				<label for="<?php echo $this->get_field_id("excerpt_length"); ?>">
-					<?php _e( 'Excerpt length (in words):' ); ?>
-				</label>
-				<input style="text-align: center;" type="text" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" size="3" />
-			</p>
-			<p>
-				<label for="<?php echo $this->get_field_id("comment_num"); ?>">
-					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("comment_num"); ?>" name="<?php echo $this->get_field_name("comment_num"); ?>"<?php checked( (bool) $instance["comment_num"], true ); ?> />
-					<?php _e( 'Show number of comments' ); ?>
-				</label>
-			</p>
-			<p>
-				<label for="<?php echo $this->get_field_id("date"); ?>">
-					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("date"); ?>"<?php checked( (bool) $instance["date"], true ); ?> />
-					<?php _e( 'Show post date' ); ?>
-				</label>
-			</p>
-			<?php if ( function_exists('the_post_thumbnail') && current_theme_supports("post-thumbnails") ) : ?>
-				<p>
-					<label for="<?php echo $this->get_field_id("thumb"); ?>">
-						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumb"); ?>" name="<?php echo $this->get_field_name("thumb"); ?>"<?php checked( (bool) $instance["thumb"], true ); ?> />
-						<?php _e( 'Show post thumbnail' ); ?>
+					<?php _e('Thumbnail dimensions (in pixels)'); ?>:<br />
+					<label for="<?php echo $this->get_field_id("thumb_w"); ?>">
+						Width: <input class="widefat" style="width:30%;" type="text" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo $instance["thumb_w"]; ?>" />
 					</label>
-				</p>
-				<p>
-					<label>
-						<?php _e('Thumbnail dimensions (in pixels)'); ?>:<br />
-						<label for="<?php echo $this->get_field_id("thumb_w"); ?>">
-							Width: <input class="widefat" style="width:30%;" type="text" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo $instance["thumb_w"]; ?>" />
-						</label>
-						
-						<label for="<?php echo $this->get_field_id("thumb_h"); ?>">
-							Height: <input class="widefat" style="width:30%;" type="text" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo $instance["thumb_h"]; ?>" />
-						</label>
+					
+					<label for="<?php echo $this->get_field_id("thumb_h"); ?>">
+						Height: <input class="widefat" style="width:30%;" type="text" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo $instance["thumb_h"]; ?>" />
 					</label>
-				</p>
-			<?php endif; ?>
-			<p>
-				<label for="<?php echo $this->get_field_id("disable_css"); ?>">
-					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_css"); ?>" name="<?php echo $this->get_field_name("disable_css"); ?>"<?php checked( (bool) $instance["disable_css"], true ); ?> />
-					<?php _e( 'Disable widget CSS' ); ?>
 				</label>
 			</p>
-			<?php
-
-		}
-
+		<?php endif; ?>
+		<p>
+			<label for="<?php echo $this->get_field_id("disable_css"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_css"); ?>" name="<?php echo $this->get_field_name("disable_css"); ?>"<?php checked( (bool) $instance["disable_css"], true ); ?> />
+				<?php _e( 'Disable widget CSS' ); ?>
+			</label>
+		</p>
+		<?php
+	}
 }
 
 add_action( 'widgets_init', create_function('', 'return register_widget("CategoryPosts");') );
