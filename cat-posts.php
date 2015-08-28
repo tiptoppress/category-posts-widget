@@ -4,7 +4,7 @@ Plugin Name: Category Posts Widget
 Plugin URI: http://mkrdip.me/category-posts-widget
 Description: Adds a widget that shows the most recent posts from a single category.
 Author: Mrinal Kanti Roy
-Version: 4.1.0
+Version: 4.2.0
 Author URI: http://mkrdip.me
 */
 
@@ -137,7 +137,7 @@ class CategoryPosts extends WP_Widget {
 						<?php the_time("j M Y"); ?>
 					</p>
 				<?php endif;
-				
+
 				if( !isset( $instance["thumbTop"] ) ) : 
 					if ( function_exists('the_post_thumbnail') &&
 							current_theme_supports("post-thumbnails") &&
@@ -147,8 +147,8 @@ class CategoryPosts extends WP_Widget {
 							href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
 							<?php the_post_thumbnail( 'cat_post_thumb_size'.$this->id ); ?>
 						</a>
-					<?php endif;
-				endif;				
+				<?php endif;
+				endif;
 					
 				if ( isset( $instance['excerpt'] ) ) : 
 					the_excerpt();
@@ -310,7 +310,7 @@ class CategoryPosts extends WP_Widget {
 					<?php _e( 'Show post thumbnail' ); ?>
 				</label>
 			</p>
-			<p>			
+			<p>
 				<label for="<?php echo $this->get_field_id("thumbTop"); ?>">
 					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumbTop"); ?>" name="<?php echo $this->get_field_name("thumbTop"); ?>"<?php checked( (bool) $instance["thumbTop"], true ); ?> />
 					<?php _e( 'Thumbnail to top' ); ?>
