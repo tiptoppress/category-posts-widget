@@ -50,7 +50,8 @@ class CategoryPosts extends WP_Widget {
 
 	function __construct() {
 		$widget_ops = array('classname' => 'cat-post-widget', 'description' => __('List single category posts'));
-		parent::__construct('category-posts', __('Category Posts'), $widget_ops);
+		$control_ops = array( 'show_title' => true );
+		parent::__construct('category-posts', __('Category Posts'), $widget_ops, $control_ops);
 	}
 
 	// Displays category posts widget on blog.
@@ -94,13 +95,15 @@ class CategoryPosts extends WP_Widget {
 		echo $before_widget;
 
 		// Widget title
-		echo $before_title;
-		if( isset ( $instance["title_link"] ) ) {
-			echo '<a href="' . get_category_link($instance["cat"]) . '">' . $instance["title"] . '</a>';
-		} else {
-			echo $instance["title"];
+		if( isset ( $instance["show_title"] ) && $instance["show_title"] ) {
+			echo $before_title;
+			if( isset ( $instance["title_link"] ) ) {
+				echo '<a href="' . get_category_link($instance["cat"]) . '">' . $instance["title"] . '</a>';
+			} else {
+				echo $instance["title"];
+			}
+			echo $after_title;
 		}
-		echo $after_title;
 
 		// Post list
 		echo "<ul>\n";
@@ -181,14 +184,17 @@ class CategoryPosts extends WP_Widget {
 	 * @return array
 	 */
 	function update($new_instance, $old_instance) {
+		
+		// thumbnail size
 		$sizes = get_option('mkrdip_cat_post_thumb_sizes');
-
 		if ( !$sizes ) {
 			$sizes = array();
 		}
-
 		$sizes[$this->id] = array($new_instance['thumb_w'], $new_instance['thumb_h']);
 		update_option('mkrdip_cat_post_thumb_sizes', $sizes);
+		
+		// show title
+		$new_instance['show_title'] = $new_instance['show_title'];
 
 		return $new_instance;
 	}
@@ -202,6 +208,7 @@ class CategoryPosts extends WP_Widget {
 	function form($instance) {
 		$instance = wp_parse_args( ( array ) $instance, array(
 			'title'          => __( '' ),
+			'show_title'     => __( true ),
 			'cat'            => __( '' ),
 			'num'            => __( '' ),
 			'sort_by'        => __( '' ),
@@ -219,6 +226,7 @@ class CategoryPosts extends WP_Widget {
 		) );
 
 		$title          = $instance['title'];
+		$show_title     = $instance['show_title'];
 		$cat            = $instance['cat'];
 		$num            = $instance['num'];
 		$sort_by        = $instance['sort_by'];
@@ -241,6 +249,12 @@ class CategoryPosts extends WP_Widget {
 				<input class="widefat" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo esc_attr($instance["title"]); ?>" />
 			</label>
 		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("show_title"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("show_title"); ?>" name="<?php echo $this->get_field_name("show_title"); ?>"<?php checked( (bool) $instance["show_title"], true ); ?> />
+				<?php _e( 'Show title' ); ?>
+			</label>
+		</p>		
 		<p>
 			<label>
 				<?php _e( 'Category' ); ?>:

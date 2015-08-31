@@ -29,6 +29,7 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 * Option to show the post date.
 * Option to show the comment count.
 * Option to make the widget title link to the category page.
+* Option to show/hide the title
 * Multiple widgets.
 
 ### Contribute ###
@@ -60,6 +61,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 4.2.0
 
 * Added Option to put thumbnail on top
+* Added Option to show/hide the title
 * Fixed no background bug.
 
 4.1.0
