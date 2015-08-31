@@ -22,6 +22,7 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 
 * Option to change ordering of posts.
 * Option to show post thumbnail & set dimension by width & height.
+* Option to put thumbnail on top
 * Set how many posts to show.
 * Set which category the posts should come form.
 * Option to show the post excerpt and how long the excerpt should be.
@@ -55,6 +56,11 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 
 ## Changelog ##
+
+4.2.0
+
+* Added Option to put thumbnail on top
+* Fixed no background bug.
 
 4.1.0
 

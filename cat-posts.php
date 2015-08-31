@@ -4,7 +4,7 @@ Plugin Name: Category Posts Widget
 Plugin URI: http://mkrdip.me/category-posts-widget
 Description: Adds a widget that shows the most recent posts from a single category.
 Author: Mrinal Kanti Roy
-Version: 4.1.0
+Version: 4.2.0
 Author URI: http://mkrdip.me
 */
 
@@ -115,6 +115,19 @@ class CategoryPosts extends WP_Widget {
 					echo "\"";
 				} ?> >
 				
+				<?php
+				if( isset( $instance["thumbTop"] ) ) : 
+					if ( function_exists('the_post_thumbnail') &&
+							current_theme_supports("post-thumbnails") &&
+							isset( $instance["thumb"] ) &&
+							has_post_thumbnail() ) : ?>
+						<a <?php if( !isset( $instance['disable_css'] ) ) { echo "class=\"cat-post-thumbnail\""; } ?>
+							href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
+							<?php the_post_thumbnail( 'cat_post_thumb_size'.$this->id ); ?>
+						</a>
+				<?php endif; 
+				endif; ?>					
+				
 				<a class="post-title <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-title"; } ?>" 
 					href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?>
 				</a>
@@ -125,15 +138,17 @@ class CategoryPosts extends WP_Widget {
 					</p>
 				<?php endif;
 
-				if ( function_exists('the_post_thumbnail') &&
-						current_theme_supports("post-thumbnails") &&
-						isset( $instance["thumb"] ) &&
-						has_post_thumbnail() ) : ?>
-					<a <?php if( !isset( $instance['disable_css'] ) ) { echo "class=\"cat-post-thumbnail\""; } ?>
-						href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
-						<?php the_post_thumbnail( 'cat_post_thumb_size'.$this->id ); ?>
-					</a>
+				if( !isset( $instance["thumbTop"] ) ) : 
+					if ( function_exists('the_post_thumbnail') &&
+							current_theme_supports("post-thumbnails") &&
+							isset( $instance["thumb"] ) &&
+							has_post_thumbnail() ) : ?>
+						<a <?php if( !isset( $instance['disable_css'] ) ) { echo "class=\"cat-post-thumbnail\""; } ?>
+							href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
+							<?php the_post_thumbnail( 'cat_post_thumb_size'.$this->id ); ?>
+						</a>
 				<?php endif;
+				endif;
 					
 				if ( isset( $instance['excerpt'] ) ) : 
 					the_excerpt();
@@ -197,6 +212,7 @@ class CategoryPosts extends WP_Widget {
 			'comment_num'    => __( '' ),
 			'date'           => __( '' ),
 			'thumb'          => __( '' ),
+			'thumbTop'       => __( '' ),
 			'thumb_w'        => __( '' ),
 			'thumb_h'        => __( '' ),
 			'disable_css'    => __( '' )
@@ -213,6 +229,7 @@ class CategoryPosts extends WP_Widget {
 		$comment_num    = $instance['comment_num'];
 		$date           = $instance['date'];
 		$thumb          = $instance['thumb'];
+		$thumbTop       = $instance['thumbTop'];
 		$thumb_w        = $instance['thumb_w'];
 		$thumb_h        = $instance['thumb_h'];
 		$disable_css    = $instance['disable_css'];
@@ -293,6 +310,12 @@ class CategoryPosts extends WP_Widget {
 					<?php _e( 'Show post thumbnail' ); ?>
 				</label>
 			</p>
+			<p>
+				<label for="<?php echo $this->get_field_id("thumbTop"); ?>">
+					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumbTop"); ?>" name="<?php echo $this->get_field_name("thumbTop"); ?>"<?php checked( (bool) $instance["thumbTop"], true ); ?> />
+					<?php _e( 'Thumbnail to top' ); ?>
+				</label>
+			</p>			
 			<p>
 				<label>
 					<?php _e('Thumbnail dimensions (in pixels)'); ?>:<br />

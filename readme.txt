@@ -1,10 +1,10 @@
 === Category Posts Widget ===
-Contributors: mkrdip, kometschuh
+Contributors: mkrdip
 Donate link: http://mkrdip.me/donate
 Tags: category, posts, widget, single category widget, posts widget, category recent posts
 Requires at least: 2.8
-Tested up to: 4.3
-Stable tag: 4.1.0
+Tested up to: 4.3.0
+Stable tag: 4.2
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,6 +18,7 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 
 * Option to change ordering of posts.
 * Option to show post thumbnail & set dimension by width & height.
+* Option to put thumbnail on top
 * Set how many posts to show.
 * Set which category the posts should come form.
 * Option to show the post excerpt and how long the excerpt should be.
@@ -34,11 +35,11 @@ While using this plugin if you find any bug or any conflict, please submit an is
 
 = Automatic installation =
 
-Automatic installation is the easiest option as WordPress handles the file transfers itself and you don't need to leave your web browser. To do an automatic install of Category Posts Widget, 
+Automatic installation is the easiest option as WordPress handles the file transfers itself and you don’t need to leave your web browser. To do an automatic install of Category Posts Widget, 
 
 1. log in to your WordPress dashboard, navigate to the Plugins menu and click Add New. 
 2. In the search field type “Category Posts Widget” and click Search Plugins. 
-3. Once you've found plugin, you can install it by simply clicking “Install Now”. 
+3. Once you’ve found plugin, you can install it by simply clicking “Install Now”. 
 4. Then, go to plugins page of WordPress admin activate the plugin. 
 5. Now, goto the Widgets page of the Appearance section and configure the Category Posts widget.
 
@@ -63,6 +64,11 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 == Changelog ==
 
+4.2.0
+
+* Added Option to put thumbnail on top
+* Fixed no background bug.
+
 4.1.0
 
 * Added PHP5 Constructor 
@@ -73,7 +79,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 4.0 
 
 * Added CSS file for post styling 
-* Now compatible with latest versions of WordPress
+* Now compaitable with latest versions of WordPress
 
 3.3
 
