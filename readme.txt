@@ -81,7 +81,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 4.0 
 
 * Added CSS file for post styling 
-* Now compaitable with latest versions of WordPress
+* Now compatible with latest versions of WordPress
 
 3.3
 
