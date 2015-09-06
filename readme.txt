@@ -4,7 +4,7 @@ Donate link: http://mkrdip.me/donate
 Tags: category, posts, widget, single category widget, posts widget, category recent posts
 Requires at least: 2.8
 Tested up to: 4.3.0
-Stable tag: 4.2
+Stable tag: 4.1.1
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,7 +65,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 == Changelog ==
 
-4.2.0
+4.1.1
 
 * Added option to put thumbnail on top
 * Added option to show/hide the title

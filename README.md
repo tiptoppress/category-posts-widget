@@ -58,7 +58,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 ## Changelog ##
 
-4.2.0
+4.1.1
 
 * Added Option to put thumbnail on top
 * Added Option to show/hide the title
