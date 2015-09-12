@@ -50,8 +50,7 @@ class CategoryPosts extends WP_Widget {
 
 	function __construct() {
 		$widget_ops = array('classname' => 'cat-post-widget', 'description' => __('List single category posts'));
-		$control_ops = array( 'show_title' => true );
-		parent::__construct('category-posts', __('Category Posts'), $widget_ops, $control_ops);
+		parent::__construct('category-posts', __('Category Posts'), $widget_ops);
 	}
 
 	// Displays category posts widget on blog.
@@ -95,7 +94,7 @@ class CategoryPosts extends WP_Widget {
 		echo $before_widget;
 
 		// Widget title
-		if( isset ( $instance["show_title"] ) && $instance["show_title"] ) {
+		if( !isset ( $instance["hide_title"] ) ) {
 			echo $before_title;
 			if( isset ( $instance["title_link"] ) ) {
 				echo '<a href="' . get_category_link($instance["cat"]) . '">' . $instance["title"] . '</a>';
@@ -193,9 +192,6 @@ class CategoryPosts extends WP_Widget {
 		$sizes[$this->id] = array($new_instance['thumb_w'], $new_instance['thumb_h']);
 		update_option('mkrdip_cat_post_thumb_sizes', $sizes);
 		
-		// show title
-		$new_instance['show_title'] = $new_instance['show_title'];
-
 		return $new_instance;
 	}
 
@@ -208,7 +204,7 @@ class CategoryPosts extends WP_Widget {
 	function form($instance) {
 		$instance = wp_parse_args( ( array ) $instance, array(
 			'title'          => __( '' ),
-			'show_title'     => __( true ),
+			'hide_title'     => __( '' ),
 			'cat'            => __( '' ),
 			'num'            => __( '' ),
 			'sort_by'        => __( '' ),
@@ -226,7 +222,7 @@ class CategoryPosts extends WP_Widget {
 		) );
 
 		$title          = $instance['title'];
-		$show_title     = $instance['show_title'];
+		$hide_title     = $instance['hide_title'];
 		$cat            = $instance['cat'];
 		$num            = $instance['num'];
 		$sort_by        = $instance['sort_by'];
@@ -250,9 +246,9 @@ class CategoryPosts extends WP_Widget {
 			</label>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id("show_title"); ?>">
-				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("show_title"); ?>" name="<?php echo $this->get_field_name("show_title"); ?>"<?php checked( (bool) $instance["show_title"], true ); ?> />
-				<?php _e( 'Show title' ); ?>
+			<label for="<?php echo $this->get_field_id("hide_title"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_title"); ?>" name="<?php echo $this->get_field_name("hide_title"); ?>"<?php checked( (bool) $instance["hide_title"], true ); ?> />
+				<?php _e( 'Hide title' ); ?>
 			</label>
 		</p>		
 		<p>
