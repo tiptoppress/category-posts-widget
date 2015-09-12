@@ -4,7 +4,7 @@ Donate link: http://mkrdip.me/donate
 Tags: category, posts, widget, single category widget, posts widget, category recent posts
 Requires at least: 2.8
 Tested up to: 4.3.0
-Stable tag: 4.1.1
+Stable tag: 4.1.2
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,7 +25,7 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 * Option to show the post date.
 * Option to show the comment count.
 * Option to make the widget title link to the category page.
-* Option to show/hide the title
+* Option to hide the title
 * Multiple widgets.
 
 = Contribute =
@@ -64,6 +64,10 @@ Automatic installation is the easiest option as WordPress handles the file trans
 2. Front end of the widget using a default WordPress Theme.
 
 == Changelog ==
+
+4.1.2
+
+* Fixed hide title bug.
 
 4.1.1
 
