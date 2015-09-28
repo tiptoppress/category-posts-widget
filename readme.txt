@@ -57,6 +57,11 @@ Automatic installation is the easiest option as WordPress handles the file trans
 * Version 4.0 uses CSS file for styling the widget in front end.
 * Version 3.0 or later version uses WordPress 2.9's built in post thumbnail functionality.
 
+== Frequently Asked Questions ==
+
+= The font-size is different from that of other widgets? =
+
+Please use the option: "Disable widget CSS".
 
 == Screenshots ==
 
