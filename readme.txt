@@ -4,7 +4,7 @@ Donate link: http://mkrdip.me/donate
 Tags: category, posts, widget, single category widget, posts widget, category recent posts
 Requires at least: 2.8
 Tested up to: 4.3.1
-Stable tag: 4.1.2
+Stable tag: 4.1.3
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
