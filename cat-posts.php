@@ -4,7 +4,7 @@ Plugin Name: Category Posts Widget
 Plugin URI: http://mkrdip.me/category-posts-widget
 Description: Adds a widget that shows the most recent posts from a single category.
 Author: Mrinal Kanti Roy
-Version: 4.1.1
+Version: 4.1.2
 Author URI: http://mkrdip.me
 */
 
@@ -85,94 +85,98 @@ class CategoryPosts extends WP_Widget {
 			"&orderby=" . $sort_by .
 			"&order=" . $sort_order
 		);
-
-		// Excerpt length filter
-		$new_excerpt_length = create_function('$length', "return " . $instance["excerpt_length"] . ";");
-		if ( $instance["excerpt_length"] > 0 )
-			add_filter('excerpt_length', $new_excerpt_length);
-
-		echo $before_widget;
-
-		// Widget title
-		if( !isset ( $instance["hide_title"] ) ) {
-			echo $before_title;
-			if( isset ( $instance["title_link"] ) ) {
-				echo '<a href="' . get_category_link($instance["cat"]) . '">' . $instance["title"] . '</a>';
-			} else {
-				echo $instance["title"];
-			}
-			echo $after_title;
-		}
-
-		// Post list
-		echo "<ul>\n";
-
-		while ( $cat_posts->have_posts() )
-		{
-			$cat_posts->the_post(); ?>
+		
+		if ( !isset ( $instance["hide_if_empty"] ) || $cat_posts->have_posts() ) {
 			
-			<li <?php if( !isset( $instance['disable_css'] ) ) {
-					echo "class=\"cat-post-item";
-						if ( is_single(get_the_title() ) ) { echo " cat-post-current"; }
-					echo "\"";
-				} ?> >
-				
-				<?php
-				if( isset( $instance["thumbTop"] ) ) : 
-					if ( function_exists('the_post_thumbnail') &&
-							current_theme_supports("post-thumbnails") &&
-							isset( $instance["thumb"] ) &&
-							has_post_thumbnail() ) : ?>
-						<a <?php if( !isset( $instance['disable_css'] ) ) { echo "class=\"cat-post-thumbnail\""; } ?>
-							href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
-							<?php the_post_thumbnail( 'cat_post_thumb_size'.$this->id ); ?>
-						</a>
-				<?php endif; 
-				endif; ?>					
-				
-				<a class="post-title <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-title"; } ?>" 
-					href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?>
-				</a>
+			// Excerpt length filter
+			$new_excerpt_length = create_function('$length', "return " . $instance["excerpt_length"] . ";");
+			if ( $instance["excerpt_length"] > 0 )
+				add_filter('excerpt_length', $new_excerpt_length);		
 
-				<?php if ( isset( $instance['date'] ) ) : ?>
-					<p class="post-date <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-date"; } ?>">
-						<?php the_time("j M Y"); ?>
-					</p>
-				<?php endif;
+			echo $before_widget;
 
-				if( !isset( $instance["thumbTop"] ) ) : 
-					if ( function_exists('the_post_thumbnail') &&
-							current_theme_supports("post-thumbnails") &&
-							isset( $instance["thumb"] ) &&
-							has_post_thumbnail() ) : ?>
-						<a <?php if( !isset( $instance['disable_css'] ) ) { echo "class=\"cat-post-thumbnail\""; } ?>
-							href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
-							<?php the_post_thumbnail( 'cat_post_thumb_size'.$this->id ); ?>
-						</a>
-				<?php endif;
-				endif;
+			// Widget title
+			if( !isset ( $instance["hide_title"] ) ) {
+				echo $before_title;
+				if( isset ( $instance["title_link"] ) ) {
+					echo '<a href="' . get_category_link($instance["cat"]) . '">' . $instance["title"] . '</a>';
+				} else {
+					echo $instance["title"];
+				}
+				echo $after_title;
+			}
+
+			// Post list
+			echo "<ul>\n";
+
+			while ( $cat_posts->have_posts() )
+			{
+				$cat_posts->the_post(); ?>
+				
+				<li <?php if( !isset( $instance['disable_css'] ) ) {
+						echo "class=\"cat-post-item";
+							if ( is_single(get_the_title() ) ) { echo " cat-post-current"; }
+						echo "\"";
+					} ?> >
 					
-				if ( isset( $instance['excerpt'] ) ) : 
-					the_excerpt();
-				endif;
+					<?php
+					if( isset( $instance["thumbTop"] ) ) : 
+						if ( function_exists('the_post_thumbnail') &&
+								current_theme_supports("post-thumbnails") &&
+								isset( $instance["thumb"] ) &&
+								has_post_thumbnail() ) : ?>
+							<a <?php if( !isset( $instance['disable_css'] ) ) { echo "class=\"cat-post-thumbnail\""; } ?>
+								href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
+								<?php the_post_thumbnail( 'cat_post_thumb_size'.$this->id ); ?>
+							</a>
+					<?php endif; 
+					endif; ?>					
+					
+					<a class="post-title <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-title"; } ?>" 
+						href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?>
+					</a>
 
-				if ( isset( $instance['comment_num'] ) ) : ?>
-					<p class="comment-num <?php if( !isset( $instance['disable_css'] ) ) { echo "cat-post-comment-num"; } ?>">
-						(<?php comments_number(); ?>)
-					</p>
-				<?php endif; ?>
-			</li>
-			<?php
-		}
+					<?php if ( isset( $instance['date'] ) ) : ?>
+						<p class="post-date <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-date"; } ?>">
+							<?php the_time("j M Y"); ?>
+						</p>
+					<?php endif;
 
-		echo "</ul>\n";
+					if( !isset( $instance["thumbTop"] ) ) : 
+						if ( function_exists('the_post_thumbnail') &&
+								current_theme_supports("post-thumbnails") &&
+								isset( $instance["thumb"] ) &&
+								has_post_thumbnail() ) : ?>
+							<a <?php if( !isset( $instance['disable_css'] ) ) { echo "class=\"cat-post-thumbnail\""; } ?>
+								href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
+								<?php the_post_thumbnail( 'cat_post_thumb_size'.$this->id ); ?>
+							</a>
+					<?php endif;
+					endif;
+						
+					if ( isset( $instance['excerpt'] ) ) : 
+						the_excerpt();
+					endif;
 
-		echo $after_widget;
+					if ( isset( $instance['comment_num'] ) ) : ?>
+						<p class="comment-num <?php if( !isset( $instance['disable_css'] ) ) { echo "cat-post-comment-num"; } ?>">
+							(<?php comments_number(); ?>)
+						</p>
+					<?php endif; ?>
+				</li>
+				<?php
+			}
 
-		remove_filter('excerpt_length', $new_excerpt_length);
+			echo "</ul>\n";
 
-		if (function_exists ('wp_reset_postdata')) //wp_reset_postdata only exists in WordPress >3.0.0
-			wp_reset_postdata();
+			echo $after_widget;
+
+			remove_filter('excerpt_length', $new_excerpt_length);
+
+			if (function_exists ('wp_reset_postdata')) //wp_reset_postdata only exists in WordPress >3.0.0
+				wp_reset_postdata();
+			
+		} // END if !isset ( $instance["hide_if_empty"] ) || $cat_posts->have_posts()
 	}
 
 	/**
@@ -218,7 +222,8 @@ class CategoryPosts extends WP_Widget {
 			'thumbTop'       => __( '' ),
 			'thumb_w'        => __( '' ),
 			'thumb_h'        => __( '' ),
-			'disable_css'    => __( '' )
+			'disable_css'    => __( '' ),
+			'hide_if_empty'  => __( '' )
 		) );
 
 		$title          = $instance['title'];
@@ -237,6 +242,7 @@ class CategoryPosts extends WP_Widget {
 		$thumb_w        = $instance['thumb_w'];
 		$thumb_h        = $instance['thumb_h'];
 		$disable_css    = $instance['disable_css'];
+		$hide_if_empty  = $instance['hide_if_empty'];		
 
 		?>
 		<p>
@@ -249,6 +255,12 @@ class CategoryPosts extends WP_Widget {
 			<label for="<?php echo $this->get_field_id("hide_title"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_title"); ?>" name="<?php echo $this->get_field_name("hide_title"); ?>"<?php checked( (bool) $instance["hide_title"], true ); ?> />
 				<?php _e( 'Hide title' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("title_link"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("title_link"); ?>" name="<?php echo $this->get_field_name("title_link"); ?>"<?php checked( (bool) $instance["title_link"], true ); ?> />
+				<?php _e( 'Make widget title link' ); ?>
 			</label>
 		</p>		
 		<p>
@@ -281,12 +293,6 @@ class CategoryPosts extends WP_Widget {
 					name="<?php echo $this->get_field_name("asc_sort_order"); ?>"
 					<?php checked( (bool) $instance["asc_sort_order"], true ); ?> />
 						<?php _e( 'Reverse sort order (ascending)' ); ?>
-			</label>
-		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id("title_link"); ?>">
-				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("title_link"); ?>" name="<?php echo $this->get_field_name("title_link"); ?>"<?php checked( (bool) $instance["title_link"], true ); ?> />
-				<?php _e( 'Make widget title link' ); ?>
 			</label>
 		</p>
 		<p>
@@ -345,6 +351,12 @@ class CategoryPosts extends WP_Widget {
 				<?php _e( 'Disable widget CSS' ); ?>
 			</label>
 		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("hide_if_empty"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_if_empty"); ?>" name="<?php echo $this->get_field_name("hide_if_empty"); ?>"<?php checked( (bool) $instance["hide_if_empty"], true ); ?> />
+				<?php _e( 'Hide if empty' ); ?>
+			</label>
+		</p>		
 		<?php
 	}
 }
