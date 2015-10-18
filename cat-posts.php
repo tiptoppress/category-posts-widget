@@ -136,6 +136,12 @@ class CategoryPosts extends WP_Widget {
 						href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?>
 					</a>
 
+					<?php if ( isset( $instance['author'] ) ) : ?>
+						<p class="post-author <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-author"; } ?>">			
+							<?php the_author_posts_link(); ?>
+						</p>
+					<?php endif; ?>
+
 					<?php if ( isset( $instance['date'] ) ) : ?>
 						<p class="post-date <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-date"; } ?>">
 							<?php the_time("j M Y"); ?>
@@ -217,6 +223,7 @@ class CategoryPosts extends WP_Widget {
 			'excerpt'        => __( '' ),
 			'excerpt_length' => __( '' ),
 			'comment_num'    => __( '' ),
+			'author'         => __( '' ),
 			'date'           => __( '' ),
 			'thumb'          => __( '' ),
 			'thumbTop'       => __( '' ),
@@ -236,6 +243,7 @@ class CategoryPosts extends WP_Widget {
 		$excerpt        = $instance['excerpt'];
 		$excerpt_length = $instance['excerpt_length'];
 		$comment_num    = $instance['comment_num'];
+		$author         = $instance['author'];
 		$date           = $instance['date'];
 		$thumb          = $instance['thumb'];
 		$thumbTop       = $instance['thumbTop'];
@@ -311,6 +319,12 @@ class CategoryPosts extends WP_Widget {
 			<label for="<?php echo $this->get_field_id("comment_num"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("comment_num"); ?>" name="<?php echo $this->get_field_name("comment_num"); ?>"<?php checked( (bool) $instance["comment_num"], true ); ?> />
 				<?php _e( 'Show number of comments' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("author"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("author"); ?>"<?php checked( (bool) $instance["author"], true ); ?> />
+				<?php _e( 'Show post author' ); ?>
 			</label>
 		</p>
 		<p>
