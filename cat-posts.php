@@ -138,7 +138,9 @@ class CategoryPosts extends WP_Widget {
 
 					<?php if ( isset( $instance['date'] ) ) : ?>
 						<p class="post-date <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-date"; } ?>">
+						<?php if( isset ( $instance["date_link"] ) ) { ?> <a href="<?php the_permalink(); ?>"><?php } ?>
 							<?php the_time("j M Y"); ?>
+						<? if( isset ( $instance["date_link"] ) ) { echo '</a>'; } ?>
 						</p>
 					<?php endif;
 
@@ -218,6 +220,7 @@ class CategoryPosts extends WP_Widget {
 			'excerpt_length' => __( '' ),
 			'comment_num'    => __( '' ),
 			'date'           => __( '' ),
+			'date_link'      => __( '' ),
 			'thumb'          => __( '' ),
 			'thumbTop'       => __( '' ),
 			'thumb_w'        => __( '' ),
@@ -237,6 +240,7 @@ class CategoryPosts extends WP_Widget {
 		$excerpt_length = $instance['excerpt_length'];
 		$comment_num    = $instance['comment_num'];
 		$date           = $instance['date'];
+		$date_link      = $instance['date_link'];
 		$thumb          = $instance['thumb'];
 		$thumbTop       = $instance['thumbTop'];
 		$thumb_w        = $instance['thumb_w'];
@@ -317,6 +321,12 @@ class CategoryPosts extends WP_Widget {
 			<label for="<?php echo $this->get_field_id("date"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("date"); ?>"<?php checked( (bool) $instance["date"], true ); ?> />
 				<?php _e( 'Show post date' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("date_link"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date_link"); ?>" name="<?php echo $this->get_field_name("date_link"); ?>"<?php checked( (bool) $instance["date_link"], true ); ?> />
+				<?php _e( 'Make widget date link' ); ?>
 			</label>
 		</p>
 		<?php if ( function_exists('the_post_thumbnail') && current_theme_supports("post-thumbnails") ) : ?>
