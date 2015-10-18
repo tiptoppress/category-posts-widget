@@ -137,8 +137,9 @@ class CategoryPosts extends WP_Widget {
 					</a>
 
 					<?php if ( isset( $instance['date'] ) ) : ?>
+						<?php if ( isset( $instance['date_format'] ) ) { $date_format = $instance['date_format']; } else { $date_format = "j M Y"; } ?>
 						<p class="post-date <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-date"; } ?>">
-							<?php the_time("j M Y"); ?>
+							<?php the_time($date_format); ?>
 						</p>
 					<?php endif;
 
@@ -218,6 +219,7 @@ class CategoryPosts extends WP_Widget {
 			'excerpt_length' => __( '' ),
 			'comment_num'    => __( '' ),
 			'date'           => __( '' ),
+			'date_format'    => __( '' ),
 			'thumb'          => __( '' ),
 			'thumbTop'       => __( '' ),
 			'thumb_w'        => __( '' ),
@@ -237,6 +239,7 @@ class CategoryPosts extends WP_Widget {
 		$excerpt_length = $instance['excerpt_length'];
 		$comment_num    = $instance['comment_num'];
 		$date           = $instance['date'];
+		$date_format    = $instance['date_format'];
 		$thumb          = $instance['thumb'];
 		$thumbTop       = $instance['thumbTop'];
 		$thumb_w        = $instance['thumb_w'];
@@ -318,6 +321,12 @@ class CategoryPosts extends WP_Widget {
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("date"); ?>"<?php checked( (bool) $instance["date"], true ); ?> />
 				<?php _e( 'Show post date' ); ?>
 			</label>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("date_format"); ?>">
+				<?php _e( 'Date format (see <a target="_parent" href="http://php.net/manual/en/function.date.php">php manual</a>):' ); ?>
+			</label>
+			<input class="text" id="<?php echo $this->get_field_id("date_format"); ?>" name="<?php echo $this->get_field_name("date_format"); ?>" type="text" value="<?php echo esc_attr($instance["date_format"]); ?>" size="8" />
 		</p>
 		<?php if ( function_exists('the_post_thumbnail') && current_theme_supports("post-thumbnails") ) : ?>
 			<p>
