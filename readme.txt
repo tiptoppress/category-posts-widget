@@ -34,7 +34,7 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 
 = Documentation =
 
-Formatting date and time see <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>. Defaults configured in your WordPress options.
+Formatting date and time: See <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>.
 
 = Contribute =
 While using this plugin if you find any bug or any conflict, please submit an issue at 
