@@ -326,7 +326,7 @@ class CategoryPosts extends WP_Widget {
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("author"); ?>">
-				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("author"); ?>"<?php checked( (bool) $instance["author"], true ); ?> />
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("author"); ?>" name="<?php echo $this->get_field_name("author"); ?>"<?php checked( (bool) $instance["author"], true ); ?> />
 				<?php _e( 'Show post author' ); ?>
 			</label>
 		</p>
@@ -338,7 +338,7 @@ class CategoryPosts extends WP_Widget {
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("date_format"); ?>">
-				<?php _e( 'Date format (see <a target="_parent" href="http://php.net/manual/en/function.date.php">php manual</a>):' ); ?>
+				<?php _e( 'Date format:' ); ?>
 			</label>
 			<input class="text" id="<?php echo $this->get_field_id("date_format"); ?>" name="<?php echo $this->get_field_name("date_format"); ?>" type="text" value="<?php echo esc_attr($instance["date_format"]); ?>" size="8" />
 		</p>
