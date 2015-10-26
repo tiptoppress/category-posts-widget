@@ -71,6 +71,10 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 Please use the option: "Disable widget CSS".
 
+= I want the title as a link pointing to the selected Categorie page? =
+
+Enable the check box "Make widget title link".
+
 == Screenshots ==
 
 1. The widget configuration dialog.
