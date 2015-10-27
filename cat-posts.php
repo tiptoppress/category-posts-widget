@@ -30,7 +30,7 @@ function category_posts_widget_styles() {
  */
 function category_posts_add_image_size(){
 	$sizes = get_option('mkrdip_cat_post_thumb_sizes');
-	
+
 	if ( $sizes ){
 		foreach ( $sizes as $id=>$size ) {
 			add_image_size( 'cat_post_thumb_size' . $id, $size[0], $size[1], true );
@@ -61,7 +61,7 @@ class CategoryPosts extends WP_Widget {
 		extract( $args );
 
 		$sizes = get_option('mkrdip_cat_post_thumb_sizes');
-		
+
 		// If not title, use the name of the category.
 		if( !$instance["title"] ) {
 			$category_info = get_category($instance["cat"]);
@@ -80,18 +80,18 @@ class CategoryPosts extends WP_Widget {
 
 		// Get array of post info.
 		$cat_posts = new WP_Query(
-			"showposts=" . $instance["num"] . 
+			"showposts=" . $instance["num"] .
 			"&cat=" . $instance["cat"] .
 			"&orderby=" . $sort_by .
 			"&order=" . $sort_order
 		);
-		
+
 		if ( !isset ( $instance["hide_if_empty"] ) || $cat_posts->have_posts() ) {
-			
+
 			// Excerpt length filter
 			$new_excerpt_length = create_function('$length', "return " . $instance["excerpt_length"] . ";");
 			if ( $instance["excerpt_length"] > 0 )
-				add_filter('excerpt_length', $new_excerpt_length);		
+				add_filter('excerpt_length', $new_excerpt_length);
 
 			echo $before_widget;
 
@@ -112,15 +112,15 @@ class CategoryPosts extends WP_Widget {
 			while ( $cat_posts->have_posts() )
 			{
 				$cat_posts->the_post(); ?>
-				
+
 				<li <?php if( !isset( $instance['disable_css'] ) ) {
 						echo "class=\"cat-post-item";
 							if ( is_single(get_the_title() ) ) { echo " cat-post-current"; }
 						echo "\"";
 					} ?> >
-					
+
 					<?php
-					if( isset( $instance["thumbTop"] ) ) : 
+					if( isset( $instance["thumbTop"] ) ) :
 						if ( function_exists('the_post_thumbnail') &&
 								current_theme_supports("post-thumbnails") &&
 								isset( $instance["thumb"] ) &&
@@ -129,27 +129,20 @@ class CategoryPosts extends WP_Widget {
 								href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
 								<?php the_post_thumbnail( 'cat_post_thumb_size'.$this->id ); ?>
 							</a>
-					<?php endif; 
-					endif; ?>					
-					
-					<a class="post-title <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-title"; } ?>" 
+					<?php endif;
+					endif; ?>
+
+					<a class="post-title <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-title"; } ?>"
 						href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?>
 					</a>
 
-					<?php if ( isset( $instance['author'] ) ) : ?>
-						<p class="post-author <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-author"; } ?>">			
-							<?php the_author_posts_link(); ?>
-						</p>
-					<?php endif; ?>
-
 					<?php if ( isset( $instance['date'] ) ) : ?>
-						<?php if ( isset( $instance['date_format'] ) ) { $date_format = $instance['date_format']; } else { $date_format = "j M Y"; } ?>
 						<p class="post-date <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-date"; } ?>">
-							<?php the_time($date_format); ?>
+							<?php the_time("j M Y"); ?>
 						</p>
 					<?php endif;
 
-					if( !isset( $instance["thumbTop"] ) ) : 
+					if( !isset( $instance["thumbTop"] ) ) :
 						if ( function_exists('the_post_thumbnail') &&
 								current_theme_supports("post-thumbnails") &&
 								isset( $instance["thumb"] ) &&
@@ -160,8 +153,8 @@ class CategoryPosts extends WP_Widget {
 							</a>
 					<?php endif;
 					endif;
-						
-					if ( isset( $instance['excerpt'] ) ) : 
+
+					if ( isset( $instance['excerpt'] ) ) :
 						the_excerpt();
 					endif;
 
@@ -176,13 +169,19 @@ class CategoryPosts extends WP_Widget {
 
 			echo "</ul>\n";
 
+			// Widget title
+
+			if( isset ( $instance["footer_link"] ) ) {
+				echo '<a href="' . get_category_link($instance["cat"]) . '">' . $instance["footer_link"] . '</a>';
+			}
+
 			echo $after_widget;
 
 			remove_filter('excerpt_length', $new_excerpt_length);
 
 			if (function_exists ('wp_reset_postdata')) //wp_reset_postdata only exists in WordPress >3.0.0
 				wp_reset_postdata();
-			
+
 		} // END if !isset ( $instance["hide_if_empty"] ) || $cat_posts->have_posts()
 	}
 
@@ -194,7 +193,7 @@ class CategoryPosts extends WP_Widget {
 	 * @return array
 	 */
 	function update($new_instance, $old_instance) {
-		
+
 		// thumbnail size
 		$sizes = get_option('mkrdip_cat_post_thumb_sizes');
 		if ( !$sizes ) {
@@ -202,7 +201,7 @@ class CategoryPosts extends WP_Widget {
 		}
 		$sizes[$this->id] = array($new_instance['thumb_w'], $new_instance['thumb_h']);
 		update_option('mkrdip_cat_post_thumb_sizes', $sizes);
-		
+
 		return $new_instance;
 	}
 
@@ -221,12 +220,11 @@ class CategoryPosts extends WP_Widget {
 			'sort_by'        => __( '' ),
 			'asc_sort_order' => __( '' ),
 			'title_link'     => __( '' ),
+			'footer_link'    => __( '' ),
 			'excerpt'        => __( '' ),
 			'excerpt_length' => __( '' ),
 			'comment_num'    => __( '' ),
-			'author'         => __( '' ),
 			'date'           => __( '' ),
-			'date_format'    => __( '' ),
 			'thumb'          => __( '' ),
 			'thumbTop'       => __( '' ),
 			'thumb_w'        => __( '' ),
@@ -242,18 +240,17 @@ class CategoryPosts extends WP_Widget {
 		$sort_by        = $instance['sort_by'];
 		$asc_sort_order = $instance['asc_sort_order'];
 		$title_link     = $instance['title_link'];
+		$footer_link    = $instance['footer_link'];
 		$excerpt        = $instance['excerpt'];
 		$excerpt_length = $instance['excerpt_length'];
 		$comment_num    = $instance['comment_num'];
-		$author         = $instance['author'];
 		$date           = $instance['date'];
-		$date_format    = $instance['date_format'];
 		$thumb          = $instance['thumb'];
 		$thumbTop       = $instance['thumbTop'];
 		$thumb_w        = $instance['thumb_w'];
 		$thumb_h        = $instance['thumb_h'];
 		$disable_css    = $instance['disable_css'];
-		$hide_if_empty  = $instance['hide_if_empty'];		
+		$hide_if_empty  = $instance['hide_if_empty'];
 
 		?>
 		<p>
@@ -273,7 +270,13 @@ class CategoryPosts extends WP_Widget {
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("title_link"); ?>" name="<?php echo $this->get_field_name("title_link"); ?>"<?php checked( (bool) $instance["title_link"], true ); ?> />
 				<?php _e( 'Make widget title link' ); ?>
 			</label>
-		</p>		
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("footer_link"); ?>">
+				<?php _e( 'Footer Link Text' ); ?>:
+				<input class="widefat" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
+			</label>
+		</p>
 		<p>
 			<label>
 				<?php _e( 'Category' ); ?>:
@@ -299,8 +302,8 @@ class CategoryPosts extends WP_Widget {
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("asc_sort_order"); ?>">
-				<input type="checkbox" class="checkbox" 
-					id="<?php echo $this->get_field_id("asc_sort_order"); ?>" 
+				<input type="checkbox" class="checkbox"
+					id="<?php echo $this->get_field_id("asc_sort_order"); ?>"
 					name="<?php echo $this->get_field_name("asc_sort_order"); ?>"
 					<?php checked( (bool) $instance["asc_sort_order"], true ); ?> />
 						<?php _e( 'Reverse sort order (ascending)' ); ?>
@@ -325,22 +328,10 @@ class CategoryPosts extends WP_Widget {
 			</label>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id("author"); ?>">
-				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("author"); ?>" name="<?php echo $this->get_field_name("author"); ?>"<?php checked( (bool) $instance["author"], true ); ?> />
-				<?php _e( 'Show post author' ); ?>
-			</label>
-		</p>
-		<p>
 			<label for="<?php echo $this->get_field_id("date"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("date"); ?>"<?php checked( (bool) $instance["date"], true ); ?> />
 				<?php _e( 'Show post date' ); ?>
 			</label>
-		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id("date_format"); ?>">
-				<?php _e( 'Date format:' ); ?>
-			</label>
-			<input class="text" id="<?php echo $this->get_field_id("date_format"); ?>" name="<?php echo $this->get_field_name("date_format"); ?>" type="text" value="<?php echo esc_attr($instance["date_format"]); ?>" size="8" />
 		</p>
 		<?php if ( function_exists('the_post_thumbnail') && current_theme_supports("post-thumbnails") ) : ?>
 			<p>
@@ -354,14 +345,14 @@ class CategoryPosts extends WP_Widget {
 					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumbTop"); ?>" name="<?php echo $this->get_field_name("thumbTop"); ?>"<?php checked( (bool) $instance["thumbTop"], true ); ?> />
 					<?php _e( 'Thumbnail to top' ); ?>
 				</label>
-			</p>			
+			</p>
 			<p>
 				<label>
 					<?php _e('Thumbnail dimensions (in pixels)'); ?>:<br />
 					<label for="<?php echo $this->get_field_id("thumb_w"); ?>">
 						Width: <input class="widefat" style="width:30%;" type="text" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo $instance["thumb_w"]; ?>" />
 					</label>
-					
+
 					<label for="<?php echo $this->get_field_id("thumb_h"); ?>">
 						Height: <input class="widefat" style="width:30%;" type="text" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo $instance["thumb_h"]; ?>" />
 					</label>
@@ -379,7 +370,7 @@ class CategoryPosts extends WP_Widget {
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_if_empty"); ?>" name="<?php echo $this->get_field_name("hide_if_empty"); ?>"<?php checked( (bool) $instance["hide_if_empty"], true ); ?> />
 				<?php _e( 'Hide if empty' ); ?>
 			</label>
-		</p>		
+		</p>
 		<?php
 	}
 }
