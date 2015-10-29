@@ -176,6 +176,13 @@ class CategoryPosts extends WP_Widget {
 
 			echo "</ul>\n";
 
+			// Footer link to category page
+			if( isset ( $instance["footer_link"] ) ) {
+				echo "<a";
+					if( !isset( $instance['disable_css'] ) ) { echo " class:\"cat-post-footer-link\""; }
+				echo " href=\"" . get_category_link($instance["cat"]) . "\">" . $instance["footer_link"] . "</a>";
+			}
+
 			echo $after_widget;
 
 			remove_filter('excerpt_length', $new_excerpt_length);
@@ -221,6 +228,7 @@ class CategoryPosts extends WP_Widget {
 			'sort_by'        => __( '' ),
 			'asc_sort_order' => __( '' ),
 			'title_link'     => __( '' ),
+			'footer_link'    => __( '' ),
 			'excerpt'        => __( '' ),
 			'excerpt_length' => __( '' ),
 			'comment_num'    => __( '' ),
@@ -242,6 +250,7 @@ class CategoryPosts extends WP_Widget {
 		$sort_by        = $instance['sort_by'];
 		$asc_sort_order = $instance['asc_sort_order'];
 		$title_link     = $instance['title_link'];
+		$footer_link    = $instance['footer_link'];
 		$excerpt        = $instance['excerpt'];
 		$excerpt_length = $instance['excerpt_length'];
 		$comment_num    = $instance['comment_num'];
@@ -273,7 +282,13 @@ class CategoryPosts extends WP_Widget {
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("title_link"); ?>" name="<?php echo $this->get_field_name("title_link"); ?>"<?php checked( (bool) $instance["title_link"], true ); ?> />
 				<?php _e( 'Make widget title link' ); ?>
 			</label>
-		</p>		
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("footer_link"); ?>">
+				<?php _e( 'Footer link text' ); ?>:
+				<input class="widefat" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
+			</label>
+		</p>
 		<p>
 			<label>
 				<?php _e( 'Category' ); ?>:
