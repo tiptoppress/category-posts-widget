@@ -143,7 +143,7 @@ class CategoryPosts extends WP_Widget {
 					<?php endif; ?>
 
 					<?php if ( isset( $instance['date'] ) ) : ?>
-						<?php if ( isset( $instance['date_format'] ) ) { $date_format = $instance['date_format']; } else { $date_format = "j M Y"; } ?>
+						<?php if ( isset( $instance['date_format'] ) && strlen( trim( $instance['date_format'] ) )>0 ) { $date_format = $instance['date_format']; } else { $date_format = "j M Y"; } ?>
 						<p class="post-date <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-date"; } ?>">
 							<?php the_time($date_format); ?>
 						</p>
