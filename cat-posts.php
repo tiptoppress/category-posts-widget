@@ -266,7 +266,7 @@ class CategoryPosts extends WP_Widget {
 		$thumb_w        = $instance['thumb_w'];
 		$thumb_h        = $instance['thumb_h'];
 		$disable_css    = $instance['disable_css'];
-		$hide_if_empty  = $instance['hide_if_empty'];		
+		$hide_if_empty  = $instance['hide_if_empty'];
 
 		?>
 		<p>
@@ -276,21 +276,15 @@ class CategoryPosts extends WP_Widget {
 			</label>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id("hide_title"); ?>">
-				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_title"); ?>" name="<?php echo $this->get_field_name("hide_title"); ?>"<?php checked( (bool) $instance["hide_title"], true ); ?> />
-				<?php _e( 'Hide title' ); ?>
-			</label>
-		</p>
-		<p>
 			<label for="<?php echo $this->get_field_id("title_link"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("title_link"); ?>" name="<?php echo $this->get_field_name("title_link"); ?>"<?php checked( (bool) $instance["title_link"], true ); ?> />
 				<?php _e( 'Make widget title link' ); ?>
 			</label>
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id("footer_link"); ?>">
-				<?php _e( 'Footer link text' ); ?>:
-				<input class="widefat" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
+			<label for="<?php echo $this->get_field_id("hide_title"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_title"); ?>" name="<?php echo $this->get_field_name("hide_title"); ?>"<?php checked( (bool) $instance["hide_title"], true ); ?> />
+				<?php _e( 'Hide title' ); ?>
 			</label>
 		</p>
 		<p>
@@ -336,13 +330,13 @@ class CategoryPosts extends WP_Widget {
 				<?php _e( 'Date format:' ); ?>
 			</label>
 			<input class="text" id="<?php echo $this->get_field_id("date_format"); ?>" name="<?php echo $this->get_field_name("date_format"); ?>" type="text" value="<?php echo esc_attr($instance["date_format"]); ?>" size="8" />
-		</p>		
+		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("date_link"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date_link"); ?>" name="<?php echo $this->get_field_name("date_link"); ?>"<?php checked( (bool) $instance["date_link"], true ); ?> />
 				<?php _e( 'Make widget date link' ); ?>
 			</label>
-		</p>		
+		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("excerpt"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt"); ?>" name="<?php echo $this->get_field_name("excerpt"); ?>"<?php checked( (bool) $instance["excerpt"], true ); ?> />
@@ -355,18 +349,6 @@ class CategoryPosts extends WP_Widget {
 			</label>
 			<input style="text-align: center;" type="text" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" size="3" />
 		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id("comment_num"); ?>">
-				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("comment_num"); ?>" name="<?php echo $this->get_field_name("comment_num"); ?>"<?php checked( (bool) $instance["comment_num"], true ); ?> />
-				<?php _e( 'Show number of comments' ); ?>
-			</label>
-		</p>		
-		<p>
-			<label for="<?php echo $this->get_field_id("author"); ?>">
-				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("author"); ?>" name="<?php echo $this->get_field_name("author"); ?>"<?php checked( (bool) $instance["author"], true ); ?> />
-				<?php _e( 'Show post author' ); ?>
-			</label>
-		</p>		
 		<?php if ( function_exists('the_post_thumbnail') && current_theme_supports("post-thumbnails") ) : ?>
 			<p>
 				<label for="<?php echo $this->get_field_id("thumb"); ?>">
@@ -379,7 +361,7 @@ class CategoryPosts extends WP_Widget {
 					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumbTop"); ?>" name="<?php echo $this->get_field_name("thumbTop"); ?>"<?php checked( (bool) $instance["thumbTop"], true ); ?> />
 					<?php _e( 'Thumbnail to top' ); ?>
 				</label>
-			</p>			
+			</p>
 			<p>
 				<label>
 					<?php _e('Thumbnail dimensions (in pixels)'); ?>:<br />
@@ -392,7 +374,25 @@ class CategoryPosts extends WP_Widget {
 					</label>
 				</label>
 			</p>
-		<?php endif; ?>
+		<?php endif; ?>	
+		<p>
+			<label for="<?php echo $this->get_field_id("comment_num"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("comment_num"); ?>" name="<?php echo $this->get_field_name("comment_num"); ?>"<?php checked( (bool) $instance["comment_num"], true ); ?> />
+				<?php _e( 'Show number of comments' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("author"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("author"); ?>" name="<?php echo $this->get_field_name("author"); ?>"<?php checked( (bool) $instance["author"], true ); ?> />
+				<?php _e( 'Show post author' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("footer_link"); ?>">
+				<?php _e( 'Footer link text' ); ?>:
+				<input class="widefat" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
+			</label>
+		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("disable_css"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_css"); ?>" name="<?php echo $this->get_field_name("disable_css"); ?>"<?php checked( (bool) $instance["disable_css"], true ); ?> />
@@ -404,7 +404,7 @@ class CategoryPosts extends WP_Widget {
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_if_empty"); ?>" name="<?php echo $this->get_field_name("hide_if_empty"); ?>"<?php checked( (bool) $instance["hide_if_empty"], true ); ?> />
 				<?php _e( 'Hide if empty' ); ?>
 			</label>
-		</p>		
+		</p>
 		<?php
 	}
 }
