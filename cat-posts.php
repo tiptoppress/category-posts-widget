@@ -145,13 +145,10 @@ class CategoryPosts extends WP_Widget {
 					<?php if ( isset( $instance['date'] ) ) : ?>
 						<?php if ( isset( $instance['date_format'] ) && strlen( trim( $instance['date_format'] ) ) > 0 ) { $date_format = $instance['date_format']; } else { $date_format = "j M Y"; } ?>
 						<p class="post-date <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-date"; } ?>">
-<<<<<<< HEAD
 						<?php if( isset ( $instance["date_link"] ) ) { ?> <a href="<?php the_permalink(); ?>"><?php } ?>
 							<?php the_time("j M Y"); ?>
 						<? if( isset ( $instance["date_link"] ) ) { echo '</a>'; } ?>
-=======
 							<?php the_time($date_format); ?>
->>>>>>> refs/remotes/origin/master
 						</p>
 					<?php endif;
 
@@ -240,11 +237,8 @@ class CategoryPosts extends WP_Widget {
 			'comment_num'    => __( '' ),
 			'author'         => __( '' ),
 			'date'           => __( '' ),
-<<<<<<< HEAD
 			'date_link'      => __( '' ),
-=======
 			'date_format'    => __( '' ),
->>>>>>> refs/remotes/origin/master
 			'thumb'          => __( '' ),
 			'thumbTop'       => __( '' ),
 			'thumb_w'        => __( '' ),
@@ -266,11 +260,8 @@ class CategoryPosts extends WP_Widget {
 		$comment_num    = $instance['comment_num'];
 		$author         = $instance['author'];
 		$date           = $instance['date'];
-<<<<<<< HEAD
 		$date_link      = $instance['date_link'];
-=======
 		$date_format    = $instance['date_format'];
->>>>>>> refs/remotes/origin/master
 		$thumb          = $instance['thumb'];
 		$thumbTop       = $instance['thumbTop'];
 		$thumb_w        = $instance['thumb_w'];
@@ -366,17 +357,14 @@ class CategoryPosts extends WP_Widget {
 			</label>
 		</p>
 		<p>
-<<<<<<< HEAD
 			<label for="<?php echo $this->get_field_id("date_link"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date_link"); ?>" name="<?php echo $this->get_field_name("date_link"); ?>"<?php checked( (bool) $instance["date_link"], true ); ?> />
 				<?php _e( 'Make widget date link' ); ?>
 			</label>
-=======
 			<label for="<?php echo $this->get_field_id("date_format"); ?>">
 				<?php _e( 'Date format:' ); ?>
 			</label>
 			<input class="text" id="<?php echo $this->get_field_id("date_format"); ?>" name="<?php echo $this->get_field_name("date_format"); ?>" type="text" value="<?php echo esc_attr($instance["date_format"]); ?>" size="8" />
->>>>>>> refs/remotes/origin/master
 		</p>
 		<?php if ( function_exists('the_post_thumbnail') && current_theme_supports("post-thumbnails") ) : ?>
 			<p>
