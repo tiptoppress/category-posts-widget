@@ -136,19 +136,12 @@ class CategoryPosts extends WP_Widget {
 						href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?>
 					</a>
 
-					<?php if ( isset( $instance['author'] ) ) : ?>
-						<p class="post-author <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-author"; } ?>">			
-							<?php the_author_posts_link(); ?>
-						</p>
-					<?php endif; ?>
-
 					<?php if ( isset( $instance['date'] ) ) : ?>
 						<?php if ( isset( $instance['date_format'] ) && strlen( trim( $instance['date_format'] ) ) > 0 ) { $date_format = $instance['date_format']; } else { $date_format = "j M Y"; } ?>
-						<p class="post-date <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-date"; } ?>">
+						<p class="post-date <?php if( !isset( $instance['disable_css'] ) ) { echo "cat-post-date"; } ?>">						
 						<?php if( isset ( $instance["date_link"] ) ) { ?> <a href="<?php the_permalink(); ?>"><?php } ?>
-							<?php the_time("j M Y"); ?>
-						<? if( isset ( $instance["date_link"] ) ) { echo '</a>'; } ?>
 							<?php the_time($date_format); ?>
+						<?php if( isset ( $instance["date_link"] ) ) { echo "</a>"; } ?>
 						</p>
 					<?php endif;
 
@@ -163,14 +156,20 @@ class CategoryPosts extends WP_Widget {
 							</a>
 					<?php endif;
 					endif;
-						
+
 					if ( isset( $instance['excerpt'] ) ) : 
 						the_excerpt();
 					endif;
-
+					
 					if ( isset( $instance['comment_num'] ) ) : ?>
 						<p class="comment-num <?php if( !isset( $instance['disable_css'] ) ) { echo "cat-post-comment-num"; } ?>">
 							(<?php comments_number(); ?>)
+						</p>
+					<?php endif;					
+
+					if ( isset( $instance['author'] ) ) : ?>
+						<p class="post-author <?php if( !isset( $instance['disable_css'] ) ) { echo "cat-post-author"; } ?>">
+							<?php the_author_posts_link(); ?>
 						</p>
 					<?php endif; ?>
 				</li>
@@ -327,6 +326,24 @@ class CategoryPosts extends WP_Widget {
 			</label>
 		</p>
 		<p>
+			<label for="<?php echo $this->get_field_id("date"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("date"); ?>"<?php checked( (bool) $instance["date"], true ); ?> />
+				<?php _e( 'Show post date' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("date_format"); ?>">
+				<?php _e( 'Date format:' ); ?>
+			</label>
+			<input class="text" id="<?php echo $this->get_field_id("date_format"); ?>" name="<?php echo $this->get_field_name("date_format"); ?>" type="text" value="<?php echo esc_attr($instance["date_format"]); ?>" size="8" />
+		</p>		
+		<p>
+			<label for="<?php echo $this->get_field_id("date_link"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date_link"); ?>" name="<?php echo $this->get_field_name("date_link"); ?>"<?php checked( (bool) $instance["date_link"], true ); ?> />
+				<?php _e( 'Make widget date link' ); ?>
+			</label>
+		</p>		
+		<p>
 			<label for="<?php echo $this->get_field_id("excerpt"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt"); ?>" name="<?php echo $this->get_field_name("excerpt"); ?>"<?php checked( (bool) $instance["excerpt"], true ); ?> />
 				<?php _e( 'Show post excerpt' ); ?>
@@ -343,29 +360,13 @@ class CategoryPosts extends WP_Widget {
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("comment_num"); ?>" name="<?php echo $this->get_field_name("comment_num"); ?>"<?php checked( (bool) $instance["comment_num"], true ); ?> />
 				<?php _e( 'Show number of comments' ); ?>
 			</label>
-		</p>
+		</p>		
 		<p>
 			<label for="<?php echo $this->get_field_id("author"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("author"); ?>" name="<?php echo $this->get_field_name("author"); ?>"<?php checked( (bool) $instance["author"], true ); ?> />
 				<?php _e( 'Show post author' ); ?>
 			</label>
-		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id("date"); ?>">
-				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("date"); ?>"<?php checked( (bool) $instance["date"], true ); ?> />
-				<?php _e( 'Show post date' ); ?>
-			</label>
-		</p>
-		<p>
-			<label for="<?php echo $this->get_field_id("date_link"); ?>">
-				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date_link"); ?>" name="<?php echo $this->get_field_name("date_link"); ?>"<?php checked( (bool) $instance["date_link"], true ); ?> />
-				<?php _e( 'Make widget date link' ); ?>
-			</label>
-			<label for="<?php echo $this->get_field_id("date_format"); ?>">
-				<?php _e( 'Date format:' ); ?>
-			</label>
-			<input class="text" id="<?php echo $this->get_field_id("date_format"); ?>" name="<?php echo $this->get_field_name("date_format"); ?>" type="text" value="<?php echo esc_attr($instance["date_format"]); ?>" size="8" />
-		</p>
+		</p>		
 		<?php if ( function_exists('the_post_thumbnail') && current_theme_supports("post-thumbnails") ) : ?>
 			<p>
 				<label for="<?php echo $this->get_field_id("thumb"); ?>">
