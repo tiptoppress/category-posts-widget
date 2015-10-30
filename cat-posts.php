@@ -136,11 +136,22 @@ class CategoryPosts extends WP_Widget {
 						href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?>
 					</a>
 
+					<?php if ( isset( $instance['author'] ) ) : ?>
+						<p class="post-author <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-author"; } ?>">			
+							<?php the_author_posts_link(); ?>
+						</p>
+					<?php endif; ?>
+
 					<?php if ( isset( $instance['date'] ) ) : ?>
+						<?php if ( isset( $instance['date_format'] ) ) { $date_format = $instance['date_format']; } else { $date_format = "j M Y"; } ?>
 						<p class="post-date <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-date"; } ?>">
+<<<<<<< HEAD
 						<?php if( isset ( $instance["date_link"] ) ) { ?> <a href="<?php the_permalink(); ?>"><?php } ?>
 							<?php the_time("j M Y"); ?>
 						<? if( isset ( $instance["date_link"] ) ) { echo '</a>'; } ?>
+=======
+							<?php the_time($date_format); ?>
+>>>>>>> refs/remotes/origin/master
 						</p>
 					<?php endif;
 
@@ -170,6 +181,13 @@ class CategoryPosts extends WP_Widget {
 			}
 
 			echo "</ul>\n";
+
+			// Footer link to category page
+			if( isset ( $instance["footer_link"] ) ) {
+				echo "<a";
+					if( !isset( $instance['disable_css'] ) ) { echo " class:\"cat-post-footer-link\""; }
+				echo " href=\"" . get_category_link($instance["cat"]) . "\">" . $instance["footer_link"] . "</a>";
+			}
 
 			echo $after_widget;
 
@@ -216,11 +234,17 @@ class CategoryPosts extends WP_Widget {
 			'sort_by'        => __( '' ),
 			'asc_sort_order' => __( '' ),
 			'title_link'     => __( '' ),
+			'footer_link'    => __( '' ),
 			'excerpt'        => __( '' ),
 			'excerpt_length' => __( '' ),
 			'comment_num'    => __( '' ),
+			'author'         => __( '' ),
 			'date'           => __( '' ),
+<<<<<<< HEAD
 			'date_link'      => __( '' ),
+=======
+			'date_format'    => __( '' ),
+>>>>>>> refs/remotes/origin/master
 			'thumb'          => __( '' ),
 			'thumbTop'       => __( '' ),
 			'thumb_w'        => __( '' ),
@@ -236,11 +260,17 @@ class CategoryPosts extends WP_Widget {
 		$sort_by        = $instance['sort_by'];
 		$asc_sort_order = $instance['asc_sort_order'];
 		$title_link     = $instance['title_link'];
+		$footer_link    = $instance['footer_link'];
 		$excerpt        = $instance['excerpt'];
 		$excerpt_length = $instance['excerpt_length'];
 		$comment_num    = $instance['comment_num'];
+		$author         = $instance['author'];
 		$date           = $instance['date'];
+<<<<<<< HEAD
 		$date_link      = $instance['date_link'];
+=======
+		$date_format    = $instance['date_format'];
+>>>>>>> refs/remotes/origin/master
 		$thumb          = $instance['thumb'];
 		$thumbTop       = $instance['thumbTop'];
 		$thumb_w        = $instance['thumb_w'];
@@ -266,7 +296,13 @@ class CategoryPosts extends WP_Widget {
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("title_link"); ?>" name="<?php echo $this->get_field_name("title_link"); ?>"<?php checked( (bool) $instance["title_link"], true ); ?> />
 				<?php _e( 'Make widget title link' ); ?>
 			</label>
-		</p>		
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("footer_link"); ?>">
+				<?php _e( 'Footer link text' ); ?>:
+				<input class="widefat" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
+			</label>
+		</p>
 		<p>
 			<label>
 				<?php _e( 'Category' ); ?>:
@@ -318,16 +354,29 @@ class CategoryPosts extends WP_Widget {
 			</label>
 		</p>
 		<p>
+			<label for="<?php echo $this->get_field_id("author"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("author"); ?>" name="<?php echo $this->get_field_name("author"); ?>"<?php checked( (bool) $instance["author"], true ); ?> />
+				<?php _e( 'Show post author' ); ?>
+			</label>
+		</p>
+		<p>
 			<label for="<?php echo $this->get_field_id("date"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("date"); ?>"<?php checked( (bool) $instance["date"], true ); ?> />
 				<?php _e( 'Show post date' ); ?>
 			</label>
 		</p>
 		<p>
+<<<<<<< HEAD
 			<label for="<?php echo $this->get_field_id("date_link"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date_link"); ?>" name="<?php echo $this->get_field_name("date_link"); ?>"<?php checked( (bool) $instance["date_link"], true ); ?> />
 				<?php _e( 'Make widget date link' ); ?>
 			</label>
+=======
+			<label for="<?php echo $this->get_field_id("date_format"); ?>">
+				<?php _e( 'Date format:' ); ?>
+			</label>
+			<input class="text" id="<?php echo $this->get_field_id("date_format"); ?>" name="<?php echo $this->get_field_name("date_format"); ?>" type="text" value="<?php echo esc_attr($instance["date_format"]); ?>" size="8" />
+>>>>>>> refs/remotes/origin/master
 		</p>
 		<?php if ( function_exists('the_post_thumbnail') && current_theme_supports("post-thumbnails") ) : ?>
 			<p>
