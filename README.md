@@ -29,6 +29,7 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 * Set which category the posts should come form.
 * Option to show the post excerpt and how long the excerpt should be.
 * Option to show the post date.
+* Option to make the widget date link to the category page.
 * Option to format the outputted date string.
 * Option to show the comment count.
 * Option to make the widget title link to the category page.
@@ -69,6 +70,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 4.1.4
 
+* Added option to make the widget date link to the category page.
 * Addd option to link to the category page below posts list.
 * Added option show post author.
 * Added option to format the outputted date string.
