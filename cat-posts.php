@@ -79,12 +79,24 @@ class CategoryPosts extends WP_Widget {
 		}
 
 		// Get array of post info.
-		$cat_posts = new WP_Query(
-			"showposts=" . $instance["num"] . 
-			"&cat=" . $instance["cat"] .
-			"&orderby=" . $sort_by .
-			"&order=" . $sort_order
+		$args = array(
+			'showposts' => $instance["num"],
+			'cat' => $instance["cat"],
+			'orderby' => $sort_by,
+			'order' => $sort_order
 		);
+		
+		if( isset( $instance['hideNoThumb'] ) ) {
+			$args = array_merge( $args, array( 'meta_query' => array(
+					array(
+					 'key' => '_thumbnail_id',
+					 'compare' => 'EXISTS' )
+					)
+				)	
+			);
+		}
+		
+		$cat_posts = new WP_Query( $args );
 		
 		if ( !isset ( $instance["hide_if_empty"] ) || $cat_posts->have_posts() ) {
 			
@@ -240,6 +252,7 @@ class CategoryPosts extends WP_Widget {
 			'date_format'    => __( '' ),
 			'thumb'          => __( '' ),
 			'thumbTop'       => __( '' ),
+			'hideNoThumb'    => __( '' ),
 			'thumb_w'        => __( '' ),
 			'thumb_h'        => __( '' ),
 			'disable_css'    => __( '' ),
@@ -263,6 +276,7 @@ class CategoryPosts extends WP_Widget {
 		$date_format    = $instance['date_format'];
 		$thumb          = $instance['thumb'];
 		$thumbTop       = $instance['thumbTop'];
+		$hideNoThumb    = $instance['hideNoThumb'];
 		$thumb_w        = $instance['thumb_w'];
 		$thumb_h        = $instance['thumb_h'];
 		$disable_css    = $instance['disable_css'];
@@ -329,7 +343,7 @@ class CategoryPosts extends WP_Widget {
 			<label for="<?php echo $this->get_field_id("date_format"); ?>">
 				<?php _e( 'Date format:' ); ?>
 			</label>
-			<input class="text" id="<?php echo $this->get_field_id("date_format"); ?>" name="<?php echo $this->get_field_name("date_format"); ?>" type="text" value="<?php echo esc_attr($instance["date_format"]); ?>" size="8" />
+			<input class="text" placeholder="j M Y" id="<?php echo $this->get_field_id("date_format"); ?>" name="<?php echo $this->get_field_name("date_format"); ?>" type="text" value="<?php echo esc_attr($instance["date_format"]); ?>" size="8" />
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("date_link"); ?>">
@@ -374,6 +388,12 @@ class CategoryPosts extends WP_Widget {
 					</label>
 				</label>
 			</p>
+			<p>
+				<label for="<?php echo $this->get_field_id("hideNoThumb"); ?>">
+					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hideNoThumb"); ?>" name="<?php echo $this->get_field_name("hideNoThumb"); ?>"<?php checked( (bool) $instance["hideNoThumb"], true ); ?> />
+					<?php _e( 'Hide posts which have no thumbnail' ); ?>
+				</label>
+			</p>			
 		<?php endif; ?>	
 		<p>
 			<label for="<?php echo $this->get_field_id("comment_num"); ?>">
@@ -390,7 +410,7 @@ class CategoryPosts extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id("footer_link"); ?>">
 				<?php _e( 'Footer link text' ); ?>:
-				<input class="widefat" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
+				<input class="widefat" placeholder="More by this topic ..." id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
 			</label>
 		</p>
 		<p>

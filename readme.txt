@@ -19,6 +19,7 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 * Option to change ordering of posts.
 * Option to show post thumbnail & set dimension by width & height.
 * Option to put thumbnail on top
+* Option to hide posts which have no thumbnail.
 * Option to disable widget CSS.
 * Set how many posts to show.
 * Option show post author.
@@ -86,6 +87,7 @@ Enable the check box "Make widget title link".
 
 4.1.4
 
+* Added option to hide posts which have no thumbnail.
 * Added option to make the widget date link to the category page.
 * Added option to link to the category page below posts list.
 * Added option show post author.
