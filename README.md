@@ -26,6 +26,7 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 * Option to hide posts which have no thumbnail.
 * Option to disable widget CSS.
 * Set how many posts to show.
+* Option exclude current post.
 * Option show post author.
 * Set which category the posts should come form.
 * Option to show the post excerpt and how long the excerpt should be.
@@ -71,6 +72,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 4.1.4
 
+* Added option exclude current post.
 * Added option to hide posts which have no thumbnail.
 * Added option to make the widget date link to the category page.
 * Addd option to link to the category page below posts list.

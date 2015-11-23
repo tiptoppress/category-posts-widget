@@ -77,11 +77,16 @@ class CategoryPosts extends WP_Widget {
 			$sort_by = 'date';
 			$sort_order = 'DESC';
 		}
+		
+		// Exclude current post
+		$current_post_id = get_the_ID();
+		$exclude_current_post = (isset( $instance['exclude_current_post'] ) && $instance['exclude_current_post'] != -1) ? $current_post_id : "";		
 
 		// Get array of post info.
 		$args = array(
 			'showposts' => $instance["num"],
 			'cat' => $instance["cat"],
+			'post__not_in' => array( $exclude_current_post ),
 			'orderby' => $sort_by,
 			'order' => $sort_order
 		);
@@ -204,8 +209,8 @@ class CategoryPosts extends WP_Widget {
 			if (function_exists ('wp_reset_postdata')) //wp_reset_postdata only exists in WordPress >3.0.0
 				wp_reset_postdata();
 			
-		} // END if !isset ( $instance["hide_if_empty"] ) || $cat_posts->have_posts()
-	}
+		} // END if
+	} // END function
 
 	/**
 	 * Update the options
@@ -235,58 +240,60 @@ class CategoryPosts extends WP_Widget {
 	 */
 	function form($instance) {
 		$instance = wp_parse_args( ( array ) $instance, array(
-			'title'          => __( '' ),
-			'hide_title'     => __( '' ),
-			'cat'            => __( '' ),
-			'num'            => __( '' ),
-			'sort_by'        => __( '' ),
-			'asc_sort_order' => __( '' ),
-			'title_link'     => __( '' ),
-			'footer_link'    => __( '' ),
-			'excerpt'        => __( '' ),
-			'excerpt_length' => __( '' ),
-			'comment_num'    => __( '' ),
-			'author'         => __( '' ),
-			'date'           => __( '' ),
-			'date_link'      => __( '' ),
-			'date_format'    => __( '' ),
-			'thumb'          => __( '' ),
-			'thumbTop'       => __( '' ),
-			'hideNoThumb'    => __( '' ),
-			'thumb_w'        => __( '' ),
-			'thumb_h'        => __( '' ),
-			'disable_css'    => __( '' ),
-			'hide_if_empty'  => __( '' )
+			'title'                => __( '' ),
+			'hide_title'           => __( '' ),
+			'cat'                  => __( '' ),
+			'num'                  => __( '' ),
+			'sort_by'              => __( '' ),
+			'asc_sort_order'       => __( '' ),
+			'exclude_current_post' => __( '' ),
+			'title_link'           => __( '' ),
+			'footer_link'          => __( '' ),
+			'excerpt'              => __( '' ),
+			'excerpt_length'       => __( '' ),
+			'comment_num'          => __( '' ),
+			'author'               => __( '' ),
+			'date'                 => __( '' ),
+			'date_link'            => __( '' ),
+			'date_format'          => __( '' ),
+			'thumb'                => __( '' ),
+			'thumbTop'             => __( '' ),
+			'hideNoThumb'          => __( '' ),
+			'thumb_w'              => __( '' ),
+			'thumb_h'              => __( '' ),
+			'disable_css'          => __( '' ),
+			'hide_if_empty'        => __( '' )
 		) );
 
-		$title          = $instance['title'];
-		$hide_title     = $instance['hide_title'];
-		$cat            = $instance['cat'];
-		$num            = $instance['num'];
-		$sort_by        = $instance['sort_by'];
-		$asc_sort_order = $instance['asc_sort_order'];
-		$title_link     = $instance['title_link'];
-		$footer_link    = $instance['footer_link'];
-		$excerpt        = $instance['excerpt'];
-		$excerpt_length = $instance['excerpt_length'];
-		$comment_num    = $instance['comment_num'];
-		$author         = $instance['author'];
-		$date           = $instance['date'];
-		$date_link      = $instance['date_link'];
-		$date_format    = $instance['date_format'];
-		$thumb          = $instance['thumb'];
-		$thumbTop       = $instance['thumbTop'];
-		$hideNoThumb    = $instance['hideNoThumb'];
-		$thumb_w        = $instance['thumb_w'];
-		$thumb_h        = $instance['thumb_h'];
-		$disable_css    = $instance['disable_css'];
-		$hide_if_empty  = $instance['hide_if_empty'];
+		$title                = $instance['title'];
+		$hide_title           = $instance['hide_title'];
+		$cat                  = $instance['cat'];
+		$num                  = $instance['num'];
+		$sort_by              = $instance['sort_by'];
+		$asc_sort_order       = $instance['asc_sort_order'];
+		$exclude_current_post = $instance['exclude_current_post'];
+		$title_link           = $instance['title_link'];
+		$footer_link          = $instance['footer_link'];
+		$excerpt              = $instance['excerpt'];
+		$excerpt_length       = $instance['excerpt_length'];
+		$comment_num          = $instance['comment_num'];
+		$author               = $instance['author'];
+		$date                 = $instance['date'];
+		$date_link            = $instance['date_link'];
+		$date_format          = $instance['date_format'];
+		$thumb                = $instance['thumb'];
+		$thumbTop             = $instance['thumbTop'];
+		$hideNoThumb          = $instance['hideNoThumb'];
+		$thumb_w              = $instance['thumb_w'];
+		$thumb_h              = $instance['thumb_h'];
+		$disable_css          = $instance['disable_css'];
+		$hide_if_empty        = $instance['hide_if_empty'];
 
 		?>
 		<p>
 			<label for="<?php echo $this->get_field_id("title"); ?>">
 				<?php _e( 'Title' ); ?>:
-				<input class="widefat" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo esc_attr($instance["title"]); ?>" />
+				<input class="widefat" style="width:80%;" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo esc_attr($instance["title"]); ?>" />
 			</label>
 		</p>
 		<p>
@@ -331,6 +338,12 @@ class CategoryPosts extends WP_Widget {
 					name="<?php echo $this->get_field_name("asc_sort_order"); ?>"
 					<?php checked( (bool) $instance["asc_sort_order"], true ); ?> />
 						<?php _e( 'Reverse sort order (ascending)' ); ?>
+			</label>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id("exclude_current_post"); ?>">
+				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("exclude_current_post"); ?>" name="<?php echo $this->get_field_name("exclude_current_post"); ?>"<?php checked( (bool) $instance["exclude_current_post"], true ); ?> />
+				<?php _e( 'Exclude current post' ); ?>
 			</label>
 		</p>
 		<p>
@@ -410,7 +423,7 @@ class CategoryPosts extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id("footer_link"); ?>">
 				<?php _e( 'Footer link text' ); ?>:
-				<input class="widefat" placeholder="More by this topic ..." id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
+				<input class="widefat" style="width:60%;" placeholder="... more by this topic" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
 			</label>
 		</p>
 		<p>
