@@ -304,7 +304,7 @@ class CategoryPosts extends WP_Widget {
 		<p>
 			<label>
 				<?php _e( 'Category' ); ?>:
-				<?php wp_dropdown_categories( array( 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"] ) ); ?>
+				<?php wp_dropdown_categories( array( 'hide_empty'=> 0, 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"] ) ); ?>
 			</label>
 		</p>
 		<p>
