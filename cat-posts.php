@@ -40,6 +40,15 @@ function category_posts_add_image_size(){
 
 add_action( 'init', 'category_posts_add_image_size' );
 
+/**
+ * Load plugin textdomain.
+ *
+ */
+function category_posts_load_textdomain() {
+  load_plugin_textdomain( 'categoryposts', false, plugin_basename( dirname( __FILE__ ) ) . '/languages' ); 
+}
+
+add_action( 'plugins_loaded', 'category_posts_load_textdomain' );
 
 /**
  * Category Posts Widget Class
@@ -49,8 +58,8 @@ add_action( 'init', 'category_posts_add_image_size' );
 class CategoryPosts extends WP_Widget {
 
 	function __construct() {
-		$widget_ops = array('classname' => 'cat-post-widget', 'description' => __('List single category posts'));
-		parent::__construct('category-posts', __('Category Posts'), $widget_ops);
+		$widget_ops = array('classname' => 'cat-post-widget', 'description' => __('List single category posts','categoryposts'));
+		parent::__construct('category-posts', __('Category Posts','categoryposts'), $widget_ops);
 	}
 
 	// Displays category posts widget on blog.
@@ -240,29 +249,29 @@ class CategoryPosts extends WP_Widget {
 	 */
 	function form($instance) {
 		$instance = wp_parse_args( ( array ) $instance, array(
-			'title'                => __( '' ),
-			'hide_title'           => __( '' ),
-			'cat'                  => __( '' ),
-			'num'                  => __( '' ),
-			'sort_by'              => __( '' ),
-			'asc_sort_order'       => __( '' ),
-			'exclude_current_post' => __( '' ),
-			'title_link'           => __( '' ),
-			'footer_link'          => __( '' ),
-			'excerpt'              => __( '' ),
-			'excerpt_length'       => __( '' ),
-			'comment_num'          => __( '' ),
-			'author'               => __( '' ),
-			'date'                 => __( '' ),
-			'date_link'            => __( '' ),
-			'date_format'          => __( '' ),
-			'thumb'                => __( '' ),
-			'thumbTop'             => __( '' ),
-			'hideNoThumb'          => __( '' ),
-			'thumb_w'              => __( '' ),
-			'thumb_h'              => __( '' ),
-			'disable_css'          => __( '' ),
-			'hide_if_empty'        => __( '' )
+			'title'                => '',
+			'hide_title'           => '',
+			'cat'                  => '',
+			'num'                  => '',
+			'sort_by'              => '',
+			'asc_sort_order'       => '',
+			'exclude_current_post' => '',
+			'title_link'           => '',
+			'footer_link'          => '',
+			'excerpt'              => '',
+			'excerpt_length'       => '',
+			'comment_num'          => '',
+			'author'               => '',
+			'date'                 => '',
+			'date_link'            => '',
+			'date_format'          => '',
+			'thumb'                => '',
+			'thumbTop'             => '',
+			'hideNoThumb'          => '',
+			'thumb_w'              => '',
+			'thumb_h'              => '',
+			'disable_css'          => '',
+			'hide_if_empty'        => ''
 		) );
 
 		$title                = $instance['title'];
@@ -292,42 +301,42 @@ class CategoryPosts extends WP_Widget {
 		?>
 		<p>
 			<label for="<?php echo $this->get_field_id("title"); ?>">
-				<?php _e( 'Title' ); ?>:
+				<?php _e( 'Title','categoryposts' ); ?>:
 				<input class="widefat" style="width:80%;" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo esc_attr($instance["title"]); ?>" />
 			</label>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("title_link"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("title_link"); ?>" name="<?php echo $this->get_field_name("title_link"); ?>"<?php checked( (bool) $instance["title_link"], true ); ?> />
-				<?php _e( 'Make widget title link' ); ?>
+				<?php _e( 'Make widget title link','categoryposts' ); ?>
 			</label>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("hide_title"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_title"); ?>" name="<?php echo $this->get_field_name("hide_title"); ?>"<?php checked( (bool) $instance["hide_title"], true ); ?> />
-				<?php _e( 'Hide title' ); ?>
+				<?php _e( 'Hide title','categoryposts' ); ?>
 			</label>
 		</p>
 		<p>
 			<label>
-				<?php _e( 'Category' ); ?>:
+				<?php _e( 'Category','categoryposts' ); ?>:
 				<?php wp_dropdown_categories( array( 'hide_empty'=> 0, 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"] ) ); ?>
 			</label>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("num"); ?>">
-				<?php _e('Number of posts to show'); ?>:
+				<?php _e('Number of posts to show','categoryposts'); ?>:
 				<input style="text-align: center;" id="<?php echo $this->get_field_id("num"); ?>" name="<?php echo $this->get_field_name("num"); ?>" type="text" value="<?php echo absint($instance["num"]); ?>" size='3' />
 			</label>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("sort_by"); ?>">
-				<?php _e('Sort by'); ?>:
+				<?php _e('Sort by','categoryposts'); ?>:
 				<select id="<?php echo $this->get_field_id("sort_by"); ?>" name="<?php echo $this->get_field_name("sort_by"); ?>">
-					<option value="date"<?php selected( $instance["sort_by"], "date" ); ?>>Date</option>
-					<option value="title"<?php selected( $instance["sort_by"], "title" ); ?>>Title</option>
-					<option value="comment_count"<?php selected( $instance["sort_by"], "comment_count" ); ?>>Number of comments</option>
-					<option value="rand"<?php selected( $instance["sort_by"], "rand" ); ?>>Random</option>
+					<option value="date"<?php selected( $instance["sort_by"], "date" ); ?>><?php _e('Date','categoryposts')?></option>
+					<option value="title"<?php selected( $instance["sort_by"], "title" ); ?>><?php _e('Title','categoryposts')?></option>
+					<option value="comment_count"<?php selected( $instance["sort_by"], "comment_count" ); ?>><?php _e('Number of comments','categoryposts')?></option>
+					<option value="rand"<?php selected( $instance["sort_by"], "rand" ); ?>><?php _e('Random','categoryposts')?></option>
 				</select>
 			</label>
 		</p>
@@ -337,42 +346,42 @@ class CategoryPosts extends WP_Widget {
 					id="<?php echo $this->get_field_id("asc_sort_order"); ?>" 
 					name="<?php echo $this->get_field_name("asc_sort_order"); ?>"
 					<?php checked( (bool) $instance["asc_sort_order"], true ); ?> />
-						<?php _e( 'Reverse sort order (ascending)' ); ?>
+						<?php _e( 'Reverse sort order (ascending)','categoryposts' ); ?>
 			</label>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("exclude_current_post"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("exclude_current_post"); ?>" name="<?php echo $this->get_field_name("exclude_current_post"); ?>"<?php checked( (bool) $instance["exclude_current_post"], true ); ?> />
-				<?php _e( 'Exclude current post' ); ?>
+				<?php _e( 'Exclude current post','categoryposts' ); ?>
 			</label>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("date"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("date"); ?>"<?php checked( (bool) $instance["date"], true ); ?> />
-				<?php _e( 'Show post date' ); ?>
+				<?php _e( 'Show post date','categoryposts' ); ?>
 			</label>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("date_format"); ?>">
-				<?php _e( 'Date format:' ); ?>
+				<?php _e( 'Date format:','categoryposts' ); ?>
 			</label>
 			<input class="text" placeholder="j M Y" id="<?php echo $this->get_field_id("date_format"); ?>" name="<?php echo $this->get_field_name("date_format"); ?>" type="text" value="<?php echo esc_attr($instance["date_format"]); ?>" size="8" />
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("date_link"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date_link"); ?>" name="<?php echo $this->get_field_name("date_link"); ?>"<?php checked( (bool) $instance["date_link"], true ); ?> />
-				<?php _e( 'Make widget date link' ); ?>
+				<?php _e( 'Make widget date link','categoryposts' ); ?>
 			</label>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("excerpt"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt"); ?>" name="<?php echo $this->get_field_name("excerpt"); ?>"<?php checked( (bool) $instance["excerpt"], true ); ?> />
-				<?php _e( 'Show post excerpt' ); ?>
+				<?php _e( 'Show post excerpt','categoryposts' ); ?>
 			</label>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("excerpt_length"); ?>">
-				<?php _e( 'Excerpt length (in words):' ); ?>
+				<?php _e( 'Excerpt length (in words):','categoryposts' ); ?>
 			</label>
 			<input style="text-align: center;" type="text" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" size="3" />
 		</p>
@@ -380,62 +389,62 @@ class CategoryPosts extends WP_Widget {
 			<p>
 				<label for="<?php echo $this->get_field_id("thumb"); ?>">
 					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumb"); ?>" name="<?php echo $this->get_field_name("thumb"); ?>"<?php checked( (bool) $instance["thumb"], true ); ?> />
-					<?php _e( 'Show post thumbnail' ); ?>
+					<?php _e( 'Show post thumbnail','categoryposts' ); ?>
 				</label>
 			</p>
 			<p>
 				<label for="<?php echo $this->get_field_id("thumbTop"); ?>">
 					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumbTop"); ?>" name="<?php echo $this->get_field_name("thumbTop"); ?>"<?php checked( (bool) $instance["thumbTop"], true ); ?> />
-					<?php _e( 'Thumbnail to top' ); ?>
+					<?php _e( 'Thumbnail to top','categoryposts' ); ?>
 				</label>
 			</p>
 			<p>
 				<label>
-					<?php _e('Thumbnail dimensions (in pixels)'); ?>:<br />
+					<?php _e('Thumbnail dimensions (in pixels)','categoryposts'); ?>:<br />
 					<label for="<?php echo $this->get_field_id("thumb_w"); ?>">
-						Width: <input class="widefat" style="width:30%;" type="text" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo $instance["thumb_w"]; ?>" />
+						<?php _e('Width:','categoryposts')?> <input class="widefat" style="width:30%;" type="text" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo $instance["thumb_w"]; ?>" />
 					</label>
 					
 					<label for="<?php echo $this->get_field_id("thumb_h"); ?>">
-						Height: <input class="widefat" style="width:30%;" type="text" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo $instance["thumb_h"]; ?>" />
+						<?php _e('Height:','categoryposts')?> <input class="widefat" style="width:30%;" type="text" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo $instance["thumb_h"]; ?>" />
 					</label>
 				</label>
 			</p>
 			<p>
 				<label for="<?php echo $this->get_field_id("hideNoThumb"); ?>">
 					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hideNoThumb"); ?>" name="<?php echo $this->get_field_name("hideNoThumb"); ?>"<?php checked( (bool) $instance["hideNoThumb"], true ); ?> />
-					<?php _e( 'Hide posts which have no thumbnail' ); ?>
+					<?php _e( 'Hide posts which have no thumbnail','categoryposts' ); ?>
 				</label>
 			</p>			
 		<?php endif; ?>	
 		<p>
 			<label for="<?php echo $this->get_field_id("comment_num"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("comment_num"); ?>" name="<?php echo $this->get_field_name("comment_num"); ?>"<?php checked( (bool) $instance["comment_num"], true ); ?> />
-				<?php _e( 'Show number of comments' ); ?>
+				<?php _e( 'Show number of comments','categoryposts' ); ?>
 			</label>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("author"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("author"); ?>" name="<?php echo $this->get_field_name("author"); ?>"<?php checked( (bool) $instance["author"], true ); ?> />
-				<?php _e( 'Show post author' ); ?>
+				<?php _e( 'Show post author','categoryposts' ); ?>
 			</label>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("footer_link"); ?>">
-				<?php _e( 'Footer link text' ); ?>:
-				<input class="widefat" style="width:60%;" placeholder="... more by this topic" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
+				<?php _e( 'Footer link text','categoryposts' ); ?>:
+				<input class="widefat" style="width:60%;" placeholder="<?php _e('... more by this topic','categoryposts')?>" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
 			</label>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("disable_css"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_css"); ?>" name="<?php echo $this->get_field_name("disable_css"); ?>"<?php checked( (bool) $instance["disable_css"], true ); ?> />
-				<?php _e( 'Disable widget CSS' ); ?>
+				<?php _e( 'Disable widget CSS','categoryposts' ); ?>
 			</label>
 		</p>
 		<p>
 			<label for="<?php echo $this->get_field_id("hide_if_empty"); ?>">
 				<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_if_empty"); ?>" name="<?php echo $this->get_field_name("hide_if_empty"); ?>"<?php checked( (bool) $instance["hide_if_empty"], true ); ?> />
-				<?php _e( 'Hide if empty' ); ?>
+				<?php _e( 'Hide if empty','categoryposts' ); ?>
 			</label>
 		</p>
 		<?php
