@@ -23,21 +23,6 @@ function category_posts_widget_styles() {
 	wp_enqueue_style( 'category-posts' );
 }
 
-/**
- * Register thumbnail sizes.
- *
- * @return void
- */
-function category_posts_add_image_size(){
-	$sizes = get_option('mkrdip_cat_post_thumb_sizes');
-	
-	if ( $sizes ){
-		foreach ( $sizes as $id=>$size ) {
-			add_image_size( 'cat_post_thumb_size' . $id, $size[0], $size[1], true );
-		}
-	}
-}
-
 add_action( 'init', 'category_posts_add_image_size' );
 
 /**
@@ -67,8 +52,6 @@ class CategoryPosts extends WP_Widget {
 
 		extract( $args );
 
-		$sizes = get_option('mkrdip_cat_post_thumb_sizes');
-		
 		// If not title, use the name of the category.
 		if( !$instance["title"] ) {
 			$category_info = get_category($instance["cat"]);
@@ -224,15 +207,7 @@ class CategoryPosts extends WP_Widget {
 	 * @return array
 	 */
 	function update($new_instance, $old_instance) {
-		
-		// thumbnail size
-		$sizes = get_option('mkrdip_cat_post_thumb_sizes');
-		if ( !$sizes ) {
-			$sizes = array();
-		}
-		$sizes[$this->id] = array($new_instance['thumb_w'], $new_instance['thumb_h']);
-		update_option('mkrdip_cat_post_thumb_sizes', $sizes);
-		
+				
 		return $new_instance;
 	}
 
