@@ -23,8 +23,6 @@ function category_posts_widget_styles() {
 	wp_enqueue_style( 'category-posts' );
 }
 
-add_action( 'init', 'category_posts_add_image_size' );
-
 /**
  * Load plugin textdomain.
  *
