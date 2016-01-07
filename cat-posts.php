@@ -64,8 +64,6 @@ class CategoryPosts extends WP_Widget {
 
 	// Displays category posts widget on blog.
 	function widget($args, $instance) {
-		global $post;
-		$post_old = $post; // Save the post object.
 
 		extract( $args );
 
@@ -147,8 +145,7 @@ class CategoryPosts extends WP_Widget {
 					
 					<?php
 					if( isset( $instance["thumbTop"] ) ) : 
-						if ( function_exists('the_post_thumbnail') &&
-								current_theme_supports("post-thumbnails") &&
+						if ( current_theme_supports("post-thumbnails") &&
 								isset( $instance["thumb"] ) &&
 								has_post_thumbnail() ) : ?>
 							<a <?php if( !isset( $instance['disable_css'] ) ) { echo "class=\"cat-post-thumbnail\""; } ?>
@@ -172,8 +169,7 @@ class CategoryPosts extends WP_Widget {
 					<?php endif;
 
 					if( !isset( $instance["thumbTop"] ) ) : 
-						if ( function_exists('the_post_thumbnail') &&
-								current_theme_supports("post-thumbnails") &&
+						if ( current_theme_supports("post-thumbnails") &&
 								isset( $instance["thumb"] ) &&
 								has_post_thumbnail() ) : ?>
 							<a <?php if( !isset( $instance['disable_css'] ) ) { echo "class=\"cat-post-thumbnail\""; } ?>
@@ -215,8 +211,7 @@ class CategoryPosts extends WP_Widget {
 
 			remove_filter('excerpt_length', $new_excerpt_length);
 
-			if (function_exists ('wp_reset_postdata')) //wp_reset_postdata only exists in WordPress >3.0.0
-				wp_reset_postdata();
+			wp_reset_postdata();
 			
 		} // END if
 	} // END function
@@ -385,7 +380,7 @@ class CategoryPosts extends WP_Widget {
 			</label>
 			<input style="text-align: center;" type="text" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" size="3" />
 		</p>
-		<?php if ( function_exists('the_post_thumbnail') && current_theme_supports("post-thumbnails") ) : ?>
+		<?php if ( current_theme_supports("post-thumbnails") ) : ?>
 			<p>
 				<label for="<?php echo $this->get_field_id("thumb"); ?>">
 					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumb"); ?>" name="<?php echo $this->get_field_name("thumb"); ?>"<?php checked( (bool) $instance["thumb"], true ); ?> />
