@@ -24,23 +24,6 @@ function category_posts_widget_styles() {
 }
 
 /**
- * Register thumbnail sizes.
- *
- * @return void
- */
-function category_posts_add_image_size(){
-	$sizes = get_option('mkrdip_cat_post_thumb_sizes');
-	
-	if ( $sizes ){
-		foreach ( $sizes as $id=>$size ) {
-			add_image_size( 'cat_post_thumb_size' . $id, $size[0], $size[1], true );
-		}
-	}
-}
-
-add_action( 'init', 'category_posts_add_image_size' );
-
-/**
  * Load plugin textdomain.
  *
  */
@@ -64,13 +47,9 @@ class CategoryPosts extends WP_Widget {
 
 	// Displays category posts widget on blog.
 	function widget($args, $instance) {
-		global $post;
-		$post_old = $post; // Save the post object.
 
 		extract( $args );
 
-		$sizes = get_option('mkrdip_cat_post_thumb_sizes');
-		
 		// If not title, use the name of the category.
 		if( !$instance["title"] ) {
 			$category_info = get_category($instance["cat"]);
@@ -147,13 +126,12 @@ class CategoryPosts extends WP_Widget {
 					
 					<?php
 					if( isset( $instance["thumbTop"] ) ) : 
-						if ( function_exists('the_post_thumbnail') &&
-								current_theme_supports("post-thumbnails") &&
+						if ( current_theme_supports("post-thumbnails") &&
 								isset( $instance["thumb"] ) &&
 								has_post_thumbnail() ) : ?>
 							<a <?php if( !isset( $instance['disable_css'] ) ) { echo "class=\"cat-post-thumbnail\""; } ?>
 								href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
-								<?php the_post_thumbnail( 'cat_post_thumb_size'.$this->id ); ?>
+								<?php the_post_thumbnail( array($instance['thumb_w'],$instance['thumb_h'])); ?>
 							</a>
 					<?php endif; 
 					endif; ?>					
@@ -172,13 +150,12 @@ class CategoryPosts extends WP_Widget {
 					<?php endif;
 
 					if( !isset( $instance["thumbTop"] ) ) : 
-						if ( function_exists('the_post_thumbnail') &&
-								current_theme_supports("post-thumbnails") &&
+						if ( current_theme_supports("post-thumbnails") &&
 								isset( $instance["thumb"] ) &&
 								has_post_thumbnail() ) : ?>
 							<a <?php if( !isset( $instance['disable_css'] ) ) { echo "class=\"cat-post-thumbnail\""; } ?>
 								href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
-								<?php the_post_thumbnail( 'cat_post_thumb_size'.$this->id ); ?>
+								<?php the_post_thumbnail( array($instance['thumb_w'],$instance['thumb_h'])); ?>
 							</a>
 					<?php endif;
 					endif;
@@ -215,8 +192,7 @@ class CategoryPosts extends WP_Widget {
 
 			remove_filter('excerpt_length', $new_excerpt_length);
 
-			if (function_exists ('wp_reset_postdata')) //wp_reset_postdata only exists in WordPress >3.0.0
-				wp_reset_postdata();
+			wp_reset_postdata();
 			
 		} // END if
 	} // END function
@@ -229,15 +205,7 @@ class CategoryPosts extends WP_Widget {
 	 * @return array
 	 */
 	function update($new_instance, $old_instance) {
-		
-		// thumbnail size
-		$sizes = get_option('mkrdip_cat_post_thumb_sizes');
-		if ( !$sizes ) {
-			$sizes = array();
-		}
-		$sizes[$this->id] = array($new_instance['thumb_w'], $new_instance['thumb_h']);
-		update_option('mkrdip_cat_post_thumb_sizes', $sizes);
-		
+				
 		return $new_instance;
 	}
 
@@ -385,7 +353,7 @@ class CategoryPosts extends WP_Widget {
 			</label>
 			<input style="text-align: center;" type="text" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" size="3" />
 		</p>
-		<?php if ( function_exists('the_post_thumbnail') && current_theme_supports("post-thumbnails") ) : ?>
+		<?php if ( current_theme_supports("post-thumbnails") ) : ?>
 			<p>
 				<label for="<?php echo $this->get_field_id("thumb"); ?>">
 					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumb"); ?>" name="<?php echo $this->get_field_name("thumb"); ?>"<?php checked( (bool) $instance["thumb"], true ); ?> />
