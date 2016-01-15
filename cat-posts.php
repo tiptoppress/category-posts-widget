@@ -68,7 +68,7 @@ function category_posts_load_textdomain() {
   load_plugin_textdomain( 'categoryposts', false, plugin_basename( dirname( __FILE__ ) ) . '/languages' ); 
 }
 
-add_action( 'plugins_loaded', 'category_posts_load_textdomain' );
+add_action( 'admin_init', 'category_posts_load_textdomain' );
 
 /**
  * Category Posts Widget Class
