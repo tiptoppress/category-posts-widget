@@ -11,6 +11,40 @@ Author URI: http://mkrdip.me
 // Don't call the file directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
+/*
+	Check if CSS needs to be enqueued by traversing all active widgets on the page
+	and checking if they all have disabled CSS.
+	
+	Return: false if CSS should not be enqueued, true if it should
+*/
+function category_posts_should_enqueue($id_base,$class) {
+	global $wp_registered_widgets;
+	$ret = false;
+	$sidebars_widgets = wp_get_sidebars_widgets();
+
+	if ( is_array($sidebars_widgets) ) {
+		foreach ( $sidebars_widgets as $sidebar => $widgets ) {
+			if ( 'wp_inactive_widgets' === $sidebar || 'orphaned_widgets' === substr( $sidebar, 0, 16 ) ) {
+				continue;
+			}
+
+			if ( is_array($widgets) ) {
+				foreach ( $widgets as $widget ) {
+					$widget_base = _get_widget_id_base($widget);
+					if ( $widget_base == $id_base )  {
+						$widgetclass = new $class();
+						$allsettings = $widgetclass->get_settings();
+						$settings = $allsettings[str_replace($widget_base.'-','',$widget)];
+						if (!isset($settings['disable_css'])) // checks if css disable is not set
+							$ret = true;
+					}
+				}
+			}
+		}
+	}
+	return $ret;
+}
+
 /**
  * Register our styles
  *
@@ -19,8 +53,11 @@ if ( !defined( 'ABSPATH' ) ) exit;
 add_action( 'wp_enqueue_scripts', 'category_posts_widget_styles' );
 
 function category_posts_widget_styles() {
-	wp_register_style( 'category-posts', plugins_url( 'category-posts/cat-posts.css' ) );
-	wp_enqueue_style( 'category-posts' );
+	$enqueue = category_posts_should_enqueue('category-posts','CategoryPosts');
+	if ($enqueue) {
+		wp_register_style( 'category-posts', plugins_url( 'category-posts/cat-posts.css' ) );
+		wp_enqueue_style( 'category-posts' );
+	}
 }
 
 /**
