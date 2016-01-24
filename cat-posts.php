@@ -219,7 +219,7 @@ class CategoryPosts extends WP_Widget {
 			echo "</ul>\n";
 
 			// Footer link to category page
-			if( isset ( $instance["footer_link"] ) ) {
+			if( isset ( $instance["footer_link"] ) && $instance["footer_link"] ) {
 				echo "<a";
 					if( !isset( $instance['disable_css'] ) ) { echo " class=\"cat-post-footer-link\""; }
 				echo " href=\"" . get_category_link($instance["cat"]) . "\">" . $instance["footer_link"] . "</a>";
