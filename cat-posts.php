@@ -4,7 +4,7 @@ Plugin Name: Category Posts Widget
 Plugin URI: http://mkrdip.me/category-posts-widget
 Description: Adds a widget that shows the most recent posts from a single category.
 Author: Mrinal Kanti Roy
-Version: 4.1.3
+Version: 4.1.5
 Author URI: http://mkrdip.me
 */
 
@@ -219,7 +219,7 @@ class CategoryPosts extends WP_Widget {
 			echo "</ul>\n";
 
 			// Footer link to category page
-			if( isset ( $instance["footer_link"] ) ) {
+			if( isset ( $instance["footer_link"] ) && $instance["footer_link"] ) {
 				echo "<a";
 					if( !isset( $instance['disable_css'] ) ) { echo " class=\"cat-post-footer-link\""; }
 				echo " href=\"" . get_category_link($instance["cat"]) . "\">" . $instance["footer_link"] . "</a>";

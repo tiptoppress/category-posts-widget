@@ -3,8 +3,8 @@ Contributors: mkrdip, kometschuh
 Donate link: http://mkrdip.me/donate
 Tags: category, posts, widget, single category widget, posts widget, category recent posts
 Requires at least: 2.8
-Tested up to: 4.4
-Stable tag: 4.1.3
+Tested up to: 4.4.1
+Stable tag: 4.1.5
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,10 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 * Option to hide the title.
 * Option to hide widget, if category have currently no posts.
 * Multiple widgets.
+* Custom post types support.
+* Multi sites support.
+* Localization support.
+* Generate thumbs from existing images.
 
 = Documentation =
 
@@ -85,6 +89,13 @@ Enable the check box "Make widget title link".
 2. Front end of the widget using a default WordPress Theme.
 
 == Changelog ==
+
+4.1.5
+
+* Support for custom post types.
+* Support for multi sites.
+* Support for localization.
+* Generate thumbs from existing images.
 
 4.1.4
 
