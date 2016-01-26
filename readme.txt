@@ -34,8 +34,7 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 * Option to link to the category page below posts list.
 * Option to hide the title.
 * Option to hide widget, if category have currently no posts.
-* Multiple widgets.
-* Custom post types support.
+* Multiple widgets support.
 * Multi sites support.
 * Localization support.
 * Generate thumbs from existing images.
@@ -92,7 +91,6 @@ Enable the check box "Make widget title link".
 
 4.1.5
 
-* Support for custom post types.
 * Support for multi sites.
 * Support for localization.
 * Generate thumbs from existing images.
