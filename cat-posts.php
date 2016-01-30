@@ -407,11 +407,11 @@ class CategoryPosts extends WP_Widget {
 				<label>
 					<?php _e('Thumbnail dimensions (in pixels)','categoryposts'); ?>:<br />
 					<label for="<?php echo $this->get_field_id("thumb_w"); ?>">
-						<?php _e('Width:','categoryposts')?> <input class="widefat" style="width:30%;" type="number" min="0" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo $instance["thumb_w"]; ?>" />
+						<?php _e('Width:','categoryposts')?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo $instance["thumb_w"]; ?>" />
 					</label>
 					
 					<label for="<?php echo $this->get_field_id("thumb_h"); ?>">
-						<?php _e('Height:','categoryposts')?> <input class="widefat" style="width:30%;" type="number" min="0" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo $instance["thumb_h"]; ?>" />
+						<?php _e('Height:','categoryposts')?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo $instance["thumb_h"]; ?>" />
 					</label>
 				</label>
 			</p>
