@@ -5,7 +5,7 @@ Category Posts Widget
 
 Adds a widget that shows the most recent posts from a single category.
 
-**Contributors:** Mrinal, Daniel
+**Contributors:** Mrinal, Mark, Daniel
   
 **Donate link:** http://mkrdip.me/donate
   
@@ -38,7 +38,10 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 * Option to link to the category page below posts list.
 * Option to hide the title.
 * Option to hide widget, if category have currently no posts.
-* Multiple widgets.
+* Multiple widgets support.
+* Multi sites support.
+* Localization support.
+* Generate thumbs from existing images.
 
 ### Documentation ###
 
@@ -69,6 +72,12 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 
 ## Changelog ##
+
+4.1.5
+
+* Support for multi sites.
+* Support for localization.
+* Generate thumbs from existing images.
 
 4.1.4
 
