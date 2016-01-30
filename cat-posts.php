@@ -331,7 +331,7 @@ class CategoryPosts extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id("num"); ?>">
 				<?php _e('Number of posts to show','categoryposts'); ?>:
-				<input style="text-align: center;" id="<?php echo $this->get_field_id("num"); ?>" name="<?php echo $this->get_field_name("num"); ?>" type="text" value="<?php echo absint($instance["num"]); ?>" size='3' />
+				<input style="text-align: center; width:30%;" id="<?php echo $this->get_field_id("num"); ?>" name="<?php echo $this->get_field_name("num"); ?>" type="number" min="0" value="<?php echo absint($instance["num"]); ?>" />
 			</label>
 		</p>
 		<p>
@@ -388,7 +388,7 @@ class CategoryPosts extends WP_Widget {
 			<label for="<?php echo $this->get_field_id("excerpt_length"); ?>">
 				<?php _e( 'Excerpt length (in words):','categoryposts' ); ?>
 			</label>
-			<input style="text-align: center;" type="text" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" size="3" />
+			<input style="text-align: center; width:30%;" type="number" min="0" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" />
 		</p>
 		<?php if ( current_theme_supports("post-thumbnails") ) : ?>
 			<p>
@@ -407,11 +407,11 @@ class CategoryPosts extends WP_Widget {
 				<label>
 					<?php _e('Thumbnail dimensions (in pixels)','categoryposts'); ?>:<br />
 					<label for="<?php echo $this->get_field_id("thumb_w"); ?>">
-						<?php _e('Width:','categoryposts')?> <input class="widefat" style="width:30%;" type="text" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo $instance["thumb_w"]; ?>" />
+						<?php _e('Width:','categoryposts')?> <input class="widefat" style="width:30%;" type="number" min="0" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo $instance["thumb_w"]; ?>" />
 					</label>
 					
 					<label for="<?php echo $this->get_field_id("thumb_h"); ?>">
-						<?php _e('Height:','categoryposts')?> <input class="widefat" style="width:30%;" type="text" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo $instance["thumb_h"]; ?>" />
+						<?php _e('Height:','categoryposts')?> <input class="widefat" style="width:30%;" type="number" min="0" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo $instance["thumb_h"]; ?>" />
 					</label>
 				</label>
 			</p>
