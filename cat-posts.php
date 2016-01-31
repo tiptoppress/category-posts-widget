@@ -71,7 +71,7 @@ function category_posts_load_textdomain() {
 add_action( 'admin_init', 'category_posts_load_textdomain' );
 
 /**
- * Load plugin textdomain.
+ * Add styles for widget sections
  *
  */
 function category_posts_admin_styles() {
@@ -105,6 +105,10 @@ function category_posts_admin_styles() {
 
 add_action( 'admin_print_styles-widgets.php', 'category_posts_admin_styles' );
 
+/**
+ * Add JS to control open and close the widget section
+ *
+ */
 function category_posts_admin_scripts() {
 ?>
 <script type="text/javascript">
