@@ -78,23 +78,43 @@ function category_posts_admin_styles() {
 ?>
 <style>
 .category-widget-cont h4 {
-	background-color:#eee;
-	font-size:18px;
-	line-height:22px;
-	padding:0 5px;
-	cursor:pointer;
-	margin:10px 0;
+    padding: 15px;
+    cursor: pointer;
+    margin: 5px 0;
+    border: 1px solid #E5E5E5;
+}
+.category-widget-cont h4:first-child {
+	margin-top: 10px;	
+}
+.category-widget-cont h4:last-of-type {
+	margin-bottom: 10px;
 }
 .category-widget-cont h4:after {
 	float:right;
 	font-family: "dashicons";
 	content: '\f140';
+	-ms-transform: translate(-1px,1px);
+	-webkit-transform: translate(-1px,1px);
+	-moz-transform: translate(-1px,1px);
+	transform: translate(-1px,1px);
+	-ms-transition: all 600ms;
+	-webkit-transition: all 600ms;
+	-moz-transition: all 600ms;
+    transition: all 600ms;	
 }	
 .category-widget-cont h4.open:after {
-	content: "\f142";
+	-ms-transition: all 600ms;
+	-webkit-transition: all 600ms;
+	-moz-transition: all 600ms;
+    transition: all 600ms;	
+	-ms-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	transform: rotate(180deg);
 }	
 .category-widget-cont div {
 	display:none;
+	overflow: hidden;
 }	
 .category-widget-cont div.open {
 	display:block;
@@ -113,14 +133,9 @@ function category_posts_admin_scripts() {
 ?>
 <script type="text/javascript">
 jQuery(document).ready(function ($) {
-	$('.category-widget-cont h4').click(function () {
-		if ($(this).hasClass('open')) {
-			$(this).removeClass('open');
-			$(this).next().removeClass('open');
-		} else {
-			$(this).addClass('open');
-			$(this).next().addClass('open');
-		}
+	$('.category-widget-cont h4').click(function () {	
+		$(this).toggleClass('open')
+			   .next().slideToggle('open');
 	})
 });	
 </script>
