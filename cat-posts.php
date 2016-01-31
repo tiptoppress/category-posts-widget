@@ -78,7 +78,7 @@ function category_posts_admin_styles() {
 ?>
 <style>
 .category-widget-cont h4 {
-    padding: 15px;
+    padding: 12px 15px;
     cursor: pointer;
     margin: 5px 0;
     border: 1px solid #E5E5E5;
