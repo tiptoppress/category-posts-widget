@@ -379,29 +379,8 @@ class CategoryPosts extends WP_Widget {
 
 		?>
 		<div class="category-widget-cont">
-			<h4 class="open"><?php _e('Title','categoryposts')?></h4>
+			<h4 class="open"><?php _e('Filter','categoryposts');?></h4>
 			<div class="open">
-				<p>
-					<label for="<?php echo $this->get_field_id("title"); ?>">
-						<?php _e( 'Title','categoryposts' ); ?>:
-						<input class="widefat" style="width:80%;" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo esc_attr($instance["title"]); ?>" />
-					</label>
-				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("title_link"); ?>">
-						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("title_link"); ?>" name="<?php echo $this->get_field_name("title_link"); ?>"<?php checked( (bool) $instance["title_link"], true ); ?> />
-						<?php _e( 'Make widget title link','categoryposts' ); ?>
-					</label>
-				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("hide_title"); ?>">
-						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_title"); ?>" name="<?php echo $this->get_field_name("hide_title"); ?>"<?php checked( (bool) $instance["hide_title"], true ); ?> />
-						<?php _e( 'Hide title','categoryposts' ); ?>
-					</label>
-				</p>
-			</div>
-			<h4><?php _e('List','categoryposts');?></h4>
-			<div>
 				<p>
 					<label>
 						<?php _e( 'Category','categoryposts' ); ?>:
@@ -411,7 +390,7 @@ class CategoryPosts extends WP_Widget {
 				<p>
 					<label for="<?php echo $this->get_field_id("num"); ?>">
 						<?php _e('Number of posts to show','categoryposts'); ?>:
-						<input style="text-align: center;" id="<?php echo $this->get_field_id("num"); ?>" name="<?php echo $this->get_field_name("num"); ?>" type="text" value="<?php echo absint($instance["num"]); ?>" size='3' />
+						<input style="text-align: center; width: 30%;" id="<?php echo $this->get_field_id("num"); ?>" name="<?php echo $this->get_field_name("num"); ?>" type="number" min="0" value="<?php echo absint($instance["num"]); ?>" />
 					</label>
 				</p>
 				<p>
@@ -441,6 +420,27 @@ class CategoryPosts extends WP_Widget {
 					</label>
 				</p>
 			</div>
+			<h4><?php _e('Title','categoryposts')?></h4>
+			<div>
+				<p>
+					<label for="<?php echo $this->get_field_id("title"); ?>">
+						<?php _e( 'Title','categoryposts' ); ?>:
+						<input class="widefat" style="width:80%;" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo esc_attr($instance["title"]); ?>" />
+					</label>
+				</p>
+				<p>
+					<label for="<?php echo $this->get_field_id("title_link"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("title_link"); ?>" name="<?php echo $this->get_field_name("title_link"); ?>"<?php checked( (bool) $instance["title_link"], true ); ?> />
+						<?php _e( 'Make widget title link','categoryposts' ); ?>
+					</label>
+				</p>
+				<p>
+					<label for="<?php echo $this->get_field_id("hide_title"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_title"); ?>" name="<?php echo $this->get_field_name("hide_title"); ?>"<?php checked( (bool) $instance["hide_title"], true ); ?> />
+						<?php _e( 'Hide title','categoryposts' ); ?>
+					</label>
+				</p>
+			</div>			
 			<?php if ( current_theme_supports("post-thumbnails") ) : ?>
 				<h4><?php _e('Thumbnails','categoryposts')?></h4>
 				<div>
@@ -451,6 +451,12 @@ class CategoryPosts extends WP_Widget {
 						</label>
 					</p>
 					<p>
+						<label for="<?php echo $this->get_field_id("hideNoThumb"); ?>">
+							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hideNoThumb"); ?>" name="<?php echo $this->get_field_name("hideNoThumb"); ?>"<?php checked( (bool) $instance["hideNoThumb"], true ); ?> />
+							<?php _e( 'Hide posts which have no thumbnail','categoryposts' ); ?>
+						</label>
+					</p>					
+					<p>
 						<label for="<?php echo $this->get_field_id("thumbTop"); ?>">
 							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumbTop"); ?>" name="<?php echo $this->get_field_name("thumbTop"); ?>"<?php checked( (bool) $instance["thumbTop"], true ); ?> />
 							<?php _e( 'Thumbnail to top','categoryposts' ); ?>
@@ -460,24 +466,30 @@ class CategoryPosts extends WP_Widget {
 						<label>
 							<?php _e('Thumbnail dimensions (in pixels)','categoryposts'); ?>:<br />
 							<label for="<?php echo $this->get_field_id("thumb_w"); ?>">
-								<?php _e('Width:','categoryposts')?> <input class="widefat" style="width:30%;" type="text" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo $instance["thumb_w"]; ?>" />
+								<?php _e('Width:','categoryposts')?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo $instance["thumb_w"]; ?>" />
 							</label>
 							
 							<label for="<?php echo $this->get_field_id("thumb_h"); ?>">
-								<?php _e('Height:','categoryposts')?> <input class="widefat" style="width:30%;" type="text" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo $instance["thumb_h"]; ?>" />
+								<?php _e('Height:','categoryposts')?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo $instance["thumb_h"]; ?>" />
 							</label>
-						</label>
-					</p>
-					<p>
-						<label for="<?php echo $this->get_field_id("hideNoThumb"); ?>">
-							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hideNoThumb"); ?>" name="<?php echo $this->get_field_name("hideNoThumb"); ?>"<?php checked( (bool) $instance["hideNoThumb"], true ); ?> />
-							<?php _e( 'Hide posts which have no thumbnail','categoryposts' ); ?>
 						</label>
 					</p>			
 				</div>
 			<?php endif; ?>	
-			<h4><?php _e('Date format','categoryposts')?></h4>
+			<h4><?php _e('Post details','categoryposts')?></h4>
 			<div>
+				<p>
+					<label for="<?php echo $this->get_field_id("excerpt"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt"); ?>" name="<?php echo $this->get_field_name("excerpt"); ?>"<?php checked( (bool) $instance["excerpt"], true ); ?> />
+						<?php _e( 'Show post excerpt','categoryposts' ); ?>
+					</label>
+				</p>
+				<p>
+					<label for="<?php echo $this->get_field_id("excerpt_length"); ?>">
+						<?php _e( 'Excerpt length (in words):','categoryposts' ); ?>
+					</label>
+					<input style="text-align: center;" type="text" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" size="3" />
+				</p>			
 				<p>
 					<label for="<?php echo $this->get_field_id("date"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("date"); ?>"<?php checked( (bool) $instance["date"], true ); ?> />
@@ -496,24 +508,6 @@ class CategoryPosts extends WP_Widget {
 						<?php _e( 'Make widget date link','categoryposts' ); ?>
 					</label>
 				</p>
-			</div>
-			<h4><?php _e('Excerpt format','categoryposts');?></h4>
-			<div>
-				<p>
-					<label for="<?php echo $this->get_field_id("excerpt"); ?>">
-						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt"); ?>" name="<?php echo $this->get_field_name("excerpt"); ?>"<?php checked( (bool) $instance["excerpt"], true ); ?> />
-						<?php _e( 'Show post excerpt','categoryposts' ); ?>
-					</label>
-				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("excerpt_length"); ?>">
-						<?php _e( 'Excerpt length (in words):','categoryposts' ); ?>
-					</label>
-					<input style="text-align: center;" type="text" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" size="3" />
-				</p>
-			</div>
-			<h4><?php _e('Misc formats','categoryposts')?></h4>
-			<div>
 				<p>
 					<label for="<?php echo $this->get_field_id("comment_num"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("comment_num"); ?>" name="<?php echo $this->get_field_name("comment_num"); ?>"<?php checked( (bool) $instance["comment_num"], true ); ?> />

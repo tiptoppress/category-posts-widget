@@ -14,6 +14,8 @@ Adds a widget that shows the most recent posts from a single category.
 
 Category Posts Widget is a light widget designed to do one thing and do it well: display the most recent posts from a certain category.
 
+We are working on a pro version that is available in a few days. If you want, you can send us your e-mail address to: tiptop@tiptoppress.com. Once our new website is accessible, we will inform you.
+
 = Features =
 
 * Option to change ordering of posts.
@@ -34,7 +36,8 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 * Option to link to the category page below posts list.
 * Option to hide the title.
 * Option to hide widget, if category have currently no posts.
-* Multiple widgets support.
+* Multiple widgets.
+* Custom post types support.
 * Multi sites support.
 * Localization support.
 * Generate thumbs from existing images.
@@ -91,6 +94,7 @@ Enable the check box "Make widget title link".
 
 4.1.5
 
+* Support for custom post types.
 * Support for multi sites.
 * Support for localization.
 * Generate thumbs from existing images.
