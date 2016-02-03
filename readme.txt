@@ -98,6 +98,7 @@ Enable the check box "Make widget title link".
 * Support for multi sites.
 * Support for localization.
 * Generate thumbs from existing images.
+* Area UI.
 
 4.1.4
 

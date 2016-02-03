@@ -82,6 +82,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 * Support for multi sites.
 * Support for localization.
 * Generate thumbs from existing images.
+* Area UI.
 
 4.1.4
 
