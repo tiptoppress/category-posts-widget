@@ -64,16 +64,18 @@ function category_posts_widget_styles() {
  * Load plugin textdomain.
  *
  */
+add_action( 'admin_init', 'category_posts_load_textdomain' );
+
 function category_posts_load_textdomain() {
   load_plugin_textdomain( 'categoryposts', false, plugin_basename( dirname( __FILE__ ) ) . '/languages' ); 
 }
-
-add_action( 'admin_init', 'category_posts_load_textdomain' );
 
 /**
  * Add styles for widget sections
  *
  */
+add_action( 'admin_print_styles-widgets.php', 'category_posts_admin_styles' );
+ 
 function category_posts_admin_styles() {
 ?>
 <style>
@@ -123,26 +125,17 @@ function category_posts_admin_styles() {
 <?php
 }
 
-add_action( 'admin_print_styles-widgets.php', 'category_posts_admin_styles' );
-
 /**
  * Add JS to control open and close the widget section
  *
  */
+add_action( 'admin_enqueue_scripts', 'category_posts_admin_scripts', 100 );
+ 
 function category_posts_admin_scripts() {
-?>
-<script type="text/javascript">
-jQuery(document).ready(function ($) {
-	$('.category-widget-cont h4').click(function () {	
-		$(this).toggleClass('open')
-			   .next().slideToggle('open');
-	})
-});	
-</script>
-<?php
+	// widget script
+	wp_register_script( 'category-posts-admin-js', plugins_url( 'category-posts/js/admin/category-posts-widget.js' ),array('jquery'),'4.1.2',true );
+	wp_enqueue_script( 'category-posts-admin-js' );
 }
-
-add_action( 'admin_footer-widgets.php', 'category_posts_admin_scripts',100 );
 
 /**
  * Category Posts Widget Class
