@@ -41,7 +41,6 @@ We are working on a pro version that is available in a few days. If you want, yo
 * Option to hide the title.
 * Option to hide widget, if category have currently no posts.
 * Multiple widgets.
-* Custom post types support.
 * Multi sites support.
 * Localization support.
 * Generate thumbs from existing images.
@@ -78,7 +77,6 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 4.1.5
 
-* Support for custom post types.
 * Support for multi sites.
 * Support for localization.
 * Generate thumbs from existing images.
