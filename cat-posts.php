@@ -200,7 +200,19 @@ class CategoryPosts extends WP_Widget {
 			// Excerpt length filter
 			$new_excerpt_length = create_function('$length', "return " . $instance["excerpt_length"] . ";");
 			if ( $instance["excerpt_length"] > 0 )
-				add_filter('excerpt_length', $new_excerpt_length);		
+				add_filter('excerpt_length', $new_excerpt_length);
+
+			// Excerpt more link filter
+			function new_excerpt_more($more) {
+				global $post, $new_excerpt_more_text;
+				return ' <a class="cat-post-excerpt-more" href="'. get_permalink($post->ID) . '">' . $new_excerpt_more_text . '</a>';
+			}
+			if( isset($instance["excerpt_more_text"]) && ltrim($instance["excerpt_more_text"]) != '' )
+			{
+				global $new_excerpt_more_text; 
+				$new_excerpt_more_text = $instance["excerpt_more_text"];
+				add_filter('excerpt_more', 'new_excerpt_more');
+			}
 
 			echo $before_widget;
 
@@ -238,7 +250,7 @@ class CategoryPosts extends WP_Widget {
 								<?php the_post_thumbnail( array($instance['thumb_w'],$instance['thumb_h'])); ?>
 							</a>
 					<?php endif; 
-					endif; ?>					
+					endif; ?>
 					
 					<a class="post-title <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-title"; } ?>" 
 						href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?>
@@ -272,7 +284,7 @@ class CategoryPosts extends WP_Widget {
 						<p class="comment-num <?php if( !isset( $instance['disable_css'] ) ) { echo "cat-post-comment-num"; } ?>">
 							(<?php comments_number(); ?>)
 						</p>
-					<?php endif;					
+					<?php endif;
 
 					if ( isset( $instance['author'] ) ) : ?>
 						<p class="post-author <?php if( !isset( $instance['disable_css'] ) ) { echo "cat-post-author"; } ?>">
@@ -332,6 +344,7 @@ class CategoryPosts extends WP_Widget {
 			'footer_link'          => '',
 			'excerpt'              => '',
 			'excerpt_length'       => '',
+			'excerpt_more_text'    => '',
 			'comment_num'          => '',
 			'author'               => '',
 			'date'                 => '',
@@ -357,6 +370,7 @@ class CategoryPosts extends WP_Widget {
 		$footer_link          = $instance['footer_link'];
 		$excerpt              = $instance['excerpt'];
 		$excerpt_length       = $instance['excerpt_length'];
+		$excerpt_more_text    = $instance['excerpt_more_text'];
 		$comment_num          = $instance['comment_num'];
 		$author               = $instance['author'];
 		$date                 = $instance['date'];
@@ -481,8 +495,14 @@ class CategoryPosts extends WP_Widget {
 					<label for="<?php echo $this->get_field_id("excerpt_length"); ?>">
 						<?php _e( 'Excerpt length (in words):','categoryposts' ); ?>
 					</label>
-					<input style="text-align: center;" type="text" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" size="3" />
-				</p>			
+					<input style="text-align: center; width:30%;" type="number" min="0" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" />
+				</p>				
+				<p>
+					<label for="<?php echo $this->get_field_id("excerpt_more_text"); ?>">
+						<?php _e( 'Excerpt \'more\' text:','categoryposts' ); ?>
+					</label>
+					<input class="widefat" style="width:55%;" placeholder="<?php _e('... more','categoryposts')?>" id="<?php echo $this->get_field_id("excerpt_more_text"); ?>" name="<?php echo $this->get_field_name("excerpt_more_text"); ?>" type="text" value="<?php echo $instance["excerpt_more_text"]; ?>" />
+				</p>				
 				<p>
 					<label for="<?php echo $this->get_field_id("date"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("date"); ?>"<?php checked( (bool) $instance["date"], true ); ?> />
