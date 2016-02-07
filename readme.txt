@@ -70,7 +70,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 == Frequently Asked Questions ==
 = Excerpt length filter doesn't works =
-The manual WordPress excerpt is often confused with the automatic excerpt. While both are related to the manual excerpt, they are different from it. When a post has no manual excerpt WordPress generates an excerpt automatically by selecting the first 55 words or the setted excerpt filter length, which we use in our widget, of the post. This means the excerpt length filter works only with automatic excerpt. If you manually added an excerpt, you'd want it all to be shown.
+When a post has no manual excerpt WordPress generates an excerpt automatically by selecting the first 55 words of the post or the first words number setted by the excerpt filter length. This means the excerpt length filter works only with automatic excerpt. If you manually added an excerpt, you'd want it all to be shown.
 WordPress Codex: <a target="_blank" href="http://codex.wordpress.org/Excerpt#Excerpt.2C_automatic_excerpt.2C_and_teaser">3 Excerpt, automatic excerpt, and teaser</a>
 
 = The font-size is different from that of other widgets or the Theme? =
