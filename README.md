@@ -22,6 +22,7 @@ We are working on a pro version that is available in a few days. If you want, yo
 ### Features ###
 * Option to change ordering of posts.
 * Option to show post thumbnail & set dimension by width & height.
+* Option to set mouse hover effects for post thumbnail.
 * Option to put thumbnail on top.
 * Option to hide posts which have no thumbnail.
 * Option to disable widget CSS.
@@ -68,16 +69,20 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 
 ## Changelog ##
-= 4.1.6 =
-* Change text for excerpt more.
+4.1.6
+
+* Add option to set mouse hover effects for post thumbnail.
+* Add option to change the excerpt more text.
 
 4.1.5 - February 4 2016
+
 * Support for multi sites.
 * Support for localization.
 * Generate thumbs from existing images.
 * Area UI.
 
 4.1.4
+
 * Added option exclude current post.
 * Added option to hide posts which have no thumbnail.
 * Added option to make the widget date link to the category page.
@@ -86,36 +91,45 @@ Automatic installation is the easiest option as WordPress handles the file trans
 * Added option to format the outputted date string.
 
 4.1.3
+
 * Added option to hide widget, if category have currently no posts.
 
 4.1.2
+
 * Fixed hide title bug.
 
 4.1.1
+
 * Added Option to put thumbnail on top
 * Added Option to show/hide the title
 * Fixed no background bug.
 
 4.1.0
+
 * Added PHP5 Constructor 
 * Added Option to allow/disallow widget CSS
 * Now, compatible with WordPress 4.3
 * Meet new plugin author [kometschuh](https://profiles.wordpress.org/kometschuh)
 
-4.0 
+4.0
+
 * Added CSS file for post styling 
 * Now compaitable with latest versions of WordPress
 
 3.3
+
 * Fixed random sort bug.
 
 3.2
+
 * Added option to change ordering of posts. Defaults to showing newest posts first.
 
 3.1
+
 * Fixed a bug in the thumbnail size registration routine.
 
 3.0
+
 * Added support for WP 2.9's post thumbnail feature.
 * Removed support for Simple Post Thumbnails plugin.
 * Added option to show the post date.
@@ -123,11 +137,14 @@ Automatic installation is the easiest option as WordPress handles the file trans
 * Added option to show the number of comments.
 
 2.3
+
 * Really tried to fix bug where wp_query global was getting over written by manually instantiating a WP_Query object
 
 2.1
+
 * Fixed bug where wp_query global was getting over written.
 
 2.0
+
 * Updated to use the WP 2.8 widget API.
 * Added support for [Simple Post Thumbnails plugin](http://wordpress.org/extend/plugins/simple-post-thumbnails/)

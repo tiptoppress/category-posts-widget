@@ -247,7 +247,13 @@ class CategoryPosts extends WP_Widget {
 						if ( current_theme_supports("post-thumbnails") &&
 								isset( $instance["thumb"] ) &&
 								has_post_thumbnail() ) : ?>
-							<a <?php if( !isset( $instance['disable_css'] ) ) { echo "class=\"cat-post-thumbnail\""; } ?>
+							<a <?php if( !isset( $instance['disable_css'] )) {
+								if( isset($instance['thumb_hover'] )) {
+									echo "class=\"cat-post-thumbnail cat-post-" . $instance['thumb_hover'] . "\"";
+								} else {
+									echo "class=\"cat-post-thumbnail\"";
+								}
+							} ?>
 								href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
 								<?php the_post_thumbnail( array($instance['thumb_w'],$instance['thumb_h'])); ?>
 							</a>
@@ -271,7 +277,13 @@ class CategoryPosts extends WP_Widget {
 						if ( current_theme_supports("post-thumbnails") &&
 								isset( $instance["thumb"] ) &&
 								has_post_thumbnail() ) : ?>
-							<a <?php if( !isset( $instance['disable_css'] ) ) { echo "class=\"cat-post-thumbnail\""; } ?>
+							<a <?php if( !isset( $instance['disable_css'] )) { 
+									if( isset($instance['thumb_hover'] )) {
+										echo "class=\"cat-post-thumbnail cat-post-" . $instance['thumb_hover'] . "\"";
+									} else {
+										echo "class=\"cat-post-thumbnail\"";
+									}
+								} ?>
 								href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
 								<?php the_post_thumbnail( array($instance['thumb_w'],$instance['thumb_h'])); ?>
 							</a>
@@ -357,6 +369,7 @@ class CategoryPosts extends WP_Widget {
 			'hideNoThumb'          => '',
 			'thumb_w'              => '',
 			'thumb_h'              => '',
+			'thumb_hover'          => '',
 			'disable_css'          => '',
 			'hide_if_empty'        => ''
 		) );
@@ -383,6 +396,7 @@ class CategoryPosts extends WP_Widget {
 		$hideNoThumb          = $instance['hideNoThumb'];
 		$thumb_w              = $instance['thumb_w'];
 		$thumb_h              = $instance['thumb_h'];
+		$thumb_hover          = $instance['thumb_hover'];
 		$disable_css          = $instance['disable_css'];
 		$hide_if_empty        = $instance['hide_if_empty'];
 
@@ -482,7 +496,18 @@ class CategoryPosts extends WP_Widget {
 								<?php _e('Height:','categoryposts')?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo $instance["thumb_h"]; ?>" />
 							</label>
 						</label>
-					</p>			
+					</p>
+					<p>
+						<label for="<?php echo $this->get_field_id("thumb_hover"); ?>">
+							<?php _e( 'Mouse hover effect:','categorypostspro' ); ?>
+						</label>
+						<select id="<?php echo $this->get_field_id("thumb_hover"); ?>" name="<?php echo $this->get_field_name("thumb_hover"); ?>">
+							<option value="none" <?php selected($thumb_hover, 'none')?>><?php _e( 'None', 'categorypostspro' ); ?></option>
+							<option value="dark" <?php selected($thumb_hover, 'dark')?>><?php _e( 'Dark', 'categorypostspro' ); ?></option>
+							<option value="white" <?php selected($thumb_hover, 'white')?>><?php _e( 'White', 'categorypostspro' ); ?></option>
+							<option value="scale" <?php selected($thumb_hover, 'scale')?>><?php _e( 'Scale', 'categorypostspro' ); ?></option>
+						</select>
+					</p>
 				</div>
 			<?php endif; ?>	
 			<h4><?php _e('Post details','categoryposts')?></h4>

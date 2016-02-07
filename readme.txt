@@ -18,6 +18,7 @@ We are working on a pro version that is available in a few days. If you want, yo
 = Features =
 * Option to change ordering of posts.
 * Option to show post thumbnail & set dimension by width & height.
+* Option to set mouse hover effects for post thumbnail.
 * Option to put thumbnail on top
 * Option to hide posts which have no thumbnail.
 * Option to disable widget CSS.
@@ -84,7 +85,8 @@ Enable the check box "Make widget title link".
 
 == Changelog ==
 = 4.1.6 =
-* Change text for excerpt more.
+* Add option to set mouse hover effects for post thumbnail.
+* Add option to change the excerpt more text.
 
 = 4.1.5 - February 4 2016 =
 * Support for multi sites.

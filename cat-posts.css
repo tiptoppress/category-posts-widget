@@ -2,6 +2,15 @@
 Default CSS Styles for the Category Posts Widget plugin
 Version: 4.1.5
 */
+/*--------------------------------------------------------------
+>>> TABLE OF CONTENTS:
+----------------------------------------------------------------
+1.0 General
+2.0 Thumbnail hover effects
+--------------------------------------------------------------*/
+/*--------------------------------------------------------------
+1.0 General
+--------------------------------------------------------------*/
 .cat-post-title {
 	font-size: 15px;
 	font-size: 0.9375rem;
@@ -43,4 +52,49 @@ Version: 4.1.5
 }
 .cat-post-item:last-child {
 	border-bottom: none;
+}
+/*--------------------------------------------------------------
+2.0 Thumbnail hover effects
+--------------------------------------------------------------*/
+/* For White, Dark, Scale */
+li a.cat-post-white,
+li a.cat-post-dark,
+li a.cat-post-scale {
+    display: inline-block;
+    background-color: black;
+	float: left;
+	margin: 5px 10px 5px 0;
+}
+li a.cat-post-white img,
+li a.cat-post-dark img,
+li a.cat-post-scale img {
+    margin: 0;
+    padding-bottom: 0 !important;
+}
+li a.cat-post-white img:hover,
+li a.cat-post-dark img:hover {
+	opacity: 0.8;
+}
+/* Only for White */
+li a.cat-post-white {
+    background-color: white;
+}
+/* Only for Dark */
+li a.cat-post-dark {
+    background-color: black;
+}
+/* Only for Scale */
+li a.cat-post-scale {
+	overflow: hidden;
+}
+li a.cat-post-scale img {
+  -webkit-transition: all 400ms;
+  -moz-transition: all 400ms;
+  -o-transition: all 400ms;
+  transition: all 400ms;
+}
+li a.cat-post-scale img:hover {
+  -webkit-transform: scale(1.1, 1.1);
+  -ms-transform: scale(1.1, 1.1);
+  transform: scale(1.1, 1.1);
 }
