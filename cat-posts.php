@@ -220,9 +220,9 @@ class CategoryPosts extends WP_Widget {
 			if( !isset ( $instance["hide_title"] ) ) {
 				echo $before_title;
 				if( isset ( $instance["title_link"] ) ) {
-					echo '<a href="' . get_category_link($instance["cat"]) . '">' . $instance["title"] . '</a>';
+					echo '<a href="' . get_category_link($instance["cat"]) . '">' . apply_filters( 'widget_title', $instance["title"] ) . '</a>';
 				} else {
-					echo $instance["title"];
+					echo apply_filters( 'widget_title', $instance["title"] );
 				}
 				echo $after_title;
 			}
@@ -235,9 +235,11 @@ class CategoryPosts extends WP_Widget {
 				$cat_posts->the_post(); ?>
 				
 				<li <?php if( !isset( $instance['disable_css'] ) ) {
-						echo "class=\"cat-post-item";
-							if ( is_single(get_the_title() ) ) { echo " cat-post-current"; }
-						echo "\"";
+						if ( is_single(get_the_title() )) { 
+							echo post_class( 'cat-post-item cat-post-current' ); 
+						} else {
+							echo post_class( 'cat-post-item' );
+						}
 					} ?> >
 					
 					<?php
