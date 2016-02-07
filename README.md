@@ -22,6 +22,7 @@ We are working on a pro version that is available in a few days. If you want, yo
 ### Features ###
 * Option to change ordering of posts.
 * Option to show post thumbnail & set dimension by width & height.
+* Option to set mouse hover effects for post thumbnail.
 * Option to put thumbnail on top.
 * Option to hide posts which have no thumbnail.
 * Option to disable widget CSS.
@@ -68,8 +69,9 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 
 ## Changelog ##
-= 4.1.6 =
-* Change text for excerpt more.
+4.1.6
+* Add option to set mouse hover effects for post thumbnail.
+* Add option to change the excerpt more text.
 
 4.1.5 - February 4 2016
 * Support for multi sites.
@@ -102,7 +104,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 * Now, compatible with WordPress 4.3
 * Meet new plugin author [kometschuh](https://profiles.wordpress.org/kometschuh)
 
-4.0 
+4.0
 * Added CSS file for post styling 
 * Now compaitable with latest versions of WordPress
 
