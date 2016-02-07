@@ -25,7 +25,7 @@ We are working on a pro version that is available in a few days. If you want, yo
 * Option exclude current post.
 * Option show post author.
 * Set which category the posts should come form.
-* Option to show the post excerpt and how long the excerpt should be.
+* Option to show the post excerpt, set the length and change 'more' text.
 * Option to show the post date.
 * Option to make the widget date link to the category page.
 * Option to format the outputted date string.
@@ -68,7 +68,11 @@ Automatic installation is the easiest option as WordPress handles the file trans
 * Version 3.0 or later version uses WordPress 2.9's built in post thumbnail functionality.
 
 == Frequently Asked Questions ==
-= The font-size is different from that of other widgets? =
+= Excerpt length filter doesn't works =
+The manual WordPress excerpt is often confused with the automatic excerpt. While both are related to the manual excerpt, they are different from it. When a post has no manual excerpt WordPress generates an excerpt automatically by selecting the first 55 words or the setted excerpt filter length, which we use in our widget, of the post. This means the excerpt length filter works only with automatic excerpt. If you manually added an excerpt, you'd want it all to be shown.
+WordPress Codex: <a target="_blank" href="http://codex.wordpress.org/Excerpt#Excerpt.2C_automatic_excerpt.2C_and_teaser">3 Excerpt, automatic excerpt, and teaser</a>
+
+= The font-size is different from that of other widgets or the Theme? =
 Please use the option: "Disable widget CSS".
 
 = I want the title as a link pointing to the selected Categorie page? =
@@ -79,6 +83,9 @@ Enable the check box "Make widget title link".
 2. Front end of the widget using a default WordPress Theme.
 
 == Changelog ==
+= 4.1.6 =
+* Change text for excerpt more.
+
 = 4.1.5 - February 4 2016 =
 * Support for multi sites.
 * Support for localization.
