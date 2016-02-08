@@ -236,9 +236,9 @@ class CategoryPosts extends WP_Widget {
 				
 				<li <?php if( !isset( $instance['disable_css'] ) ) {
 						if ( is_single(get_the_title() )) { 
-							echo post_class( 'cat-post-item cat-post-current' ); 
+							echo "class='cat-post-item cat-post-current'"; 
 						} else {
-							echo post_class( 'cat-post-item' );
+							echo "class='cat-post-item'";
 						}
 					} ?> >
 					
