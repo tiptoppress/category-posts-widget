@@ -199,9 +199,10 @@ class CategoryPosts extends WP_Widget {
 			
 			// Excerpt length filter
 			$new_excerpt_length = create_function('$length', "return " . $instance["excerpt_length"] . ";");
-			if ( $instance["excerpt_length"] > 0 )
+			if ( $instance["excerpt_length"] > 0 ) {
 				add_filter('excerpt_length', $new_excerpt_length);
-
+			}
+			
 			// Excerpt more link filter
 			function new_excerpt_more($more) {
 				global $post, $new_excerpt_more_text;
@@ -212,6 +213,42 @@ class CategoryPosts extends WP_Widget {
 				global $new_excerpt_more_text; 
 				$new_excerpt_more_text = $instance["excerpt_more_text"];
 				add_filter('excerpt_more', 'new_excerpt_more');
+			}
+
+			// Excerpt allow HTML
+			function allow_html_excerpt($text) {
+				global $post, $new_excerpt_length, $new_excerpt_more_text, $wp_filter;
+				if ( '' == $text ) {
+					$text = get_the_content('');
+					$text = strip_shortcodes( $text );
+					$text = apply_filters('the_content', $text);
+					$text = str_replace('\]\]\>', ']]&gt;', $text);
+					$text = preg_replace('@<script[^>]*?>.*?</script>@si', '', $text);
+					$text = strip_tags($text, '<script>,<style>,<br>,<em>,<i>,<ul>,<ol>,<li>,<a>,<p>,<img>,<video>,<audio>');
+					$excerpt_length = $new_excerpt_length;					
+					
+					if(ltrim($new_excerpt_more_text) != '') {
+						$excerpt_more = new_excerpt_more('');
+					}else if($filterName = key($wp_filter['excerpt_more'][10])) {
+						$excerpt_more = $wp_filter['excerpt_more'][10][$filterName]['function'](0);
+					}else {
+						$excerpt_more = '[...]';
+					}
+					
+					$words = explode(' ', $text, $excerpt_length + 1);
+					if (count($words)> $excerpt_length) {
+						array_pop($words);
+						array_push($words, $excerpt_more);
+						$text = implode(' ', $words);
+					}
+				}
+				return $text;
+			}
+			if( isset( $instance['excerpt_allow_html'] ) ) {
+				global $new_excerpt_length;
+				$new_excerpt_length = ( isset($instance["excerpt_length"]) && $instance["excerpt_length"] > 0 ) ? $instance["excerpt_length"] : 55;
+				remove_filter('get_the_excerpt', 'wp_trim_excerpt');
+				add_filter('get_the_excerpt', 'allow_html_excerpt');
 			}
 
 			echo $before_widget;
@@ -358,6 +395,7 @@ class CategoryPosts extends WP_Widget {
 			'footer_link'          => '',
 			'excerpt'              => '',
 			'excerpt_length'       => '',
+			'excerpt_allow_html'   => '',
 			'excerpt_more_text'    => '',
 			'comment_num'          => '',
 			'author'               => '',
@@ -385,6 +423,7 @@ class CategoryPosts extends WP_Widget {
 		$footer_link          = $instance['footer_link'];
 		$excerpt              = $instance['excerpt'];
 		$excerpt_length       = $instance['excerpt_length'];
+		$excerpt_allow_html   = $instance['excerpt_allow_html'];
 		$excerpt_more_text    = $instance['excerpt_more_text'];
 		$comment_num          = $instance['comment_num'];
 		$author               = $instance['author'];
@@ -523,13 +562,19 @@ class CategoryPosts extends WP_Widget {
 						<?php _e( 'Excerpt length (in words):','categoryposts' ); ?>
 					</label>
 					<input style="text-align: center; width:30%;" type="number" min="0" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" />
-				</p>				
+				</p>
+				<p>
+					<label for="<?php echo $this->get_field_id("excerpt_allow_html"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_allow_html"); ?>" name="<?php echo $this->get_field_name("excerpt_allow_html"); ?>"<?php checked( (bool) $instance["excerpt_allow_html"], true ); ?> />
+						<?php _e( 'Allow HTML in excerpt','categoryposts' ); ?>
+					</label>
+				</p>
 				<p>
 					<label for="<?php echo $this->get_field_id("excerpt_more_text"); ?>">
 						<?php _e( 'Excerpt \'more\' text:','categoryposts' ); ?>
 					</label>
-					<input class="widefat" style="width:55%;" placeholder="<?php _e('... more','categoryposts')?>" id="<?php echo $this->get_field_id("excerpt_more_text"); ?>" name="<?php echo $this->get_field_name("excerpt_more_text"); ?>" type="text" value="<?php echo $instance["excerpt_more_text"]; ?>" />
-				</p>				
+					<input class="widefat" style="width:50%;" placeholder="<?php _e('... more','categoryposts')?>" id="<?php echo $this->get_field_id("excerpt_more_text"); ?>" name="<?php echo $this->get_field_name("excerpt_more_text"); ?>" type="text" value="<?php echo $instance["excerpt_more_text"]; ?>" />
+				</p>
 				<p>
 					<label for="<?php echo $this->get_field_id("date"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("date"); ?>"<?php checked( (bool) $instance["date"], true ); ?> />
