@@ -26,7 +26,7 @@ We are working on a pro version that is available in a few days. If you want, yo
 * Option exclude current post.
 * Option show post author.
 * Set which category the posts should come form.
-* Option to show the post excerpt, set the length and change 'more' text.
+* Option to show the post excerpt, set the length, allow HTML and change 'more' text.
 * Option to show the post date.
 * Option to make the widget date link to the category page.
 * Option to format the outputted date string.
@@ -87,6 +87,8 @@ Enable the check box "Make widget title link".
 = 4.1.6 =
 * Add option to set mouse hover effects for post thumbnail.
 * Add option to change the excerpt more text.
+* Add option to allow HTML in the excerpt
+* Add filter 'widget_title' for the title
 
 = 4.1.5 - February 4 2016 =
 * Support for multi sites.
