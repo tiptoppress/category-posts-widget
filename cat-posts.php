@@ -34,7 +34,7 @@ function category_posts_should_enqueue($id_base,$class) {
 					if ( $widget_base == $id_base )  {
 						$widgetclass = new $class();
 						$allsettings = $widgetclass->get_settings();
-						$settings = $allsettings[str_replace($widget_base.'-','',$widget)];
+						$settings = isset($allsettings[str_replace($widget_base.'-','',$widget)]) ? $allsettings[str_replace($widget_base.'-','',$widget)] : false;
 						if (!isset($settings['disable_css'])) // checks if css disable is not set
 							$ret = true;
 					}
@@ -197,17 +197,23 @@ class CategoryPosts extends WP_Widget {
 		
 		if ( !isset ( $instance["hide_if_empty"] ) || $cat_posts->have_posts() ) {
 			
-			// Excerpt length filter
+			/**
+			 * Excerpt length filter
+			 */
 			$new_excerpt_length = create_function('$length', "return " . $instance["excerpt_length"] . ";");
 			if ( $instance["excerpt_length"] > 0 ) {
 				add_filter('excerpt_length', $new_excerpt_length);
 			}
 			
-			// Excerpt more link filter
+			if ( ! function_exists( 'new_excerpt_more' ) ) :
+			/**
+			 * Excerpt more link filter
+			 */
 			function new_excerpt_more($more) {
 				global $post, $new_excerpt_more_text;
 				return ' <a class="cat-post-excerpt-more" href="'. get_permalink($post->ID) . '">' . $new_excerpt_more_text . '</a>';
 			}
+			endif;			
 			if( isset($instance["excerpt_more_text"]) && ltrim($instance["excerpt_more_text"]) != '' )
 			{
 				global $new_excerpt_more_text; 
@@ -215,7 +221,10 @@ class CategoryPosts extends WP_Widget {
 				add_filter('excerpt_more', 'new_excerpt_more');
 			}
 
-			// Excerpt allow HTML
+			if ( ! function_exists( 'allow_html_excerpt' ) ) :
+			/**
+			 * Excerpt allow HTML
+			 */
 			function allow_html_excerpt($text) {
 				global $post, $new_excerpt_length, $new_excerpt_more_text, $wp_filter;
 				if ( '' == $text ) {
@@ -244,6 +253,7 @@ class CategoryPosts extends WP_Widget {
 				}
 				return $text;
 			}
+			endif;
 			if( isset( $instance['excerpt_allow_html'] ) ) {
 				global $new_excerpt_length;
 				$new_excerpt_length = ( isset($instance["excerpt_length"]) && $instance["excerpt_length"] > 0 ) ? $instance["excerpt_length"] : 55;
