@@ -33,7 +33,7 @@ We are working on a pro version that is available in a few days. If you want, yo
 * Option to show the comment count.
 * Option to make the widget title link to the category page.
 * Option to link to the category page below posts list.
-* Option to hide the title.
+* Option to hide the widget title and post title.
 * Option to hide widget, if category have currently no posts.
 * Multiple widgets.
 * Multi sites support.
@@ -89,6 +89,7 @@ Enable the check box "Make widget title link".
 * Add option to change the excerpt more text.
 * Add option to allow HTML in the excerpt
 * Add filter 'widget_title' for the title
+* Add option to hide post title.
 
 = 4.1.5 - February 4 2016 =
 * Support for multi sites.

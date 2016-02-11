@@ -305,13 +305,15 @@ class CategoryPosts extends WP_Widget {
 								<?php the_post_thumbnail( array($instance['thumb_w'],$instance['thumb_h'])); ?>
 							</a>
 					<?php endif; 
-					endif; ?>
+					endif;
 					
-					<a class="post-title <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-title"; } ?>" 
-						href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?>
-					</a>
+					if( !isset( $instance['hide_post_title'] ) ) {  ?>
+						<a class="post-title <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-title"; } ?>" 
+							href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?>
+						</a>
+					<?php }
 
-					<?php if ( isset( $instance['date'] ) ) : ?>
+					if ( isset( $instance['date'] ) ) : ?>
 						<?php if ( isset( $instance['date_format'] ) && strlen( trim( $instance['date_format'] ) ) > 0 ) { $date_format = $instance['date_format']; } else { $date_format = "j M Y"; } ?>
 						<p class="post-date <?php if( !isset( $instance['disable_css'] ) ) { echo "cat-post-date"; } ?>">						
 						<?php if( isset ( $instance["date_link"] ) ) { ?> <a href="<?php the_permalink(); ?>"><?php } ?>
@@ -403,6 +405,7 @@ class CategoryPosts extends WP_Widget {
 			'exclude_current_post' => '',
 			'title_link'           => '',
 			'footer_link'          => '',
+			'hide_post_title'      => '',
 			'excerpt'              => '',
 			'excerpt_length'       => '',
 			'excerpt_allow_html'   => '',
@@ -431,6 +434,7 @@ class CategoryPosts extends WP_Widget {
 		$exclude_current_post = $instance['exclude_current_post'];
 		$title_link           = $instance['title_link'];
 		$footer_link          = $instance['footer_link'];
+		$hide_post_title      = $instance['hide_post_title'];
 		$excerpt              = $instance['excerpt'];
 		$excerpt_length       = $instance['excerpt_length'];
 		$excerpt_allow_html   = $instance['excerpt_allow_html'];
@@ -561,6 +565,12 @@ class CategoryPosts extends WP_Widget {
 			<?php endif; ?>	
 			<h4><?php _e('Post details','categoryposts')?></h4>
 			<div>
+				<p>
+					<label for="<?php echo $this->get_field_id("hide_post_title"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_post_title"); ?>" name="<?php echo $this->get_field_name("hide_post_title"); ?>"<?php checked( (bool) $instance["hide_post_title"], true ); ?> />
+						<?php _e( 'Hide post title','categoryposts' ); ?>
+					</label>
+				</p>
 				<p>
 					<label for="<?php echo $this->get_field_id("excerpt"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt"); ?>" name="<?php echo $this->get_field_name("excerpt"); ?>"<?php checked( (bool) $instance["excerpt"], true ); ?> />

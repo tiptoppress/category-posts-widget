@@ -16,7 +16,7 @@ if (window.jQuery) {
 		
 		
 	jQuery(document).on('widget-added widget-updated', function(){ // for customize and after save on widgets page
-		jQuery('.category-widget-cont h4').click(function () {	
+		jQuery('.category-widget-cont h4').off('click').on('click', function () {	
 			jQuery(this).toggleClass('open')
 						.next().slideToggle('open');
 		})
