@@ -1,5 +1,5 @@
 === Category Posts Widget ===
-Contributors: mkrdip, kometschuh
+Contributors: mkrdip, mark-k, kometschuh
 Donate link: http://mkrdip.me/donate
 Tags: category, posts, widget, single category widget, posts widget, category recent posts
 Requires at least: 2.8
@@ -95,6 +95,7 @@ Enable the check box "Make widget title link".
 * Support for localization.
 * Generate thumbs from existing images.
 * Area UI.
+* Meet new plugin author [mark-k](https://profiles.wordpress.org/mark-k/)
 
 = 4.1.4 =
 * Added option exclude current post.
