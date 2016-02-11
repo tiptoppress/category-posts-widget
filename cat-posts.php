@@ -307,7 +307,7 @@ class CategoryPosts extends WP_Widget {
 					<?php endif; 
 					endif;
 					
-					if( !isset( $instance['hide_post_title'] ) ) {  ?>
+					if( !isset( $instance['hide_post_titles'] ) ) {  ?>
 						<a class="post-title <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-title"; } ?>" 
 							href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?>
 						</a>
@@ -405,7 +405,7 @@ class CategoryPosts extends WP_Widget {
 			'exclude_current_post' => '',
 			'title_link'           => '',
 			'footer_link'          => '',
-			'hide_post_title'      => '',
+			'hide_post_titles'     => '',
 			'excerpt'              => '',
 			'excerpt_length'       => '',
 			'excerpt_allow_html'   => '',
@@ -434,7 +434,7 @@ class CategoryPosts extends WP_Widget {
 		$exclude_current_post = $instance['exclude_current_post'];
 		$title_link           = $instance['title_link'];
 		$footer_link          = $instance['footer_link'];
-		$hide_post_title      = $instance['hide_post_title'];
+		$hide_post_titles     = $instance['hide_post_titles'];
 		$excerpt              = $instance['excerpt'];
 		$excerpt_length       = $instance['excerpt_length'];
 		$excerpt_allow_html   = $instance['excerpt_allow_html'];
@@ -566,9 +566,9 @@ class CategoryPosts extends WP_Widget {
 			<h4><?php _e('Post details','categoryposts')?></h4>
 			<div>
 				<p>
-					<label for="<?php echo $this->get_field_id("hide_post_title"); ?>">
-						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_post_title"); ?>" name="<?php echo $this->get_field_name("hide_post_title"); ?>"<?php checked( (bool) $instance["hide_post_title"], true ); ?> />
-						<?php _e( 'Hide post title','categoryposts' ); ?>
+					<label for="<?php echo $this->get_field_id("hide_post_titles"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_post_titles"); ?>" name="<?php echo $this->get_field_name("hide_post_titles"); ?>"<?php checked( (bool) $instance["hide_post_titles"], true ); ?> />
+						<?php _e( 'Hide post titles','categoryposts' ); ?>
 					</label>
 				</p>
 				<p>
