@@ -80,6 +80,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 * Support for localization.
 * Generate thumbs from existing images.
 * Area UI.
+* Meet new plugin author [mark-k](https://profiles.wordpress.org/mark-k/)
 
 4.1.4
 * Added option exclude current post.
