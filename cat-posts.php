@@ -13,7 +13,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 
 define( 'CAT_POST_PLUGINURL', plugins_url(basename( dirname(__FILE__))) . "/");
 define( 'CAT_POST_PLUGINPATH', dirname(__FILE__) . "/");
-define( 'CAT_POST_VERSION', "4.1.4");
+define( 'CAT_POST_VERSION', "4.1.5");
 
 require_once( CAT_POST_PLUGINPATH . 'php/css-cropping.php' );
 
