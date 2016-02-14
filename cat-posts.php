@@ -11,6 +11,12 @@ Author URI: http://mkrdip.me
 // Don't call the file directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
+define( 'CAT_POST_PLUGINURL', plugins_url(basename( dirname(__FILE__))) . "/");
+define( 'CAT_POST_PLUGINPATH', dirname(__FILE__) . "/");
+define( 'CAT_POST_VERSION', "4.1.4");
+
+require_once( CAT_POST_PLUGINPATH . 'php/css-cropping.php' );
+
 /*
 	Check if CSS needs to be enqueued by traversing all active widgets on the page
 	and checking if they all have disabled CSS.
@@ -55,7 +61,7 @@ add_action( 'wp_enqueue_scripts', 'category_posts_widget_styles' );
 function category_posts_widget_styles() {
 	$enqueue = category_posts_should_enqueue('category-posts','CategoryPosts');
 	if ($enqueue) {
-		wp_register_style( 'category-posts', plugins_url( 'category-posts/cat-posts.css' ) );
+		wp_register_style( 'category-posts', CAT_POST_PLUGINURL . 'cat-posts.css' );
 		wp_enqueue_style( 'category-posts' );
 	}
 }
@@ -133,7 +139,7 @@ add_action( 'admin_enqueue_scripts', 'category_posts_admin_scripts', 100 );
  
 function category_posts_admin_scripts() {
 	// widget script
-	wp_register_script( 'category-posts-admin-js', plugins_url( 'category-posts/js/admin/category-posts-widget.js' ),array('jquery'),'4.1.2',true );
+	wp_register_script( 'category-posts-admin-js', CAT_POST_PLUGINURL . 'js/admin/category-posts-widget.js',array('jquery'),CAT_POST_VERSION,true );
 	wp_enqueue_script( 'category-posts-admin-js' );
 }
 
@@ -289,20 +295,38 @@ class CategoryPosts extends WP_Widget {
 						}
 					} ?> >
 					
-					<?php
+					<?php // CSS cropping
+					$css_cropping = array (
+						'css_class'    => '',
+						'image_size_h' => 0,
+						'image_size_w' => 0
+					);	
+					
+					if( isset($instance['use_css_cropping']) )
+						$css_cropping = get_css_cropping( $css_cropping, $instance );					
+					
+					// Thumbnail position to top
 					if( isset( $instance["thumbTop"] ) ) : 
 						if ( current_theme_supports("post-thumbnails") &&
 								isset( $instance["thumb"] ) &&
 								has_post_thumbnail() ) : ?>
-							<a <?php if( !isset( $instance['disable_css'] )) {
-								if( isset($instance['thumb_hover'] )) {
-									echo "class=\"cat-post-thumbnail cat-post-" . $instance['thumb_hover'] . "\"";
-								} else {
-									echo "class=\"cat-post-thumbnail\"";
-								}
-							} ?>
+							<a <?php echo "style=\"width:" . $instance['thumb_w'] . "px;height:" . $instance['thumb_h'] . "px\""; 
+								if( !isset( $instance['disable_css'] )) { 
+									if( isset($instance['thumb_hover'] )) {
+										echo "class=\"cat-post-thumbnail " . $css_cropping['css_class'] . " cat-post-" . $instance['thumb_hover'] . "\"";
+									} else {
+										echo "class=\"cat-post-thumbnail " . $css_cropping['css_class'] . "\"";
+									}
+								} ?>
 								href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
-								<?php the_post_thumbnail( array($instance['thumb_w'],$instance['thumb_h'])); ?>
+								<?php 
+									if( empty($css_cropping['css_class']) ) {
+										the_post_thumbnail( array($instance['thumb_w'],$instance['thumb_h'])); 
+									} else {
+										$dimention = $css_cropping['image_size_h'] > $css_cropping['image_size_w'] ? $css_cropping['image_size_h'] : $css_cropping['image_size_w'];
+										the_post_thumbnail( array( $dimention, $dimention ) ); // css cropping needs each image size same or bigger as crop size (WP renders the smallest image size as default)
+									}
+								?>
 							</a>
 					<?php endif; 
 					endif;
@@ -321,20 +345,29 @@ class CategoryPosts extends WP_Widget {
 						<?php if( isset ( $instance["date_link"] ) ) { echo "</a>"; } ?>
 						</p>
 					<?php endif;
-
+					
+					// Thumbnail position normal
 					if( !isset( $instance["thumbTop"] ) ) : 
 						if ( current_theme_supports("post-thumbnails") &&
 								isset( $instance["thumb"] ) &&
 								has_post_thumbnail() ) : ?>
-							<a <?php if( !isset( $instance['disable_css'] )) { 
+							<a <?php echo "style=\"width:" . $instance['thumb_w'] . "px;height:" . $instance['thumb_h'] . "px\""; 
+								if( !isset( $instance['disable_css'] )) { 
 									if( isset($instance['thumb_hover'] )) {
-										echo "class=\"cat-post-thumbnail cat-post-" . $instance['thumb_hover'] . "\"";
+										echo "class=\"cat-post-thumbnail " . $css_cropping['css_class'] . " cat-post-" . $instance['thumb_hover'] . "\"";
 									} else {
-										echo "class=\"cat-post-thumbnail\"";
+										echo "class=\"cat-post-thumbnail " . $css_cropping['css_class'] . "\"";
 									}
 								} ?>
 								href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
-								<?php the_post_thumbnail( array($instance['thumb_w'],$instance['thumb_h'])); ?>
+								<?php 
+									if( empty($css_cropping['css_class']) ) {
+										the_post_thumbnail( array($instance['thumb_w'],$instance['thumb_h'])); 
+									} else {
+										$dimention = $css_cropping['image_size_h'] > $css_cropping['image_size_w'] ? $css_cropping['image_size_h'] : $css_cropping['image_size_w'];
+										the_post_thumbnail( array( $dimention, $dimention ) ); // css cropping needs each image size same or bigger as crop size (WP renders the smallest image size as default)
+									}
+								?>
 							</a>
 					<?php endif;
 					endif;
@@ -420,6 +453,7 @@ class CategoryPosts extends WP_Widget {
 			'hideNoThumb'          => '',
 			'thumb_w'              => '',
 			'thumb_h'              => '',
+			'use_css_cropping'     => '',
 			'thumb_hover'          => '',
 			'disable_css'          => '',
 			'hide_if_empty'        => ''
@@ -449,6 +483,7 @@ class CategoryPosts extends WP_Widget {
 		$hideNoThumb          = $instance['hideNoThumb'];
 		$thumb_w              = $instance['thumb_w'];
 		$thumb_h              = $instance['thumb_h'];
+		$use_css_cropping     = $instance['use_css_cropping'];
 		$thumb_hover          = $instance['thumb_hover'];
 		$disable_css          = $instance['disable_css'];
 		$hide_if_empty        = $instance['hide_if_empty'];
@@ -550,6 +585,12 @@ class CategoryPosts extends WP_Widget {
 							</label>
 						</label>
 					</p>
+					<p>
+						<label for="<?php echo $this->get_field_id("use_css_cropping"); ?>">
+							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("use_css_cropping"); ?>" name="<?php echo $this->get_field_name("use_css_cropping"); ?>"<?php checked( (bool) $instance["use_css_cropping"], true ); ?> />
+							<?php _e( 'Use CSS cropping','categoryposts' ); ?>
+						</label>
+					</p>					
 					<p>
 						<label for="<?php echo $this->get_field_id("thumb_hover"); ?>">
 							<?php _e( 'Mouse hover effect:','categorypostspro' ); ?>
