@@ -323,35 +323,44 @@ class CategoryPosts extends WP_Widget {
 						}
 					} ?> >
 					
-					<?php // CSS cropping
-					$css_cropping = array (
-						'css_class'    => '',
-						'image_size_h' => 0,
-						'image_size_w' => 0
-					);	
+					<?php // CSS cropping			
+					$image_size = array (
+						'image_h' => 0,
+						'image_w' => 0,
+						'thumb_h' => 0,
+						'thumb_w' => 0
+					);
 					
-					if( isset($instance['use_css_cropping']) )
-						$css_cropping = get_css_cropping( $css_cropping, $instance );					
+					$image_size['thumb_h'] = $instance['thumb_h'];
+					$image_size['thumb_w'] = $instance['thumb_w'];					
+					
+					$cropping_css_class = "";
+					if( isset($instance['use_css_cropping']) ) {
+						// get WP image size
+						$image_size = get_image_size( $image_size );
+						// compare widget settings and WP image size for how to crop
+						$cropping_css_class = get_cropping_css_class( $image_size );
+					}
 					
 					// Thumbnail position to top
 					if( isset( $instance["thumbTop"] ) ) : 
 						if ( current_theme_supports("post-thumbnails") &&
 								isset( $instance["thumb"] ) &&
 								has_post_thumbnail() ) : ?>
-							<a <?php echo "style=\"width:" . $instance['thumb_w'] . "px;height:" . $instance['thumb_h'] . "px\""; 
+							<a <?php echo "style=\"width:" . $image_size['thumb_w'] . "px;height:" . $image_size['thumb_h'] . "px\""; 
 								if( !isset( $instance['disable_css'] )) { 
 									if( isset($instance['thumb_hover'] )) {
-										echo "class=\"cat-post-thumbnail " . $css_cropping['css_class'] . " cat-post-" . $instance['thumb_hover'] . "\"";
+										echo "class=\"cat-post-thumbnail " . $cropping_css_class . " cat-post-" . $instance['thumb_hover'] . "\"";
 									} else {
-										echo "class=\"cat-post-thumbnail " . $css_cropping['css_class'] . "\"";
+										echo "class=\"cat-post-thumbnail " . $cropping_css_class . "\"";
 									}
 								} ?>
 								href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
 								<?php 
-									if( empty($css_cropping['css_class']) ) {
+									if( empty($cropping_css_class) ) {
 										$this->the_post_thumbnail( array($instance['thumb_w'],$instance['thumb_h'])); 
 									} else {
-										$dimention = $css_cropping['image_size_h'] > $css_cropping['image_size_w'] ? $css_cropping['image_size_h'] : $css_cropping['image_size_w'];
+										$dimention = $image_size['image_h'] > $image_size['image_w'] ? $image_size['image_h'] : $image_size['image_w'];
 										$this->the_post_thumbnail( array( $dimention, $dimention ) ); // css cropping needs each image size same or bigger as crop size (WP renders the smallest image size as default)
 									}
 								?>
@@ -379,20 +388,20 @@ class CategoryPosts extends WP_Widget {
 						if ( current_theme_supports("post-thumbnails") &&
 								isset( $instance["thumb"] ) &&
 								has_post_thumbnail() ) : ?>
-							<a <?php echo "style=\"width:" . $instance['thumb_w'] . "px;height:" . $instance['thumb_h'] . "px\""; 
+							<a <?php echo "style=\"width:" . $image_size['thumb_w'] . "px;height:" . $image_size['thumb_h'] . "px\""; 
 								if( !isset( $instance['disable_css'] )) { 
 									if( isset($instance['thumb_hover'] )) {
-										echo "class=\"cat-post-thumbnail " . $css_cropping['css_class'] . " cat-post-" . $instance['thumb_hover'] . "\"";
+										echo "class=\"cat-post-thumbnail " . $cropping_css_class . " cat-post-" . $instance['thumb_hover'] . "\"";
 									} else {
-										echo "class=\"cat-post-thumbnail " . $css_cropping['css_class'] . "\"";
+										echo "class=\"cat-post-thumbnail " . $cropping_css_class . "\"";
 									}
 								} ?>
 								href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
 								<?php 
-									if( empty($css_cropping['css_class']) ) {
+									if( empty($cropping_css_class) ) {
 										$this->the_post_thumbnail( array($instance['thumb_w'],$instance['thumb_h'])); 
 									} else {
-										$dimention = $css_cropping['image_size_h'] > $css_cropping['image_size_w'] ? $css_cropping['image_size_h'] : $css_cropping['image_size_w'];
+										$dimention = $image_size['image_h'] > $image_size['image_w'] ? $image_size['image_h'] : $image_size['image_w'];
 										$this->the_post_thumbnail( array( $dimention, $dimention ) ); // css cropping needs each image size same or bigger as crop size (WP renders the smallest image size as default)
 									}
 								?>
