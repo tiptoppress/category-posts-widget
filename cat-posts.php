@@ -168,6 +168,14 @@ class CategoryPosts extends WP_Widget {
 		override the thumbnail htmo to insert cropping when needed
 	*/
 	function post_thumbnail_html($html, $post_id, $post_thumbnail_id, $size, $attr){
+		if ($this->temp_width / $this->temp_height == $this->instance['thumb_w'] / $this->$instance['thumb_w']) {
+			// image is same ratio as asked for, nothing to do here as the browser will handle it correctly
+			;
+		} else if ($this->instance['use_css_cropping']) {
+		} else {
+			// stretch it by adding explicit width and height to the image
+			$html = str_replace('<img ','<img style="width:'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px"',$html);
+		}
 		return $html;
 	}
 	
@@ -175,11 +183,15 @@ class CategoryPosts extends WP_Widget {
 		wrapper to execute the the_post_thumbnail with filters
 	*/
 	function the_post_thumbnail($size= 'post-thumbnail',$attr='') {
-		add_filter('wp_get_attachment_image_src',array($this,'wp_get_attachment_image_src'),1,4);
-		add_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
+		if ($this->instance['use_css_cropping']) {
+			add_filter('wp_get_attachment_image_src',array($this,'wp_get_attachment_image_src'),1,4);
+			add_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
+		}
 		the_post_thumbnail($size,$attr);
-		remove_filter('wp_get_attachment_image_src',array($this,'wp_get_attachment_image_src'),1,4);
-		remove_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
+		if ($this->instance['use_css_cropping']) {
+			remove_filter('wp_get_attachment_image_src',array($this,'wp_get_attachment_image_src'),1,4);
+			remove_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
+		}
 	}
 	
 	// Displays category posts widget on blog.
