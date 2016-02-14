@@ -186,6 +186,7 @@ class CategoryPosts extends WP_Widget {
 	function widget($args, $instance) {
 
 		extract( $args );
+		$this->instance = $instance;
 
 		// If not title, use the name of the category.
 		if( !$instance["title"] ) {
