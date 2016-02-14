@@ -17,7 +17,8 @@ We are working on a pro version that is available in a few days. If you want, yo
 
 = Features =
 * Option to change ordering of posts.
-* Option to show post thumbnail & set dimension by width & height.
+* Option to show post thumbnail & set dimension or image size by width & height.
+* Option to crop thumbnails with CSS.
 * Option to set mouse hover effects for post thumbnail.
 * Option to put thumbnail on top
 * Option to hide posts which have no thumbnail.
@@ -38,7 +39,6 @@ We are working on a pro version that is available in a few days. If you want, yo
 * Multiple widgets.
 * Multi sites support.
 * Localization support.
-* Generate thumbs from existing images.
 
 = Documentation =
 Formatting date and time: See <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>.
@@ -85,6 +85,7 @@ Enable the check box "Make widget title link".
 
 == Changelog ==
 = 4.1.6 =
+* Add option CSS cropping for thumbnails.
 * Add option to set mouse hover effects for post thumbnail.
 * Add option to change the excerpt more text.
 * Add option to allow HTML in the excerpt
@@ -94,7 +95,6 @@ Enable the check box "Make widget title link".
 = 4.1.5 - February 4 2016 =
 * Support for multi sites.
 * Support for localization.
-* Generate thumbs from existing images.
 * Area UI.
 * Meet new plugin author [mark-k](https://profiles.wordpress.org/mark-k/)
 
