@@ -1,5 +1,8 @@
 <?php
 
+// Don't call the file directly
+if ( !defined( 'ABSPATH' ) ) exit;
+
 if ( ! function_exists( 'get_css_cropping' ) ) :
 /**
  * Get css cropping
