@@ -155,6 +155,33 @@ class CategoryPosts extends WP_Widget {
 		parent::__construct('category-posts', __('Category Posts','categoryposts'), $widget_ops);
 	}
 
+	/*
+		get the original image dimensions
+	*/
+	function wp_get_attachment_image_src($image, $attachment_id, $size, $icon) {
+		$this->temp_width = $image['width'];
+		$this->temp_height = $image['height'];
+		return $image;
+	}
+	
+	/*
+		override the thumbnail htmo to insert cropping when needed
+	*/
+	function post_thumbnail_html($html, $post_id, $post_thumbnail_id, $size, $attr){
+		return $html;
+	}
+	
+	/*
+		wrapper to execute the the_post_thumbnail with filters
+	*/
+	function the_post_thumbnail($size= 'post-thumbnail',$attr='') {
+		add_filter('wp_get_attachment_image_src',array($this,'wp_get_attachment_image_src'),1,4);
+		add_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
+		the_post_thumbnail($size,$attr);
+		remove_filter('wp_get_attachment_image_src',array($this,'wp_get_attachment_image_src'),1,4);
+		remove_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
+	}
+	
 	// Displays category posts widget on blog.
 	function widget($args, $instance) {
 
@@ -321,10 +348,10 @@ class CategoryPosts extends WP_Widget {
 								href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
 								<?php 
 									if( empty($css_cropping['css_class']) ) {
-										the_post_thumbnail( array($instance['thumb_w'],$instance['thumb_h'])); 
+										$this->the_post_thumbnail( array($instance['thumb_w'],$instance['thumb_h'])); 
 									} else {
 										$dimention = $css_cropping['image_size_h'] > $css_cropping['image_size_w'] ? $css_cropping['image_size_h'] : $css_cropping['image_size_w'];
-										the_post_thumbnail( array( $dimention, $dimention ) ); // css cropping needs each image size same or bigger as crop size (WP renders the smallest image size as default)
+										$this->the_post_thumbnail( array( $dimention, $dimention ) ); // css cropping needs each image size same or bigger as crop size (WP renders the smallest image size as default)
 									}
 								?>
 							</a>
@@ -362,10 +389,10 @@ class CategoryPosts extends WP_Widget {
 								href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
 								<?php 
 									if( empty($css_cropping['css_class']) ) {
-										the_post_thumbnail( array($instance['thumb_w'],$instance['thumb_h'])); 
+										$this->the_post_thumbnail( array($instance['thumb_w'],$instance['thumb_h'])); 
 									} else {
 										$dimention = $css_cropping['image_size_h'] > $css_cropping['image_size_w'] ? $css_cropping['image_size_h'] : $css_cropping['image_size_w'];
-										the_post_thumbnail( array( $dimention, $dimention ) ); // css cropping needs each image size same or bigger as crop size (WP renders the smallest image size as default)
+										$this->the_post_thumbnail( array( $dimention, $dimention ) ); // css cropping needs each image size same or bigger as crop size (WP renders the smallest image size as default)
 									}
 								?>
 							</a>
