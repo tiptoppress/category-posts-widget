@@ -18,14 +18,12 @@ define( 'CAT_POST_VERSION', "4.1.5");
 require_once( CAT_POST_PLUGINPATH . 'php/css-cropping.php' );
 
 /*
-	Check if CSS needs to be enqueued by traversing all active widgets on the page
-	and checking if they all have disabled CSS.
-	
-	Return: false if CSS should not be enqueued, true if it should
+ * Iterate over all the widgets active at the page and call the callback for them
+ * 
+ * callback - accepts the widget settings, return true to continue iteration or false to stop
 */
-function category_posts_should_enqueue($id_base,$class) {
+function category_posts_iterator($id_base,$class,$callback) {
 	global $wp_registered_widgets;
-	$ret = false;
 	$sidebars_widgets = wp_get_sidebars_widgets();
 
 	if ( is_array($sidebars_widgets) ) {
@@ -41,13 +39,52 @@ function category_posts_should_enqueue($id_base,$class) {
 						$widgetclass = new $class();
 						$allsettings = $widgetclass->get_settings();
 						$settings = isset($allsettings[str_replace($widget_base.'-','',$widget)]) ? $allsettings[str_replace($widget_base.'-','',$widget)] : false;
-						if (!isset($settings['disable_css'])) // checks if css disable is not set
-							$ret = true;
+						if (!$callback($settings))
+							return;
 					}
 				}
 			}
 		}
 	}
+}
+
+/*
+	Check if CSS needs to be added to support cropping by traversing all active widgets on the page
+	and checking if any has cropping enabled.
+	
+	Return: false if cropping is not active, false otherwise
+*/
+function category_posts_cropping_active($id_base,$class) {
+	$ret = false;
+	
+	category_posts_iterator($id_base, $class, function ($settings) use (&$ret) {
+		if (isset($settings['use_css_cropping'])) { // checks if cropping is active
+			$ret = true;
+			return false; // stop iterator
+		} else
+			return true; // continue iteration to next widget
+	});
+	
+	return $ret;
+}
+
+/*
+	Check if CSS needs to be enqueued by traversing all active widgets on the page
+	and checking if they all have disabled CSS.
+	
+	Return: false if CSS should not be enqueued, true if it should
+*/
+function category_posts_should_enqueue($id_base,$class) {
+	$ret = false;
+	
+	category_posts_iterator($id_base, $class, function ($settings) use (&$ret) {
+		if (!isset($settings['disable_css'])) { // checks if css disable is not set
+			$ret = true;
+			return false; // stop iterator
+		} else
+			return true; // continue iteration to next widget
+	});
+	
 	return $ret;
 }
 
@@ -57,6 +94,20 @@ function category_posts_should_enqueue($id_base,$class) {
  * @return void
  */
 add_action( 'wp_enqueue_scripts', 'category_posts_widget_styles' );
+
+function category_posts_wp_head() {
+	if (category_posts_cropping_active('category-posts','CategoryPosts')) {
+?>
+<style type="text/css">
+.cat-post-item span.cat-post-css-cropping {
+	overflow: hidden;
+}
+</style>
+<?php	
+	}
+}
+
+add_action('wp_head','category_posts_wp_head');
 
 function category_posts_widget_styles() {
 	$enqueue = category_posts_should_enqueue('category-posts','CategoryPosts');
