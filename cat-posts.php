@@ -173,7 +173,7 @@ class CategoryPosts extends WP_Widget {
 		} else if (isset($this->instance['use_css_cropping'])) {
 			$image = category_posts_get_image_size($this->instance['thumb_w'],$this->instance['thumb_h'],$width,$height);
 			$html = str_replace('<img ','<img style="width:'.$image['image_w'].'px;height:'.$image['image_h'].'px;'.$image['margin'].'"',$html);
-			$html = '<span style="width:'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px;">'
+			$html = '<span class="cat-post-css-cropping" style="width:'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px;">'
 					.$html.'</span>';
 		} else {
 			// stretch it by adding explicit width and height to the image

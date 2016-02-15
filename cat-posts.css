@@ -59,12 +59,12 @@ Version: 4.1.5
 /*--------------------------------------------------------------
 2.0 CSS cropping
 --------------------------------------------------------------*/
-.cat-post-item span {
+.cat-post-item span.cat-post-css-cropping {
 	overflow: hidden;
 	float: left;
 	margin: 5px 10px 5px 0;	
 }
-.cat-post-item span img {
+.cat-post-item span.cat-post-css-cropping img {
 	max-width: initial;
 	max-height: initial;
 }
