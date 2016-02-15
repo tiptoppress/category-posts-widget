@@ -35,27 +35,3 @@ function category_posts_get_image_size( $thumb_w,$thumb_h,$image_w,$image_h) {
 	return $image_size;
 }
 endif;
-
-if ( ! function_exists( 'category_posts_get_cropping_css_class' ) ) :
-/**
- * Get cropping CSS class
- *
- * $thumb_w, $thumb_h - the width and height of the thumbnail in the widget settings
- * $width,$height - the actual image size
- *
- * Return: The class to apply to the element containing the thumbnail image
- */
-function category_posts_get_cropping_css_class( $thumb_w,$thumb_h,$width,$height ) {
-	
-	$relation_thumbnail = $thumb_w / $thumb_h;
-	$cropping_css_class = "";
-	$relation_cropped = $height / $width;
-	
-	if ($relation_thumbnail < $relation_cropped)
-		$cropping_css_class = "cat-post-css-vcropping";
-	else if ($relation_thumbnail > $relation_cropped)
-		$cropping_css_class = "cat-post-css-hcropping";
-
-	return $cropping_css_class;
-}
-endif;

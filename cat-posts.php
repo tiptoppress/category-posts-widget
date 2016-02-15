@@ -159,7 +159,7 @@ class CategoryPosts extends WP_Widget {
 		override the thumbnail htmo to insert cropping when needed
 	*/
 	function post_thumbnail_html($html, $post_id, $post_thumbnail_id, $size, $attr){
-		if (!isset($this->instance['thumb_w']) || !isset($this->instance['thumb_w']))
+		if ( empty($this->instance['thumb_w']) || empty($this->instance['thumb_w']))
 			return $html; // bail out if no full dimensions defined
 
 		$meta = image_get_intermediate_size($post_thumbnail_id,$size);
@@ -173,7 +173,7 @@ class CategoryPosts extends WP_Widget {
 		} else if (isset($this->instance['use_css_cropping'])) {
 			$image = category_posts_get_image_size($this->instance['thumb_w'],$this->instance['thumb_h'],$width,$height);
 			$html = str_replace('<img ','<img style="width:'.$image['image_w'].'px;height:'.$image['image_h'].'px;'.$image['margin'].'"',$html);
-			$html = '<span class="'.category_posts_get_cropping_css_class($this->instance['thumb_w'],$this->instance['thumb_h'],$width,$height).'" style="width'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px">'
+			$html = '<span style="width:'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px;">'
 					.$html.'</span>';
 		} else {
 			// stretch it by adding explicit width and height to the image
@@ -339,17 +339,17 @@ class CategoryPosts extends WP_Widget {
 						if ( current_theme_supports("post-thumbnails") &&
 								isset( $instance["thumb"] ) &&
 								has_post_thumbnail() ) : ?>
-							<a <?php echo "style=\"width:" . $image_size['thumb_w'] . "px;height:" . $image_size['thumb_h'] . "px\""; 
+							<a <?php 
 								if( !isset( $instance['disable_css'] )) { 
 									if( isset($instance['thumb_hover'] )) {
 										echo "class=\"cat-post-thumbnail cat-post-" . $instance['thumb_hover'] . "\"";
 									} else {
-										echo "class=\"cat-post-thumbnail \"";
+										echo "class=\"cat-post-thumbnail\"";
 									}
 								} ?>
 								href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
 								<?php 
-										$this->the_post_thumbnail( array($instance['thumb_w'],$instance['thumb_h'])); 
+									$this->the_post_thumbnail( array($instance['thumb_w'],$instance['thumb_h'])); 
 								?>
 							</a>
 					<?php endif; 
