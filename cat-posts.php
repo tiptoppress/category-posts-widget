@@ -172,7 +172,7 @@ class CategoryPosts extends WP_Widget {
 			;
 		} else if (isset($this->instance['use_css_cropping'])) {
 			$image = category_posts_get_image_size($this->instance['thumb_w'],$this->instance['thumb_h'],$width,$height);
-			$html = str_replace('<img ','<img style="width:'.$image['image_w'].'px;height:'.$image['image_h'].'px"',$html);
+			$html = str_replace('<img ','<img style="width:'.$image['image_w'].'px;height:'.$image['image_h'].'px;'.$image['margin'].'"',$html);
 			$html = '<span class="'.category_posts_get_cropping_css_class($this->instance['thumb_w'],$this->instance['thumb_h'],$width,$height).'" style="width'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px">'
 					.$html.'</span>';
 		} else {
