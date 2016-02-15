@@ -6,13 +6,21 @@ Version: 4.1.5
 /*--------------------------------------------------------------
 >>> TABLE OF CONTENTS:
 ----------------------------------------------------------------
-1.0 General
-2.0 CSS cropping
-3.0 Thumbnail hover effects
+1.0 Normalise
+2.0 General
+3.0 CSS cropping
+4.0 Thumbnail hover effects
 --------------------------------------------------------------*/
 
 /*--------------------------------------------------------------
-1.0 General
+1.0 Normalise
+--------------------------------------------------------------*/
+.cat-post-item span.cat-post-css-cropping img {
+	max-width: initial;
+	max-height: initial;
+}
+/*--------------------------------------------------------------
+2.0 General
 --------------------------------------------------------------*/
 .cat-post-title {
 	font-size: 15px;
@@ -57,19 +65,15 @@ Version: 4.1.5
 	border-bottom: none;
 }
 /*--------------------------------------------------------------
-2.0 CSS cropping
+3.0 CSS cropping
 --------------------------------------------------------------*/
 .cat-post-item span.cat-post-css-cropping {
 	overflow: hidden;
 	float: left;
 	margin: 5px 10px 5px 0;	
 }
-.cat-post-item span.cat-post-css-cropping img {
-	max-width: initial;
-	max-height: initial;
-}
 /*--------------------------------------------------------------
-3.0 Thumbnail hover effects
+4.0 Thumbnail hover effects
 --------------------------------------------------------------*/
 /* For White, Dark, Scale */
 li a.cat-post-white,

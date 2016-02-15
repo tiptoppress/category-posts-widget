@@ -171,8 +171,25 @@ class CategoryPosts extends WP_Widget {
 			// image is same ratio as asked for, nothing to do here as the browser will handle it correctly
 			;
 		} else if (isset($this->instance['use_css_cropping'])) {
-			$image = category_posts_get_image_size($this->instance['thumb_w'],$this->instance['thumb_h'],$width,$height);
-			$html = str_replace('<img ','<img style="width:'.$image['image_w'].'px;height:'.$image['image_h'].'px;'.$image['margin'].'"',$html);
+			$image = category_posts_get_image_size($this->instance['thumb_w'],$this->instance['thumb_h'],$width,$height);			
+
+			// replace srcset
+			$array = array();
+			preg_match( '/width="([^"]*)"/i', $html, $array ) ;
+			$pattern = "/".$array[1]."w/";
+			$html = preg_replace($pattern, $image['image_w']."w", $html);			
+			// replace size
+			$pattern = "/".$array[1]."px/";
+			$html = preg_replace($pattern, $image['image_w']."px", $html);						
+			// replace width
+			$pattern = "/width=\"[0-9]*\"/";
+			$html = preg_replace($pattern, "width='".$image['image_w']."'", $html);
+			// replace height
+			$pattern = "/height=\"[0-9]*\"/";
+			$html = preg_replace($pattern, "height='".$image['image_h']."'", $html);			
+			// set margin
+			$html = str_replace('<img ','<img style="'.$image['margin'].'"',$html);			
+			// wrap span
 			$html = '<span class="cat-post-css-cropping" style="width:'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px;">'
 					.$html.'</span>';
 		} else {
