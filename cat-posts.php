@@ -101,6 +101,7 @@ function category_posts_wp_head() {
 <style type="text/css">
 .cat-post-item span.cat-post-css-cropping {
 	overflow: hidden;
+	display:inline-block;
 }
 </style>
 <?php	
