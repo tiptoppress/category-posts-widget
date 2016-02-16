@@ -262,6 +262,14 @@ class CategoryPosts extends WP_Widget {
 		remove_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
 	}
 	
+	/**
+	 * Excerpt more link filter
+	 */
+	function excerpt_more_filter($more) {
+		global $post;
+		return ' <a class="cat-post-excerpt-more" href="'. get_permalink($post->ID) . '">' . $this->instance["excerpt_more_text"] . '</a>';
+	}
+
 	// Displays category posts widget on blog.
 	function widget($args, $instance) {
 
@@ -319,20 +327,9 @@ class CategoryPosts extends WP_Widget {
 				add_filter('excerpt_length', $new_excerpt_length);
 			}
 			
-			if ( ! function_exists( 'new_excerpt_more' ) ) :
-			/**
-			 * Excerpt more link filter
-			 */
-			function new_excerpt_more($more) {
-				global $post, $new_excerpt_more_text;
-				return ' <a class="cat-post-excerpt-more" href="'. get_permalink($post->ID) . '">' . $new_excerpt_more_text . '</a>';
-			}
-			endif;			
 			if( isset($instance["excerpt_more_text"]) && ltrim($instance["excerpt_more_text"]) != '' )
 			{
-				global $new_excerpt_more_text; 
-				$new_excerpt_more_text = $instance["excerpt_more_text"];
-				add_filter('excerpt_more', 'new_excerpt_more');
+				add_filter('excerpt_more', array($this,'excerpt_more_filter'));
 			}
 
 			if ( ! function_exists( 'allow_html_excerpt' ) ) :
@@ -493,7 +490,8 @@ class CategoryPosts extends WP_Widget {
 			echo $after_widget;
 
 			remove_filter('excerpt_length', $new_excerpt_length);
-
+			remove_filter('excerpt_more', array($this,'excerpt_more_filter'));
+			
 			wp_reset_postdata();
 			
 		} // END if
