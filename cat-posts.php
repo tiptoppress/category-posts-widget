@@ -187,12 +187,14 @@ function category_posts_admin_styles() {
  * Add JS to control open and close the widget section
  *
  */
-add_action( 'admin_enqueue_scripts', 'category_posts_admin_scripts', 100 );
+add_action( 'admin_enqueue_scripts', 'category_posts_admin_scripts', 10,1 );
  
-function category_posts_admin_scripts() {
+function category_posts_admin_scripts($hook) {
 	// widget script
-	wp_register_script( 'category-posts-admin-js', CAT_POST_PLUGINURL . 'js/admin/category-posts-widget.js',array('jquery'),CAT_POST_VERSION,true );
-	wp_enqueue_script( 'category-posts-admin-js' );
+	if ($hook == 'widgets.php') { // enqueue only for widget admin and customizer
+		wp_register_script( 'category-posts-admin-js', CAT_POST_PLUGINURL . 'js/admin/category-posts-widget.js',array('jquery'),CAT_POST_VERSION,true );
+		wp_enqueue_script( 'category-posts-admin-js' );
+	}
 }
 
 /**
