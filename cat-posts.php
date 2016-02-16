@@ -247,8 +247,8 @@ class CategoryPosts extends WP_Widget {
 			$html = '<span style="width:'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px;">'
 					.$html.'</span>';
 		} else {
-			// stretch it by adding explicit width and height to the image
-			$html = str_replace('<img ','<img style="width:'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px"',$html);
+			// if use_css_cropping not used
+			// no interface changes: leave without change
 		}
 		return $html;
 	}
