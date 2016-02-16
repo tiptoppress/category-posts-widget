@@ -99,7 +99,7 @@ function category_posts_wp_head() {
 	if (category_posts_cropping_active('category-posts','CategoryPosts')) {
 ?>
 <style type="text/css">
-.cat-post-item span.cat-post-css-cropping {
+.cat-post-item .cat-post-css-cropping span {
 	overflow: hidden;
 	display:inline-block;
 }
@@ -244,7 +244,7 @@ class CategoryPosts extends WP_Widget {
 			// set margin
 			$html = str_replace('<img ','<img style="'.$image['margin'].'"',$html);			
 			// wrap span
-			$html = '<span class="cat-post-css-cropping" style="width:'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px;">'
+			$html = '<span style="width:'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px;">'
 					.$html.'</span>';
 		} else {
 			// stretch it by adding explicit width and height to the image
@@ -311,11 +311,12 @@ class CategoryPosts extends WP_Widget {
 				isset( $this->instance["thumb"] ) &&
 				has_post_thumbnail() ) : ?>
 			<a <?php 
+				$use_css_cropping = isset($this->instance['use_css_cropping']) ? "cat-post-css-cropping" : "";
 				if( !isset( $this->instance['disable_css'] )) { 
 					if( isset($this->instance['thumb_hover'] )) {
-						echo "class=\"cat-post-thumbnail cat-post-" . $this->instance['thumb_hover'] . "\"";
+						echo "class=\"cat-post-thumbnail " . $use_css_cropping ." cat-post-" . $this->instance['thumb_hover'] . "\"";
 					} else {
-						echo "class=\"cat-post-thumbnail\"";
+						echo "class=\"cat-post-thumbnail " . $use_css_cropping . "\"";
 					}
 				} ?>
 				href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
