@@ -303,6 +303,29 @@ class CategoryPosts extends WP_Widget {
 		return $text;
 	}
 	
+	/*
+		Show the thumb of the current post
+	*/
+	function show_thumb() {
+		if ( current_theme_supports("post-thumbnails") &&
+				isset( $this->instance["thumb"] ) &&
+				has_post_thumbnail() ) : ?>
+			<a <?php 
+				if( !isset( $this->instance['disable_css'] )) { 
+					if( isset($this->instance['thumb_hover'] )) {
+						echo "class=\"cat-post-thumbnail cat-post-" . $this->instance['thumb_hover'] . "\"";
+					} else {
+						echo "class=\"cat-post-thumbnail\"";
+					}
+				} ?>
+				href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
+				<?php 
+					$this->the_post_thumbnail( array($this->instance['thumb_w'],$this->instance['thumb_h'])); 
+				?>
+			</a>
+		<?php endif; 
+	}
+	
 	// Displays category posts widget on blog.
 	function widget($args, $instance) {
 
@@ -402,23 +425,7 @@ class CategoryPosts extends WP_Widget {
 										
 					// Thumbnail position to top
 					if( isset( $instance["thumbTop"] ) ) : 
-						if ( current_theme_supports("post-thumbnails") &&
-								isset( $instance["thumb"] ) &&
-								has_post_thumbnail() ) : ?>
-							<a <?php 
-								if( !isset( $instance['disable_css'] )) { 
-									if( isset($instance['thumb_hover'] )) {
-										echo "class=\"cat-post-thumbnail cat-post-" . $instance['thumb_hover'] . "\"";
-									} else {
-										echo "class=\"cat-post-thumbnail\"";
-									}
-								} ?>
-								href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
-								<?php 
-									$this->the_post_thumbnail( array($instance['thumb_w'],$instance['thumb_h'])); 
-								?>
-							</a>
-					<?php endif; 
+						$this->show_thumb(); 
 					endif;
 					
 					if( !isset( $instance['hide_post_titles'] ) ) {  ?>
@@ -438,23 +445,7 @@ class CategoryPosts extends WP_Widget {
 					
 					// Thumbnail position normal
 					if( !isset( $instance["thumbTop"] ) ) : 
-						if ( current_theme_supports("post-thumbnails") &&
-								isset( $instance["thumb"] ) &&
-								has_post_thumbnail() ) : ?>
-							<a <?php 
-								if( !isset( $instance['disable_css'] )) { 
-									if( isset($instance['thumb_hover'] )) {
-										echo "class=\"cat-post-thumbnail cat-post-" . $instance['thumb_hover'] . "\"";
-									} else {
-										echo "class=\"cat-post-thumbnail\"";
-									}
-								} ?>
-								href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
-								<?php 
-									$this->the_post_thumbnail( array($instance['thumb_w'],$instance['thumb_h'])); 
-								?>
-							</a>
-					<?php endif;
+						$this->show_thumb();
 					endif;
 
 					if ( isset( $instance['excerpt'] ) ) : 
