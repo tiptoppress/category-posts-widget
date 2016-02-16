@@ -270,6 +270,39 @@ class CategoryPosts extends WP_Widget {
 		return ' <a class="cat-post-excerpt-more" href="'. get_permalink($post->ID) . '">' . $this->instance["excerpt_more_text"] . '</a>';
 	}
 
+	/**
+	 * Excerpt allow HTML
+	 */
+	function allow_html_excerpt($text) {
+		global $post, $new_excerpt_length, $new_excerpt_more_text, $wp_filter;
+		$new_excerpt_length = ( isset($this->instance["excerpt_length"]) && $this->instance["excerpt_length"] > 0 ) ? $this->instance["excerpt_length"] : 55;
+		if ( '' == $text ) {
+			$text = get_the_content('');
+			$text = strip_shortcodes( $text );
+			$text = apply_filters('the_content', $text);
+			$text = str_replace('\]\]\>', ']]&gt;', $text);
+			$text = preg_replace('@<script[^>]*?>.*?</script>@si', '', $text);
+			$text = strip_tags($text, '<script>,<style>,<br>,<em>,<i>,<ul>,<ol>,<li>,<a>,<p>,<img>,<video>,<audio>');
+			$excerpt_length = $new_excerpt_length;					
+			
+			if(ltrim($new_excerpt_more_text) != '') {
+				$excerpt_more = new_excerpt_more('');
+			}else if($filterName = key($wp_filter['excerpt_more'][10])) {
+				$excerpt_more = $wp_filter['excerpt_more'][10][$filterName]['function'](0);
+			}else {
+				$excerpt_more = '[...]';
+			}
+			
+			$words = explode(' ', $text, $excerpt_length + 1);
+			if (count($words)> $excerpt_length) {
+				array_pop($words);
+				array_push($words, $excerpt_more);
+				$text = implode(' ', $words);
+			}
+		}
+		return $text;
+	}
+	
 	// Displays category posts widget on blog.
 	function widget($args, $instance) {
 
@@ -332,44 +365,9 @@ class CategoryPosts extends WP_Widget {
 				add_filter('excerpt_more', array($this,'excerpt_more_filter'));
 			}
 
-			if ( ! function_exists( 'allow_html_excerpt' ) ) :
-			/**
-			 * Excerpt allow HTML
-			 */
-			function allow_html_excerpt($text) {
-				global $post, $new_excerpt_length, $new_excerpt_more_text, $wp_filter;
-				if ( '' == $text ) {
-					$text = get_the_content('');
-					$text = strip_shortcodes( $text );
-					$text = apply_filters('the_content', $text);
-					$text = str_replace('\]\]\>', ']]&gt;', $text);
-					$text = preg_replace('@<script[^>]*?>.*?</script>@si', '', $text);
-					$text = strip_tags($text, '<script>,<style>,<br>,<em>,<i>,<ul>,<ol>,<li>,<a>,<p>,<img>,<video>,<audio>');
-					$excerpt_length = $new_excerpt_length;					
-					
-					if(ltrim($new_excerpt_more_text) != '') {
-						$excerpt_more = new_excerpt_more('');
-					}else if($filterName = key($wp_filter['excerpt_more'][10])) {
-						$excerpt_more = $wp_filter['excerpt_more'][10][$filterName]['function'](0);
-					}else {
-						$excerpt_more = '[...]';
-					}
-					
-					$words = explode(' ', $text, $excerpt_length + 1);
-					if (count($words)> $excerpt_length) {
-						array_pop($words);
-						array_push($words, $excerpt_more);
-						$text = implode(' ', $words);
-					}
-				}
-				return $text;
-			}
-			endif;
 			if( isset( $instance['excerpt_allow_html'] ) ) {
-				global $new_excerpt_length;
-				$new_excerpt_length = ( isset($instance["excerpt_length"]) && $instance["excerpt_length"] > 0 ) ? $instance["excerpt_length"] : 55;
 				remove_filter('get_the_excerpt', 'wp_trim_excerpt');
-				add_filter('get_the_excerpt', 'allow_html_excerpt');
+				add_filter('get_the_excerpt', array($this,'allow_html_excerpt'));
 			}
 
 			echo $before_widget;
@@ -491,6 +489,8 @@ class CategoryPosts extends WP_Widget {
 
 			remove_filter('excerpt_length', $new_excerpt_length);
 			remove_filter('excerpt_more', array($this,'excerpt_more_filter'));
+			add_filter('get_the_excerpt', 'wp_trim_excerpt');
+			remove_filter('get_the_excerpt', array($this,'allow_html_excerpt'));
 			
 			wp_reset_postdata();
 			
