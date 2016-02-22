@@ -274,7 +274,7 @@ class CategoryPosts extends WP_Widget {
 	 * Excerpt allow HTML
 	 */
 	function allow_html_excerpt($text) {
-		global $post, $new_excerpt_length, $new_excerpt_more_text, $wp_filter;
+		global $post, $wp_filter;
 		$new_excerpt_length = ( isset($this->instance["excerpt_length"]) && $this->instance["excerpt_length"] > 0 ) ? $this->instance["excerpt_length"] : 55;
 		if ( '' == $text ) {
 			$text = get_the_content('');
@@ -282,11 +282,11 @@ class CategoryPosts extends WP_Widget {
 			$text = apply_filters('the_content', $text);
 			$text = str_replace('\]\]\>', ']]&gt;', $text);
 			$text = preg_replace('@<script[^>]*?>.*?</script>@si', '', $text);
-			$text = strip_tags($text, '<script>,<style>,<br>,<em>,<i>,<ul>,<ol>,<li>,<a>,<p>,<img>,<video>,<audio>');
-			$excerpt_length = $new_excerpt_length;					
-			
-			if(ltrim($new_excerpt_more_text) != '') {
-				$excerpt_more = new_excerpt_more('');
+			$text = strip_tags($text, '<a>');
+			$excerpt_length = $new_excerpt_length;		
+
+			if( !empty($this->instance["excerpt_more_text"])) {
+				$excerpt_more = $this->excerpt_more_filter($this->instance["excerpt_more_text"]); 
 			}else if($filterName = key($wp_filter['excerpt_more'][10])) {
 				$excerpt_more = $wp_filter['excerpt_more'][10][$filterName]['function'](0);
 			}else {
@@ -300,6 +300,7 @@ class CategoryPosts extends WP_Widget {
 				$text = implode(' ', $words);
 			}
 		}
+
 		return $text;
 	}
 	
@@ -390,8 +391,8 @@ class CategoryPosts extends WP_Widget {
 			}
 
 			if( isset( $instance['excerpt_allow_html'] ) ) {
-				remove_filter('get_the_excerpt', 'wp_trim_excerpt');
-				add_filter('get_the_excerpt', array($this,'allow_html_excerpt'));
+				remove_filter('the_excerpt', 'wp_trim_excerpt');
+				add_filter('the_excerpt', array($this,'allow_html_excerpt'));
 			}
 
 			echo $before_widget;
@@ -707,7 +708,7 @@ class CategoryPosts extends WP_Widget {
 				<p>
 					<label for="<?php echo $this->get_field_id("excerpt_allow_html"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_allow_html"); ?>" name="<?php echo $this->get_field_name("excerpt_allow_html"); ?>"<?php checked( (bool) $instance["excerpt_allow_html"], true ); ?> />
-						<?php _e( 'Allow HTML in excerpt','categoryposts' ); ?>
+						<?php _e( 'Allow links in excerpt','categoryposts' ); ?>
 					</label>
 				</p>
 				<p>
