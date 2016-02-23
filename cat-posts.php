@@ -285,7 +285,7 @@ class CategoryPosts extends WP_Widget {
 			$text = strip_tags($text, '<a>');
 			$excerpt_length = $new_excerpt_length;		
 
-			if( !empty($this->instance["excerpt_more_text"])) {
+			if( !empty($this->instance["excerpt_more_text"]) ) {
 				$excerpt_more = $this->excerpt_more_filter($this->instance["excerpt_more_text"]); 
 			}else if($filterName = key($wp_filter['excerpt_more'][10])) {
 				$excerpt_more = $wp_filter['excerpt_more'][10][$filterName]['function'](0);
@@ -301,7 +301,7 @@ class CategoryPosts extends WP_Widget {
 			}
 		}
 
-		return $text;
+		return '<p>' . $text . '</p>';
 	}
 	
 	/*
@@ -391,7 +391,7 @@ class CategoryPosts extends WP_Widget {
 			}
 
 			if( isset( $instance['excerpt_allow_html'] ) ) {
-				remove_filter('the_excerpt', 'wp_trim_excerpt');
+				remove_filter('get_the_excerpt', 'wp_trim_excerpt');
 				add_filter('the_excerpt', array($this,'allow_html_excerpt'));
 			}
 
