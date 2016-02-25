@@ -44,6 +44,9 @@ Version: 4.1.5
 .cat-post-author {
 	margin-bottom: 0;
 }
+.cat-post-thumbnail {
+	display: block;
+}
 .cat-post-thumbnail img {
 	margin: 5px 10px 5px 0;
 }
