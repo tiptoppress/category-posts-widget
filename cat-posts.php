@@ -242,10 +242,12 @@ class CategoryPosts extends WP_Widget {
 			$pattern = "/height=\"[0-9]*\"/";
 			$html = preg_replace($pattern, "height='".$image['image_h']."'", $html);			
 			// set margin
-			$html = str_replace('<img ','<img style="'.$image['margin'].'"',$html);			
+			$html = str_replace('<img ','<img style="'.$image['marginAttr'].':-'.$image['marginVal'].'px;height:'.$image['image_h']
+				.'px;clip:rect(auto,'.($this->instance['thumb_w']+$image['marginVal']).'px,auto,'.$image['marginVal']
+				.'px);width:auto;max-width:initial;"',$html);
 			// wrap span
 			$html = '<span style="width:'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px;">'
-					.$html.'</span>';
+				.$html.'</span>';
 		} else {
 			// if use_css_cropping not used
 			// no interface changes: leave without change

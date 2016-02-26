@@ -69,6 +69,9 @@ Automatic installation is the easiest option as WordPress handles the file trans
 * Version 3.0 or later version uses WordPress 2.9's built in post thumbnail functionality.
 
 == Frequently Asked Questions ==
+= The feature image dimention are not correctly displayed? =
+Enable the option "Use CSS cropping". With this option, your stored setting (Settings > Media) are not decisive.
+
 = Excerpt length filter doesn't works =
 When a post has no manual excerpt WordPress generates an excerpt automatically by selecting the first 55 words of the post or the first words number setted by the excerpt filter length. This means the excerpt length filter works only with automatic excerpt. If you manually added an excerpt, you'd want it all to be shown.
 WordPress Codex: <a target="_blank" href="http://codex.wordpress.org/Excerpt#Excerpt.2C_automatic_excerpt.2C_and_teaser">3 Excerpt, automatic excerpt, and teaser</a>
