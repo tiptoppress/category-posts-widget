@@ -22,7 +22,7 @@ We are working on a pro version that is available in a few days. If you want, yo
 ### Features
 * Option to change ordering of posts.
 * Option to show post thumbnail & set dimension or image size by width & height.
-* Option to crop thumbnails with CSS.
+* Option to crop thumbnails with CSS <a target="_blank" href="http://tiptoppress.com/css-image-crop/">What is 'CSS Image Crop'</a>.
 * Option to set mouse hover effects for post thumbnail.
 * Option to put thumbnail on top.
 * Option to hide posts which have no thumbnail.

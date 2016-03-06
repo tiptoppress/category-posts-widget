@@ -18,7 +18,7 @@ We are working on a pro version that is available in a few days. If you want, yo
 = Features =
 * Option to change ordering of posts.
 * Option to show post thumbnail & set dimension or image size by width & height.
-* Option to crop thumbnails with CSS.
+* Option to crop thumbnails with CSS <a target="_blank" href="http://tiptoppress.com/css-image-crop/">What is 'CSS Image Crop'</a>.
 * Option to set mouse hover effects for post thumbnail.
 * Option to put thumbnail on top
 * Option to hide posts which have no thumbnail.
@@ -70,7 +70,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 == Frequently Asked Questions ==
 = The feature image dimention are not correctly displayed? =
-Enable the option "Use CSS cropping". With this option, your stored setting (Settings > Media) are not decisive.
+Enable the option "Use CSS cropping". This option don't care about stored setting (Settings > Media) or added image sizes. <a target="_blank" href="http://tiptoppress.com/css-image-crop/">What is 'CSS Image Crop'.</a> 
 
 = Excerpt length filter doesn't works =
 When a post has no manual excerpt WordPress generates an excerpt automatically by selecting the first 55 words of the post or the first words number setted by the excerpt filter length. This means the excerpt length filter works only with automatic excerpt. If you manually added an excerpt, you'd want it all to be shown.
