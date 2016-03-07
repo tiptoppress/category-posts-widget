@@ -244,7 +244,7 @@ class CategoryPosts extends WP_Widget {
 			// set margin
 			$html = str_replace('<img ','<img style="'.$image['marginAttr'].':-'.$image['marginVal'].'px;height:'.$image['image_h']
 				.'px;clip:rect(auto,'.($this->instance['thumb_w']+$image['marginVal']).'px,auto,'.$image['marginVal']
-				.'px);width:auto;max-width:initial;"',$html);
+				.'px);width:auto;max-width:initial;" ',$html);
 			// wrap span
 			$html = '<span style="width:'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px;">'
 				.$html.'</span>';
