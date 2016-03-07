@@ -412,13 +412,17 @@ class CategoryPosts extends WP_Widget {
 
 			// Post list
 			echo "<ul>\n";
-
+            
+            $current_post_id = null;
+            if (is_singular())
+                $current_post_id = get_the_ID();
+            
 			while ( $cat_posts->have_posts() )
 			{
 				$cat_posts->the_post(); ?>
 				
 				<li <?php 
-						if ( is_single( $cat_posts->post->ID )) { 
+						if ( $current_post_id == $cat_posts->post->ID ) { 
 							echo "class='cat-post-item cat-post-current'"; 
 						} else {
 							echo "class='cat-post-item'";
