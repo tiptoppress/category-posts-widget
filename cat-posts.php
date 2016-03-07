@@ -573,6 +573,7 @@ class CategoryPosts extends WP_Widget {
 
 		?>
 		<div class="category-widget-cont">
+            <p><a href="http://tiptoppress.com/categorie-posts-widget-pro/">Get the Pro Version</a></p>
 			<h4 class="open"><?php _e('Filter','categoryposts');?></h4>
 			<div class="open">
 				<p>
@@ -774,6 +775,11 @@ class CategoryPosts extends WP_Widget {
 					</label>
 				</p>
 			</div>
+            <h4>Follow Us</h4>
+            <div>
+                <p><a href="https://www.facebook.com/TipTopPress">On FaceBook</a></p>
+                <p><a href="https://twitter.com/TipTopPress">On Twitter</a></p>
+            </div>
 		</div>
 		<?php
 	}
