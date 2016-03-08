@@ -789,4 +789,8 @@ class CategoryPosts extends WP_Widget {
 	}
 }
 
-add_action( 'widgets_init', create_function('', 'return register_widget("CategoryPosts");') );
+function category_posts_register_widget() {
+    return register_widget("CategoryPosts");
+}
+
+add_action( 'widgets_init', 'category_posts_register_widget' );
