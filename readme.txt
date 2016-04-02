@@ -13,7 +13,8 @@ Adds a widget that shows the most recent posts from a single category.
 == Description ==
 Category Posts Widget is a light widget designed to do one thing and do it well: display the most recent posts from a certain category.
 
-We are working on a pro version that is available in a few days. If you want, you can send us your e-mail address to: tiptop@tiptoppress.com. Once our new website is accessible, we will inform you about the new features. There will be a multi-category option that supports custom post types and new WP tags. We want to design different styles that are easy to be selected, like vertical scrolling ticker. Then we plan a bundle offer with our other expanded Posts widgets, so you can upgrade your site quickly by widget bundle. The free version will still exist, maintained and supported with most of the new features.
+= Term, Tag and Category Posts Widget =
+We are working on a pro version that is available in a few days. If you want, you can send us your e-mail address to: tiptop@tiptoppress.com. Once the pro version is available, we will inform you. There will be a multi-category option that supports custom post types and new WP tags. We want to design different styles that are easy to be selected, like vertical scrolling ticker. Then we plan a bundle offer with our other expanded Posts widgets, so you can upgrade your site quickly by widget bundle. The free version will still exist, maintained and supported with most of the new features. Read more on <a target="_blank" href="http://tiptoppress.com/">Tip Top Press</a>.
 
 = Features =
 * Option to change ordering of posts.
