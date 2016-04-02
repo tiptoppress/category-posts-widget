@@ -610,7 +610,7 @@ class CategoryPosts extends WP_Widget {
 
 		?>
 		<div class="category-widget-cont">
-            <p><a href="http://tiptoppress.com/categorie-posts-widget-pro/">Get the Pro Version</a></p>
+            	<p><a target="_blank" href="http://tiptoppress.com/term-tag-and-category-posts-widget/">Get the Pro Version</a></p>
 			<h4 class="open"><?php _e('Filter','categoryposts');?></h4>
 			<div class="open">
 				<p>
@@ -812,13 +812,14 @@ class CategoryPosts extends WP_Widget {
 					</label>
 				</p>
 			</div>
-            <h4>Follow Us</h4>
+            <h4>Follow us on</h4>
             <div>
-                <p><a href="https://www.facebook.com/TipTopPress">On FaceBook</a></p>
-                <p><a href="https://twitter.com/TipTopPress">On Twitter</a></p>
+                <a target="_blank" href="https://www.facebook.com/TipTopPress">Facebook</a> and 
+		<a target="_blank" href="https://twitter.com/TipTopPress">Twitter</a></br></br>
+		</br>
             </div>
-		</div>
-		<?php
+	</div>
+	<?php
 	}
 }
 
