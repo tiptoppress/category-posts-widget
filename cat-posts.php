@@ -610,9 +610,30 @@ class CategoryPosts extends WP_Widget {
 
 		?>
 		<div class="category-widget-cont">
-            	<p><a target="_blank" href="http://tiptoppress.com/term-tag-and-category-posts-widget/">Get the Pro Version</a></p>
-			<h4 class="open"><?php _e('Filter','categoryposts');?></h4>
-			<div class="open">
+            <p><a target="_blank" href="http://tiptoppress.com/term-tag-and-category-posts-widget/">Get the Pro Version</a></p>
+			<h4><?php _e('Title','categoryposts')?></h4>
+			<div>
+				<p>
+					<label for="<?php echo $this->get_field_id("title"); ?>">
+						<?php _e( 'Title','categoryposts' ); ?>:
+						<input class="widefat" style="width:80%;" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo esc_attr($instance["title"]); ?>" />
+					</label>
+				</p>
+				<p>
+					<label for="<?php echo $this->get_field_id("title_link"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("title_link"); ?>" name="<?php echo $this->get_field_name("title_link"); ?>"<?php checked( (bool) $instance["title_link"], true ); ?> />
+						<?php _e( 'Make widget title link','categoryposts' ); ?>
+					</label>
+				</p>
+				<p>
+					<label for="<?php echo $this->get_field_id("hide_title"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_title"); ?>" name="<?php echo $this->get_field_name("hide_title"); ?>"<?php checked( (bool) $instance["hide_title"], true ); ?> />
+						<?php _e( 'Hide title','categoryposts' ); ?>
+					</label>
+				</p>
+			</div>			
+			<h4><?php _e('Filter','categoryposts');?></h4>
+			<div>
 				<p>
 					<label>
 						<?php _e( 'Category','categoryposts' ); ?>:
@@ -649,27 +670,6 @@ class CategoryPosts extends WP_Widget {
 					<label for="<?php echo $this->get_field_id("exclude_current_post"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("exclude_current_post"); ?>" name="<?php echo $this->get_field_name("exclude_current_post"); ?>"<?php checked( (bool) $instance["exclude_current_post"], true ); ?> />
 						<?php _e( 'Exclude current post','categoryposts' ); ?>
-					</label>
-				</p>
-			</div>
-			<h4><?php _e('Title','categoryposts')?></h4>
-			<div>
-				<p>
-					<label for="<?php echo $this->get_field_id("title"); ?>">
-						<?php _e( 'Title','categoryposts' ); ?>:
-						<input class="widefat" style="width:80%;" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo esc_attr($instance["title"]); ?>" />
-					</label>
-				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("title_link"); ?>">
-						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("title_link"); ?>" name="<?php echo $this->get_field_name("title_link"); ?>"<?php checked( (bool) $instance["title_link"], true ); ?> />
-						<?php _e( 'Make widget title link','categoryposts' ); ?>
-					</label>
-				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("hide_title"); ?>">
-						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_title"); ?>" name="<?php echo $this->get_field_name("hide_title"); ?>"<?php checked( (bool) $instance["hide_title"], true ); ?> />
-						<?php _e( 'Hide title','categoryposts' ); ?>
 					</label>
 				</p>
 			</div>			
@@ -788,16 +788,7 @@ class CategoryPosts extends WP_Widget {
 					</label>
 				</p>
 			</div>
-			<h4><?php _e('Footer','categoryposts')?></h4>
-			<div>
-				<p>
-					<label for="<?php echo $this->get_field_id("footer_link"); ?>">
-						<?php _e( 'Footer link text','categoryposts' ); ?>:
-						<input class="widefat" style="width:60%;" placeholder="<?php _e('... more by this topic','categoryposts')?>" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
-					</label>
-				</p>
-			</div>
-			<h4><?php _e('General styling','categoryposts')?></h4>
+			<h4><?php _e('General','categoryposts')?></h4>
 			<div>
 				<p>
 					<label for="<?php echo $this->get_field_id("disable_css"); ?>">
@@ -812,14 +803,23 @@ class CategoryPosts extends WP_Widget {
 					</label>
 				</p>
 			</div>
+			<h4><?php _e('Footer','categoryposts')?></h4>
+			<div>
+				<p>
+					<label for="<?php echo $this->get_field_id("footer_link"); ?>">
+						<?php _e( 'Footer link text','categoryposts' ); ?>:
+						<input class="widefat" style="width:60%;" placeholder="<?php _e('... more by this topic','categoryposts')?>" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
+					</label>
+				</p>
+			</div>			
             <h4>Follow us on</h4>
             <div>
                 <a target="_blank" href="https://www.facebook.com/TipTopPress">Facebook</a> and 
-		<a target="_blank" href="https://twitter.com/TipTopPress">Twitter</a></br></br>
-		</br>
+				<a target="_blank" href="https://twitter.com/TipTopPress">Twitter</a></br></br>
+				</br>
             </div>
-	</div>
-	<?php
+		</div>
+		<?php
 	}
 }
 
