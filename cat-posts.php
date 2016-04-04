@@ -611,6 +611,7 @@ class CategoryPosts extends WP_Widget {
 		?>
 		<div class="category-widget-cont">
             <p><a target="_blank" href="http://tiptoppress.com/terms-tags-and-categories-posts-widget/">Get the Pro Version</a></p>
+            <p><a target="_blank" href="http://tiptoppress.com/category-posts-widget/documentation/">Documentation</a></p>
 			<h4><?php _e('Title','categoryposts')?></h4>
 			<div>
 				<p>
