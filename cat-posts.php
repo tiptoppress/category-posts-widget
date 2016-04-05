@@ -800,7 +800,7 @@ class CategoryPosts extends WP_Widget {
 				<p>
 					<label for="<?php echo $this->get_field_id("hide_if_empty"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_if_empty"); ?>" name="<?php echo $this->get_field_name("hide_if_empty"); ?>"<?php checked( (bool) $instance["hide_if_empty"], true ); ?> />
-						<?php _e( 'Hide widget if no matching posts','categoryposts' ); ?>
+						<?php _e( 'Hide widget if there are no matching posts','categoryposts' ); ?>
 					</label>
 				</p>
 			</div>
