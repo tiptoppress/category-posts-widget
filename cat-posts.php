@@ -715,13 +715,13 @@ class CategoryPosts extends WP_Widget {
 					</p>					
 					<p>
 						<label for="<?php echo $this->get_field_id("thumb_hover"); ?>">
-							<?php _e( 'Mouse hover effect:','categorypostspro' ); ?>
+							<?php _e( 'Animation on mouse hover:','categorypostspro' ); ?>
 						</label>
 						<select id="<?php echo $this->get_field_id("thumb_hover"); ?>" name="<?php echo $this->get_field_name("thumb_hover"); ?>">
 							<option value="none" <?php selected($thumb_hover, 'none')?>><?php _e( 'None', 'categorypostspro' ); ?></option>
-							<option value="dark" <?php selected($thumb_hover, 'dark')?>><?php _e( 'Dark', 'categorypostspro' ); ?></option>
-							<option value="white" <?php selected($thumb_hover, 'white')?>><?php _e( 'White', 'categorypostspro' ); ?></option>
-							<option value="scale" <?php selected($thumb_hover, 'scale')?>><?php _e( 'Scale', 'categorypostspro' ); ?></option>
+							<option value="dark" <?php selected($thumb_hover, 'dark')?>><?php _e( 'Darker', 'categorypostspro' ); ?></option>
+							<option value="white" <?php selected($thumb_hover, 'white')?>><?php _e( 'Brighter', 'categorypostspro' ); ?></option>
+							<option value="scale" <?php selected($thumb_hover, 'scale')?>><?php _e( 'Zoom in', 'categorypostspro' ); ?></option>
 						</select>
 					</p>
 				</div>
