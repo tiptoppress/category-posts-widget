@@ -710,7 +710,7 @@ class CategoryPosts extends WP_Widget {
 					<p>
 						<label for="<?php echo $this->get_field_id("use_css_cropping"); ?>">
 							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("use_css_cropping"); ?>" name="<?php echo $this->get_field_name("use_css_cropping"); ?>"<?php checked( (bool) $instance["use_css_cropping"], true ); ?> />
-							<?php _e( 'Use CSS cropping','categoryposts' ); ?>
+							<?php _e( 'Crop bigger thumbnails around the center ','categoryposts' ); ?>
 						</label>
 					</p>					
 					<p>
