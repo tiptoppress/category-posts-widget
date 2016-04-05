@@ -692,7 +692,7 @@ class CategoryPosts extends WP_Widget {
 					<p>
 						<label for="<?php echo $this->get_field_id("thumbTop"); ?>">
 							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumbTop"); ?>" name="<?php echo $this->get_field_name("thumbTop"); ?>"<?php checked( (bool) $instance["thumbTop"], true ); ?> />
-							<?php _e( 'Thumbnail to top','categoryposts' ); ?>
+							<?php _e( 'Show thumbnails above text','categoryposts' ); ?>
 						</label>
 					</p>
 					<p>
