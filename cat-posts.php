@@ -673,6 +673,12 @@ class CategoryPosts extends WP_Widget {
 						<?php _e( 'Exclude current post','categoryposts' ); ?>
 					</label>
 				</p>
+					<p>
+						<label for="<?php echo $this->get_field_id("hideNoThumb"); ?>">
+							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hideNoThumb"); ?>" name="<?php echo $this->get_field_name("hideNoThumb"); ?>"<?php checked( (bool) $instance["hideNoThumb"], true ); ?> />
+							<?php _e( 'Exclude posts which have no thumbnail','categoryposts' ); ?>
+						</label>
+					</p>					
 			</div>			
 			<?php if ( current_theme_supports("post-thumbnails") ) : ?>
 				<h4><?php _e('Thumbnails','categoryposts')?></h4>
@@ -683,12 +689,6 @@ class CategoryPosts extends WP_Widget {
 							<?php _e( 'Show post thumbnail','categoryposts' ); ?>
 						</label>
 					</p>
-					<p>
-						<label for="<?php echo $this->get_field_id("hideNoThumb"); ?>">
-							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hideNoThumb"); ?>" name="<?php echo $this->get_field_name("hideNoThumb"); ?>"<?php checked( (bool) $instance["hideNoThumb"], true ); ?> />
-							<?php _e( 'Hide posts which have no thumbnail','categoryposts' ); ?>
-						</label>
-					</p>					
 					<p>
 						<label for="<?php echo $this->get_field_id("thumbTop"); ?>">
 							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumbTop"); ?>" name="<?php echo $this->get_field_name("thumbTop"); ?>"<?php checked( (bool) $instance["thumbTop"], true ); ?> />
