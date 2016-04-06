@@ -13,14 +13,12 @@ Adds a widget that shows the most recent posts from a single category.
 == Description ==
 Category Posts Widget is a light widget designed to do one thing and do it well: display the most recent posts from a certain category.
 
-= Term, Tag and Category Posts Widget =
+= Term and Category based Posts Widget =
 We are working on a pro version that is available in a few days. If you want, you can send us your e-mail address to: tiptop@tiptoppress.com. Once the pro version is available, we will inform you. There will be a multi-category option that supports custom post types and new WP tags. We want to design different styles that are easy to be selected, like vertical scrolling ticker. Then we plan a bundle offer with our other expanded Posts widgets, so you can upgrade your site quickly by widget bundle. The free version will still exist, maintained and supported with most of the new features. Read more on <a target="_blank" href="http://tiptoppress.com/">Tip Top Press</a>.
 
 = Features =
 * Option to change ordering of posts.
-* Option to show post thumbnail & set dimension or image size by width & height.
-* Option to crop thumbnails with CSS <a target="_blank" href="http://tiptoppress.com/css-image-crop/">What is 'CSS Image Crop'</a>.
-* Option to set mouse hover effects for post thumbnail.
+* Option to show post thumbnail & set dimension by width & height.
 * Option to put thumbnail on top
 * Option to hide posts which have no thumbnail.
 * Option to disable widget CSS.
@@ -28,18 +26,19 @@ We are working on a pro version that is available in a few days. If you want, yo
 * Option exclude current post.
 * Option show post author.
 * Set which category the posts should come form.
-* Option to show the post excerpt, set the length, allow links and change 'more' text.
+* Option to show the post excerpt and how long the excerpt should be.
 * Option to show the post date.
 * Option to make the widget date link to the category page.
 * Option to format the outputted date string.
 * Option to show the comment count.
 * Option to make the widget title link to the category page.
 * Option to link to the category page below posts list.
-* Option to hide the widget title and post titles.
+* Option to hide the title.
 * Option to hide widget, if category have currently no posts.
 * Multiple widgets.
 * Multi sites support.
 * Localization support.
+* Generate thumbs from existing images.
 
 = Documentation =
 Formatting date and time: See <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>.
@@ -70,14 +69,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 * Version 3.0 or later version uses WordPress 2.9's built in post thumbnail functionality.
 
 == Frequently Asked Questions ==
-= The feature image dimention are not correctly displayed? =
-Enable the option "Use CSS cropping". This option don't care about stored setting (Settings > Media) or added image sizes. <a target="_blank" href="http://tiptoppress.com/css-image-crop/">What is 'CSS Image Crop'.</a> 
-
-= Excerpt length filter doesn't works =
-When a post has no manual excerpt WordPress generates an excerpt automatically by selecting the first 55 words of the post or the first words number setted by the excerpt filter length. This means the excerpt length filter works only with automatic excerpt. If you manually added an excerpt, you'd want it all to be shown.
-WordPress Codex: <a target="_blank" href="http://codex.wordpress.org/Excerpt#Excerpt.2C_automatic_excerpt.2C_and_teaser">3 Excerpt, automatic excerpt, and teaser</a>
-
-= The font-size is different from that of other widgets or the Theme? =
+= The font-size is different from that of other widgets? =
 Please use the option: "Disable widget CSS".
 
 = I want the title as a link pointing to the selected Categorie page? =
@@ -88,17 +80,10 @@ Enable the check box "Make widget title link".
 2. Front end of the widget using a default WordPress Theme.
 
 == Changelog ==
-= 4.1.6 =
-* Add option CSS cropping for thumbnails.
-* Add option to set mouse hover effects for post thumbnail.
-* Add option to change the excerpt more text.
-* Add option to allow links in the excerpt
-* Add filter 'widget_title' for the title
-* Add option to hide post titles.
-
 = 4.1.5 - February 4 2016 =
 * Support for multi sites.
 * Support for localization.
+* Generate thumbs from existing images.
 * Area UI.
 * Meet new plugin author [mark-k](https://profiles.wordpress.org/mark-k/)
 
