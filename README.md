@@ -18,7 +18,13 @@ Adds a widget that shows the most recent posts from a single category.
 Category Posts Widget is a light widget designed to do one thing and do it well: display the most recent posts from a certain category.
 
 ### Term and Category based Posts Widget
-We are working on a pro version that is available in a few days. If you want, you can send us your e-mail address to: tiptop@tiptoppress.com. Once the pro version is available, we will inform you. There will be a multi-category option that supports custom post types and new WP tags. We want to design different styles that are easy to be selected, like vertical scrolling ticker. Then we plan a bundle offer with our other expanded Posts widgets, so you can upgrade your site quickly by widget bundle. The free version will still exist, maintained and supported with most of the new features. Read more on <a target="_blank" href="http://tiptoppress.com/">Tip Top Press</a>.
+It's the pro version and available at on <a target="_blank" href="http://tiptoppress.com/">Tip Top Press</a> created for big Wordpress sites.
+We giving you a 50%-special discount code: **'WordPress'**. (Enter it after checkout.)
+
+### Pro features
+* Custom Post Types, Terms and Custom Taxonomies
+* Multi selection
+* Different styles, like vertical scrolling ticker
 
 ### Features
 * Option to change ordering of posts.
@@ -70,7 +76,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 
 ## Changelog
-##### 4.1.6
+##### 4.1.6 - April 13th 2016
 * Add option CSS cropping for thumbnails.
 * Add option to set mouse hover effects for post thumbnail.
 * Add option to change the excerpt more text.
@@ -78,7 +84,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 * Add filter 'widget_title' for the title
 * Add option to hide post titles.
 
-##### 4.1.5 - February 4 2016
+##### 4.1.5 - February 4th 2016
 * Support for multi sites.
 * Support for localization.
 * Area UI.
