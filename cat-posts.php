@@ -4,7 +4,7 @@ Plugin Name: Category Posts Widget
 Plugin URI: http://mkrdip.me/category-posts-widget
 Description: Adds a widget that shows the most recent posts from a single category.
 Author: Mrinal Kanti Roy
-Version: 4.1.6
+Version: 4.1.7
 Author URI: http://mkrdip.me
 */
 
@@ -250,10 +250,26 @@ class CategoryPosts extends WP_Widget {
 			return $html; // bail out if no full dimensions defined
 
 		$meta = image_get_intermediate_size($post_thumbnail_id,$size);
+		if( empty( $meta )) {
+			// user setted size have to be smaller as image 'large' size (attention: not 'full')
+			$size_large = image_get_intermediate_size( $post_thumbnail_id, 'large' );
+
+			if ( $size_large['width'] < $this->instance['thumb_w'] ) {
+				$size['width'] = $size_large['width'];
+				$size['height'] = $this->instance['thumb_h'] * $size_large['width'] / $size_large['height'];
+			}
+			$size_large['height'] = isset( $size['height'] ) ? $size['height'] : $size_large['height'];
+			if ( $size_large['height'] < $this->instance['thumb_h'] ) {
+				$size['height'] = $size_large['height'];
+				$size['width'] = $this->instance['thumb_w'] * $size_large['height'] / $size_large['width'];
+			}
+			$meta = image_get_intermediate_size($post_thumbnail_id,array($size['width'],$size['height']));
+		}
+
 		$origfile = get_attached_file( $post_thumbnail_id, true); // the location of the full file
 		$file =	dirname($origfile) .'/'.$meta['file']; // the location of the file displayed as thumb
 		list( $width, $height ) = getimagesize($file);  // get actual size of the thumb file
-		
+
 		if ($width / $height == $this->instance['thumb_w'] / $this->instance['thumb_h']) {
 			// image is same ratio as asked for, nothing to do here as the browser will handle it correctly
 			;

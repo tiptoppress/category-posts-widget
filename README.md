@@ -76,6 +76,9 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 
 ## Changelog
+##### 4.1.7 - April 14th 2016
+* Fixed division by zero bug.
+
 ##### 4.1.6 - April 13th 2016
 * Add option CSS cropping for thumbnails.
 * Add option to set mouse hover effects for post thumbnail.
