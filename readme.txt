@@ -81,6 +81,12 @@ Please use the option: "Disable widget CSS".
 = I want the title as a link pointing to the selected Categorie page? =
 Enable the check box "Make widget title link".
 
+= Parse error: syntax error, unexpected T_FUNCTION in /home/www/blog/wp-content/plugins/category-posts/cat-posts.php on line 58 =
+Some of the features that were used in that version needs PHP 5.3+.
+We apologies for any headache this may cause you, but frankly it is better for you to check with your hosting company how can you upgrade the PHP version that you are using, and not only in order to use this plugin. PHP 5.2 should be considered insecure now, and for your own sake you should upgrade.
+PHP 5.2 is very old and any support for it from the php developers had ended more then 5 years ago [php.net/eol.php](http://php.net/eol.php).
+We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wordpress.org/about/stats/) and we can't imagine this people will have no other problems, if they don't update.
+
 == Screenshots ==
 1. The widget configuration dialog.
 2. Front end of the widget using a default WordPress Theme.
