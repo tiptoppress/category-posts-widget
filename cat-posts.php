@@ -246,7 +246,7 @@ class CategoryPosts extends WP_Widget {
 		override the thumbnail htmo to insert cropping when needed
 	*/
 	function post_thumbnail_html($html, $post_id, $post_thumbnail_id, $size, $attr){
-		if ( empty($this->instance['thumb_w']) || empty($this->instance['thumb_w']))
+		if ( empty($this->instance['thumb_w']) || empty($this->instance['thumb_h']))
 			return $html; // bail out if no full dimensions defined
 
 		$meta = image_get_intermediate_size($post_thumbnail_id,$size);
