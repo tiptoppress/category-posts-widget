@@ -312,6 +312,13 @@ class CategoryPosts extends WP_Widget {
 	}
 
 	/**
+	 * Explicite excerpt
+	 */	
+	function explicite_the_excerpt($text) {
+		return apply_filters('the_content', $text);
+	}
+	
+	/**
 	 * Excerpt allow HTML
 	 */
 	function allow_html_excerpt($text) {
@@ -434,7 +441,10 @@ class CategoryPosts extends WP_Widget {
 			if( isset( $instance['excerpt_allow_html'] ) ) {
 				remove_filter('get_the_excerpt', 'wp_trim_excerpt');
 				add_filter('the_excerpt', array($this,'allow_html_excerpt'));
+			} else {
+				add_filter('the_excerpt', array($this,'explicite_the_excerpt'));
 			}
+			
 
 			echo $before_widget;
 
@@ -528,7 +538,8 @@ class CategoryPosts extends WP_Widget {
 			remove_filter('excerpt_length', $new_excerpt_length);
 			remove_filter('excerpt_more', array($this,'excerpt_more_filter'));
 			add_filter('get_the_excerpt', 'wp_trim_excerpt');
-			remove_filter('get_the_excerpt', array($this,'allow_html_excerpt'));
+			remove_filter('the_excerpt', array($this,'allow_html_excerpt'));
+			remove_filter('the_excerpt', array($this,'explicite_the_excerpt'));
 			
 			wp_reset_postdata();
 			
