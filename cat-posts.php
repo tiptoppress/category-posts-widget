@@ -251,8 +251,10 @@ class CategoryPosts extends WP_Widget {
 
 		$meta = image_get_intermediate_size($post_thumbnail_id,$size);
 		
-		if ( empty( $meta ))		
-			$meta['file'] = basename( wp_get_attachment_metadata($post_thumbnail_id, $size)['file'] );
+		if ( empty( $meta )) {		
+			$post_img = wp_get_attachment_metadata($post_thumbnail_id, $size);
+			$meta['file'] = basename( $post_img['file'] );
+		}
 
 		$origfile = get_attached_file( $post_thumbnail_id, true); // the location of the full file
 		$file =	dirname($origfile) .'/'.$meta['file']; // the location of the file displayed as thumb
