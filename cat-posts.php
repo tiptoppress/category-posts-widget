@@ -829,13 +829,11 @@ class CategoryPosts extends WP_Widget {
 						<input class="widefat" style="width:60%;" placeholder="<?php _e('... more by this topic','categoryposts')?>" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
 					</label>
 				</p>
-			</div>			
-            <h4>Follow us on</h4>
-            <div>
-                <a target="_blank" href="https://www.facebook.com/TipTopPress">Facebook</a> and 
+			</div>
+            <p style="text-align:right;">
+                Follow us on <a target="_blank" href="https://www.facebook.com/TipTopPress">Facebook</a> and 
 				<a target="_blank" href="https://twitter.com/TipTopPress">Twitter</a></br></br>
-				</br>
-            </div>
+            </p>
 		</div>
 		<?php
 	}
