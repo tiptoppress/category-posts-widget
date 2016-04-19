@@ -8,6 +8,8 @@ Version: 4.1.7
 Author URI: http://mkrdip.me
 */
 
+namespace categoryPosts;
+
 // Don't call the file directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
@@ -20,7 +22,7 @@ define( 'CAT_POST_VERSION', "4.1.5");
  * 
  * callback - accepts the widget settings, return true to continue iteration or false to stop
 */
-function category_posts_iterator($id_base,$class,$callback) {
+function iterator($id_base,$class,$callback) {
 	global $wp_registered_widgets;
 	$sidebars_widgets = wp_get_sidebars_widgets();
 
@@ -52,10 +54,10 @@ function category_posts_iterator($id_base,$class,$callback) {
 	
 	Return: false if cropping is not active, false otherwise
 */
-function category_posts_cropping_active($id_base,$class) {
+function cropping_active($id_base,$class) {
 	$ret = false;
 	
-	category_posts_iterator($id_base, $class, function ($settings) use (&$ret) {
+	iterator($id_base, $class, function ($settings) use (&$ret) {
 		if (isset($settings['use_css_cropping'])) { // checks if cropping is active
 			$ret = true;
 			return false; // stop iterator
@@ -72,10 +74,10 @@ function category_posts_cropping_active($id_base,$class) {
 	
 	Return: false if CSS should not be enqueued, true if it should
 */
-function category_posts_should_enqueue($id_base,$class) {
+function should_enqueue($id_base,$class) {
 	$ret = false;
 	
-	category_posts_iterator($id_base, $class, function ($settings) use (&$ret) {
+	iterator($id_base, $class, function ($settings) use (&$ret) {
 		if (!isset($settings['disable_css'])) { // checks if css disable is not set
 			$ret = true;
 			return false; // stop iterator
@@ -91,10 +93,10 @@ function category_posts_should_enqueue($id_base,$class) {
  *
  * @return void
  */
-add_action( 'wp_enqueue_scripts', 'category_posts_widget_styles' );
+add_action( 'wp_enqueue_scripts', __NAMESPACE__.'\widget_styles' );
 
-function category_posts_wp_head() {
-	if (category_posts_cropping_active('category-posts','CategoryPosts')) {
+function wp_head() {
+	if (cropping_active('category-posts',__NAMESPACE__.'\Widget')) {
 ?>
 <style type="text/css">
 .cat-post-item .cat-post-css-cropping span {
@@ -106,10 +108,10 @@ function category_posts_wp_head() {
 	}
 }
 
-add_action('wp_head','category_posts_wp_head');
+add_action('wp_head',__NAMESPACE__.'\wp_head');
 
-function category_posts_widget_styles() {
-	$enqueue = category_posts_should_enqueue('category-posts','CategoryPosts');
+function widget_styles() {
+	$enqueue = should_enqueue('category-posts',__NAMESPACE__.'\Widget');
 	if ($enqueue) {
 		wp_register_style( 'category-posts', CAT_POST_PLUGINURL . 'cat-posts.css' );
 		wp_enqueue_style( 'category-posts' );
@@ -120,9 +122,9 @@ function category_posts_widget_styles() {
  * Load plugin textdomain.
  *
  */
-add_action( 'admin_init', 'category_posts_load_textdomain' );
+add_action( 'admin_init', __NAMESPACE__.'\load_textdomain' );
 
-function category_posts_load_textdomain() {
+function load_textdomain() {
   load_plugin_textdomain( 'categoryposts', false, plugin_basename( dirname( __FILE__ ) ) . '/languages' ); 
 }
 
@@ -130,9 +132,9 @@ function category_posts_load_textdomain() {
  * Add styles for widget sections
  *
  */
-add_action( 'admin_print_styles-widgets.php', 'category_posts_admin_styles' );
+add_action( 'admin_print_styles-widgets.php', __NAMESPACE__.'\admin_styles' );
  
-function category_posts_admin_styles() {
+function admin_styles() {
 ?>
 <style>
 .category-widget-cont h4 {
@@ -185,9 +187,9 @@ function category_posts_admin_styles() {
  * Add JS to control open and close the widget section
  *
  */
-add_action( 'admin_enqueue_scripts', 'category_posts_admin_scripts', 10,1 );
+add_action( 'admin_enqueue_scripts', __NAMESPACE__.'\admin_scripts', 10,1 );
  
-function category_posts_admin_scripts($hook) {
+function admin_scripts($hook) {
 	// widget script
 	if ($hook == 'widgets.php') { // enqueue only for widget admin and customizer
 		wp_register_script( 'category-posts-admin-js', CAT_POST_PLUGINURL . 'js/admin/category-posts-widget.js',array('jquery'),CAT_POST_VERSION,true );
@@ -203,7 +205,7 @@ function category_posts_admin_scripts($hook) {
  *
  * return: an array with the width and height of the element containing the image
  */
-function category_posts_get_image_size( $thumb_w,$thumb_h,$image_w,$image_h) {
+function get_image_size( $thumb_w,$thumb_h,$image_w,$image_h) {
 	
 	$image_size = array('image_h' => $thumb_h, 'image_w' => $thumb_w, 'marginAttr' => '', 'marginVal' => '');
 	$relation_thumbnail = $thumb_w / $thumb_h;
@@ -235,7 +237,7 @@ function category_posts_get_image_size( $thumb_w,$thumb_h,$image_w,$image_h) {
  *
  * Shows the single category posts with some configurable options
  */
-class CategoryPosts extends WP_Widget {
+class Widget extends \WP_Widget {
 
 	function __construct() {
 		$widget_ops = array('classname' => 'cat-post-widget', 'description' => __('List single category posts','categoryposts'));
@@ -421,7 +423,7 @@ class CategoryPosts extends WP_Widget {
 			);
 		}
 		
-		$cat_posts = new WP_Query( $args );
+		$cat_posts = new \WP_Query( $args );
 		
 		if ( !isset ( $instance["hide_if_empty"] ) || $cat_posts->have_posts() ) {
 			
@@ -839,8 +841,8 @@ class CategoryPosts extends WP_Widget {
 	}
 }
 
-function category_posts_register_widget() {
-    return register_widget("CategoryPosts");
+function register_widget() {
+    return \register_widget(__NAMESPACE__.'\Widget');
 }
 
-add_action( 'widgets_init', 'category_posts_register_widget' );
+add_action( 'widgets_init', __NAMESPACE__.'\register_widget' );
