@@ -26,6 +26,7 @@ We giving you a 50%-special discount code: **'WordPress'**. (Enter it after chec
 * Option to show post thumbnail & set dimension by width & height.
 * Option to crop thumbnails with CSS. <a target="_blank" href="http://tiptoppress.com/css-image-crop/">What is 'CSS Image Crop'?</a>
 * Option to set mouse hover effects for post thumbnail.
+* Jetpack 'Sharing - Show buttons on posts' support
 * Option to put thumbnail on top
 * Option to hide posts which have no thumbnail.
 * Option to disable widget CSS.
@@ -92,6 +93,9 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 2. Front end of the widget using a default WordPress Theme.
 
 == Changelog ==
+= 4.1.8
+* Add Jetpack 'Sharing - Show buttons on posts' support
+
 = 4.1.7 - April 14th 2016 =
 * Fixed division by zero bug.
 
