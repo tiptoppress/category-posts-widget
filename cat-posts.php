@@ -560,6 +560,48 @@ class Widget extends \WP_Widget {
 	}
 
 	/**
+	 * Output the title panel of the widget configuration form.
+	 *
+	 * @param  array $instance
+	 * @return void
+     *
+     * @since 4.6
+	 */
+    function formTitlePanel($instance) {
+		$instance = wp_parse_args( ( array ) $instance, array(
+			'title'                => '',
+			'title_link'           => '',
+			'hide_title'           => ''
+        ));
+		$title                = $instance['title'];
+		$hide_title           = $instance['hide_title'];
+		$title_link           = $instance['title_link'];        
+?>    
+        <h4><?php _e('Title','categoryposts')?></h4>
+        <div>
+            <p>
+                <label for="<?php echo $this->get_field_id("title"); ?>">
+                    <?php _e( 'Title','categoryposts' ); ?>:
+                    <input class="widefat" style="width:80%;" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo esc_attr($instance["title"]); ?>" />
+                </label>
+            </p>
+            <p>
+                <label for="<?php echo $this->get_field_id("title_link"); ?>">
+                    <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("title_link"); ?>" name="<?php echo $this->get_field_name("title_link"); ?>"<?php checked( (bool) $instance["title_link"], true ); ?> />
+                    <?php _e( 'Make widget title link','categoryposts' ); ?>
+                </label>
+            </p>
+            <p>
+                <label for="<?php echo $this->get_field_id("hide_title"); ?>">
+                    <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_title"); ?>" name="<?php echo $this->get_field_name("hide_title"); ?>"<?php checked( (bool) $instance["hide_title"], true ); ?> />
+                    <?php _e( 'Hide title','categoryposts' ); ?>
+                </label>
+            </p>
+        </div>			
+<?php            
+    }
+    
+	/**
 	 * The widget configuration form back end.
 	 *
 	 * @param  array $instance
@@ -567,14 +609,11 @@ class Widget extends \WP_Widget {
 	 */
 	function form($instance) {
 		$instance = wp_parse_args( ( array ) $instance, array(
-			'title'                => '',
-			'hide_title'           => '',
 			'cat'                  => '',
 			'num'                  => get_option('posts_per_page'),
 			'sort_by'              => '',
 			'asc_sort_order'       => '',
 			'exclude_current_post' => '',
-			'title_link'           => '',
 			'footer_link'          => '',
 			'hide_post_titles'     => '',
 			'excerpt'              => '',
@@ -597,14 +636,11 @@ class Widget extends \WP_Widget {
 			'hide_if_empty'        => ''
 		) );
 
-		$title                = $instance['title'];
-		$hide_title           = $instance['hide_title'];
 		$cat                  = $instance['cat'];
 		$num                  = $instance['num'];
 		$sort_by              = $instance['sort_by'];
 		$asc_sort_order       = $instance['asc_sort_order'];
 		$exclude_current_post = $instance['exclude_current_post'];
-		$title_link           = $instance['title_link'];
 		$footer_link          = $instance['footer_link'];
 		$hide_post_titles     = $instance['hide_post_titles'];
 		$excerpt              = $instance['excerpt'];
@@ -630,27 +666,6 @@ class Widget extends \WP_Widget {
 		<div class="category-widget-cont">
             <p><a target="_blank" href="http://tiptoppress.com/terms-tags-and-categories-posts-widget/">Get the Pro Version</a></p>
             <p><a target="_blank" href="http://tiptoppress.com/category-posts-widget/documentation/">Documentation</a></p>
-			<h4><?php _e('Title','categoryposts')?></h4>
-			<div>
-				<p>
-					<label for="<?php echo $this->get_field_id("title"); ?>">
-						<?php _e( 'Title','categoryposts' ); ?>:
-						<input class="widefat" style="width:80%;" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo esc_attr($instance["title"]); ?>" />
-					</label>
-				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("title_link"); ?>">
-						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("title_link"); ?>" name="<?php echo $this->get_field_name("title_link"); ?>"<?php checked( (bool) $instance["title_link"], true ); ?> />
-						<?php _e( 'Make widget title link','categoryposts' ); ?>
-					</label>
-				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("hide_title"); ?>">
-						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_title"); ?>" name="<?php echo $this->get_field_name("hide_title"); ?>"<?php checked( (bool) $instance["hide_title"], true ); ?> />
-						<?php _e( 'Hide title','categoryposts' ); ?>
-					</label>
-				</p>
-			</div>			
 			<h4><?php _e('Filter','categoryposts');?></h4>
 			<div>
 				<p>
