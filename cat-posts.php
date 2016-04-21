@@ -358,8 +358,7 @@ class Widget extends \WP_Widget {
 		Show the thumb of the current post
 	*/
 	function show_thumb() {
-		if ( current_theme_supports("post-thumbnails") &&
-				isset( $this->instance["thumb"] ) &&
+		if ( isset( $this->instance["thumb"] ) &&
 				has_post_thumbnail() ) : ?>
 			<a <?php 
 				$use_css_cropping = isset($this->instance['use_css_cropping']) ? "cat-post-css-cropping" : "";
@@ -699,52 +698,50 @@ class Widget extends \WP_Widget {
 						</label>
 					</p>					
 			</div>			
-			<?php if ( current_theme_supports("post-thumbnails") ) : ?>
-				<h4><?php _e('Thumbnails','categoryposts')?></h4>
-				<div>
-					<p>
-						<label for="<?php echo $this->get_field_id("thumb"); ?>">
-							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumb"); ?>" name="<?php echo $this->get_field_name("thumb"); ?>"<?php checked( (bool) $instance["thumb"], true ); ?> />
-							<?php _e( 'Show post thumbnail','categoryposts' ); ?>
-						</label>
-					</p>
-					<p>
-						<label for="<?php echo $this->get_field_id("thumbTop"); ?>">
-							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumbTop"); ?>" name="<?php echo $this->get_field_name("thumbTop"); ?>"<?php checked( (bool) $instance["thumbTop"], true ); ?> />
-							<?php _e( 'Show thumbnails above text','categoryposts' ); ?>
-						</label>
-					</p>
-					<p>
-						<label>
-							<?php _e('Thumbnail dimensions (in pixels)','categoryposts'); ?>:<br />
-							<label for="<?php echo $this->get_field_id("thumb_w"); ?>">
-								<?php _e('Width:','categoryposts')?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo $instance["thumb_w"]; ?>" />
-							</label>
-							
-							<label for="<?php echo $this->get_field_id("thumb_h"); ?>">
-								<?php _e('Height:','categoryposts')?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo $instance["thumb_h"]; ?>" />
-							</label>
-						</label>
-					</p>
-					<p>
-						<label for="<?php echo $this->get_field_id("use_css_cropping"); ?>">
-							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("use_css_cropping"); ?>" name="<?php echo $this->get_field_name("use_css_cropping"); ?>"<?php checked( (bool) $instance["use_css_cropping"], true ); ?> />
-							<?php _e( 'Crop bigger thumbnails around the center ','categoryposts' ); ?>
-						</label>
-					</p>					
-					<p>
-						<label for="<?php echo $this->get_field_id("thumb_hover"); ?>">
-							<?php _e( 'Animation on mouse hover:','categorypostspro' ); ?>
-						</label>
-						<select id="<?php echo $this->get_field_id("thumb_hover"); ?>" name="<?php echo $this->get_field_name("thumb_hover"); ?>">
-							<option value="none" <?php selected($thumb_hover, 'none')?>><?php _e( 'None', 'categorypostspro' ); ?></option>
-							<option value="dark" <?php selected($thumb_hover, 'dark')?>><?php _e( 'Darker', 'categorypostspro' ); ?></option>
-							<option value="white" <?php selected($thumb_hover, 'white')?>><?php _e( 'Brighter', 'categorypostspro' ); ?></option>
-							<option value="scale" <?php selected($thumb_hover, 'scale')?>><?php _e( 'Zoom in', 'categorypostspro' ); ?></option>
-						</select>
-					</p>
-				</div>
-			<?php endif; ?>	
+            <h4><?php _e('Thumbnails','categoryposts')?></h4>
+            <div>
+                <p>
+                    <label for="<?php echo $this->get_field_id("thumb"); ?>">
+                        <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumb"); ?>" name="<?php echo $this->get_field_name("thumb"); ?>"<?php checked( (bool) $instance["thumb"], true ); ?> />
+                        <?php _e( 'Show post thumbnail','categoryposts' ); ?>
+                    </label>
+                </p>
+                <p>
+                    <label for="<?php echo $this->get_field_id("thumbTop"); ?>">
+                        <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumbTop"); ?>" name="<?php echo $this->get_field_name("thumbTop"); ?>"<?php checked( (bool) $instance["thumbTop"], true ); ?> />
+                        <?php _e( 'Show thumbnails above text','categoryposts' ); ?>
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        <?php _e('Thumbnail dimensions (in pixels)','categoryposts'); ?>:<br />
+                        <label for="<?php echo $this->get_field_id("thumb_w"); ?>">
+                            <?php _e('Width:','categoryposts')?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo $instance["thumb_w"]; ?>" />
+                        </label>
+                        
+                        <label for="<?php echo $this->get_field_id("thumb_h"); ?>">
+                            <?php _e('Height:','categoryposts')?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo $instance["thumb_h"]; ?>" />
+                        </label>
+                    </label>
+                </p>
+                <p>
+                    <label for="<?php echo $this->get_field_id("use_css_cropping"); ?>">
+                        <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("use_css_cropping"); ?>" name="<?php echo $this->get_field_name("use_css_cropping"); ?>"<?php checked( (bool) $instance["use_css_cropping"], true ); ?> />
+                        <?php _e( 'Crop bigger thumbnails around the center ','categoryposts' ); ?>
+                    </label>
+                </p>					
+                <p>
+                    <label for="<?php echo $this->get_field_id("thumb_hover"); ?>">
+                        <?php _e( 'Animation on mouse hover:','categorypostspro' ); ?>
+                    </label>
+                    <select id="<?php echo $this->get_field_id("thumb_hover"); ?>" name="<?php echo $this->get_field_name("thumb_hover"); ?>">
+                        <option value="none" <?php selected($thumb_hover, 'none')?>><?php _e( 'None', 'categorypostspro' ); ?></option>
+                        <option value="dark" <?php selected($thumb_hover, 'dark')?>><?php _e( 'Darker', 'categorypostspro' ); ?></option>
+                        <option value="white" <?php selected($thumb_hover, 'white')?>><?php _e( 'Brighter', 'categorypostspro' ); ?></option>
+                        <option value="scale" <?php selected($thumb_hover, 'scale')?>><?php _e( 'Zoom in', 'categorypostspro' ); ?></option>
+                    </select>
+                </p>
+            </div>
 			<h4><?php _e('Post details','categoryposts')?></h4>
 			<div>
 				<p>
