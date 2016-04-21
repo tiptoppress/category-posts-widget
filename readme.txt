@@ -93,7 +93,7 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 2. Front end of the widget using a default WordPress Theme.
 
 == Changelog ==
-= 4.1.8 - April 21th 2016 =
+= 4.1.8
 * Add Jetpack 'Sharing - Show buttons on posts' support
 
 = 4.1.7 - April 14th 2016 =
