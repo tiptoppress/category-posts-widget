@@ -602,6 +602,80 @@ class Widget extends \WP_Widget {
     }
     
 	/**
+	 * Output the filter panel of the widget configuration form.
+	 *
+	 * @param  array $instance
+	 * @return void
+     *
+     * @since 4.6
+	 */
+    function formFilterPanel($instance) {
+		$instance = wp_parse_args( ( array ) $instance, array(
+			'cat'                  => '',
+			'num'                  => get_option('posts_per_page'),
+			'sort_by'              => '',
+			'asc_sort_order'       => '',
+			'exclude_current_post' => '',
+			'hideNoThumb'          => ''
+        ));
+		$cat                  = $instance['cat'];
+		$num                  = $instance['num'];
+		$sort_by              = $instance['sort_by'];
+		$asc_sort_order       = $instance['asc_sort_order'];
+		$exclude_current_post = $instance['exclude_current_post'];
+		$hideNoThumb          = $instance['hideNoThumb'];
+?>
+        <h4><?php _e('Filter','categoryposts');?></h4>
+        <div>
+            <p>
+                <label>
+                    <?php _e( 'Category','categoryposts' ); ?>:
+                    <?php wp_dropdown_categories( array( 'hide_empty'=> 0, 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"] ) ); ?>
+                </label>
+            </p>
+            <p>
+                <label for="<?php echo $this->get_field_id("num"); ?>">
+                    <?php _e('Number of posts to show','categoryposts'); ?>:
+                    <input style="text-align: center; width: 30%;" id="<?php echo $this->get_field_id("num"); ?>" name="<?php echo $this->get_field_name("num"); ?>" type="number" min="0" value="<?php echo absint($instance["num"]); ?>" />
+                </label>
+            </p>
+            <p>
+                <label for="<?php echo $this->get_field_id("sort_by"); ?>">
+                    <?php _e('Sort by','categoryposts'); ?>:
+                    <select id="<?php echo $this->get_field_id("sort_by"); ?>" name="<?php echo $this->get_field_name("sort_by"); ?>">
+                        <option value="date"<?php selected( $instance["sort_by"], "date" ); ?>><?php _e('Date','categoryposts')?></option>
+                        <option value="title"<?php selected( $instance["sort_by"], "title" ); ?>><?php _e('Title','categoryposts')?></option>
+                        <option value="comment_count"<?php selected( $instance["sort_by"], "comment_count" ); ?>><?php _e('Number of comments','categoryposts')?></option>
+                        <option value="rand"<?php selected( $instance["sort_by"], "rand" ); ?>><?php _e('Random','categoryposts')?></option>
+                    </select>
+                </label>
+            </p>
+            <p>
+                <label for="<?php echo $this->get_field_id("asc_sort_order"); ?>">
+                    <input type="checkbox" class="checkbox" 
+                        id="<?php echo $this->get_field_id("asc_sort_order"); ?>" 
+                        name="<?php echo $this->get_field_name("asc_sort_order"); ?>"
+                        <?php checked( (bool) $instance["asc_sort_order"], true ); ?> />
+                            <?php _e( 'Reverse sort order (ascending)','categoryposts' ); ?>
+                </label>
+            </p>
+            <p>
+                <label for="<?php echo $this->get_field_id("exclude_current_post"); ?>">
+                    <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("exclude_current_post"); ?>" name="<?php echo $this->get_field_name("exclude_current_post"); ?>"<?php checked( (bool) $instance["exclude_current_post"], true ); ?> />
+                    <?php _e( 'Exclude current post','categoryposts' ); ?>
+                </label>
+            </p>
+                <p>
+                    <label for="<?php echo $this->get_field_id("hideNoThumb"); ?>">
+                        <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hideNoThumb"); ?>" name="<?php echo $this->get_field_name("hideNoThumb"); ?>"<?php checked( (bool) $instance["hideNoThumb"], true ); ?> />
+                        <?php _e( 'Exclude posts which have no thumbnail','categoryposts' ); ?>
+                    </label>
+                </p>					
+        </div>			
+<?php
+    }
+    
+	/**
 	 * The widget configuration form back end.
 	 *
 	 * @param  array $instance
@@ -609,11 +683,6 @@ class Widget extends \WP_Widget {
 	 */
 	function form($instance) {
 		$instance = wp_parse_args( ( array ) $instance, array(
-			'cat'                  => '',
-			'num'                  => get_option('posts_per_page'),
-			'sort_by'              => '',
-			'asc_sort_order'       => '',
-			'exclude_current_post' => '',
 			'footer_link'          => '',
 			'hide_post_titles'     => '',
 			'excerpt'              => '',
@@ -627,7 +696,6 @@ class Widget extends \WP_Widget {
 			'date_format'          => '',
 			'thumb'                => '',
 			'thumbTop'             => '',
-			'hideNoThumb'          => '',
 			'thumb_w'              => '',
 			'thumb_h'              => '',
 			'use_css_cropping'     => '',
@@ -636,11 +704,6 @@ class Widget extends \WP_Widget {
 			'hide_if_empty'        => ''
 		) );
 
-		$cat                  = $instance['cat'];
-		$num                  = $instance['num'];
-		$sort_by              = $instance['sort_by'];
-		$asc_sort_order       = $instance['asc_sort_order'];
-		$exclude_current_post = $instance['exclude_current_post'];
 		$footer_link          = $instance['footer_link'];
 		$hide_post_titles     = $instance['hide_post_titles'];
 		$excerpt              = $instance['excerpt'];
@@ -654,7 +717,6 @@ class Widget extends \WP_Widget {
 		$date_format          = $instance['date_format'];
 		$thumb                = $instance['thumb'];
 		$thumbTop             = $instance['thumbTop'];
-		$hideNoThumb          = $instance['hideNoThumb'];
 		$thumb_w              = $instance['thumb_w'];
 		$thumb_h              = $instance['thumb_h'];
 		$use_css_cropping     = $instance['use_css_cropping'];
@@ -666,53 +728,10 @@ class Widget extends \WP_Widget {
 		<div class="category-widget-cont">
             <p><a target="_blank" href="http://tiptoppress.com/terms-tags-and-categories-posts-widget/">Get the Pro Version</a></p>
             <p><a target="_blank" href="http://tiptoppress.com/category-posts-widget/documentation/">Documentation</a></p>
-			<h4><?php _e('Filter','categoryposts');?></h4>
-			<div>
-				<p>
-					<label>
-						<?php _e( 'Category','categoryposts' ); ?>:
-						<?php wp_dropdown_categories( array( 'hide_empty'=> 0, 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"] ) ); ?>
-					</label>
-				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("num"); ?>">
-						<?php _e('Number of posts to show','categoryposts'); ?>:
-						<input style="text-align: center; width: 30%;" id="<?php echo $this->get_field_id("num"); ?>" name="<?php echo $this->get_field_name("num"); ?>" type="number" min="0" value="<?php echo absint($instance["num"]); ?>" />
-					</label>
-				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("sort_by"); ?>">
-						<?php _e('Sort by','categoryposts'); ?>:
-						<select id="<?php echo $this->get_field_id("sort_by"); ?>" name="<?php echo $this->get_field_name("sort_by"); ?>">
-							<option value="date"<?php selected( $instance["sort_by"], "date" ); ?>><?php _e('Date','categoryposts')?></option>
-							<option value="title"<?php selected( $instance["sort_by"], "title" ); ?>><?php _e('Title','categoryposts')?></option>
-							<option value="comment_count"<?php selected( $instance["sort_by"], "comment_count" ); ?>><?php _e('Number of comments','categoryposts')?></option>
-							<option value="rand"<?php selected( $instance["sort_by"], "rand" ); ?>><?php _e('Random','categoryposts')?></option>
-						</select>
-					</label>
-				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("asc_sort_order"); ?>">
-						<input type="checkbox" class="checkbox" 
-							id="<?php echo $this->get_field_id("asc_sort_order"); ?>" 
-							name="<?php echo $this->get_field_name("asc_sort_order"); ?>"
-							<?php checked( (bool) $instance["asc_sort_order"], true ); ?> />
-								<?php _e( 'Reverse sort order (ascending)','categoryposts' ); ?>
-					</label>
-				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("exclude_current_post"); ?>">
-						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("exclude_current_post"); ?>" name="<?php echo $this->get_field_name("exclude_current_post"); ?>"<?php checked( (bool) $instance["exclude_current_post"], true ); ?> />
-						<?php _e( 'Exclude current post','categoryposts' ); ?>
-					</label>
-				</p>
-					<p>
-						<label for="<?php echo $this->get_field_id("hideNoThumb"); ?>">
-							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hideNoThumb"); ?>" name="<?php echo $this->get_field_name("hideNoThumb"); ?>"<?php checked( (bool) $instance["hideNoThumb"], true ); ?> />
-							<?php _e( 'Exclude posts which have no thumbnail','categoryposts' ); ?>
-						</label>
-					</p>					
-			</div>			
+        <?php
+            $this->formTitlePanel($instance);
+            $this->formFilterPanel($instance);
+        ?>
             <h4><?php _e('Thumbnails','categoryposts')?></h4>
             <div>
                 <p>
