@@ -423,6 +423,10 @@ class Widget extends \WP_Widget {
 	/**
 	 * Calculate the HTML of the title based on the widget settings
 	 *
+     * @param  string $before_title The sidebar configured HTML that should come
+     *                              before the title itself
+     * @param  string $after_title The sidebar configured HTML that should come
+     *                              after the title itself
 	 * @param  array $instance Array which contains the various settings
 	 * @return string The HTML for the title area
 	 */
