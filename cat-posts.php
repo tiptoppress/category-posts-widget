@@ -420,17 +420,39 @@ class Widget extends \WP_Widget {
         return $args;
     }
     
-	// Displays category posts widget on blog.
-	function widget($args, $instance) {
-
-		extract( $args );
-		$this->instance = $instance;
-
+	/**
+	 * Calculate the HTML of the title based on the widget settings
+	 *
+	 * @param  array $instance Array which contains the various settings
+	 * @return string The HTML for the title area
+	 */
+    function titleHTML($before_title,$after_title,$instance) {
+        $ret = '';
+        
 		// If not title, use the name of the category.
 		if( !$instance["title"] ) {
 			$category_info = get_category($instance["cat"]);
 			$instance["title"] = $category_info->name;
 		}
+
+        if( !isset ( $instance["hide_title"] ) ) {
+            $ret = $before_title;
+            if( isset ( $instance["title_link"] ) ) {
+                $ret .= '<a href="' . get_category_link($instance["cat"]) . '">' . apply_filters( 'widget_title', $instance["title"] ) . '</a>';
+            } else {
+                $ret .= apply_filters( 'widget_title', $instance["title"] );
+            }
+            $ret .= $after_title;
+        }
+        
+        return $ret;
+    }
+    
+	// Displays category posts widget on blog.
+	function widget($args, $instance) {
+
+		extract( $args );
+		$this->instance = $instance;
 		
         $args = $this->queryArgs($instance);
 		$cat_posts = new \WP_Query( $args );
@@ -461,15 +483,7 @@ class Widget extends \WP_Widget {
 			echo $before_widget;
 
 			// Widget title
-			if( !isset ( $instance["hide_title"] ) ) {
-				echo $before_title;
-				if( isset ( $instance["title_link"] ) ) {
-					echo '<a href="' . get_category_link($instance["cat"]) . '">' . apply_filters( 'widget_title', $instance["title"] ) . '</a>';
-				} else {
-					echo apply_filters( 'widget_title', $instance["title"] );
-				}
-				echo $after_title;
-			}
+            echo $this->titleHTML($before_title,$after_title,$instance);
 
 			// Post list
 			echo "<ul>\n";
