@@ -382,6 +382,8 @@ class Widget extends \WP_Widget {
 	 *
 	 * @param  array $instance Array which contains the various settings
 	 * @return array The array that can be fed to wp_Query to get the relevant posts
+     *
+     * @since 4.6
 	 */
     function queryArgs($instance) {
 		$valid_sort_orders = array('date', 'title', 'comment_count', 'rand');
@@ -429,6 +431,8 @@ class Widget extends \WP_Widget {
      *                              after the title itself
 	 * @param  array $instance Array which contains the various settings
 	 * @return string The HTML for the title area
+     *
+     * @since 4.6
 	 */
     function titleHTML($before_title,$after_title,$instance) {
         $ret = '';
@@ -457,6 +461,8 @@ class Widget extends \WP_Widget {
 	 *
 	 * @param  array $instance Array which contains the various settings
 	 * @return string The HTML for the footer area
+     *
+     * @since 4.6
 	 */
     function footerHTML($instance) {
         $ret = '';
