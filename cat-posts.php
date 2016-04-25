@@ -377,18 +377,13 @@ class Widget extends \WP_Widget {
 		<?php endif; 
 	}
 	
-	// Displays category posts widget on blog.
-	function widget($args, $instance) {
-
-		extract( $args );
-		$this->instance = $instance;
-
-		// If not title, use the name of the category.
-		if( !$instance["title"] ) {
-			$category_info = get_category($instance["cat"]);
-			$instance["title"] = $category_info->name;
-		}
-
+	/**
+	 * Calculate the wp-query arguments matching the filter settings of the widget
+	 *
+	 * @param  array $instance Array which contains the various settings
+	 * @return array The array that can be fed to wp_Query to get the relevant posts
+	 */
+    function queryArgs($instance) {
 		$valid_sort_orders = array('date', 'title', 'comment_count', 'rand');
 		if ( in_array($instance['sort_by'], $valid_sort_orders) ) {
 			$sort_by = $instance['sort_by'];
@@ -421,7 +416,23 @@ class Widget extends \WP_Widget {
 				)	
 			);
 		}
+        
+        return $args;
+    }
+    
+	// Displays category posts widget on blog.
+	function widget($args, $instance) {
+
+		extract( $args );
+		$this->instance = $instance;
+
+		// If not title, use the name of the category.
+		if( !$instance["title"] ) {
+			$category_info = get_category($instance["cat"]);
+			$instance["title"] = $category_info->name;
+		}
 		
+        $args = $this->queryArgs($instance);
 		$cat_posts = new \WP_Query( $args );
 		
 		if ( !isset ( $instance["hide_if_empty"] ) || $cat_posts->have_posts() ) {
@@ -785,7 +796,7 @@ class Widget extends \WP_Widget {
 
 		?>
 		<div class="category-widget-cont">
-            <p><a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/">Get the Pro Version</a></p>
+            <p><a target="_blank" href="http://tiptoppress.com/terms-tags-and-categories-posts-widget/">Get the Pro Version</a></p>
             <p><a target="_blank" href="http://tiptoppress.com/category-posts-widget/documentation/">Documentation</a></p>
         <?php
             $this->formTitlePanel($instance);
