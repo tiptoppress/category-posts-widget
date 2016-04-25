@@ -452,6 +452,24 @@ class Widget extends \WP_Widget {
         return $ret;
     }
     
+	/**
+	 * Calculate the HTML of the footer based on the widget settings
+	 *
+	 * @param  array $instance Array which contains the various settings
+	 * @return string The HTML for the footer area
+	 */
+    function footerHTML($instance) {
+        $ret = '';
+        
+        if( isset ( $instance["footer_link"] ) && $instance["footer_link"] ) {
+            $ret = "<a";
+                if( !isset( $instance['disable_css'] ) ) { $ret.= " class=\"cat-post-footer-link\""; }
+            $ret .= " href=\"" . get_category_link($instance["cat"]) . "\">" . $instance["footer_link"] . "</a>";
+        }
+        
+        return $ret;
+    }
+    
 	// Displays category posts widget on blog.
 	function widget($args, $instance) {
 
@@ -557,11 +575,7 @@ class Widget extends \WP_Widget {
 			echo "</ul>\n";
 
 			// Footer link to category page
-			if( isset ( $instance["footer_link"] ) && $instance["footer_link"] ) {
-				echo "<a";
-					if( !isset( $instance['disable_css'] ) ) { echo " class=\"cat-post-footer-link\""; }
-				echo " href=\"" . get_category_link($instance["cat"]) . "\">" . $instance["footer_link"] . "</a>";
-			}
+            echo $this->footerHTML($instance);
 
 			echo $after_widget;
 
