@@ -34,7 +34,7 @@ We giving you a 50%-special discount code: **'WordPress'**. (Enter it after chec
 * Option exclude current post.
 * Option show post author.
 * Set which category the posts should come form.
-* Option to show the post excerpt, set the length, allow links and change 'more' text.
+* Option to show the post excerpt, set the length, allow HTML and change 'more' text.
 * Option to show the post date.
 * Option to make the widget date link to the category page.
 * Option to format the outputted date string.
@@ -94,7 +94,9 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 
 == Changelog ==
 = 4.1.8
+* Add option to choose allowed HTML in the excerpt
 * Add Jetpack 'Sharing - Show buttons on posts' support
+* Fixed division by zero bug (for small uploaded images).
 
 = 4.1.7 - April 14th 2016 =
 * Fixed division by zero bug.
