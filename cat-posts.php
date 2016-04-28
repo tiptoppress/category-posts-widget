@@ -415,7 +415,7 @@ class Widget extends \WP_Widget {
 	 */
 	function excerpt_more_filter($more) {
 		global $post;
-		return ' <a class="cat-post-excerpt-more" href="'. get_permalink($post->ID) . '">' . $this->instance["excerpt_more_text"] . '</a>';
+		return ' <a class="cat-post-excerpt-more" href="'. get_permalink($post->ID) . '">' . esc_html($this->instance["excerpt_more_text"]) . '</a>';
 	}
 
 	/**
@@ -891,11 +891,11 @@ class Widget extends \WP_Widget {
                 <label>
                     <?php _e('Thumbnail dimensions (in pixels)','categoryposts'); ?>:<br />
                     <label for="<?php echo $this->get_field_id("thumb_w"); ?>">
-                        <?php _e('Width:','categoryposts')?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo $instance["thumb_w"]; ?>" />
+                        <?php _e('Width:','categoryposts')?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo esc_attr($instance["thumb_w"]); ?>" />
                     </label>
                     
                     <label for="<?php echo $this->get_field_id("thumb_h"); ?>">
-                        <?php _e('Height:','categoryposts')?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo $instance["thumb_h"]; ?>" />
+                        <?php _e('Height:','categoryposts')?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo esc_attr($instance["thumb_h"]); ?>" />
                     </label>
                 </label>
             </p>
@@ -1032,7 +1032,7 @@ class Widget extends \WP_Widget {
 					<label for="<?php echo $this->get_field_id("excerpt_more_text"); ?>">
 						<?php _e( 'Excerpt \'more\' text:','categoryposts' ); ?>
 					</label>
-					<input class="widefat" style="width:50%;" placeholder="<?php _e('... more','categoryposts')?>" id="<?php echo $this->get_field_id("excerpt_more_text"); ?>" name="<?php echo $this->get_field_name("excerpt_more_text"); ?>" type="text" value="<?php echo $instance["excerpt_more_text"]; ?>" />
+					<input class="widefat" style="width:50%;" placeholder="<?php _e('... more','categoryposts')?>" id="<?php echo $this->get_field_id("excerpt_more_text"); ?>" name="<?php echo $this->get_field_name("excerpt_more_text"); ?>" type="text" value="<?php echo esc_attr($instance["excerpt_more_text"]); ?>" />
 				</p>
 				<p>
 					<label for="<?php echo $this->get_field_id("date"); ?>">
