@@ -113,7 +113,7 @@ add_action('wp_head',__NAMESPACE__.'\wp_head');
 function widget_styles() {
 	$enqueue = should_enqueue('category-posts',__NAMESPACE__.'\Widget');
 	if ($enqueue) {
-		wp_register_style( 'category-posts', CAT_POST_PLUGINURL . 'cat-posts.css' );
+		wp_register_style( 'category-posts', CAT_POST_PLUGINURL . 'cat-posts.css',array(),CAT_POST_VERSION );
 		wp_enqueue_style( 'category-posts' );
 	}
 }
