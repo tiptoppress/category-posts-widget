@@ -524,13 +524,15 @@ class CategoryPosts extends WP_Widget {
 		$this->instance = $instance;
 
 		// If not title, use the name of the category.
-		if( !$instance["title"] ) {
+		if(isset($instance["title"]) && !$instance["title"]) {
+			if(!isset($instance["cat"]))
+				breake;
 			$category_info = get_category($instance["cat"]);
 			$instance["title"] = $category_info->name;
 		}
 
 		$valid_sort_orders = array('date', 'title', 'comment_count', 'rand');
-		if ( in_array($instance['sort_by'], $valid_sort_orders) ) {
+		if ( isset($instance['sort_by']) && in_array($instance['sort_by'],$valid_sort_orders) ) {
 			$sort_by = $instance['sort_by'];
 			$sort_order = (bool) isset( $instance['asc_sort_order'] ) ? 'ASC' : 'DESC';
 		} else {
@@ -545,8 +547,8 @@ class CategoryPosts extends WP_Widget {
 
 		// Get array of post info.
 		$args = array(
-			'showposts' => $instance["num"],
-			'cat' => $instance["cat"],
+			'showposts' => isset($instance["num"])?$instance["num"]:0,
+			'cat' => isset($instance["cat"])?$instance["cat"]:0,
 			'post__not_in' => array( $exclude_current_post ),
 			'orderby' => $sort_by,
 			'order' => $sort_order
@@ -569,10 +571,8 @@ class CategoryPosts extends WP_Widget {
 			/**
 			 * Excerpt length filter
 			 */
-			$new_excerpt_length = create_function('$length', "return " . $instance["excerpt_length"] . ";");
-			if ( $instance["excerpt_length"] > 0 ) {
-				add_filter('excerpt_length', $new_excerpt_length);
-			}
+			if ( isset($instance["excerpt_length"]) && $instance["excerpt_length"] > 0 )
+				add_filter('excerpt_length', $instance["excerpt_length"]);
 			
 			if( isset($instance["excerpt_more_text"]) && ltrim($instance["excerpt_more_text"]) != '' )
 			{
@@ -595,7 +595,8 @@ class CategoryPosts extends WP_Widget {
 				if( isset ( $instance["title_link"] ) ) {
 					echo '<a href="' . get_category_link($instance["cat"]) . '">' . apply_filters( 'widget_title', $instance["title"] ) . '</a>';
 				} else {
-					echo apply_filters( 'widget_title', $instance["title"] );
+					if(isset($instance["title"]))
+						echo apply_filters( 'widget_title', $instance["title"] );
 				}
 				echo $after_title;
 			}
@@ -676,7 +677,8 @@ class CategoryPosts extends WP_Widget {
 
 			echo $after_widget;
 
-			remove_filter('excerpt_length', $new_excerpt_length);
+			if ( isset($instance["excerpt_length"]) && $instance["excerpt_length"] > 0 )
+				remove_filter('excerpt_length', $instance["excerpt_length"]);
 			remove_filter('excerpt_more', array($this,'excerpt_more_filter'));
 			add_filter('get_the_excerpt', 'wp_trim_excerpt');
 			remove_filter('the_excerpt', array($this,'allow_html_excerpt'));
