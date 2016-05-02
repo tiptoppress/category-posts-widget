@@ -872,7 +872,7 @@ class CategoryPosts extends WP_Widget {
 					<p>
 						<label for="<?php echo $this->get_field_id("use_css_cropping"); ?>">
 							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("use_css_cropping"); ?>" name="<?php echo $this->get_field_name("use_css_cropping"); ?>"<?php checked( (bool) $instance["use_css_cropping"], true ); ?> />
-							<?php _e( 'Crop bigger thumbnails around the center ','categoryposts' ); ?>
+							<?php _e( 'Crop to setted size','categoryposts' ); ?>
 						</label>
 					</p>					
 					<p>
@@ -884,6 +884,7 @@ class CategoryPosts extends WP_Widget {
 							<option value="dark" <?php selected($thumb_hover, 'dark')?>><?php _e( 'Darker', 'categorypostspro' ); ?></option>
 							<option value="white" <?php selected($thumb_hover, 'white')?>><?php _e( 'Brighter', 'categorypostspro' ); ?></option>
 							<option value="scale" <?php selected($thumb_hover, 'scale')?>><?php _e( 'Zoom in', 'categorypostspro' ); ?></option>
+							<option value="blur" <?php selected($thumb_hover, 'blur')?>><?php _e( 'Blur', 'categorypostspro' ); ?></option>
 						</select>
 					</p>
 				</div>

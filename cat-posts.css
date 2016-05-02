@@ -101,6 +101,7 @@ li a.cat-post-white img:hover,
 li a.cat-post-dark img:hover {
 	opacity: 0.8;
 }
+
 /* Only for White */
 li a.cat-post-white {
     background-color: white;
@@ -127,4 +128,12 @@ li a.cat-post-scale img:hover {
   -webkit-transform: scale(1.1, 1.1);
   -ms-transform: scale(1.1, 1.1);
   transform: scale(1.1, 1.1);
+}
+/* Only for Blur */
+li a.cat-post-blur img:hover {
+  -webkit-filter: blur(1px);
+  -moz-filter: blur(1px);
+  -o-filter: blur(1px);
+  -ms-filter: blur(1px);
+  filter: blur(1px);
 }
