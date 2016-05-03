@@ -4,7 +4,7 @@ Plugin Name: Category Posts Widget
 Plugin URI: http://mkrdip.me/category-posts-widget
 Description: Adds a widget that shows the most recent posts from a single category.
 Author: Mrinal Kanti Roy
-Version: 4.1.7
+Version: 4.1.8
 Author URI: http://mkrdip.me
 */
 
@@ -571,8 +571,10 @@ class CategoryPosts extends WP_Widget {
 			/**
 			 * Excerpt length filter
 			 */
-			if ( isset($instance["excerpt_length"]) && $instance["excerpt_length"] > 0 )
-				add_filter('excerpt_length', $instance["excerpt_length"]);
+ 			if ( isset($instance["excerpt_length"]) && $instance["excerpt_length"] > 0 ) {
+				$new_excerpt_length = create_function('$length', "return " . $instance["excerpt_length"] . ";");
+ 				add_filter('excerpt_length', $new_excerpt_length);
+			}
 			
 			if( isset($instance["excerpt_more_text"]) && ltrim($instance["excerpt_more_text"]) != '' )
 			{
@@ -678,7 +680,7 @@ class CategoryPosts extends WP_Widget {
 			echo $after_widget;
 
 			if ( isset($instance["excerpt_length"]) && $instance["excerpt_length"] > 0 )
-				remove_filter('excerpt_length', $instance["excerpt_length"]);
+				remove_filter('excerpt_length', $new_excerpt_length);
 			remove_filter('excerpt_more', array($this,'excerpt_more_filter'));
 			add_filter('get_the_excerpt', 'wp_trim_excerpt');
 			remove_filter('the_excerpt', array($this,'allow_html_excerpt'));

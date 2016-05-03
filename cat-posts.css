@@ -1,6 +1,6 @@
 /*
 Default CSS Styles for the Category Posts Widget plugin
-Version: 4.1.7
+Version: 4.1.8
 */
 
 /*--------------------------------------------------------------
@@ -23,6 +23,7 @@ Version: 4.1.7
 2.0 General
 --------------------------------------------------------------*/
 .cat-post-title {
+	display: inline-block;
 	font-size: 15px;
 	font-size: 0.9375rem;
 }
@@ -80,49 +81,56 @@ Version: 4.1.7
 /* For White, Dark, Scale */
 li a.cat-post-white,
 li a.cat-post-dark,
-li a.cat-post-scale {
-    background-color: black;
-	display: inline-block;
-    float: left;
-	margin: 5px 10px 5px 0;
+li a.cat-post-scale,
+li a.cat-post-blur {
+  display: inline-block;
+  float: left;
+  margin: 5px 10px 5px 0;
 }
 li.cat-post-item a.cat-post-white span,
 li.cat-post-item a.cat-post-dark span,
-li.cat-post-item a.cat-post-scale span{
+li.cat-post-item a.cat-post-scale span,
+li.cat-post-item a.cat-post-blur span {
     margin: 0;
 }
 li a.cat-post-white img,
 li a.cat-post-dark img,
-li a.cat-post-scale img {
-    margin: 0;
-    padding-bottom: 0 !important;
+li a.cat-post-scale img,
+li a.cat-post-blur img {
+  margin: 0;
+  padding-bottom: 0 !important;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 li a.cat-post-white img:hover,
 li a.cat-post-dark img:hover {
-	opacity: 0.8;
+  opacity: 0.8;
 }
-
 /* Only for White */
 li a.cat-post-white {
-    background-color: white;
+  background-color: white;
 }
 /* Only for Dark */
 li a.cat-post-dark {
-    background-color: black;
+  background-color: black;
 }
 /* Only for Scale */
 li a.cat-post-scale {
-	overflow: hidden;
+  overflow: hidden;
 }
 li a.cat-post-scale.cat-post-css-cropping span {
-	margin: 0;
-	overflow: initial;
+  margin: 0;
+  overflow: initial;
 }
 li a.cat-post-scale img {
-  -webkit-transition: all 400ms;
-  -moz-transition: all 400ms;
-  -o-transition: all 400ms;
-  transition: all 400ms;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -ms-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 li a.cat-post-scale img:hover {
   -webkit-transform: scale(1.1, 1.1);
@@ -130,6 +138,9 @@ li a.cat-post-scale img:hover {
   transform: scale(1.1, 1.1);
 }
 /* Only for Blur */
+li a.cat-post-blur {
+  overflow: hidden;
+}
 li a.cat-post-blur img:hover {
   -webkit-filter: blur(1px);
   -moz-filter: blur(1px);
