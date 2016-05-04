@@ -94,9 +94,11 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 
 == Changelog ==
 = 4.1.8 - May 03th 2016 =
+* Add mouse hover effects: blur
 * Add option to choose allowed HTML in the excerpt
 * Add Jetpack 'Sharing - Show buttons on posts' support
-* Fixed division by zero bug (for small uploaded images).
+* Fixed division by zero bug (for small uploaded images)
+* [Read more on our blog ...](http://tiptoppress.com/version-4-1-8-of-the-category-posts-widget-plugin-released/)
 
 = 4.1.7 - April 14th 2016 =
 * Fixed division by zero bug.
