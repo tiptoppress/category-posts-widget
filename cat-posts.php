@@ -121,7 +121,7 @@ function widget_styles() {
 /*
  *	Initialize select2
  */	
-function category_posts_widget_load_select2_scripts_footer() {
+function load_select2_scripts_footer() {
 ?>
 	<script type="text/javascript">
 		<?php if (!is_customize_preview()) { // only for widgets page ?>
@@ -294,7 +294,7 @@ function admin_scripts($hook) {
 			wp_enqueue_script( 'select2-css', plugins_url( 'js/select2-4.0.1/js/select2.min.js' , __FILE__ ), array( 'jquery' ),'4.0.1' );
 			wp_enqueue_style( 'select2-js', plugins_url( 'js/select2-4.0.1/css/select2.min.css' , __FILE__ ) );
 			
-			add_action('admin_print_scripts','category_posts_widget_load_select2_scripts_footer',100);
+			add_action('admin_print_scripts',__NAMESPACE__.'\load_select2_scripts_footer',100);
 
 		}
         wp_register_script( 'category-posts-widget-admin-js', CAT_POST_PLUGINURL.'/js/admin/category-posts-widget.js',array('jquery'),'0.9',true );
