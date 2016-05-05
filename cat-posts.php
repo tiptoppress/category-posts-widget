@@ -4,7 +4,7 @@ Plugin Name: Category Posts Widget
 Plugin URI: http://mkrdip.me/category-posts-widget
 Description: Adds a widget that shows the most recent posts from a single category.
 Author: Mrinal Kanti Roy
-Version: 4.1.7
+Version: 4.1.8
 Author URI: http://mkrdip.me
 */
 
@@ -512,7 +512,7 @@ class Widget extends \WP_Widget {
 	 */
     function queryArgs($instance) {
 		$valid_sort_orders = array('date', 'title', 'comment_count', 'rand');
-		if ( in_array($instance['sort_by'], $valid_sort_orders) ) {
+		if ( isset($instance['sort_by']) && in_array($instance['sort_by'],$valid_sort_orders) ) {
 			$sort_by = $instance['sort_by'];
 			$sort_order = (bool) isset( $instance['asc_sort_order'] ) ? 'ASC' : 'DESC';
 		} else {
@@ -527,8 +527,8 @@ class Widget extends \WP_Widget {
 
 		// Get array of post info.
 		$args = array(
-			'showposts' => $instance["num"],
-			'cat' => $instance["cat"],
+			'showposts' => isset($instance["num"])?$instance["num"]:0,
+			'cat' => isset($instance["cat"])?$instance["cat"]:0,
 			'post__not_in' => array( $exclude_current_post ),
 			'orderby' => $sort_by,
 			'order' => $sort_order
@@ -615,9 +615,9 @@ class Widget extends \WP_Widget {
 			/**
 			 * Excerpt length filter
 			 */
-			$new_excerpt_length = create_function('$length', "return " . $instance["excerpt_length"] . ";");
-			if ( $instance["excerpt_length"] > 0 ) {
-				add_filter('excerpt_length', $new_excerpt_length);
+ 			if ( isset($instance["excerpt_length"]) && $instance["excerpt_length"] > 0 ) {
+				$new_excerpt_length = create_function('$length', "return " . $instance["excerpt_length"] . ";");
+ 				add_filter('excerpt_length', $new_excerpt_length);
 			}
 			
 			if( isset($instance["excerpt_more_text"]) && ltrim($instance["excerpt_more_text"]) != '' )
@@ -710,7 +710,8 @@ class Widget extends \WP_Widget {
 
 			echo $after_widget;
 
-			remove_filter('excerpt_length', $new_excerpt_length);
+			if ( isset($instance["excerpt_length"]) && $instance["excerpt_length"] > 0 )
+				remove_filter('excerpt_length', $new_excerpt_length);
 			remove_filter('excerpt_more', array($this,'excerpt_more_filter'));
 			add_filter('get_the_excerpt', 'wp_trim_excerpt');
 			remove_filter('the_excerpt', array($this,'allow_html_excerpt'));
@@ -914,6 +915,7 @@ class Widget extends \WP_Widget {
                     <option value="dark" <?php selected($thumb_hover, 'dark')?>><?php _e( 'Darker', 'categorypostspro' ); ?></option>
                     <option value="white" <?php selected($thumb_hover, 'white')?>><?php _e( 'Brighter', 'categorypostspro' ); ?></option>
                     <option value="scale" <?php selected($thumb_hover, 'scale')?>><?php _e( 'Zoom in', 'categorypostspro' ); ?></option>
+					<option value="blur" <?php selected($thumb_hover, 'blur')?>><?php _e( 'Blur', 'categorypostspro' ); ?></option>
                 </select>
             </p>
         </div>

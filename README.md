@@ -19,7 +19,6 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 
 ### Term and Category based Posts Widget
 It's the pro version and available at on <a target="_blank" href="http://tiptoppress.com/">Tip Top Press</a> created for big Wordpress sites.
-We giving you a 50%-special discount code: **'WordPress'**. (Enter it after checkout.)
 
 ### Pro features
 * Custom Post Types, Terms and Custom Taxonomies
@@ -81,10 +80,12 @@ Automatic installation is the easiest option as WordPress handles the file trans
 ## Changelog
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
 
-#### 4.1.8
+#### 4.1.8 - May 3th 2016
+* Add mouse hover effects: blur
 * Add option to choose allowed HTML in the excerpt
 * Add Jetpack 'Sharing - Show buttons on posts' support
 * Fixed division by zero bug (for small uploaded images).
+* [Read more on our blog ...](http://tiptoppress.com/version-4-1-8-of-the-category-posts-widget-plugin-released/)
 
 ##### 4.1.7 - April 14th 2016
 * Fixed division by zero bug.

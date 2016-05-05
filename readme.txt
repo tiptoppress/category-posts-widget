@@ -3,8 +3,8 @@ Contributors: mkrdip, mark-k, kometschuh
 Donate link: http://mkrdip.me/donate
 Tags: category, posts, widget, single category widget, posts widget, category recent posts
 Requires at least: 2.8
-Tested up to: 4.5
-Stable tag: 4.1.7
+Tested up to: 4.5.1
+Stable tag: 4.1.8
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,7 +15,7 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 
 = Term and Category based Posts Widget =
 It's the pro version and available at on <a target="_blank" href="http://tiptoppress.com/">Tip Top Press</a> created for big Wordpress sites.
-We giving you a 50%-special discount code: **'WordPress'**. (Enter it after checkout.)
+
 = Pro features =
 * Custom Post Types, Terms and Custom Taxonomies
 * Multi selection
@@ -97,10 +97,12 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
 
-= 4.1.8
+= 4.1.8 - May 03th 2016 =
+* Add mouse hover effects: blur
 * Add option to choose allowed HTML in the excerpt
 * Add Jetpack 'Sharing - Show buttons on posts' support
-* Fixed division by zero bug (for small uploaded images).
+* Fixed division by zero bug (for small uploaded images)
+* [Read more on our blog ...](http://tiptoppress.com/version-4-1-8-of-the-category-posts-widget-plugin-released/)
 
 = 4.1.7 - April 14th 2016 =
 * Fixed division by zero bug.
