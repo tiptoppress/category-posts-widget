@@ -53,6 +53,8 @@ We giving you a 50%-special discount code: **'WordPress'**. (Enter it after chec
 * Localization support.
 
 ### Documentation
+Full documentation on [Tiptoppress](http://tiptoppress.com/category-posts-widget/documentation/)
+
 Formatting date and time: See [Formatting Date and Time] (https://codex.wordpress.org/Formatting_Date_and_Time).
 
 ### Contribute
@@ -77,6 +79,8 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 
 ## Changelog
+[Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
+
 #### 4.1.8
 * Add option to choose allowed HTML in the excerpt
 * Add Jetpack 'Sharing - Show buttons on posts' support

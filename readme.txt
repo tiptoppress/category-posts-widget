@@ -48,6 +48,8 @@ We giving you a 50%-special discount code: **'WordPress'**. (Enter it after chec
 * Localization support.
 
 = Documentation =
+Full documentation on [Tiptoppress](http://tiptoppress.com/category-posts-widget/documentation/)
+
 Formatting date and time: See <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>.
 
 = Contribute =
@@ -93,6 +95,8 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 2. Front end of the widget using a default WordPress Theme.
 
 == Changelog ==
+[Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
+
 = 4.1.8
 * Add option to choose allowed HTML in the excerpt
 * Add Jetpack 'Sharing - Show buttons on posts' support
