@@ -371,7 +371,7 @@ class Widget extends \WP_Widget {
 			// image is same ratio as asked for, nothing to do here as the browser will handle it correctly
 			;
 		} else if (isset($this->instance['use_css_cropping'])) {
-			$image = category_posts_get_image_size($this->instance['thumb_w'],$this->instance['thumb_h'],$width,$height);			
+			$image = get_image_size($this->instance['thumb_w'],$this->instance['thumb_h'],$width,$height);			
 
 			// replace srcset
 			$array = array();
