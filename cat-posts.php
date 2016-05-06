@@ -601,6 +601,22 @@ class Widget extends \WP_Widget {
         return $ret;
     }
     
+	/**
+	 * Filter to set the number of words in an excerpt
+	 *
+	 * @param  int $length The number of words as configured by wordpress core or set by previous filters
+	 * @return int The number of words configured for the widget, 
+     *             or the $length parameter if it is not configured or garbage value
+     *
+     * @since 4.6
+	 */
+    function excerpt_length_filter($length) {
+        if ( isset($this->instance["excerpt_length"]) && $this->instance["excerpt_length"] > 0 )
+            $length = $this->instance["excerpt_length"];
+
+        return $length;
+    }
+    
 	// Displays category posts widget on blog.
 	function widget($args, $instance) {
 
@@ -616,8 +632,7 @@ class Widget extends \WP_Widget {
 			 * Excerpt length filter
 			 */
  			if ( isset($instance["excerpt_length"]) && $instance["excerpt_length"] > 0 ) {
-				$new_excerpt_length = create_function('$length', "return " . $instance["excerpt_length"] . ";");
- 				add_filter('excerpt_length', $new_excerpt_length);
+ 				add_filter('excerpt_length', array($this,'excerpt_length_filter'));
 			}
 			
 			if( isset($instance["excerpt_more_text"]) && ltrim($instance["excerpt_more_text"]) != '' )
@@ -908,14 +923,14 @@ class Widget extends \WP_Widget {
             </p>					
             <p>
                 <label for="<?php echo $this->get_field_id("thumb_hover"); ?>">
-                    <?php _e( 'Animation on mouse hover:','categorypostspro' ); ?>
+                    <?php _e( 'Animation on mouse hover:','categoryposts' ); ?>
                 </label>
                 <select id="<?php echo $this->get_field_id("thumb_hover"); ?>" name="<?php echo $this->get_field_name("thumb_hover"); ?>">
-                    <option value="none" <?php selected($thumb_hover, 'none')?>><?php _e( 'None', 'categorypostspro' ); ?></option>
-                    <option value="dark" <?php selected($thumb_hover, 'dark')?>><?php _e( 'Darker', 'categorypostspro' ); ?></option>
-                    <option value="white" <?php selected($thumb_hover, 'white')?>><?php _e( 'Brighter', 'categorypostspro' ); ?></option>
-                    <option value="scale" <?php selected($thumb_hover, 'scale')?>><?php _e( 'Zoom in', 'categorypostspro' ); ?></option>
-					<option value="blur" <?php selected($thumb_hover, 'blur')?>><?php _e( 'Blur', 'categorypostspro' ); ?></option>
+                    <option value="none" <?php selected($thumb_hover, 'none')?>><?php _e( 'None', 'categoryposts' ); ?></option>
+                    <option value="dark" <?php selected($thumb_hover, 'dark')?>><?php _e( 'Darker', 'categoryposts' ); ?></option>
+                    <option value="white" <?php selected($thumb_hover, 'white')?>><?php _e( 'Brighter', 'categoryposts' ); ?></option>
+                    <option value="scale" <?php selected($thumb_hover, 'scale')?>><?php _e( 'Zoom in', 'categoryposts' ); ?></option>
+					<option value="blur" <?php selected($thumb_hover, 'blur')?>><?php _e( 'Blur', 'categoryposts' ); ?></option>
                 </select>
             </p>
         </div>
