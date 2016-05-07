@@ -1,0 +1,15 @@
+
+
+A. Install PHPUnit and follow this steps, expected 2. and download the right WP version: https://make.wordpress.org/core/handbook/testing/automated-testing/phpunit/
+
+B. Set system path variable to 'phpunit.phar' 
+
+
+1. Upload the widget in the plugin folder in the downloaded WP test (downloaded )
+
+2. Open cmd shell
+
+3. Move to folder: src\plugins\category-posts-widget\tests
+
+4. Run the Category-Posts-Widget tests with $phpunit
+
