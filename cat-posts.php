@@ -564,8 +564,12 @@ class Widget extends \WP_Widget {
         
 		// If not title, use the name of the category.
 		if( !isset($instance["title"]) || !$instance["title"] ) {
-			$category_info = get_category($instance["cat"]);
-			$instance["title"] = $category_info->name;
+            $instance["title"] = '';
+            if (isset($instance["cat"])) {
+                $category_info = get_category($instance["cat"]);
+                if ($category_info)
+                    $instance["title"] = $category_info->name;
+            }
 		}
 
         if( !isset ( $instance["hide_title"] ) ) {
