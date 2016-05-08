@@ -145,4 +145,57 @@ class testWidgetFront extends WP_UnitTestCase {
         remove_filter('widget_title','titleFilterTest');
         
     }
+    
+    /**
+     *  Test the footerHTML method of the widget
+     */
+    function testfooterHTML() {
+        $className = NS.'\Widget';
+        $widget = new $className();
+
+        // no options set
+        $out = $widget->footerHTML(array());
+        $this->assertEquals('',$out);
+
+        // empty category
+        $out = $widget->footerHTML(array(
+                                    'footer_link'=>true,
+                                    ));
+        $this->assertEquals('',$out);
+
+        // bad category
+        $out = $widget->footerHTML(array(
+                                    'footer_link'=>true,
+                                    'cat'=>1000
+                                    ));
+        $this->assertEquals('',$out);
+
+        // bad category no css
+        $out = $widget->footerHTML(array(
+                                    'footer_link'=>true,
+                                    'cat'=>1000,
+                                    'disable_css' => true
+                                    ));
+        $this->assertEquals('',$out);
+
+        // valid category
+        $cid = $this->factory->category->create(array('name'=>'test cat'));
+        
+        $out = $widget->footerHTML(array(
+                                    'footer_link'=>true,
+                                    'cat'=>$cid
+                                    ));
+        $this->assertEquals('<a class="cat-post-footer-link" href="http://example.org/?cat='.$cid.'">1</a>',$out);
+        
+        // valid category no css
+        
+        $out = $widget->footerHTML(array(
+                                    'footer_link'=>true,
+                                    'cat'=>$cid,
+                                    'disable_css' => true
+                                    ));
+        $this->assertEquals('<a href="http://example.org/?cat='.$cid.'">1</a>',$out);
+
+    }
+    
 }
