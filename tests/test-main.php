@@ -12,6 +12,17 @@ function removeSpaceBetweenTags($string) {
     return trim(preg_replace('~>\s*\n\s*<~','><',$string));
 }
 
+/**
+ *  Filter function to test the widget_title filter behaviour. 
+ *  Helps to check html escaping as a side job
+ *  
+ *  @param [in] $title The title as passed to the filter
+ *  @return whatever constant string
+ */
+function titleFilterTest($title) {
+    return 'Me > You';
+}
+
 class testWidgetFront extends WP_UnitTestCase {
 
     /**
@@ -114,5 +125,24 @@ class testWidgetFront extends WP_UnitTestCase {
                                             'title_link' => true
                                         ));
         $this->assertEquals('<h3></h3>',$out);
+        
+        // test widget_title filtering
+        add_filter('widget_title','titleFilterTest');
+
+        // link to category with no manual title
+        $out = $widget->titleHTML('<h3>','</h3>',array(
+                                            'cat'=>$cid,
+                                            'title_link' => true
+                                        ));
+        $this->assertEquals('<h3><a href="http://example.org/?cat='.$cid.'">Me &gt; You</a></h3>',$out);
+        
+        // title without a link
+        $out = $widget->titleHTML('<h3>','</h3>',array(
+                                            'cat'=>$cid,
+                                        ));
+        $this->assertEquals('<h3>Me &gt; You</h3>',$out);
+        
+        remove_filter('widget_title','titleFilterTest');
+        
     }
 }
