@@ -574,7 +574,7 @@ class Widget extends \WP_Widget {
 
         if( !isset ( $instance["hide_title"] ) ) {
             $ret = $before_title;
-            if( isset ( $instance["title_link"]) && isset($instance["cat"]) && (get_category($instance["cat"] != null)) ) {
+            if( isset ( $instance["title_link"]) && isset($instance["cat"]) && (get_category($instance["cat"]) != null))  {
                 $ret .= '<a href="' . get_category_link($instance["cat"]) . '">' . esc_html(apply_filters( 'widget_title', $instance["title"] )) . '</a>';
             } else {
                 $ret .= esc_html(apply_filters( 'widget_title', $instance["title"] ));
@@ -596,7 +596,7 @@ class Widget extends \WP_Widget {
     function footerHTML($instance) {
         $ret = '';
         
-        if( isset ( $instance["footer_link"] ) && $instance["footer_link"] ) {
+        if( isset ( $instance["footer_link"] ) && $instance["footer_link"] && isset($instance["cat"]) && (get_category($instance["cat"]) != null) ) {
             $ret = "<a";
                 if( !isset( $instance['disable_css'] ) ) { $ret.= " class=\"cat-post-footer-link\""; }
             $ret .= " href=\"" . get_category_link($instance["cat"]) . "\">" . esc_html($instance["footer_link"]) . "</a>";
