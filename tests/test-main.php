@@ -129,14 +129,14 @@ class testWidgetFront extends WP_UnitTestCase {
         // test widget_title filtering
         add_filter('widget_title','titleFilterTest');
 
-        // link to category with no manual title
+        // widget_filte filter for link to category with no manual title
         $out = $widget->titleHTML('<h3>','</h3>',array(
                                             'cat'=>$cid,
                                             'title_link' => true
                                         ));
         $this->assertEquals('<h3><a href="http://example.org/?cat='.$cid.'">Me &gt; You</a></h3>',$out);
         
-        // title without a link
+        // widget_filte filter fortitle without a link
         $out = $widget->titleHTML('<h3>','</h3>',array(
                                             'cat'=>$cid,
                                         ));
