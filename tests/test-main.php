@@ -198,4 +198,18 @@ class testWidgetFront extends WP_UnitTestCase {
 
     }
     
+    /**
+     *  Test the excerpt_length_filter method of the widget
+     */
+    function testexcerpt_length_filter() {
+        $className = NS.'\Widget';
+        $widget = new $className();
+        
+        // no setting
+        $widget->instance = array();
+        $this->assertEquals(55,$widget->excerpt_length_filter(55));
+
+        $widget->instance = array('excerpt_length'=>20);
+        $this->assertEquals(20,$widget->excerpt_length_filter(55));
+    }
 }
