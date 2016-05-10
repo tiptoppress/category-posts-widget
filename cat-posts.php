@@ -216,6 +216,32 @@ function load_select2_scripts_footer() {
 <?php
 }
 
+/*
+	Enqueue select2 related JS and CSS for widget manipulation on the widget admin screen and costumizer
+	but due to customizer bugs only for 4.4 and above for the customizer
+*/	
+function admin_scripts($hook) {
+ 
+	if ($hook == 'widgets.php') { // enqueue only for widget admin and customizer
+		if (version_compare( $GLOBALS['wp_version'], '4.4', '>=' ) || !isset($GLOBALS['wp_customize'])) {
+			
+			// select2
+			wp_enqueue_script( 'select2-css', plugins_url( 'js/select2-4.0.1/js/select2.min.js' , __FILE__ ), array( 'jquery' ),'4.0.1' );
+			wp_enqueue_style( 'select2-js', plugins_url( 'js/select2-4.0.1/css/select2.min.css' , __FILE__ ) );
+			
+			add_action('admin_print_scripts','category_posts_widget_load_select2_scripts_footer',100);
+
+		}
+		
+		// control open and close the widget section
+        wp_register_script( 'category-posts-widget-admin-js', CAT_POST_PLUGINURL.'/js/admin/category-posts-widget.js',array('jquery'),'0.9',true );
+        wp_enqueue_script( 'category-posts-widget-admin-js' );	
+	}	
+}
+
+add_action('admin_enqueue_scripts', __NAMESPACE__.'\admin_scripts'); // "called on widgets.php and costumizer since 3.9
+
+
 /**
  * Load plugin textdomain.
  *
@@ -279,27 +305,6 @@ function admin_styles() {
 }	
 </style>
 <?php
-}
-
-/**
- * Add JS to control open and close the widget section
- *
- */
-add_action( 'admin_enqueue_scripts', __NAMESPACE__.'\admin_scripts', 10,1 );
- 
-function admin_scripts($hook) {
-	// widget script
-	if ($hook == 'widgets.php') {
-		if (version_compare( $GLOBALS['wp_version'], '4.4', '>=' ) || !isset($GLOBALS['wp_customize'])) {
-			wp_enqueue_script( 'select2-css', plugins_url( 'js/select2-4.0.1/js/select2.min.js' , __FILE__ ), array( 'jquery' ),'4.0.1' );
-			wp_enqueue_style( 'select2-js', plugins_url( 'js/select2-4.0.1/css/select2.min.css' , __FILE__ ) );
-			
-			add_action('admin_print_scripts',__NAMESPACE__.'\load_select2_scripts_footer',100);
-
-		}
-        wp_register_script( 'category-posts-widget-admin-js', CAT_POST_PLUGINURL.'/js/admin/category-posts-widget.js',array('jquery'),'0.9',true );
-        wp_enqueue_script( 'category-posts-widget-admin-js' );	
-	}	
 }
 
 /**
