@@ -220,16 +220,19 @@ function category_posts_widget_load_select2_scripts_footer() {
 */	
 function category_posts_widget_admin_scripts($hook) {
  
-	// select2
-	if ($hook == 'widgets.php') {
+	if ($hook == 'widgets.php') { // enqueue only for widget admin and customizer
 		if (version_compare( $GLOBALS['wp_version'], '4.4', '>=' ) || !isset($GLOBALS['wp_customize'])) {
+			
+			// select2
 			wp_enqueue_script( 'select2-css', plugins_url( 'js/select2-4.0.1/js/select2.min.js' , __FILE__ ), array( 'jquery' ),'4.0.1' );
 			wp_enqueue_style( 'select2-js', plugins_url( 'js/select2-4.0.1/css/select2.min.css' , __FILE__ ) );
 			
 			add_action('admin_print_scripts','category_posts_widget_load_select2_scripts_footer',100);
 
 		}
-        wp_register_script( 'category-posts-widget-admin-js', CAT_POST_PRO_PLUGINURL.'/js/admin/category-posts-widget.js',array('jquery'),'0.9',true );
+		
+		// control open and close the widget section
+        wp_register_script( 'category-posts-widget-admin-js', CAT_POST_PLUGINURL.'/js/admin/category-posts-widget.js',array('jquery'),'0.9',true );
         wp_enqueue_script( 'category-posts-widget-admin-js' );	
 	}	
 }
@@ -300,20 +303,6 @@ function category_posts_admin_styles() {
 }	
 </style>
 <?php
-}
-
-/**
- * Add JS to control open and close the widget section
- *
- */
-add_action( 'admin_enqueue_scripts', 'category_posts_admin_scripts', 10,1 );
- 
-function category_posts_admin_scripts($hook) {
-	// widget script
-	if ($hook == 'widgets.php') { // enqueue only for widget admin and customizer
-		wp_register_script( 'category-posts-admin-js', CAT_POST_PLUGINURL . 'js/admin/category-posts-widget.js',array('jquery'),CAT_POST_VERSION,true );
-		wp_enqueue_script( 'category-posts-admin-js' );
-	}
 }
 
 /**
