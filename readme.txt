@@ -3,8 +3,8 @@ Contributors: mkrdip, mark-k, kometschuh
 Donate link: http://mkrdip.me/donate
 Tags: category, posts, widget, single category widget, posts widget, category recent posts
 Requires at least: 2.8
-Tested up to: 4.5.1
-Stable tag: 4.1.8
+Tested up to: 4.5.2
+Stable tag: 4.6.1
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
