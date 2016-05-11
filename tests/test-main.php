@@ -9,7 +9,8 @@ define('NS','categoryPosts');
  *  @return Normalized string
  */
 function removeSpaceBetweenTags($string) {
-    return trim(preg_replace('~>\s*\n\s*<~','><',$string));
+    $string = preg_replace('~\s+~',' ',$string); // collapse spaces the way html handles it
+    return trim(preg_replace('~>\s*<~','><',$string));
 }
 
 /**
@@ -211,5 +212,82 @@ class testWidgetFront extends WP_UnitTestCase {
 
         $widget->instance = array('excerpt_length'=>20);
         $this->assertEquals(20,$widget->excerpt_length_filter(55));
+    }
+}
+
+class testWidgetAdmin extends WP_UnitTestCase {
+
+    function testformTitlePanel() {
+        $className = NS.'\Widget';
+        $widget = new $className();
+        
+        // no setting
+        ob_start();
+        $widget->formTitlePanel(array());
+        $out = removeSpaceBetweenTags(ob_get_contents());
+        ob_end_clean();
+        $this->assertEquals('<h4>Title</h4><div><p><label for="widget-category-posts--title">'.
+                    ' Title: '.
+                    '<input class="widefat" style="width:80%;" id="widget-category-posts--title" name="widget-category-posts[][title]" type="text" value="" /></label></p><p><label for="widget-category-posts--title_link"><input type="checkbox" class="checkbox" id="widget-category-posts--title_link" name="widget-category-posts[][title_link]" />'.
+                    ' Make widget title link </label></p><p><label for="widget-category-posts--hide_title"><input type="checkbox" class="checkbox" id="widget-category-posts--hide_title" name="widget-category-posts[][hide_title]" />'.
+                    ' Hide title </label></p></div>',$out);    
+                    
+        // title
+        ob_start();
+        $widget->formTitlePanel(array('title' => 'title <> me'));
+        $out = removeSpaceBetweenTags(ob_get_contents());
+        ob_end_clean();
+        $this->assertEquals('<h4>Title</h4><div><p><label for="widget-category-posts--title">'.
+                    ' Title: '.
+                    '<input class="widefat" style="width:80%;" id="widget-category-posts--title" name="widget-category-posts[][title]" type="text" value="title &lt;&gt; me" />'.
+                    '</label></p><p><label for="widget-category-posts--title_link"><input type="checkbox" class="checkbox" id="widget-category-posts--title_link" name="widget-category-posts[][title_link]" />'.
+                    ' Make widget title link </label></p><p><label for="widget-category-posts--hide_title"><input type="checkbox" class="checkbox" id="widget-category-posts--hide_title" name="widget-category-posts[][hide_title]" />'.
+                    ' Hide title </label></p></div>',$out);    
+                   
+        // title and link
+        ob_start();
+        $widget->formTitlePanel(array(
+                                    'title' => 'title <> me',
+                                    'title_link' => true
+                                    ));
+        $out = removeSpaceBetweenTags(ob_get_contents());
+        ob_end_clean();
+        $this->assertEquals('<h4>Title</h4><div><p><label for="widget-category-posts--title">'.
+                    ' Title: '.
+                    '<input class="widefat" style="width:80%;" id="widget-category-posts--title" name="widget-category-posts[][title]" type="text" value="title &lt;&gt; me" />'.
+                    '</label></p>'.
+                    '<p><label for="widget-category-posts--title_link"><input type="checkbox" class="checkbox" id="widget-category-posts--title_link" name="widget-category-posts[][title_link]" checked=\'checked\' />'.
+                    ' Make widget title link </label></p><p><label for="widget-category-posts--hide_title"><input type="checkbox" class="checkbox" id="widget-category-posts--hide_title" name="widget-category-posts[][hide_title]" />'.
+                    ' Hide title </label></p></div>',$out);    
+
+        // no title just link
+        ob_start();
+        $widget->formTitlePanel(array(
+                                    'title_link' => true
+                                    ));
+        $out = removeSpaceBetweenTags(ob_get_contents());
+        ob_end_clean();
+        $this->assertEquals('<h4>Title</h4><div><p><label for="widget-category-posts--title">'.
+                    ' Title: '.
+                    '<input class="widefat" style="width:80%;" id="widget-category-posts--title" name="widget-category-posts[][title]" type="text" value="" />'.
+                    '</label></p>'.
+                    '<p><label for="widget-category-posts--title_link"><input type="checkbox" class="checkbox" id="widget-category-posts--title_link" name="widget-category-posts[][title_link]" checked=\'checked\' />'.
+                    ' Make widget title link </label></p><p><label for="widget-category-posts--hide_title"><input type="checkbox" class="checkbox" id="widget-category-posts--hide_title" name="widget-category-posts[][hide_title]" />'.
+                    ' Hide title </label></p></div>',$out);    
+
+        // no title just link
+        ob_start();
+        $widget->formTitlePanel(array(
+                                    'hide_title' => true
+                                    ));
+        $out = removeSpaceBetweenTags(ob_get_contents());
+        ob_end_clean();
+        $this->assertEquals('<h4>Title</h4><div><p><label for="widget-category-posts--title">'.
+                    ' Title: '.
+                    '<input class="widefat" style="width:80%;" id="widget-category-posts--title" name="widget-category-posts[][title]" type="text" value="" />'.
+                    '</label></p>'.
+                    '<p><label for="widget-category-posts--title_link"><input type="checkbox" class="checkbox" id="widget-category-posts--title_link" name="widget-category-posts[][title_link]" />'.
+                    ' Make widget title link </label></p><p><label for="widget-category-posts--hide_title"><input type="checkbox" class="checkbox" id="widget-category-posts--hide_title" name="widget-category-posts[][hide_title]" checked=\'checked\' />'.
+                    ' Hide title </label></p></div>',$out);    
     }
 }
