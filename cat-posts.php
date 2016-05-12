@@ -229,7 +229,7 @@ function admin_scripts($hook) {
 			wp_enqueue_script( 'select2-css', plugins_url( 'js/select2-4.0.1/js/select2.min.js' , __FILE__ ), array( 'jquery' ),'4.0.1' );
 			wp_enqueue_style( 'select2-js', plugins_url( 'js/select2-4.0.1/css/select2.min.css' , __FILE__ ) );
 			
-			add_action('admin_print_scripts','category_posts_widget_load_select2_scripts_footer',100);
+			add_action('admin_print_scripts',__NAMESPACE__.'\load_select2_scripts_footer',100);
 
 		}
 		
