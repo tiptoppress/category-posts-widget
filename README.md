@@ -78,6 +78,9 @@ Automatic installation is the easiest option as WordPress handles the file trans
 ## Changelog
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
 
+#### 4.6.1
+* Keep panels open after save.
+
 #### 4.1.9 - May 5th 2016
 * Fixed undefined constant.
 
