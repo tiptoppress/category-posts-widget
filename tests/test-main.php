@@ -226,7 +226,7 @@ class testWidgetAdmin extends WP_UnitTestCase {
         $widget->formTitlePanel(array());
         $out = removeSpaceBetweenTags(ob_get_contents());
         ob_end_clean();
-        $this->assertEquals('<h4>Title</h4><div><p><label for="widget-category-posts--title">'.
+        $this->assertEquals('<h4 data-panel="title">Title</h4><div><p><label for="widget-category-posts--title">'.
                     ' Title: '.
                     '<input class="widefat" style="width:80%;" id="widget-category-posts--title" name="widget-category-posts[][title]" type="text" value="" /></label></p><p><label for="widget-category-posts--title_link"><input type="checkbox" class="checkbox" id="widget-category-posts--title_link" name="widget-category-posts[][title_link]" />'.
                     ' Make widget title link </label></p><p><label for="widget-category-posts--hide_title"><input type="checkbox" class="checkbox" id="widget-category-posts--hide_title" name="widget-category-posts[][hide_title]" />'.
@@ -237,7 +237,7 @@ class testWidgetAdmin extends WP_UnitTestCase {
         $widget->formTitlePanel(array('title' => 'title <> me'));
         $out = removeSpaceBetweenTags(ob_get_contents());
         ob_end_clean();
-        $this->assertEquals('<h4>Title</h4><div><p><label for="widget-category-posts--title">'.
+        $this->assertEquals('<h4 data-panel="title">Title</h4><div><p><label for="widget-category-posts--title">'.
                     ' Title: '.
                     '<input class="widefat" style="width:80%;" id="widget-category-posts--title" name="widget-category-posts[][title]" type="text" value="title &lt;&gt; me" />'.
                     '</label></p><p><label for="widget-category-posts--title_link"><input type="checkbox" class="checkbox" id="widget-category-posts--title_link" name="widget-category-posts[][title_link]" />'.
@@ -252,7 +252,7 @@ class testWidgetAdmin extends WP_UnitTestCase {
                                     ));
         $out = removeSpaceBetweenTags(ob_get_contents());
         ob_end_clean();
-        $this->assertEquals('<h4>Title</h4><div><p><label for="widget-category-posts--title">'.
+        $this->assertEquals('<h4 data-panel="title">Title</h4><div><p><label for="widget-category-posts--title">'.
                     ' Title: '.
                     '<input class="widefat" style="width:80%;" id="widget-category-posts--title" name="widget-category-posts[][title]" type="text" value="title &lt;&gt; me" />'.
                     '</label></p>'.
@@ -267,7 +267,7 @@ class testWidgetAdmin extends WP_UnitTestCase {
                                     ));
         $out = removeSpaceBetweenTags(ob_get_contents());
         ob_end_clean();
-        $this->assertEquals('<h4>Title</h4><div><p><label for="widget-category-posts--title">'.
+        $this->assertEquals('<h4 data-panel="title">Title</h4><div><p><label for="widget-category-posts--title">'.
                     ' Title: '.
                     '<input class="widefat" style="width:80%;" id="widget-category-posts--title" name="widget-category-posts[][title]" type="text" value="" />'.
                     '</label></p>'.
@@ -282,7 +282,7 @@ class testWidgetAdmin extends WP_UnitTestCase {
                                     ));
         $out = removeSpaceBetweenTags(ob_get_contents());
         ob_end_clean();
-        $this->assertEquals('<h4>Title</h4><div><p><label for="widget-category-posts--title">'.
+        $this->assertEquals('<h4 data-panel="title">Title</h4><div><p><label for="widget-category-posts--title">'.
                     ' Title: '.
                     '<input class="widefat" style="width:80%;" id="widget-category-posts--title" name="widget-category-posts[][title]" type="text" value="" />'.
                     '</label></p>'.
