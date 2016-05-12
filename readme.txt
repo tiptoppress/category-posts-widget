@@ -4,7 +4,11 @@ Donate link: http://mkrdip.me/donate
 Tags: category, posts, widget, single category widget, posts widget, category recent posts
 Requires at least: 2.8
 Tested up to: 4.5.2
+<<<<<<< HEAD
 Stable tag: 4.6.1
+=======
+Stable tag: 4.1.9
+>>>>>>> master
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -97,6 +101,12 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
 
+<<<<<<< HEAD
+=======
+= 4.1.9 - May 5th 2016 =
+* Fixed undefined constant.
+
+>>>>>>> master
 = 4.1.8 - May 03th 2016 =
 * Add mouse hover effects: blur
 * Add option to choose allowed HTML in the excerpt

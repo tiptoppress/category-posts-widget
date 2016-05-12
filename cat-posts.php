@@ -4,7 +4,11 @@ Plugin Name: Category Posts Widget
 Plugin URI: http://mkrdip.me/category-posts-widget
 Description: Adds a widget that shows the most recent posts from a single category.
 Author: Mrinal Kanti Roy
+<<<<<<< HEAD
 Version: 4.6.1
+=======
+Version: 4.1.9
+>>>>>>> master
 Author URI: http://mkrdip.me
 */
 

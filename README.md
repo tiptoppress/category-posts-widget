@@ -52,8 +52,6 @@ It's the pro version and available at on <a target="_blank" href="http://tiptopp
 * Localization support.
 
 ### Documentation
-Full documentation on [Tiptoppress](http://tiptoppress.com/category-posts-widget/documentation/)
-
 Formatting date and time: See [Formatting Date and Time] (https://codex.wordpress.org/Formatting_Date_and_Time).
 
 ### Contribute
@@ -80,11 +78,14 @@ Automatic installation is the easiest option as WordPress handles the file trans
 ## Changelog
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
 
+#### 4.1.9 - May 5th 2016
+* Fixed undefined constant.
+
 #### 4.1.8 - May 3th 2016
 * Add mouse hover effects: blur
 * Add option to choose allowed HTML in the excerpt
 * Add Jetpack 'Sharing - Show buttons on posts' support
-* Fixed division by zero bug (for small uploaded images)
+* Fixed division by zero bug (for small uploaded images).
 
 ##### 4.1.7 - April 14th 2016
 * Fixed division by zero bug.
