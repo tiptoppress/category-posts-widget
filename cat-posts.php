@@ -776,7 +776,7 @@ class Widget extends \WP_Widget {
 		$hide_title           = $instance['hide_title'];
 		$title_link           = $instance['title_link'];        
 ?>    
-        <h4><?php _e('Title','categoryposts')?></h4>
+        <h4 data-panel="title"><?php _e('Title','categoryposts')?></h4>
         <div>
             <p>
                 <label for="<?php echo $this->get_field_id("title"); ?>">
@@ -824,7 +824,7 @@ class Widget extends \WP_Widget {
 		$exclude_current_post = $instance['exclude_current_post'];
 		$hideNoThumb          = $instance['hideNoThumb'];
 ?>
-        <h4><?php _e('Filter','categoryposts');?></h4>
+        <h4 data-panel="filter"><?php _e('Filter','categoryposts');?></h4>
         <div>
             <p>
                 <label>
@@ -898,7 +898,7 @@ class Widget extends \WP_Widget {
 		$use_css_cropping     = $instance['use_css_cropping'];
 		$thumb_hover          = $instance['thumb_hover'];
 ?>        
-        <h4><?php _e('Thumbnails','categoryposts')?></h4>
+        <h4 data-panel="thumbnail"><?php _e('Thumbnails','categoryposts')?></h4>
         <div>
             <p>
                 <label for="<?php echo $this->get_field_id("thumb"); ?>">
@@ -994,7 +994,7 @@ class Widget extends \WP_Widget {
             $this->formFilterPanel($instance);
             $this->formThumbnailPanel($instance);
         ?>
-			<h4><?php _e('Post details','categoryposts')?></h4>
+			<h4 data-panel="details"><?php _e('Post details','categoryposts')?></h4>
 			<div>
 				<p>
 					<label for="<?php echo $this->get_field_id("hide_post_titles"); ?>">
@@ -1091,7 +1091,7 @@ class Widget extends \WP_Widget {
 					</label>
 				</p>
 			</div>
-			<h4><?php _e('General','categoryposts')?></h4>
+			<h4 data-panel="general"><?php _e('General','categoryposts')?></h4>
 			<div>
 				<p>
 					<label for="<?php echo $this->get_field_id("disable_css"); ?>">
@@ -1106,7 +1106,7 @@ class Widget extends \WP_Widget {
 					</label>
 				</p>
 			</div>
-			<h4><?php _e('Footer','categoryposts')?></h4>
+			<h4 data-panel="footer"><?php _e('Footer','categoryposts')?></h4>
 			<div>
 				<p>
 					<label for="<?php echo $this->get_field_id("footer_link"); ?>">
