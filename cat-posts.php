@@ -653,6 +653,7 @@ class Widget extends \WP_Widget {
                 $ret .= " cat-post-title"; 
             }
             $ret .= '" href="'.get_the_permalink().'" rel="bookmark">'.get_the_title();
+            $ret .= '</a> ';
         }
 
         if ( isset( $instance['date'] ) ) {
@@ -682,6 +683,7 @@ class Widget extends \WP_Widget {
         }
 
         if ( isset( $instance['excerpt'] ) ) {
+            $ret .= apply_filters('the_excerpt',get_the_excerpt());
         }
         
         if ( isset( $instance['comment_num'] ) ) {
