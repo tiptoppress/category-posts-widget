@@ -484,27 +484,36 @@ class Widget extends \WP_Widget {
 		return '<p>' . $text . '</p>';
 	}
 	
-	/*
-		Show the thumb of the current post
-	*/
-	function show_thumb() {
-		if ( isset( $this->instance["thumb"] ) &&
-				has_post_thumbnail() ) : ?>
-			<a <?php 
-				$use_css_cropping = isset($this->instance['use_css_cropping']) ? "cat-post-css-cropping" : "";
-				if( !isset( $this->instance['disable_css'] )) { 
-					if( isset($this->instance['thumb_hover'] )) {
-						echo "class=\"cat-post-thumbnail " . $use_css_cropping ." cat-post-" . $this->instance['thumb_hover'] . "\"";
-					} else {
-						echo "class=\"cat-post-thumbnail " . $use_css_cropping . "\"";
-					}
-				} ?>
-				href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
-				<?php 
-					$this->the_post_thumbnail( array($this->instance['thumb_w'],$this->instance['thumb_h'])); 
-				?>
-			</a>
-		<?php endif; 
+	/**
+	 * Calculate the HTML for showing the thumb of a post item.
+     * Expected to be called from a loop with globals properly set
+	 *
+	 * @param  array $instance Array which contains the various settings
+	 * @return string The HTML for the thumb related to the post
+     *
+     * @since 4.6
+	 */
+	function show_thumb($instance) {
+        $ret = '';
+        
+		if ( isset( $instance["thumb"] ) &&
+				has_post_thumbnail() ) {
+			$use_css_cropping = isset($this->instance['use_css_cropping']) ? "cat-post-css-cropping" : "";
+            $class = '';
+            if( !isset( $this->instance['disable_css'] )) { 
+                if( isset($this->instance['thumb_hover'] )) {
+                    $class = "class=\"cat-post-thumbnail " . $use_css_cropping ." cat-post-" . $instance['thumb_hover'] . "\"";
+                } else {
+                    $class = "class=\"cat-post-thumbnail " . $use_css_cropping . "\"";
+                }
+            } 
+            $title_args = array('echo'=>false);
+			$ret .= '<a '.$class . ' href="'.get_the_permalink().'" title="'.the_title_attribute($title_args).'">';
+            $ret .= $this->the_post_thumbnail( array($this->instance['thumb_w'],$this->instance['thumb_h'])); 
+			$ret .= '</a>';
+		}
+        
+        return $ret;
 	}
 	
 	/**
@@ -611,6 +620,95 @@ class Widget extends \WP_Widget {
     }
     
 	/**
+	 * Calculate the HTML for a post item based on the widget settings and post.
+     * Expected to be called in an active loop with all the globals set
+	 *
+	 * @param  array $instance Array which contains the various settings
+     * $param  null|integer $current_post_id If on singular page specifies the id of
+     *                      the post, otherwise null
+	 * @return string The HTML for item related to the post
+     *
+     * @since 4.6
+	 */
+    function itemHTML($instance,$current_post_id) {
+        global $post;
+        
+        $ret = '<li ';
+                    
+        if ( $current_post_id == $post->ID ) { 
+            $ret .= "class='cat-post-item cat-post-current'"; 
+        } else {
+            $ret .= "class='cat-post-item'";
+        }
+        $ret.='>'; // close the li opening tag
+        
+        // Thumbnail position to top
+        if( isset( $instance["thumbTop"] ) ) {
+            $ret .= $this->show_thumb($instance); 
+        }
+        
+        if( !isset( $instance['hide_post_titles'] ) ) { 
+            $ret .= '<a class="post-title';
+            if( !isset( $instance['disable_css'] ) ) { 
+                $ret .= " cat-post-title"; 
+            }
+            $ret .= '" href="'.get_the_permalink().'" rel="bookmark">'.get_the_title();
+        }
+
+        if ( isset( $instance['date'] ) ) {
+            if ( isset( $instance['date_format'] ) && strlen( trim( $instance['date_format'] ) ) > 0 ) { 
+                $date_format = $instance['date_format']; 
+            } else {
+                $date_format = "j M Y"; 
+            } 
+            $ret .= '<p class="post-date ';
+            if( !isset( $instance['disable_css'] ) ) { 
+                $ret .= "cat-post-date";
+            } 
+            $ret .= '">';
+            if ( isset ( $instance["date_link"] ) ) { 
+                $ret .= '<a href="'.get_the_permalink().'">';
+            }
+            $ret .= get_the_time($date_format);
+            if ( isset ( $instance["date_link"] ) ) { 
+                $ret .= '</a>';
+            }
+            $ret .= '</p>';
+        }
+        
+        // Thumbnail position normal
+        if( !isset( $instance["thumbTop"] ) ) {
+            $this->show_thumb($instance);
+        }
+
+        if ( isset( $instance['excerpt'] ) ) {
+        }
+        
+        if ( isset( $instance['comment_num'] ) ) {
+            $ret .= '<p class="comment-num';
+            if ( !isset( $instance['disable_css'] ) ) {
+                $ret .= " cat-post-comment-num"; 
+            } 
+            $ret .= '">';
+            $ret .= '('.get_comments_number().')';
+            $ret .= '</p>';
+        }
+
+        if ( isset( $instance['author'] ) ) {
+            $ret .= '<p class="post-author ';
+            if( !isset( $instance['disable_css'] ) ) { 
+                $ret .= "cat-post-author"; 
+            } 
+            $ret .= '">';
+            $ret .= get_the_author_posts_link(); 
+            $ret .= '</p>';
+        }
+        
+        $ret .= '</li>';
+        return $ret;
+    }
+    
+	/**
 	 * Filter to set the number of words in an excerpt
 	 *
 	 * @param  int $length The number of words as configured by wordpress core or set by previous filters
@@ -664,67 +762,16 @@ class Widget extends \WP_Widget {
 
 			// Post list
 			echo "<ul>\n";
-            
+
             $current_post_id = null;
             if (is_singular())
                 $current_post_id = get_the_ID();
             
 			while ( $cat_posts->have_posts() )
 			{
-				$cat_posts->the_post(); ?>
-				
-				<li <?php 
-						if ( $current_post_id == $cat_posts->post->ID ) { 
-							echo "class='cat-post-item cat-post-current'"; 
-						} else {
-							echo "class='cat-post-item'";
-						}
-					?> >
-					
-					<?php 
-										
-					// Thumbnail position to top
-					if( isset( $instance["thumbTop"] ) ) : 
-						$this->show_thumb(); 
-					endif;
-					
-					if( !isset( $instance['hide_post_titles'] ) ) {  ?>
-						<a class="post-title <?php if( !isset( $instance['disable_css'] ) ) { echo " cat-post-title"; } ?>" 
-							href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?>
-						</a>
-					<?php }
-
-					if ( isset( $instance['date'] ) ) : ?>
-						<?php if ( isset( $instance['date_format'] ) && strlen( trim( $instance['date_format'] ) ) > 0 ) { $date_format = $instance['date_format']; } else { $date_format = "j M Y"; } ?>
-						<p class="post-date <?php if( !isset( $instance['disable_css'] ) ) { echo "cat-post-date"; } ?>">						
-						<?php if( isset ( $instance["date_link"] ) ) { ?> <a href="<?php the_permalink(); ?>"><?php } ?>
-							<?php the_time($date_format); ?>
-						<?php if( isset ( $instance["date_link"] ) ) { echo "</a>"; } ?>
-						</p>
-					<?php endif;
-					
-					// Thumbnail position normal
-					if( !isset( $instance["thumbTop"] ) ) : 
-						$this->show_thumb();
-					endif;
-
-					if ( isset( $instance['excerpt'] ) ) : 
-						the_excerpt();
-					endif;
-					
-					if ( isset( $instance['comment_num'] ) ) : ?>
-						<p class="comment-num <?php if( !isset( $instance['disable_css'] ) ) { echo "cat-post-comment-num"; } ?>">
-							(<?php comments_number(); ?>)
-						</p>
-					<?php endif;
-
-					if ( isset( $instance['author'] ) ) : ?>
-						<p class="post-author <?php if( !isset( $instance['disable_css'] ) ) { echo "cat-post-author"; } ?>">
-							<?php the_author_posts_link(); ?>
-						</p>
-					<?php endif; ?>
-				</li>
-				<?php
+                $cat_posts->the_post();
+                
+				echo $this->itemHTML($instance,$current_post_id);
 			}
 
 			echo "</ul>\n";
