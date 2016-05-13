@@ -234,7 +234,7 @@ function admin_scripts($hook) {
 		}
 		
 		// control open and close the widget section
-        wp_register_script( 'category-posts-widget-admin-js', CAT_POST_PLUGINURL.'/js/admin/category-posts-widget.js',array('jquery'),'0.9',true );
+        wp_register_script( 'category-posts-widget-admin-js', CAT_POST_PLUGINURL.'/js/admin/category-posts-widget.js',array('jquery'),CAT_POST_VERSION,true );
         wp_enqueue_script( 'category-posts-widget-admin-js' );	
 	}	
 }
