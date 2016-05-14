@@ -783,8 +783,7 @@ class Widget extends \WP_Widget {
 
 			echo $after_widget;
 
-			if ( isset($instance["excerpt_length"]) && $instance["excerpt_length"] > 0 )
-				remove_filter('excerpt_length', array($this,'excerpt_length_filter'));
+			remove_filter('excerpt_length', array($this,'excerpt_length_filter'));
 			remove_filter('excerpt_more', array($this,'excerpt_more_filter'));
 			add_filter('get_the_excerpt', 'wp_trim_excerpt');
 			remove_filter('the_excerpt', array($this,'allow_html_excerpt'));
