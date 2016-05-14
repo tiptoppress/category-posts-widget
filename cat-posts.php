@@ -527,12 +527,10 @@ class Widget extends \WP_Widget {
 		$valid_sort_orders = array('date', 'title', 'comment_count', 'rand');
 		if ( isset($instance['sort_by']) && in_array($instance['sort_by'],$valid_sort_orders) ) {
 			$sort_by = $instance['sort_by'];
-			$sort_order = (bool) isset( $instance['asc_sort_order'] ) ? 'ASC' : 'DESC';
 		} else {
-			// by default, display latest first
 			$sort_by = 'date';
-			$sort_order = 'DESC';
 		}
+        $sort_order = (bool) isset( $instance['asc_sort_order'] ) ? 'ASC' : 'DESC';
 		
 		// Get array of post info.
 		$args = array(
