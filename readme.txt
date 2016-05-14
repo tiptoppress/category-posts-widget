@@ -17,10 +17,10 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 It's the pro version and available on <a target="_blank" href="http://tiptoppress.com/">Tip Top Press</a> created for big Wordpress sites.
 
 = Pro features =
-* Custom Post Types, Terms and Custom Taxonomies
+* Custom Post Types, Terms and Custom Taxonomies (e.g. WooCommerce products)
 * Multi selection
 * Different styles, like vertical scrolling ticker
-* More [Examples on the demo page](http://demo.tiptoppress.com/)
+* More [examples on the demo page](http://demo.tiptoppress.com/)
 
 = Features =
 * Option to change ordering of posts.

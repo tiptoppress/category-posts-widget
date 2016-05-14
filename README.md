@@ -21,9 +21,10 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 It's the pro version and available at on <a target="_blank" href="http://tiptoppress.com/">Tip Top Press</a> created for big Wordpress sites.
 
 ### Pro features
-* Custom Post Types, Terms and Custom Taxonomies
+* Custom Post Types, Terms and Custom Taxonomies (e.g. WooCommerce products)
 * Multi selection
 * Different styles, like vertical scrolling ticker
+* More <a target="_blank" href="http://demo.tiptoppress.com/">examples on the demo page</a>
 
 ### Features
 * Option to change ordering of posts.
@@ -76,7 +77,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 
 ## Changelog
-[Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
+#### <a target="_blank" href="http://tiptoppress.com/category/category-posts-widget/">Read more on our blog ...</a>
 
 #### 4.6.1
 * Keep panels open after save.
