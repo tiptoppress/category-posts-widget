@@ -534,20 +534,23 @@ class Widget extends \WP_Widget {
 			$sort_order = 'DESC';
 		}
 		
-		// Exclude current post
-		$current_post_id = get_the_ID();
-		$exclude_current_post = (isset( $instance['exclude_current_post'] ) && $instance['exclude_current_post'] != -1) ? $current_post_id : "";		
-
 		// Get array of post info.
 		$args = array(
-			'showposts' => isset($instance["num"])?$instance["num"]:0,
-			'cat' => isset($instance["cat"])?$instance["cat"]:0,
-			'post__not_in' => array( $exclude_current_post ),
 			'orderby' => $sort_by,
 			'order' => $sort_order
 		);
+        
+        if (isset($instance["num"])) 
+            $args['showposts'] = (int) $instance["num"];
 		
-		if( isset( $instance['hideNoThumb'] ) ) {
+        if (isset($instance["cat"])) 
+            $args['cat'] = (int) $instance["cat"];
+
+		$current_post_id = get_the_ID();
+        if (!$current_post_id && isset( $instance['exclude_current_post'] )) 
+            $args['post__not_in'] = $current_post_id;
+
+        if( isset( $instance['hideNoThumb'] ) ) {
 			$args = array_merge( $args, array( 'meta_query' => array(
 					array(
 					 'key' => '_thumbnail_id',
