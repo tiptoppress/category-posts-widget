@@ -213,6 +213,24 @@ class testWidgetFront extends WP_UnitTestCase {
         $widget->instance = array('excerpt_length'=>20);
         $this->assertEquals(20,$widget->excerpt_length_filter(55));
     }
+
+    /**
+     *  Test the excerpt_more_filter method of the widget
+     */
+    function testexcerpt_more_filter() {
+        $className = NS.'\Widget';
+        $widget = new $className();
+        
+        // generate a post to test with as the function expects to be called in a loop
+        $pid = $this->factory->post->create(array('title'=>'test','post_status'=>'publish')); 
+
+        global $post;
+        $post = get_post($pid);
+        setup_postdata($post);
+        
+        $widget->instance["excerpt_more_text"] = 'text"';
+        $this->assertEquals(' <a class="cat-post-excerpt-more" href="http://example.org/?p='.$pid.'">text&quot;</a>',$widget->excerpt_more_filter(''));
+    }
 }
 
 class testWidgetAdmin extends WP_UnitTestCase {
