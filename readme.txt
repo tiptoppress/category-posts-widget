@@ -14,12 +14,13 @@ Adds a widget that shows the most recent posts from a single category.
 Category Posts Widget is a light widget designed to do one thing and do it well: display the most recent posts from a certain category.
 
 = Term and Category based Posts Widget =
-It's the pro version and available at on <a target="_blank" href="http://tiptoppress.com/">Tip Top Press</a> created for big Wordpress sites.
+It's the pro version and available on <a target="_blank" href="http://tiptoppress.com/">Tip Top Press</a> created for big Wordpress sites.
 
 = Pro features =
 * Custom Post Types, Terms and Custom Taxonomies
 * Multi selection
 * Different styles, like vertical scrolling ticker
+* More [Examples on the demo page](http://demo.tiptoppress.com/)
 
 = Features =
 * Option to change ordering of posts.
