@@ -419,8 +419,7 @@ class Widget extends \WP_Widget {
 	 * Excerpt more link filter
 	 */
 	function excerpt_more_filter($more) {
-		global $post;
-		return ' <a class="cat-post-excerpt-more" href="'. get_permalink($post->ID) . '">' . esc_html($this->instance["excerpt_more_text"]) . '</a>';
+		return ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '">' . esc_html($this->instance["excerpt_more_text"]) . '</a>';
 	}
 
 	/**
