@@ -231,6 +231,84 @@ class testWidgetFront extends WP_UnitTestCase {
         $widget->instance["excerpt_more_text"] = 'text"';
         $this->assertEquals(' <a class="cat-post-excerpt-more" href="http://example.org/?p='.$pid.'">text&quot;</a>',$widget->excerpt_more_filter(''));
     }
+    
+    /**
+     *  Test the queryArgs method of the widget
+     */
+    function testqueryArgs() {
+        $className = NS.'\Widget';
+        $widget = new $className();
+   
+        // no settings, just have defaults
+        $instance = array();
+        $expected = array(
+                        'orderby' => 'date',
+                        'order' =>'DESC'
+                        );
+        $this->assertEquals($expected,$widget->queryArgs($instance));
+        
+        $sort_criteria = array(null,'date', 'title', 'comment_count', 'rand','garbage');
+        $sort_criteria_results = array('date','date', 'title', 'comment_count', 'rand','date');
+
+        $sort_order = array('whatever', null);
+        $sort_order_results = array('ASC', 'DESC');
+        
+        $cats = array('10', 7, null,'fail');
+        $cats_results = array(10, 7, null,0);
+        
+        $nums = array('10', 7, null,'oops');
+        $nums_results = array(10, 7, null,0);
+
+        $hidethumbs = array(true,null);
+        $hidethumbs_results = array(array(
+					array(
+					 'key' => '_thumbnail_id',
+					 'compare' => 'EXISTS' )
+				), null);
+        
+        $pid = $this->factory->post->create(array('title'=>'test','post_status'=>'publish')); 
+        
+        $exclude_current = array('whatever', null);
+
+        foreach ($sort_criteria as $ksc=>$sc) 
+            foreach ($sort_order as $kso => $so) 
+                foreach ($cats as $kcat => $cat) 
+                    foreach ($nums as $knum => $num) 
+                        foreach ($hidethumbs as $kt => $thumb) 
+                            foreach ($exclude_current as $ke => $exclude) {
+                                $instance = array(
+                                    'sort_by' => $sc,
+                                    'asc_sort_order' => $so,
+                                    'cat' => $cat,
+                                    'hideNoThumb' => $thumb,
+                                    'exclude_current_post' => $exclude,
+                                    'num' => $num
+                                );
+                                $expected = array(
+                                            'orderby' => $sort_criteria_results[$ksc],
+                                            'order' => $sort_order_results[$kso]
+                                            );
+                                if ($cat)
+                                    $expected['cat'] = $cats_results[$kcat];
+                                    
+                                if ($num)
+                                    $expected['showposts'] = $nums_results[$knum];
+                                    
+                                if ($thumb)
+                                    $expected['meta_query'] = $hidethumbs_results[$kt];
+                                    
+                                // test archive type of page
+                                $this->go_to('/');
+                                $this->assertEquals($expected,$widget->queryArgs($instance));
+                                
+                                // test single post page
+                                if ($exclude)
+                                    $expected['post__not_in'] = $pid;
+                                $this->go_to('/?p='.$pid);
+                                $this->assertEquals($expected,$widget->queryArgs($instance));
+                            }
+                    
+    }
 }
 
 class testWidgetAdmin extends WP_UnitTestCase {
