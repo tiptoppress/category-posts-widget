@@ -96,7 +96,7 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 2. Front end of the widget using a default WordPress Theme.
 
 == Changelog ==
-= Read more on our [blog ...](http://tiptoppress.com/category/category-posts-widget/)
+= [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/) =
 
 = 4.6.1 =
 * Keep panels open after save.
