@@ -726,7 +726,17 @@ class Widget extends \WP_Widget {
         return $length;
     }
     
-	// Displays category posts widget on blog.
+	/**
+	 * The main widget display controller
+     *
+     * Called by the sidebar processing core logic to display the widget
+	 *
+	 * @param array $args An array containing the "environment" setting for the widget,
+     *                     namely, the enclosing tags for the widget and its title. 
+	 * @param array $instance The settings associate with the widget
+     *
+     * @since 4.1
+	 */
 	function widget($args, $instance) {
 
 		extract( $args );
