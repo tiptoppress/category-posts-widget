@@ -544,9 +544,8 @@ class Widget extends \WP_Widget {
         if (isset($instance["cat"])) 
             $args['cat'] = (int) $instance["cat"];
 
-		$current_post_id = get_the_ID();
-        if (!$current_post_id && isset( $instance['exclude_current_post'] )) 
-            $args['post__not_in'] = $current_post_id;
+        if (is_singular() && isset( $instance['exclude_current_post'] )) 
+            $args['post__not_in'] = get_the_ID();
 
         if( isset( $instance['hideNoThumb'] ) ) {
 			$args = array_merge( $args, array( 'meta_query' => array(
