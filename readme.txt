@@ -20,7 +20,7 @@ It's the pro version and available on <a target="_blank" href="http://tiptoppres
 * Custom Post Types, Terms and Custom Taxonomies
 * Multi selection
 * Different styles, like vertical scrolling ticker
-* [Examples on the demo page](http://demo.tiptoppress.com/)
+* More [Examples on the demo page](http://demo.tiptoppress.com/)
 
 = Features =
 * Option to change ordering of posts.
