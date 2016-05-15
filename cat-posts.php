@@ -726,6 +726,49 @@ class Widget extends \WP_Widget {
     }
     
 	/**
+	 * Set the proper excerpt filters based on the settings
+	 *
+	 * @param  array $instance widget settings
+	 * @return void
+     *
+     * @since 4.6
+	 */
+    function setExcerpFilters($instance) {
+        // Excerpt length filter
+        if ( isset($instance["excerpt_length"]) && ((int) $instance["excerpt_length"]) > 0 ) {
+            add_filter('excerpt_length', array($this,'excerpt_length_filter'));
+        }
+        
+        if( isset($instance["excerpt_more_text"]) && ltrim($instance["excerpt_more_text"]) != '' )
+        {
+            add_filter('excerpt_more', array($this,'excerpt_more_filter'));
+        }
+
+        if( isset( $instance['excerpt_allow_html'] ) ) {
+            remove_filter('get_the_excerpt', 'wp_trim_excerpt');
+            add_filter('the_excerpt', array($this,'allow_html_excerpt'));
+        } else {
+            add_filter('the_excerpt', array($this,'explicite_the_excerpt'));
+        }
+    }
+    
+	/**
+	 * Remove the excerpt filter
+	 *
+	 * @param  array $instance widget settings
+	 * @return void
+     *
+     * @since 4.6
+	 */
+    function removeExcerpFilters($instance) {
+        remove_filter('excerpt_length', array($this,'excerpt_length_filter'));
+        remove_filter('excerpt_more', array($this,'excerpt_more_filter'));
+        add_filter('get_the_excerpt', 'wp_trim_excerpt');
+        remove_filter('the_excerpt', array($this,'allow_html_excerpt'));
+        remove_filter('the_excerpt', array($this,'explicite_the_excerpt'));
+    }
+    
+	/**
 	 * The main widget display controller
      *
      * Called by the sidebar processing core logic to display the widget
@@ -744,64 +787,33 @@ class Widget extends \WP_Widget {
         $args = $this->queryArgs($instance);
 		$cat_posts = new \WP_Query( $args );
 		
-		if ( !isset ( $instance["hide_if_empty"] ) || $cat_posts->have_posts() ) {
-			
-			/**
-			 * Excerpt length filter
-			 */
- 			if ( isset($instance["excerpt_length"]) && $instance["excerpt_length"] > 0 ) {
- 				add_filter('excerpt_length', array($this,'excerpt_length_filter'));
-			}
-			
-			if( isset($instance["excerpt_more_text"]) && ltrim($instance["excerpt_more_text"]) != '' )
-			{
-				add_filter('excerpt_more', array($this,'excerpt_more_filter'));
-			}
-
-			if( isset( $instance['excerpt_allow_html'] ) ) {
-				remove_filter('get_the_excerpt', 'wp_trim_excerpt');
-				add_filter('the_excerpt', array($this,'allow_html_excerpt'));
-			} else {
-				add_filter('the_excerpt', array($this,'explicite_the_excerpt'));
-			}
-			
-
+		if ( !isset ( $instance["hide_if_empty"] ) || $cat_posts->have_posts() ) {				
 			echo $before_widget;
-
-			// Widget title
             echo $this->titleHTML($before_title,$after_title,$instance);
-
-			// Post list
-			echo "<ul>\n";
 
             $current_post_id = null;
             if (is_singular())
                 $current_post_id = get_the_ID();
-            
+
+			echo "<ul>\n";
+
+            $this->setExcerpFilters($instance);         
 			while ( $cat_posts->have_posts() )
 			{
-                $cat_posts->the_post();
-                
+                $cat_posts->the_post();              
 				echo $this->itemHTML($instance,$current_post_id);
 			}
-
 			echo "</ul>\n";
 
-			// Footer link to category page
             echo $this->footerHTML($instance);
-
 			echo $after_widget;
-
-			remove_filter('excerpt_length', array($this,'excerpt_length_filter'));
-			remove_filter('excerpt_more', array($this,'excerpt_more_filter'));
-			add_filter('get_the_excerpt', 'wp_trim_excerpt');
-			remove_filter('the_excerpt', array($this,'allow_html_excerpt'));
-			remove_filter('the_excerpt', array($this,'explicite_the_excerpt'));
+       
+            $this->removeExcerpFilters($instance);
 			
 			wp_reset_postdata();
 			
-		} // END if
-	} // END function
+		} 
+	} 
 
 	/**
 	 * Update the options
