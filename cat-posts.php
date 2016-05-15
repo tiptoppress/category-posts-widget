@@ -421,10 +421,28 @@ class Widget extends \WP_Widget {
 	/*
 		wrapper to execute the the_post_thumbnail with filters
 	*/
-	function the_post_thumbnail($size= 'post-thumbnail',$attr='') {
+	/**
+	 * Calculate the HTML for showing the thumb of a post item.
+     *
+     * It is a wrapper to execute the the_post_thumbnail with filters
+     *
+     * @param  string|array    $size The requested size identified by name or (width, height) array
+     *
+	 * @return string The HTML for the thumb related to the post and empty string if it can not be calculated
+     *
+     * @since 4.1
+	 */
+	function the_post_thumbnail($size= 'post-thumbnail') {
+        if (is_array($size)) {
+            if (count($size) != 2)
+                return '';
+            if (empty($size[0]) || empty($size[1]))
+                return '';
+        }
 		add_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
-		the_post_thumbnail($size,$attr);
+		$ret = get_the_post_thumbnail( null,$size,'');
 		remove_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
+        return $ret;
 	}
 	
 	/**

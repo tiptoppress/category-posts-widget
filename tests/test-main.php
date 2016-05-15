@@ -24,6 +24,42 @@ function titleFilterTest($title) {
     return 'Me > You';
 }
 
+/**
+ *  Add a file as an attachment.
+ *  
+ *  @param string $filename The path of the file to add as an atachment
+ *  @return int the ID of the new attachment
+ */
+function _make_attachment( $filename) {
+
+    $contents = file_get_contents($filename);
+
+    $upload = wp_upload_bits(basename($filename), null, $contents);
+    $type = '';
+    if ( !empty($upload['type']) ) {
+        $type = $upload['type'];
+    } else {
+        $mime = wp_check_filetype( $upload['file'] );
+        if ($mime)
+            $type = $mime['type'];
+    }
+
+    $attachment = array(
+        'post_title' => basename( $upload['file'] ),
+        'post_content' => '',
+        'post_type' => 'attachment',
+        'post_mime_type' => $type,
+        'guid' => $upload[ 'url' ],
+    );
+
+    // Save the data
+    $id = wp_insert_attachment( $attachment, $upload[ 'file' ] );
+    wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $upload['file'] ) );
+
+    return $id;
+
+}
+
 class testWidgetFront extends WP_UnitTestCase {
 
     /**
@@ -308,6 +344,43 @@ class testWidgetFront extends WP_UnitTestCase {
                                 $this->assertEquals($expected,$widget->queryArgs($instance));
                             }
                     
+    }
+    
+    /**
+     *  Test the post_thumbnail_html method of the widget
+     */
+    function test_the_post_thumbnail() {
+        $className = NS.'\Widget';
+        $widget = new $className();
+        
+        // clean upload dir for consistant file names
+        $dir = wp_upload_dir();
+        $dir = $dir['path'];
+        array_map('unlink', glob($dir."/*"));
+        
+        $pid = $this->factory->post->create(array('title'=>'test','post_status'=>'publish')); 
+        $thumbnail_id = _make_attachment(DIR_TESTDATA . '/images/canola.jpg');
+        set_post_thumbnail( $pid, $thumbnail_id);
+        
+        global $post;
+        $post = get_post($pid);
+        setup_postdata($post);
+
+        // test no thumb width and height, shoud get same html
+        $this->assertEquals('',$widget->the_post_thumbnail(array()));
+        
+        $this->assertEquals('',$widget->the_post_thumbnail(array(10,'')));
+
+        $this->assertEquals('',$widget->the_post_thumbnail(array('',10)));
+        
+        // equal to min thumb size. no manipulation needed
+        $widget->instance=array('thumb_h' => 150,'thumb_w' => 150);
+        $this->assertEquals('<img width="150" height="150" src="http://example.org/wp-content/uploads/2016/05/canola-150x150.jpg" class="attachment-150x150 wp-post-image" alt="canola.jpg" />',$widget->the_post_thumbnail(array(150,150)));
+        
+        // equal to min thumb size. no manipulation needed
+        $widget->instance=array('thumb_h' => 200,'thumb_w' => 200);
+        $this->assertEquals('<img width="150" height="150" src="http://example.org/wp-content/uploads/2016/05/canola-150x150.jpg" class="attachment-150x150 wp-post-image" alt="canola.jpg" />',$widget->the_post_thumbnail(array(200,200)));
+        
     }
 }
 
