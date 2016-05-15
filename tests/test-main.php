@@ -27,7 +27,7 @@ function titleFilterTest($title) {
 /**
  *  Add a file as an attachment.
  *  
- *  @param string $filename The path of the file to add as an atachment
+ *  @param string $filename The path of the file to add as an attachment
  *  @return int the ID of the new attachment
  */
 function _make_attachment( $filename) {
@@ -51,6 +51,7 @@ function _make_attachment( $filename) {
         'post_mime_type' => $type,
         'guid' => $upload[ 'url' ],
     );
+
 
     // Save the data
     $id = wp_insert_attachment( $attachment, $upload[ 'file' ] );
@@ -271,7 +272,7 @@ class testWidgetFront extends WP_UnitTestCase {
     /**
      *  Test the queryArgs method of the widget
      */
-    function testqueryArgs() {
+	function testqueryArgs() {
         $className = NS.'\Widget';
         $widget = new $className();
    
@@ -347,7 +348,7 @@ class testWidgetFront extends WP_UnitTestCase {
     }
     
     /**
-     *  Test the post_thumbnail_html method of the widget
+     *  Test the post_thumbnail method of the widget
      */
     function test_the_post_thumbnail() {
         $className = NS.'\Widget';
@@ -356,10 +357,11 @@ class testWidgetFront extends WP_UnitTestCase {
         // clean upload dir for consistant file names
         $dir = wp_upload_dir();
         $dir = $dir['path'];
-        array_map('unlink', glob($dir."/*"));
+        array_map('unlink', glob($dir."/*"));		
         
-        $pid = $this->factory->post->create(array('title'=>'test','post_status'=>'publish')); 
-        $thumbnail_id = _make_attachment(DIR_TESTDATA . '/images/canola.jpg');
+		// 1) use image size: 640x480
+        $pid = $this->factory->post->create(array('title'=>'canola','post_status'=>'publish')); 
+        $thumbnail_id = _make_attachment(DIR_TESTDATA . '/images/canola.jpg'); // wp-content\plugins\4.5\tests\phpunit\includes\..\data\images\canola.jpg
         set_post_thumbnail( $pid, $thumbnail_id);
         
         global $post;
@@ -375,13 +377,90 @@ class testWidgetFront extends WP_UnitTestCase {
         
         // equal to min thumb size. no manipulation needed
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150);
-        $this->assertEquals('<img width="150" height="150" src="http://example.org/wp-content/uploads/2016/05/canola-150x150.jpg" class="attachment-150x150 wp-post-image" alt="canola.jpg" />',$widget->the_post_thumbnail(array(150,150)));
-        
-        // equal to min thumb size. no manipulation needed
+        $this->assertEquals('<img width="150" height="150" src="http://example.org/wp-content/uploads/2016/05/canola-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="canola.jpg" />',
+								$widget->the_post_thumbnail(array(150,150))
+							);
+
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200);
-        $this->assertEquals('<img width="150" height="150" src="http://example.org/wp-content/uploads/2016/05/canola-150x150.jpg" class="attachment-150x150 wp-post-image" alt="canola.jpg" />',$widget->the_post_thumbnail(array(200,200)));
-        
-    }
+        $this->assertEquals('<img width="200" height="150" src="http://example.org/wp-content/uploads/2016/05/canola-300x225.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="canola.jpg" srcset="http://example.org/wp-content/uploads/2016/05/canola-300x225.jpg 300w, http://example.org/wp-content/uploads/2016/05/canola.jpg 640w" sizes="(max-width: 200px) 100vw, 200px" />',
+								$widget->the_post_thumbnail(array(200,200))
+							);
+
+		// Use with "use_css_cropping"
+        $widget->instance=array('thumb_h' => 150,'thumb_w' => 150,'use_css_cropping' => true);
+        $this->assertEquals('<img width="150" height="150" src="http://example.org/wp-content/uploads/2016/05/canola-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="canola.jpg" />',
+								$widget->the_post_thumbnail(array(150,150))
+							);
+		
+        $widget->instance=array('thumb_h' => 200,'thumb_w' => 200,'use_css_cropping' => true);
+        $this->assertEquals('<span style="width:200px;height:200px;"><img style="margin-left:-33.333333333333px;height:200px;clip:rect(auto,233.33333333333px,auto,33.333333333333px);width:auto;max-width:initial;" width=\'266.66666666667\' height=\'200\' src="http://example.org/wp-content/uploads/2016/05/canola-300x225.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="canola.jpg" srcset="http://example.org/wp-content/uploads/2016/05/canola-300x225.jpg 300w, http://example.org/wp-content/uploads/2016/05/canola.jpg 640w" sizes="(max-width: 266.66666666667px) 100vw, 266.66666666667px" /></span>',
+								$widget->the_post_thumbnail(array(200,200))
+							);
+
+		// 2.) use smaller image as media -> settings thumbnail_size, image size: 50x50
+        delete_post_thumbnail( $pid );
+		$pid = $this->factory->post->create(array('title'=>'test-image','post_status'=>'publish')); 
+        $thumbnail_id = _make_attachment(DIR_TESTDATA . '/images/test-image.jpg'); // wp-content\plugins\4.5\tests\phpunit\includes\..\data\images\test-image.jpg
+        set_post_thumbnail( $pid, $thumbnail_id);
+		
+        $post = get_post($pid);
+        setup_postdata($post);
+
+		$widget->instance=array('use_css_cropping' => false);
+		
+        $widget->instance=array('thumb_h' => 150,'thumb_w' => 150);
+        $this->assertEquals('<img width="50" height="50" src="http://example.org/wp-content/uploads/2016/05/test-image.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="test-image.jpg" />',
+								$widget->the_post_thumbnail(array(150,150))
+							);
+
+        $widget->instance=array('thumb_h' => 200,'thumb_w' => 200);
+        $this->assertEquals('<img width="50" height="50" src="http://example.org/wp-content/uploads/2016/05/test-image.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="test-image.jpg" />',
+								$widget->the_post_thumbnail(array(200,200))
+							);
+
+		// Use with "use_css_cropping"
+        $widget->instance=array('thumb_h' => 150,'thumb_w' => 150,'use_css_cropping' => true);
+        $this->assertEquals('<img width="50" height="50" src="http://example.org/wp-content/uploads/2016/05/test-image.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="test-image.jpg" />',
+								$widget->the_post_thumbnail(array(150,150))
+							);
+
+        $widget->instance=array('thumb_h' => 200,'thumb_w' => 200,'use_css_cropping' => true);
+        $this->assertEquals('<img width="50" height="50" src="http://example.org/wp-content/uploads/2016/05/test-image.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="test-image.jpg" />',
+								$widget->the_post_thumbnail(array(200,200))
+							);
+
+		// 3.) use bigger image as media -> settings large_size, image size: 1920x1080
+        delete_post_thumbnail( $pid );
+		$pid = $this->factory->post->create(array('title'=>'33772','post_status'=>'publish')); 
+        $thumbnail_id = _make_attachment(DIR_TESTDATA . '/images/33772.jpg'); // wp-content\plugins\4.5\tests\phpunit\includes\..\data\images\33772.jpg
+        set_post_thumbnail( $pid, $thumbnail_id);
+		
+        $post = get_post($pid);
+        setup_postdata($post);		
+
+		$widget->instance=array('use_css_cropping' => false);
+		
+        $widget->instance=array('thumb_h' => 150,'thumb_w' => 150);
+        $this->assertEquals('<img width="150" height="150" src="http://example.org/wp-content/uploads/2016/05/33772-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="33772.jpg" />',
+								$widget->the_post_thumbnail(array(150,150))
+							);
+
+        $widget->instance=array('thumb_h' => 200,'thumb_w' => 200);
+        $this->assertEquals('<img width="200" height="113" src="http://example.org/wp-content/uploads/2016/05/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="http://example.org/wp-content/uploads/2016/05/33772-768x432.jpg 768w, http://example.org/wp-content/uploads/2016/05/33772-300x169.jpg 300w, http://example.org/wp-content/uploads/2016/05/33772-1024x576.jpg 1024w" sizes="(max-width: 200px) 100vw, 200px" />',
+								$widget->the_post_thumbnail(array(200,200))
+							);
+		
+		// Use with "use_css_cropping"
+        $widget->instance=array('thumb_h' => 150,'thumb_w' => 150,'use_css_cropping' => true);
+        $this->assertEquals('<img width="150" height="150" src="http://example.org/wp-content/uploads/2016/05/33772-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="33772.jpg" />',
+								$widget->the_post_thumbnail(array(150,150))
+							);
+
+        $widget->instance=array('thumb_h' => 200,'thumb_w' => 200,'use_css_cropping' => true);
+        $this->assertEquals('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="http://example.org/wp-content/uploads/2016/05/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="http://example.org/wp-content/uploads/2016/05/33772-768x432.jpg 768w, http://example.org/wp-content/uploads/2016/05/33772-300x169.jpg 300w, http://example.org/wp-content/uploads/2016/05/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
+								$widget->the_post_thumbnail(array(200,200))
+							);
+    }	
 }
 
 class testWidgetAdmin extends WP_UnitTestCase {

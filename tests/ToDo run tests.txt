@@ -11,5 +11,8 @@ B. Set system path variable to 'phpunit.phar'
 
 3. Move to folder: src\plugins\category-posts-widget\tests
 
-4. Run the Category-Posts-Widget tests with $phpunit
+4. Run the Category-Posts-Widget tests with $phpunit or $phpunit --debug
+
+
+Tipp: Use print "hello world" for dumping variables and output to CLI
 
