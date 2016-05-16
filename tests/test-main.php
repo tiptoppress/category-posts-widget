@@ -377,24 +377,28 @@ class testWidgetFront extends WP_UnitTestCase {
         
         // equal to min thumb size. no manipulation needed
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150);
-        $this->assertEquals('<img width="150" height="150" src="http://example.org/wp-content/uploads/2016/05/canola-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="canola.jpg" />',
-								$widget->the_post_thumbnail(array(150,150))
+		// MODIF for older WP <4.5: class size-WxH is supported up +4.5
+        $this->assertEquals('<img width="150" height="150" src="http://example.org/wp-content/uploads/2016/05/canola-150x150.jpg" class="attachment-150x150 wp-post-image" alt="canola.jpg" />',
+								str_replace(" size-150x150", "", $widget->the_post_thumbnail(array(150,150)))
 							);
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200);
-        $this->assertEquals('<img width="200" height="150" src="http://example.org/wp-content/uploads/2016/05/canola-300x225.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="canola.jpg" srcset="http://example.org/wp-content/uploads/2016/05/canola-300x225.jpg 300w, http://example.org/wp-content/uploads/2016/05/canola.jpg 640w" sizes="(max-width: 200px) 100vw, 200px" />',
-								$widget->the_post_thumbnail(array(200,200))
+        // MODIF for older WP <4.5: class size-WxH is supported up +4.5
+		$this->assertEquals('<img width="200" height="150" src="http://example.org/wp-content/uploads/2016/05/canola-300x225.jpg" class="attachment-200x200 wp-post-image" alt="canola.jpg" srcset="http://example.org/wp-content/uploads/2016/05/canola-300x225.jpg 300w, http://example.org/wp-content/uploads/2016/05/canola.jpg 640w" sizes="(max-width: 200px) 100vw, 200px" />',
+								str_replace(" size-200x200", "", $widget->the_post_thumbnail(array(200,200)))
 							);
 
 		// Use with "use_css_cropping"
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150,'use_css_cropping' => true);
-        $this->assertEquals('<img width="150" height="150" src="http://example.org/wp-content/uploads/2016/05/canola-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="canola.jpg" />',
-								$widget->the_post_thumbnail(array(150,150))
+        // MODIF for older WP <4.5: class size-WxH is supported up +4.5
+		$this->assertEquals('<img width="150" height="150" src="http://example.org/wp-content/uploads/2016/05/canola-150x150.jpg" class="attachment-150x150 wp-post-image" alt="canola.jpg" />',
+								str_replace(" size-150x150", "", $widget->the_post_thumbnail(array(150,150)))
 							);
 		
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200,'use_css_cropping' => true);
-        $this->assertEquals('<span style="width:200px;height:200px;"><img style="margin-left:-33.333333333333px;height:200px;clip:rect(auto,233.33333333333px,auto,33.333333333333px);width:auto;max-width:initial;" width=\'266.66666666667\' height=\'200\' src="http://example.org/wp-content/uploads/2016/05/canola-300x225.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="canola.jpg" srcset="http://example.org/wp-content/uploads/2016/05/canola-300x225.jpg 300w, http://example.org/wp-content/uploads/2016/05/canola.jpg 640w" sizes="(max-width: 266.66666666667px) 100vw, 266.66666666667px" /></span>',
-								$widget->the_post_thumbnail(array(200,200))
+        // MODIF for older WP <4.5: class size-WxH is supported up +4.5
+		$this->assertEquals('<span style="width:200px;height:200px;"><img style="margin-left:-33.333333333333px;height:200px;clip:rect(auto,233.33333333333px,auto,33.333333333333px);width:auto;max-width:initial;" width=\'266.66666666667\' height=\'200\' src="http://example.org/wp-content/uploads/2016/05/canola-300x225.jpg" class="attachment-200x200 wp-post-image" alt="canola.jpg" srcset="http://example.org/wp-content/uploads/2016/05/canola-300x225.jpg 300w, http://example.org/wp-content/uploads/2016/05/canola.jpg 640w" sizes="(max-width: 266.66666666667px) 100vw, 266.66666666667px" /></span>',
+								str_replace(" size-200x200", "", $widget->the_post_thumbnail(array(200,200)))
 							);
 
 		// 2.) use smaller image as media -> settings thumbnail_size, image size: 50x50
@@ -409,24 +413,28 @@ class testWidgetFront extends WP_UnitTestCase {
 		$widget->instance=array('use_css_cropping' => false);
 		
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150);
-        $this->assertEquals('<img width="50" height="50" src="http://example.org/wp-content/uploads/2016/05/test-image.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="test-image.jpg" />',
-								$widget->the_post_thumbnail(array(150,150))
+        // MODIF for older WP <4.5: class size-WxH is supported up +4.5
+		$this->assertEquals('<img width="50" height="50" src="http://example.org/wp-content/uploads/2016/05/test-image.jpg" class="attachment-150x150 wp-post-image" alt="test-image.jpg" />',
+								str_replace(" size-150x150", "", $widget->the_post_thumbnail(array(150,150)))
 							);
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200);
-        $this->assertEquals('<img width="50" height="50" src="http://example.org/wp-content/uploads/2016/05/test-image.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="test-image.jpg" />',
-								$widget->the_post_thumbnail(array(200,200))
+        // MODIF for older WP <4.5: class size-WxH is supported up +4.5
+		$this->assertEquals('<img width="50" height="50" src="http://example.org/wp-content/uploads/2016/05/test-image.jpg" class="attachment-200x200 wp-post-image" alt="test-image.jpg" />',
+								str_replace(" size-200x200", "", $widget->the_post_thumbnail(array(200,200)))
 							);
 
 		// Use with "use_css_cropping"
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150,'use_css_cropping' => true);
-        $this->assertEquals('<img width="50" height="50" src="http://example.org/wp-content/uploads/2016/05/test-image.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="test-image.jpg" />',
-								$widget->the_post_thumbnail(array(150,150))
+        // MODIF for older WP <4.5: class size-WxH is supported up +4.5
+		$this->assertEquals('<img width="50" height="50" src="http://example.org/wp-content/uploads/2016/05/test-image.jpg" class="attachment-150x150 wp-post-image" alt="test-image.jpg" />',
+								str_replace(" size-150x150", "", $widget->the_post_thumbnail(array(150,150)))
 							);
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200,'use_css_cropping' => true);
-        $this->assertEquals('<img width="50" height="50" src="http://example.org/wp-content/uploads/2016/05/test-image.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="test-image.jpg" />',
-								$widget->the_post_thumbnail(array(200,200))
+        // MODIF for older WP <4.5: class size-WxH is supported up +4.5
+		$this->assertEquals('<img width="50" height="50" src="http://example.org/wp-content/uploads/2016/05/test-image.jpg" class="attachment-200x200 wp-post-image" alt="test-image.jpg" />',
+								str_replace(" size-200x200", "", $widget->the_post_thumbnail(array(200,200)))
 							);
 
 		// 3.) use bigger image as media -> settings large_size, image size: 1920x1080
@@ -441,24 +449,28 @@ class testWidgetFront extends WP_UnitTestCase {
 		$widget->instance=array('use_css_cropping' => false);
 		
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150);
-        $this->assertEquals('<img width="150" height="150" src="http://example.org/wp-content/uploads/2016/05/33772-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="33772.jpg" />',
-								$widget->the_post_thumbnail(array(150,150))
+        // MODIF for older WP <4.5: class size-WxH is supported up +4.5
+		$this->assertEquals('<img width="150" height="150" src="http://example.org/wp-content/uploads/2016/05/33772-150x150.jpg" class="attachment-150x150 wp-post-image" alt="33772.jpg" />',
+								str_replace(" size-150x150", "", $widget->the_post_thumbnail(array(150,150)))
 							);
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200);
-        $this->assertEquals('<img width="200" height="113" src="http://example.org/wp-content/uploads/2016/05/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="http://example.org/wp-content/uploads/2016/05/33772-768x432.jpg 768w, http://example.org/wp-content/uploads/2016/05/33772-300x169.jpg 300w, http://example.org/wp-content/uploads/2016/05/33772-1024x576.jpg 1024w" sizes="(max-width: 200px) 100vw, 200px" />',
-								$widget->the_post_thumbnail(array(200,200))
+        // MODIF for older WP <4.5: class size-WxH is supported up +4.5
+		$this->assertEquals('<img width="200" height="113" src="http://example.org/wp-content/uploads/2016/05/33772-768x432.jpg" class="attachment-200x200 wp-post-image" alt="33772.jpg" srcset="http://example.org/wp-content/uploads/2016/05/33772-768x432.jpg 768w, http://example.org/wp-content/uploads/2016/05/33772-300x169.jpg 300w, http://example.org/wp-content/uploads/2016/05/33772-1024x576.jpg 1024w" sizes="(max-width: 200px) 100vw, 200px" />',
+								str_replace(" size-200x200", "", $widget->the_post_thumbnail(array(200,200)))
 							);
 		
 		// Use with "use_css_cropping"
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150,'use_css_cropping' => true);
-        $this->assertEquals('<img width="150" height="150" src="http://example.org/wp-content/uploads/2016/05/33772-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="33772.jpg" />',
-								$widget->the_post_thumbnail(array(150,150))
+        // MODIF for older WP <4.5: class size-WxH is supported up +4.5
+		$this->assertEquals('<img width="150" height="150" src="http://example.org/wp-content/uploads/2016/05/33772-150x150.jpg" class="attachment-150x150 wp-post-image" alt="33772.jpg" />',
+								str_replace(" size-150x150", "", $widget->the_post_thumbnail(array(150,150)))
 							);
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200,'use_css_cropping' => true);
-        $this->assertEquals('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="http://example.org/wp-content/uploads/2016/05/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="http://example.org/wp-content/uploads/2016/05/33772-768x432.jpg 768w, http://example.org/wp-content/uploads/2016/05/33772-300x169.jpg 300w, http://example.org/wp-content/uploads/2016/05/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
-								$widget->the_post_thumbnail(array(200,200))
+        // MODIF for older WP <4.5: class size-WxH is supported up +4.5
+		$this->assertEquals('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="http://example.org/wp-content/uploads/2016/05/33772-768x432.jpg" class="attachment-200x200 wp-post-image" alt="33772.jpg" srcset="http://example.org/wp-content/uploads/2016/05/33772-768x432.jpg 768w, http://example.org/wp-content/uploads/2016/05/33772-300x169.jpg 300w, http://example.org/wp-content/uploads/2016/05/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
+								str_replace(" size-200x200", "", $widget->the_post_thumbnail(array(200,200)))
 							);
     }	
 }
