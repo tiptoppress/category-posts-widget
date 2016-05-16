@@ -433,12 +433,6 @@ class Widget extends \WP_Widget {
      * @since 4.1
 	 */
 	function the_post_thumbnail($size= 'post-thumbnail') {
-        if (is_array($size)) {
-            if (count($size) != 2)
-                return '';
-            if (empty($size[0]) || empty($size[1]))
-                return '';
-        }
 		add_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
 		$ret = get_the_post_thumbnail( null,$size,'');
 		remove_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
