@@ -541,7 +541,7 @@ class Widget extends \WP_Widget {
             $ret .= $this->the_post_thumbnail( array($this->instance['thumb_w'],$this->instance['thumb_h'])); 
 			$ret .= '</a>';
 		}
-        
+
         return $ret;
 	}
 	
@@ -708,7 +708,7 @@ class Widget extends \WP_Widget {
         
         // Thumbnail position normal
         if( !isset( $instance["thumbTop"] ) ) {
-            $this->show_thumb($instance);
+            $ret .= $this->show_thumb($instance);
         }
 
         if ( isset( $instance['excerpt'] ) ) {
