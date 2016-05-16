@@ -25,7 +25,7 @@ Version: 4.6.1
 .cat-post-title {
 	display: inline-block;
 	font-size: 15px;
-	font-size: 0.9375rem;
+	font-size: 0.9375em;
 }
 .cat-post-current .cat-post-title {
 	font-weight: bold;
@@ -34,9 +34,9 @@ Version: 4.6.1
 .cat-post-date,
 .cat-post-comment-num {
 	font-size: 12px;
-	font-size: 0.75rem;
+	font-size: 0.75em;
 	line-height: 18px;
-	line-height: 1.125rem;
+	line-height: 1.125em;
 	margin-bottom: 0;
 }
 .cat-post-date {
