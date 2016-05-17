@@ -105,17 +105,20 @@ li a.cat-post-blur img {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-li a.cat-post-white img:hover,
-li a.cat-post-dark img:hover {
-  opacity: 0.8;
-}
 /* Only for White */
 li a.cat-post-white {
   background-color: white;
 }
+li a.cat-post-white img:hover {
+  opacity: 0.8;
+}
 /* Only for Dark */
-li a.cat-post-dark {
-  background-color: black;
+li a.cat-post-dark img:hover {
+  -webkit-filter: brightness(75%);
+  -moz-filter: brightness(75%);
+  -ms-filter: brightness(75%);
+  -o-filter: brightness(75%);
+  filter: brightness(75%);
 }
 /* Only for Scale */
 li a.cat-post-scale {
