@@ -8,7 +8,7 @@
  */
 
  
-if (window.jQuery) {
+jQuery(document).ready( function () {
 
     // namespace 
     
@@ -54,4 +54,4 @@ if (window.jQuery) {
             }
         }
 	});	
-}
+});
