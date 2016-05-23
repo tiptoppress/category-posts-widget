@@ -573,7 +573,7 @@ class Widget extends \WP_Widget {
             $args['cat'] = (int) $instance["cat"];
 
         if (is_singular() && isset( $instance['exclude_current_post'] )) 
-            $args['post__not_in'] = get_the_ID();
+            $args['post__not_in'] = array(get_the_ID());
 
         if( isset( $instance['hideNoThumb'] ) ) {
 			$args = array_merge( $args, array( 'meta_query' => array(
@@ -608,7 +608,7 @@ class Widget extends \WP_Widget {
             $instance["title"] = '';
             if (isset($instance["cat"])) {
                 $category_info = get_category($instance["cat"]);
-                if ($category_info)
+                if ($category_info && !is_wp_error($category_info))
                     $instance["title"] = $category_info->name;
             }
 		}
@@ -695,7 +695,7 @@ class Widget extends \WP_Widget {
             } 
             $ret .= '">';
             if ( isset ( $instance["date_link"] ) ) { 
-                $ret .= '<a href="'.get_the_permalink().'">';
+                $ret .= '<a href="'.\get_the_permalink().'">';
             }
             $ret .= get_the_time($date_format);
             if ( isset ( $instance["date_link"] ) ) { 
@@ -710,7 +710,7 @@ class Widget extends \WP_Widget {
         }
 
         if ( isset( $instance['excerpt'] ) ) {
-            $ret .= apply_filters('the_excerpt',get_the_excerpt());
+            $ret .= apply_filters('the_excerpt',\get_the_excerpt());
         }
         
         if ( isset( $instance['comment_num'] ) ) {
@@ -719,7 +719,7 @@ class Widget extends \WP_Widget {
                 $ret .= " cat-post-comment-num"; 
             } 
             $ret .= '">';
-            $ret .= '('.get_comments_number().')';
+            $ret .= '('.\get_comments_number().')';
             $ret .= '</p>';
         }
 
@@ -729,7 +729,14 @@ class Widget extends \WP_Widget {
                 $ret .= "cat-post-author"; 
             } 
             $ret .= '">';
-            $ret .= get_the_author_posts_link(); 
+            global $authordata;
+            $link = sprintf(
+                '<a href="%1$s" title="%2$s" rel="author">%3$s</a>',
+                esc_url( get_author_posts_url( $authordata->ID, $authordata->user_nicename ) ),
+                esc_attr( sprintf( __( 'Posts by %s' ), get_the_author() ) ),
+                get_the_author()
+            );
+            $ret .= $link; 
             $ret .= '</p>';
         }
         
@@ -1234,10 +1241,9 @@ function shortcode($attr,$content=null) {
             if (is_customize_preview()) {
                 $o=get_option('virtual-'.WIDGET_BASE_ID);
                 if (is_array($o))
-                    $instance=array_merge($instance,$o[get_the_ID()]);
+                    $instance=$o[get_the_ID()];
             }
             $widget=new Widget();
-            var_dump($instance);
             ob_start();
             $widget->widget(array(
                                 'before_widget' => '',
@@ -1299,7 +1305,38 @@ function save_post($pid,$post) {
     if (!$exist)
         delete_post_meta($pid,SHORTCODE_META);
     else if (!is_array($has_meta))  // get_post_meta have strang return vaules when do not exist so just check it is expected structure
-        add_post_meta($pid,SHORTCODE_META,array(),true);
+        add_post_meta($pid,SHORTCODE_META,array(
+                        'title' => '',
+                        'title_link' => false,
+                        'hide_title' => false,
+                        'cat'                  => '',
+                        'num'                  => get_option('posts_per_page'),
+                        'sort_by'              => 'date',
+                        'asc_sort_order'       => false,
+                        'exclude_current_post' => false,
+                        'hideNoThumb'          => false,
+                        'footer_link'          => '',
+                        'thumb'                => false,
+                        'thumbTop'             => false,
+                        'thumb_w'              => '',
+                        'thumb_h'              => '',
+                        'use_css_cropping'     => false,
+                        'thumb_hover'          => 'none',
+                        'hide_post_titles'     => false,
+                        'excerpt'              => false,
+                        'excerpt_length'       => 55,
+                        'excerpt_allow_html'   => false,
+                        'excerpt_allowed_elements' => array('0'),
+                        'excerpt_more_text'    => '',
+                        'comment_num'          => false,
+                        'author'               => false,
+                        'date'                 => false,
+                        'date_link'            => false,
+                        'date_format'          => '',
+                        'disable_css'          => false,
+                        'hide_if_empty'        => false
+                        ),
+                        true);
 }
 
 add_action('save_post',__NAMESPACE__.'\save_post',10,2);
@@ -1354,9 +1391,10 @@ function customize_register($wp_customize) {
             $widget->form(array());
             $form = ob_get_clean();
             $form = preg_replace_callback('/<(input|select)\s+.*name=("|\').*\[\d*\]\[([^\]]*)\][^>]*>/',
-                function ($matches) use ($p, $wp_customize) {
+                function ($matches) use ($p, $wp_customize, $meta) {
                     $setting = 'virtual-'.WIDGET_BASE_ID.'['.$p->ID.']['.$matches[3].']';
                     $wp_customize->add_setting( $setting, array(
+                        'default' => $meta[$matches[3]], // set default to current value
                         'type' => 'option'
                     ) );
 
