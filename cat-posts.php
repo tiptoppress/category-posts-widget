@@ -17,6 +17,10 @@ define( 'CAT_POST_PLUGINURL', plugins_url(basename( dirname(__FILE__))) . "/");
 define( 'CAT_POST_PLUGINPATH', dirname(__FILE__) . "/");
 define( 'CAT_POST_VERSION', "4.6.1");
 
+const SHORTCODE_NAME = 'catposts';
+const SHORTCODE_META = 'categoryPosts-shorcode';
+const WIDGET_BASE_ID = 'category-posts';
+
 /*
  * Iterate over all the widgets active at the page and call the callback for them
  * 
@@ -96,7 +100,7 @@ function should_enqueue($id_base,$class) {
 add_action( 'wp_enqueue_scripts', __NAMESPACE__.'\widget_styles' );
 
 function wp_head() {
-	if (cropping_active('category-posts',__NAMESPACE__.'\Widget')) {
+	if (cropping_active(WIDGET_BASE_ID,__NAMESPACE__.'\Widget')) {
 ?>
 <style type="text/css">
 .cat-post-item .cat-post-css-cropping span {
@@ -111,7 +115,7 @@ function wp_head() {
 add_action('wp_head',__NAMESPACE__.'\wp_head');
 
 function widget_styles() {
-	$enqueue = should_enqueue('category-posts',__NAMESPACE__.'\Widget');
+	$enqueue = should_enqueue(WIDGET_BASE_ID,__NAMESPACE__.'\Widget');
 	if ($enqueue) {
 		wp_register_style( 'category-posts', CAT_POST_PLUGINURL . 'cat-posts.css',array(),CAT_POST_VERSION );
 		wp_enqueue_style( 'category-posts' );
@@ -351,7 +355,7 @@ class Widget extends \WP_Widget {
 
 	function __construct() {
 		$widget_ops = array('classname' => 'cat-post-widget', 'description' => __('List single category posts','categoryposts'));
-		parent::__construct('category-posts', __('Category Posts','categoryposts'), $widget_ops);
+		parent::__construct(WIDGET_BASE_ID, __('Category Posts','categoryposts'), $widget_ops);
 	}
 
 	/**
@@ -944,10 +948,7 @@ class Widget extends \WP_Widget {
             </p>
             <p>
                 <label for="<?php echo $this->get_field_id("asc_sort_order"); ?>">
-                    <input type="checkbox" class="checkbox" 
-                        id="<?php echo $this->get_field_id("asc_sort_order"); ?>" 
-                        name="<?php echo $this->get_field_name("asc_sort_order"); ?>"
-                        <?php checked( (bool) $instance["asc_sort_order"], true ); ?> />
+                    <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("asc_sort_order"); ?>" name="<?php echo $this->get_field_name("asc_sort_order"); ?>" <?php checked( (bool) $instance["asc_sort_order"], true ); ?> />
                             <?php _e( 'Reverse sort order (ascending)','categoryposts' ); ?>
                 </label>
             </p>
@@ -1222,3 +1223,161 @@ function register_widget() {
 }
 
 add_action( 'widgets_init', __NAMESPACE__.'\register_widget' );
+
+// shortcode section
+
+function shortcode($attr,$content=null) {
+    if (is_singular()) {
+        $instance = get_post_meta(get_the_ID(),SHORTCODE_META,true);
+        
+        if ($instance!==false) {
+            if (is_customize_preview()) {
+                $o=get_option('virtual-'.WIDGET_BASE_ID);
+                if (is_array($o))
+                    $instance=array_merge($instance,$o[get_the_ID()]);
+            }
+            $widget=new Widget();
+            var_dump($instance);
+            ob_start();
+            $widget->widget(array(
+                                'before_widget' => '',
+                                'after_widget' => '',
+                                'before_title' => '',
+                                'after_title' => ''
+                            ), $instance);
+            return ob_get_clean();
+        }       
+    }
+    
+    return '';
+}
+
+add_shortcode(SHORTCODE_NAME,__NAMESPACE__.'\shortcode');
+
+/**
+ *  Find if a specific shortcode is used in a content
+ *  
+ *  @param string $shortcode_name The name of the shortcode
+ *  #param string The content to look at
+ *  @return boolean True if used, otherwise false
+ *  
+ */
+function shortcode_exist($shortcode_name,$content) {
+
+	$regex_pattern = get_shortcode_regex();
+	if (preg_match_all ('/'.$regex_pattern.'/s', $content, $matches)) {
+		foreach ($matches[2] as $k=>$shortcode) {
+			if ($shortcode == SHORTCODE_NAME) {
+                return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+/**
+ *  Manipulate the relevant meta related to the short code when a post is save
+ *  
+ *  If A post has a short code, a meta holder is created, If it does not the meta holder is deleted
+ *  
+ *  @param integer $pid  The post ID of the post being saved
+ *  @param WP_Post $post The post being saved
+ *  @return void
+ *  
+ *  @since 4.6
+ */
+function save_post($pid,$post) {
+
+	// ignore revisions and auto saves
+	if ( wp_is_post_revision( $pid ) || wp_is_post_autosave($pid))
+		return;
+		
+    $has_meta = get_post_meta($pid,SHORTCODE_META,true);
+	$exist = shortcode_exist(SHORTCODE_NAME,$post->post_content);
+
+    if (!$exist)
+        delete_post_meta($pid,SHORTCODE_META);
+    else if (!is_array($has_meta))  // get_post_meta have strang return vaules when do not exist so just check it is expected structure
+        add_post_meta($pid,SHORTCODE_META,array(),true);
+}
+
+add_action('save_post',__NAMESPACE__.'\save_post',10,2);
+
+function customize_register($wp_customize) {
+    class shortCodeControlNoop extends \WP_Customize_Control {
+       
+        public function render_content() {
+        }
+    }    
+
+    class shortCodeControl extends \WP_Customize_Control {
+        public $form;
+        
+        public function render_content() {
+            echo $this->form;
+        }
+    }    
+
+    $args = array(
+        'post_type' => 'any',
+        'post_status' => 'any',
+        'update_post_term_cache' => false,
+        'meta_query' => array(
+					array(
+					 'key' => SHORTCODE_META,
+					 'compare' => 'EXISTS' 
+                     )
+				),
+                 
+    );
+    $posts = get_posts($args);
+    
+    if (count($posts) > 0) {
+        $wp_customize->add_section( __NAMESPACE__, array(
+            'title'           => __( 'Category posts shortcode', 'twentyfourteen' ),
+            'description'     => sprintf( __( 'Use a <a href="%1$s">tag</a> to feature your posts. If no posts match the tag, <a href="%2$s">sticky posts</a> will be displayed instead.', 'twentyfourteen' ),
+                esc_url( add_query_arg( 'tag', _x( 'featured', 'featured content default tag slug', 'twentyfourteen' ), admin_url( 'edit.php' ) ) ),
+                admin_url( 'edit.php?show_sticky=1' )
+            ),
+            'priority'        => 200
+        ) );
+        
+        foreach($posts as $p) {
+            $widget = new Widget();
+            $widget->number = $p->ID;
+            $meta = get_post_meta($p->ID,SHORTCODE_META,true);
+            if (!is_array($meta))
+                continue;
+            
+            ob_start();
+            $widget->form(array());
+            $form = ob_get_clean();
+            $form = preg_replace_callback('/<(input|select)\s+.*name=("|\').*\[\d*\]\[([^\]]*)\][^>]*>/',
+                function ($matches) use ($p, $wp_customize) {
+                    $setting = 'virtual-'.WIDGET_BASE_ID.'['.$p->ID.']['.$matches[3].']';
+                    $wp_customize->add_setting( $setting, array(
+                        'type' => 'option'
+                    ) );
+
+                    return str_replace('<'.$matches[1],'<'.$matches[1].' data-customize-setting-link="'.$setting.'"',$matches[0]);
+                },
+                $form
+            );
+
+            $wp_customize->add_control( new shortCodeControl(
+                $wp_customize,
+                'virtual-'.WIDGET_BASE_ID.'['.$p->ID.'][title]',
+                array(
+                'label'   => __( 'Layout', 'twentyfourteen' ),
+                'section' => __NAMESPACE__,
+                'form' => $form,
+                'settings' => 'virtual-'.WIDGET_BASE_ID.'['.$p->ID.'][title]',
+                'active_callback' => function () use ($p) { return is_single($p->ID); }
+                )
+            ) );
+        }
+    }
+}
+
+add_action( 'customize_register', __NAMESPACE__.'\customize_register' );
