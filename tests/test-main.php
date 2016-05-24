@@ -585,3 +585,94 @@ class testWidgetAdmin extends WP_UnitTestCase {
                     ' Hide title </label></p></div>',$out);    
     }
 }
+
+class testShortCode extends WP_UnitTestCase {
+
+    const SHORTCODE_NAME = 'catposts';
+    const SHORTCODE_META = 'categoryPosts-shorcode';
+
+    /**
+     *  Test the generation and removal of met values when a shortcode is 
+     *  inserted and removed from content
+     *  
+     */
+     function testsave_post() {
+        $pid = $this->factory->post->create(array('title'=>'test','post_status'=>'publish','post_content'=>'')); 
+        // test no meta when post created with no shortcode
+        $this->assertEmpty(get_post_meta($pid,self::SHORTCODE_META,true));
+
+        // initialization to defaults when inserted
+        wp_update_post(array('ID'=>$pid,'post_content' => '['.self::SHORTCODE_NAME.']'));
+        $this->assertEqualse(array (
+                                'title' => '',
+                                'title_link' => false,
+                                'hide_title' => false,
+                                'cat'                  => '',
+                                'num'                  => get_option('posts_per_page'),
+                                'sort_by'              => 'date',
+                                'asc_sort_order'       => false,
+                                'exclude_current_post' => false,
+                                'hideNoThumb'          => false,
+                                'footer_link'          => '',
+                                'thumb'                => false,
+                                'thumbTop'             => false,
+                                'thumb_w'              => '',
+                                'thumb_h'              => '',
+                                'use_css_cropping'     => false,
+                                'thumb_hover'          => 'none',
+                                'hide_post_titles'     => false,
+                                'excerpt'              => false,
+                                'excerpt_length'       => 55,
+                                'excerpt_allow_html'   => false,
+                                'excerpt_allowed_elements' => array('0'),
+                                'excerpt_more_text'    => '',
+                                'comment_num'          => false,
+                                'author'               => false,
+                                'date'                 => false,
+                                'date_link'            => false,
+                                'date_format'          => '',
+                                'disable_css'          => false,
+                                'hide_if_empty'        => false
+                               ),
+                               get_post_meta($pid,$this->SHORTCODE_META,true));
+                               
+        // test change in other parts of the content
+        wp_update_post(array('ID'=>$pid,'post_content' => '['.self::SHORTCODE_NAME.'] lovely day'));
+        $this->assertEqualse(array (
+                                'title' => '',
+                                'title_link' => false,
+                                'hide_title' => false,
+                                'cat'                  => '',
+                                'num'                  => get_option('posts_per_page'),
+                                'sort_by'              => 'date',
+                                'asc_sort_order'       => false,
+                                'exclude_current_post' => false,
+                                'hideNoThumb'          => false,
+                                'footer_link'          => '',
+                                'thumb'                => false,
+                                'thumbTop'             => false,
+                                'thumb_w'              => '',
+                                'thumb_h'              => '',
+                                'use_css_cropping'     => false,
+                                'thumb_hover'          => 'none',
+                                'hide_post_titles'     => false,
+                                'excerpt'              => false,
+                                'excerpt_length'       => 55,
+                                'excerpt_allow_html'   => false,
+                                'excerpt_allowed_elements' => array('0'),
+                                'excerpt_more_text'    => '',
+                                'comment_num'          => false,
+                                'author'               => false,
+                                'date'                 => false,
+                                'date_link'            => false,
+                                'date_format'          => '',
+                                'disable_css'          => false,
+                                'hide_if_empty'        => false
+                               ),
+                               get_post_meta($pid,self::SHORTCODE_META,true));
+                               
+        // test removal
+        wp_update_post(array('ID'=>$pid,'post_content' => '['.$this->SHORTCODE_NAME.'bla] '.$this->SHORTCODE_NAME));
+        $this->assertEmpty(get_post_meta($pid,self::SHORTCODE_META,true));
+    }
+}
