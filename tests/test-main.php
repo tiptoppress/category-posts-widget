@@ -105,6 +105,12 @@ class testWidgetFront extends WP_UnitTestCase {
                                         ));
         $this->assertEquals('<h3>te&#038;st</h3>',$out);
 
+        $out = $widget->titleHTML('<h3>','</h3>',array(
+                                            'title'=>'te&st',
+                                            'hide_title'=>false
+                                        ));
+        $this->assertEquals('<h3>te&#038;st</h3>',$out);
+
         // test hide title
         $out = $widget->titleHTML('<h3>','</h3>',array(
                                             'title'=>'test',
@@ -124,6 +130,13 @@ class testWidgetFront extends WP_UnitTestCase {
         
         $out = $widget->titleHTML('<h3>','</h3>',array(
                                             'test' => '',
+                                            'cat'=>$cid
+                                        ));
+        $this->assertEquals('<h3>test cat</h3>',$out);
+        
+        $out = $widget->titleHTML('<h3>','</h3>',array(
+                                            'test' => '',
+                                            'hide_title'=>false,                                            
                                             'cat'=>$cid
                                         ));
         $this->assertEquals('<h3>test cat</h3>',$out);
@@ -157,6 +170,13 @@ class testWidgetFront extends WP_UnitTestCase {
                                             'title_link' => true
                                         ));
         $this->assertEquals('<h3><a href="http://example.org/?cat='.$cid.'">test cat</a></h3>',$out);
+
+        // no link when it is not set to be
+        $out = $widget->titleHTML('<h3>','</h3>',array(
+                                            'cat'=>$cid,
+                                            'title_link' => false
+                                        ));
+        $this->assertEquals('<h3>test cat</h3>',$out);
 
         // link to not existing category
         $out = $widget->titleHTML('<h3>','</h3>',array(
@@ -195,6 +215,12 @@ class testWidgetFront extends WP_UnitTestCase {
         $out = $widget->footerHTML(array());
         $this->assertEquals('',$out);
 
+        // option set to not do it
+        $out = $widget->footerHTML(array(
+                                    'footer_link'=>false,
+                                    ));
+        $this->assertEquals('',$out);
+
         // empty category
         $out = $widget->footerHTML(array(
                                     'footer_link'=>true,
@@ -221,6 +247,14 @@ class testWidgetFront extends WP_UnitTestCase {
         
         $out = $widget->footerHTML(array(
                                     'footer_link'=>true,
+                                    'cat'=>$cid
+                                    ));
+        $this->assertEquals('<a class="cat-post-footer-link" href="http://example.org/?cat='.$cid.'">1</a>',$out);
+        
+        // valid category explicit css
+        $out = $widget->footerHTML(array(
+                                    'footer_link'=>true,
+                                    'disable_css' => false,
                                     'cat'=>$cid
                                     ));
         $this->assertEquals('<a class="cat-post-footer-link" href="http://example.org/?cat='.$cid.'">1</a>',$out);
@@ -287,8 +321,8 @@ class testWidgetFront extends WP_UnitTestCase {
         $sort_criteria = array(null,'date', 'title', 'comment_count', 'rand','garbage');
         $sort_criteria_results = array('date','date', 'title', 'comment_count', 'rand','date');
 
-        $sort_order = array('whatever', null);
-        $sort_order_results = array('ASC', 'DESC');
+        $sort_order = array('whatever', true,null,false);
+        $sort_order_results = array('ASC', 'ASC', 'DESC', 'DESC');
         
         $cats = array('10', 7, null,'fail');
         $cats_results = array(10, 7, null,0);
@@ -296,16 +330,16 @@ class testWidgetFront extends WP_UnitTestCase {
         $nums = array('10', 7, null,'oops');
         $nums_results = array(10, 7, null,0);
 
-        $hidethumbs = array(true,null);
+        $hidethumbs = array(true,null,false);
         $hidethumbs_results = array(array(
 					array(
 					 'key' => '_thumbnail_id',
 					 'compare' => 'EXISTS' )
-				), null);
+				), null,null);
         
         $pid = $this->factory->post->create(array('title'=>'test','post_status'=>'publish')); 
         
-        $exclude_current = array('whatever', null);
+        $exclude_current = array('whatever',true, null,false);
 
         foreach ($sort_criteria as $ksc=>$sc) 
             foreach ($sort_order as $kso => $so) 

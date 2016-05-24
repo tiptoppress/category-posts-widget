@@ -558,7 +558,7 @@ class Widget extends \WP_Widget {
 		} else {
 			$sort_by = 'date';
 		}
-        $sort_order = (bool) isset( $instance['asc_sort_order'] ) ? 'ASC' : 'DESC';
+        $sort_order = (isset( $instance['asc_sort_order'] ) && $instance['asc_sort_order']) ? 'ASC' : 'DESC';
 		
 		// Get array of post info.
 		$args = array(
@@ -572,10 +572,10 @@ class Widget extends \WP_Widget {
         if (isset($instance["cat"])) 
             $args['cat'] = (int) $instance["cat"];
 
-        if (is_singular() && isset( $instance['exclude_current_post'] )) 
-            $args['post__not_in'] = array(get_the_ID());
+        if (is_singular() && isset( $instance['exclude_current_post'] ) && $instance['exclude_current_post']) 
+            $args['post__not_in'] = get_the_ID();
 
-        if( isset( $instance['hideNoThumb'] ) ) {
+        if( isset( $instance['hideNoThumb'] ) && $instance['hideNoThumb']) {
 			$args = array_merge( $args, array( 'meta_query' => array(
 					array(
 					 'key' => '_thumbnail_id',
@@ -613,9 +613,9 @@ class Widget extends \WP_Widget {
             }
 		}
 
-        if( !isset ( $instance["hide_title"] ) ) {
+        if( !(isset ( $instance["hide_title"] ) && $instance["hide_title"])) {
             $ret = $before_title;
-            if( isset ( $instance["title_link"]) && isset($instance["cat"]) && (get_category($instance["cat"]) != null))  {
+            if( isset ( $instance["title_link"]) && $instance["title_link"] && isset($instance["cat"]) && (get_category($instance["cat"]) != null))  {
                 $ret .= '<a href="' . get_category_link($instance["cat"]) . '">' . esc_html(apply_filters( 'widget_title', $instance["title"] )) . '</a>';
             } else {
                 $ret .= esc_html(apply_filters( 'widget_title', $instance["title"] ));
@@ -639,7 +639,7 @@ class Widget extends \WP_Widget {
         
         if( isset ( $instance["footer_link"] ) && $instance["footer_link"] && isset($instance["cat"]) && (get_category($instance["cat"]) != null) ) {
             $ret = "<a";
-                if( !isset( $instance['disable_css'] ) ) { $ret.= " class=\"cat-post-footer-link\""; }
+                if( !(isset( $instance['disable_css'] ) && $instance['disable_css'])) { $ret.= " class=\"cat-post-footer-link\""; }
             $ret .= " href=\"" . get_category_link($instance["cat"]) . "\">" . esc_html($instance["footer_link"]) . "</a>";
         }
         
@@ -670,11 +670,11 @@ class Widget extends \WP_Widget {
         $ret.='>'; // close the li opening tag
         
         // Thumbnail position to top
-        if( isset( $instance["thumbTop"] ) ) {
+        if( isset( $instance["thumbTop"] ) && $instance["thumbTop"]) {
             $ret .= $this->show_thumb($instance); 
         }
         
-        if( !isset( $instance['hide_post_titles'] ) ) { 
+        if( !(isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'])) { 
             $ret .= '<a class="post-title';
             if( !isset( $instance['disable_css'] ) ) { 
                 $ret .= " cat-post-title"; 
@@ -684,7 +684,7 @@ class Widget extends \WP_Widget {
         }
 
         if ( isset( $instance['date'] ) ) {
-            if ( isset( $instance['date_format'] ) && strlen( trim( $instance['date_format'] ) ) > 0 ) { 
+            if ( isset( $instance['date_format'] ) && $instance['date_format'] && strlen( trim( $instance['date_format'] ) ) > 0 ) { 
                 $date_format = $instance['date_format']; 
             } else {
                 $date_format = "j M Y"; 
@@ -694,7 +694,7 @@ class Widget extends \WP_Widget {
                 $ret .= "cat-post-date";
             } 
             $ret .= '">';
-            if ( isset ( $instance["date_link"] ) ) { 
+            if ( isset ( $instance["date_link"] ) && $instance["date_link"]) { 
                 $ret .= '<a href="'.\get_the_permalink().'">';
             }
             $ret .= get_the_time($date_format);
@@ -705,15 +705,15 @@ class Widget extends \WP_Widget {
         }
         
         // Thumbnail position normal
-        if( !isset( $instance["thumbTop"] ) ) {
+        if( !(isset( $instance["thumbTop"] ) && $instance["thumbTop"])) {
             $ret .= $this->show_thumb($instance);
         }
 
-        if ( isset( $instance['excerpt'] ) ) {
+        if ( isset( $instance['excerpt'] ) && $instance['excerpt']) {
             $ret .= apply_filters('the_excerpt',\get_the_excerpt());
         }
         
-        if ( isset( $instance['comment_num'] ) ) {
+        if ( isset( $instance['comment_num'] ) && $instance['comment_num']) {
             $ret .= '<p class="comment-num';
             if ( !isset( $instance['disable_css'] ) ) {
                 $ret .= " cat-post-comment-num"; 
@@ -723,7 +723,7 @@ class Widget extends \WP_Widget {
             $ret .= '</p>';
         }
 
-        if ( isset( $instance['author'] ) ) {
+        if ( isset( $instance['author'] ) && $instance['author']) {
             $ret .= '<p class="post-author ';
             if( !isset( $instance['disable_css'] ) ) { 
                 $ret .= "cat-post-author"; 
@@ -822,7 +822,7 @@ class Widget extends \WP_Widget {
         $args = $this->queryArgs($instance);
 		$cat_posts = new \WP_Query( $args );
 		
-		if ( !isset ( $instance["hide_if_empty"] ) || $cat_posts->have_posts() ) {				
+		if ( !isset ( $instance["hide_if_empty"] ) || !$instance["hide_if_empty"] || $cat_posts->have_posts() ) {				
 			echo $before_widget;
             echo $this->titleHTML($before_title,$after_title,$instance);
 
