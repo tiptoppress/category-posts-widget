@@ -699,8 +699,8 @@ class Widget extends \WP_Widget {
             $ret .= '</a> ';
         }
 
-        if ( isset( $instance['date'] ) ) {
-            if ( isset( $instance['date_format'] ) && $instance['date_format'] && strlen( trim( $instance['date_format'] ) ) > 0 ) { 
+        if ( isset( $instance['date']) && $instance['date']) {
+            if ( isset( $instance['date_format'] ) && strlen( trim( $instance['date_format'] ) ) > 0 ) { 
                 $date_format = $instance['date_format']; 
             } else {
                 $date_format = "j M Y"; 
