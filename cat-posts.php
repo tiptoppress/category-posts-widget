@@ -438,8 +438,20 @@ class Widget extends \WP_Widget {
      * @since 4.1
 	 */
 	function the_post_thumbnail($size= 'post-thumbnail') {
-        if (empty($size))
-            return '';
+        if (empty($size))  // if junk value, make it a normal thumb
+            $size= 'post-thumbnail';
+        else if (is_array($size) && (count($size)==2)) {  // good format at least
+            // normalize to ints first
+            $size[0] = (int) $size[0];
+            $size[1] = (int) $size[1];
+            if (($size[0] == 0) && ($size[1] == 0)) //both values zero then revert to thumbnail
+                $size= 'post-thumbnail';
+            // if one value is zero make a square using the other value
+            else if (($size[0] == 0) && ($size[1] != 0))
+                $size[0] = $size[1];
+            else if (($size[0] != 0) && ($size[1] == 0))
+                $size[1] = $size[0];
+        } else $size= 'post-thumbnail'; // yet another form of junk
             
 		add_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
 		$ret = get_the_post_thumbnail( null,$size,'');

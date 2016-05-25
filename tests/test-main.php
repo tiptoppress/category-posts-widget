@@ -402,12 +402,12 @@ class testWidgetFront extends WP_UnitTestCase {
         $post = get_post($pid);
         setup_postdata($post);
 
-        // test no thumb width and height, shoud get same html
-        $this->assertEquals('',$widget->the_post_thumbnail(array()));
+        // test no thumb width and height, should get same html
+        $this->assertEquals('<img width="640" height="480" src="http://example.org/wp-content/uploads/2016/05/canola.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="canola.jpg" srcset="http://example.org/wp-content/uploads/2016/05/canola.jpg 640w, http://example.org/wp-content/uploads/2016/05/canola-300x225.jpg 300w" sizes="(max-width: 640px) 100vw, 640px" />',$widget->the_post_thumbnail(array()));
         
-        $this->assertEquals('',$widget->the_post_thumbnail(array(10,'')));
+        $this->assertEquals('<img width="10" height="10" src="http://example.org/wp-content/uploads/2016/05/canola-150x150.jpg" class="attachment-10x10 size-10x10 wp-post-image" alt="canola.jpg" />',$widget->the_post_thumbnail(array(10,'')));
 
-        $this->assertEquals('',$widget->the_post_thumbnail(array('',10)));
+        $this->assertEquals('<img width="10" height="10" src="http://example.org/wp-content/uploads/2016/05/canola-150x150.jpg" class="attachment-10x10 size-10x10 wp-post-image" alt="canola.jpg" />',$widget->the_post_thumbnail(array('',10)));
         
         // equal to min thumb size. no manipulation needed
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150);
@@ -603,7 +603,7 @@ class testShortCode extends WP_UnitTestCase {
 
         // initialization to defaults when inserted
         wp_update_post(array('ID'=>$pid,'post_content' => '['.self::SHORTCODE_NAME.']'));
-        $this->assertEqualse(array (
+        $this->assertEquals(array (
                                 'title' => '',
                                 'title_link' => false,
                                 'hide_title' => false,
@@ -634,11 +634,11 @@ class testShortCode extends WP_UnitTestCase {
                                 'disable_css'          => false,
                                 'hide_if_empty'        => false
                                ),
-                               get_post_meta($pid,$this->SHORTCODE_META,true));
+                               get_post_meta($pid,self::SHORTCODE_META,true));
                                
         // test change in other parts of the content
         wp_update_post(array('ID'=>$pid,'post_content' => '['.self::SHORTCODE_NAME.'] lovely day'));
-        $this->assertEqualse(array (
+        $this->assertEquals(array (
                                 'title' => '',
                                 'title_link' => false,
                                 'hide_title' => false,
