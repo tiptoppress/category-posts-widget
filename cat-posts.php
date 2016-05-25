@@ -21,6 +21,7 @@ const SHORTCODE_NAME = 'catposts';
 const SHORTCODE_META = 'categoryPosts-shorcode';
 const WIDGET_BASE_ID = 'category-posts';
 
+const TEXTDOMAIN = 'categoryposts';
 /*
  * Iterate over all the widgets active at the page and call the callback for them
  * 
@@ -140,7 +141,7 @@ function load_select2_scripts_footer() {
 			jQuery(document).on('widget-added widget-updated', function(event,widget){
 				widget.find('.cphtml').select2({
 					width:'100%',
-					placeholder:'<?php _e('Select as many as needed','categoryposts')?>',
+					placeholder:'<?php _e('Select as many as needed',TEXTDOMAIN)?>',
 					DropdownAdapter:'DropdownSearch'
 				});	
 			});	
@@ -167,7 +168,7 @@ function load_select2_scripts_footer() {
 		jQuery(document).on('expanded widget-added', function(){
 			jQuery(this).find('.widget-rendered.expanded .cphtml').select2({
 				width:'100%',
-				placeholder:'<?php _e('Select as many as needed','categoryposts')?>',
+				placeholder:'<?php _e('Select as many as needed',TEXTDOMAIN)?>',
 				DropdownAdapter:'DropdownSearch'
 			});	
 		});
@@ -253,7 +254,7 @@ add_action('admin_enqueue_scripts', __NAMESPACE__.'\admin_scripts'); // "called 
 add_action( 'admin_init', __NAMESPACE__.'\load_textdomain' );
 
 function load_textdomain() {
-  load_plugin_textdomain( 'categoryposts', false, plugin_basename( dirname( __FILE__ ) ) . '/languages' ); 
+  load_plugin_textdomain( TEXTDOMAIN, false, plugin_basename( dirname( __FILE__ ) ) . '/languages' ); 
 }
 
 /**
@@ -354,8 +355,8 @@ function get_image_size( $thumb_w,$thumb_h,$image_w,$image_h) {
 class Widget extends \WP_Widget {
 
 	function __construct() {
-		$widget_ops = array('classname' => 'cat-post-widget', 'description' => __('List single category posts','categoryposts'));
-		parent::__construct(WIDGET_BASE_ID, __('Category Posts','categoryposts'), $widget_ops);
+		$widget_ops = array('classname' => 'cat-post-widget', 'description' => __('List single category posts',TEXTDOMAIN));
+		parent::__construct(WIDGET_BASE_ID, __('Category Posts',TEXTDOMAIN), $widget_ops);
 	}
 
 	/**
@@ -883,24 +884,24 @@ class Widget extends \WP_Widget {
 		$hide_title           = $instance['hide_title'];
 		$title_link           = $instance['title_link'];        
 ?>    
-        <h4 data-panel="title"><?php _e('Title','categoryposts')?></h4>
+        <h4 data-panel="title"><?php _e('Title',TEXTDOMAIN)?></h4>
         <div>
             <p>
                 <label for="<?php echo $this->get_field_id("title"); ?>">
-                    <?php _e( 'Title','categoryposts' ); ?>:
+                    <?php _e( 'Title',TEXTDOMAIN ); ?>:
                     <input class="widefat" style="width:80%;" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo esc_attr($instance["title"]); ?>" />
                 </label>
             </p>
             <p>
                 <label for="<?php echo $this->get_field_id("title_link"); ?>">
                     <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("title_link"); ?>" name="<?php echo $this->get_field_name("title_link"); ?>"<?php checked( (bool) $instance["title_link"], true ); ?> />
-                    <?php _e( 'Make widget title link','categoryposts' ); ?>
+                    <?php _e( 'Make widget title link',TEXTDOMAIN ); ?>
                 </label>
             </p>
             <p>
                 <label for="<?php echo $this->get_field_id("hide_title"); ?>">
                     <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_title"); ?>" name="<?php echo $this->get_field_name("hide_title"); ?>"<?php checked( (bool) $instance["hide_title"], true ); ?> />
-                    <?php _e( 'Hide title','categoryposts' ); ?>
+                    <?php _e( 'Hide title',TEXTDOMAIN ); ?>
                 </label>
             </p>
         </div>			
@@ -931,47 +932,47 @@ class Widget extends \WP_Widget {
 		$exclude_current_post = $instance['exclude_current_post'];
 		$hideNoThumb          = $instance['hideNoThumb'];
 ?>
-        <h4 data-panel="filter"><?php _e('Filter','categoryposts');?></h4>
+        <h4 data-panel="filter"><?php _e('Filter',TEXTDOMAIN);?></h4>
         <div>
             <p>
                 <label>
-                    <?php _e( 'Category','categoryposts' ); ?>:
+                    <?php _e( 'Category',TEXTDOMAIN ); ?>:
                     <?php wp_dropdown_categories( array( 'hide_empty'=> 0, 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"] ) ); ?>
                 </label>
             </p>
             <p>
                 <label for="<?php echo $this->get_field_id("num"); ?>">
-                    <?php _e('Number of posts to show','categoryposts'); ?>:
+                    <?php _e('Number of posts to show',TEXTDOMAIN); ?>:
                     <input style="text-align: center; width: 30%;" id="<?php echo $this->get_field_id("num"); ?>" name="<?php echo $this->get_field_name("num"); ?>" type="number" min="0" value="<?php echo absint($instance["num"]); ?>" />
                 </label>
             </p>
             <p>
                 <label for="<?php echo $this->get_field_id("sort_by"); ?>">
-                    <?php _e('Sort by','categoryposts'); ?>:
+                    <?php _e('Sort by',TEXTDOMAIN); ?>:
                     <select id="<?php echo $this->get_field_id("sort_by"); ?>" name="<?php echo $this->get_field_name("sort_by"); ?>">
-                        <option value="date"<?php selected( $instance["sort_by"], "date" ); ?>><?php _e('Date','categoryposts')?></option>
-                        <option value="title"<?php selected( $instance["sort_by"], "title" ); ?>><?php _e('Title','categoryposts')?></option>
-                        <option value="comment_count"<?php selected( $instance["sort_by"], "comment_count" ); ?>><?php _e('Number of comments','categoryposts')?></option>
-                        <option value="rand"<?php selected( $instance["sort_by"], "rand" ); ?>><?php _e('Random','categoryposts')?></option>
+                        <option value="date"<?php selected( $instance["sort_by"], "date" ); ?>><?php _e('Date',TEXTDOMAIN)?></option>
+                        <option value="title"<?php selected( $instance["sort_by"], "title" ); ?>><?php _e('Title',TEXTDOMAIN)?></option>
+                        <option value="comment_count"<?php selected( $instance["sort_by"], "comment_count" ); ?>><?php _e('Number of comments',TEXTDOMAIN)?></option>
+                        <option value="rand"<?php selected( $instance["sort_by"], "rand" ); ?>><?php _e('Random',TEXTDOMAIN)?></option>
                     </select>
                 </label>
             </p>
             <p>
                 <label for="<?php echo $this->get_field_id("asc_sort_order"); ?>">
                     <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("asc_sort_order"); ?>" name="<?php echo $this->get_field_name("asc_sort_order"); ?>" <?php checked( (bool) $instance["asc_sort_order"], true ); ?> />
-                            <?php _e( 'Reverse sort order (ascending)','categoryposts' ); ?>
+                            <?php _e( 'Reverse sort order (ascending)',TEXTDOMAIN ); ?>
                 </label>
             </p>
             <p>
                 <label for="<?php echo $this->get_field_id("exclude_current_post"); ?>">
                     <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("exclude_current_post"); ?>" name="<?php echo $this->get_field_name("exclude_current_post"); ?>"<?php checked( (bool) $instance["exclude_current_post"], true ); ?> />
-                    <?php _e( 'Exclude current post','categoryposts' ); ?>
+                    <?php _e( 'Exclude current post',TEXTDOMAIN ); ?>
                 </label>
             </p>
             <p>
                 <label for="<?php echo $this->get_field_id("hideNoThumb"); ?>">
                     <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hideNoThumb"); ?>" name="<?php echo $this->get_field_name("hideNoThumb"); ?>"<?php checked( (bool) $instance["hideNoThumb"], true ); ?> />
-                    <?php _e( 'Exclude posts which have no thumbnail','categoryposts' ); ?>
+                    <?php _e( 'Exclude posts which have no thumbnail',TEXTDOMAIN ); ?>
                 </label>
             </p>					
         </div>			
@@ -1002,48 +1003,48 @@ class Widget extends \WP_Widget {
 		$use_css_cropping     = $instance['use_css_cropping'];
 		$thumb_hover          = $instance['thumb_hover'];
 ?>        
-        <h4 data-panel="thumbnail"><?php _e('Thumbnails','categoryposts')?></h4>
+        <h4 data-panel="thumbnail"><?php _e('Thumbnails',TEXTDOMAIN)?></h4>
         <div>
             <p>
                 <label for="<?php echo $this->get_field_id("thumb"); ?>">
                     <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumb"); ?>" name="<?php echo $this->get_field_name("thumb"); ?>"<?php checked( (bool) $instance["thumb"], true ); ?> />
-                    <?php _e( 'Show post thumbnail','categoryposts' ); ?>
+                    <?php _e( 'Show post thumbnail',TEXTDOMAIN ); ?>
                 </label>
             </p>
             <p>
                 <label for="<?php echo $this->get_field_id("thumbTop"); ?>">
                     <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("thumbTop"); ?>" name="<?php echo $this->get_field_name("thumbTop"); ?>"<?php checked( (bool) $instance["thumbTop"], true ); ?> />
-                    <?php _e( 'Show thumbnails above text','categoryposts' ); ?>
+                    <?php _e( 'Show thumbnails above text',TEXTDOMAIN ); ?>
                 </label>
             </p>
             <p>
                 <label>
-                    <?php _e('Thumbnail dimensions (in pixels)','categoryposts'); ?>:<br />
+                    <?php _e('Thumbnail dimensions (in pixels)',TEXTDOMAIN); ?>:<br />
                     <label for="<?php echo $this->get_field_id("thumb_w"); ?>">
-                        <?php _e('Width:','categoryposts')?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo esc_attr($instance["thumb_w"]); ?>" />
+                        <?php _e('Width:',TEXTDOMAIN)?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo esc_attr($instance["thumb_w"]); ?>" />
                     </label>
                     
                     <label for="<?php echo $this->get_field_id("thumb_h"); ?>">
-                        <?php _e('Height:','categoryposts')?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo esc_attr($instance["thumb_h"]); ?>" />
+                        <?php _e('Height:',TEXTDOMAIN)?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo esc_attr($instance["thumb_h"]); ?>" />
                     </label>
                 </label>
             </p>
             <p>
                 <label for="<?php echo $this->get_field_id("use_css_cropping"); ?>">
                     <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("use_css_cropping"); ?>" name="<?php echo $this->get_field_name("use_css_cropping"); ?>"<?php checked( (bool) $instance["use_css_cropping"], true ); ?> />
-                    <?php _e( 'Crop bigger thumbnails around the center ','categoryposts' ); ?>
+                    <?php _e( 'Crop bigger thumbnails around the center ',TEXTDOMAIN ); ?>
                 </label>
             </p>					
             <p>
                 <label for="<?php echo $this->get_field_id("thumb_hover"); ?>">
-                    <?php _e( 'Animation on mouse hover:','categoryposts' ); ?>
+                    <?php _e( 'Animation on mouse hover:',TEXTDOMAIN ); ?>
                 </label>
                 <select id="<?php echo $this->get_field_id("thumb_hover"); ?>" name="<?php echo $this->get_field_name("thumb_hover"); ?>">
-                    <option value="none" <?php selected($thumb_hover, 'none')?>><?php _e( 'None', 'categoryposts' ); ?></option>
-                    <option value="dark" <?php selected($thumb_hover, 'dark')?>><?php _e( 'Darker', 'categoryposts' ); ?></option>
-                    <option value="white" <?php selected($thumb_hover, 'white')?>><?php _e( 'Brighter', 'categoryposts' ); ?></option>
-                    <option value="scale" <?php selected($thumb_hover, 'scale')?>><?php _e( 'Zoom in', 'categoryposts' ); ?></option>
-					<option value="blur" <?php selected($thumb_hover, 'blur')?>><?php _e( 'Blur', 'categoryposts' ); ?></option>
+                    <option value="none" <?php selected($thumb_hover, 'none')?>><?php _e( 'None', TEXTDOMAIN ); ?></option>
+                    <option value="dark" <?php selected($thumb_hover, 'dark')?>><?php _e( 'Darker', TEXTDOMAIN ); ?></option>
+                    <option value="white" <?php selected($thumb_hover, 'white')?>><?php _e( 'Brighter', TEXTDOMAIN ); ?></option>
+                    <option value="scale" <?php selected($thumb_hover, 'scale')?>><?php _e( 'Zoom in', TEXTDOMAIN ); ?></option>
+					<option value="blur" <?php selected($thumb_hover, 'blur')?>><?php _e( 'Blur', TEXTDOMAIN ); ?></option>
                 </select>
             </p>
         </div>
@@ -1098,30 +1099,30 @@ class Widget extends \WP_Widget {
             $this->formFilterPanel($instance);
             $this->formThumbnailPanel($instance);
         ?>
-			<h4 data-panel="details"><?php _e('Post details','categoryposts')?></h4>
+			<h4 data-panel="details"><?php _e('Post details',TEXTDOMAIN)?></h4>
 			<div>
 				<p>
 					<label for="<?php echo $this->get_field_id("hide_post_titles"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_post_titles"); ?>" name="<?php echo $this->get_field_name("hide_post_titles"); ?>"<?php checked( (bool) $instance["hide_post_titles"], true ); ?> />
-						<?php _e( 'Hide post titles','categoryposts' ); ?>
+						<?php _e( 'Hide post titles',TEXTDOMAIN ); ?>
 					</label>
 				</p>
 				<p>
 					<label for="<?php echo $this->get_field_id("excerpt"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt"); ?>" name="<?php echo $this->get_field_name("excerpt"); ?>"<?php checked( (bool) $instance["excerpt"], true ); ?> />
-						<?php _e( 'Show post excerpt','categoryposts' ); ?>
+						<?php _e( 'Show post excerpt',TEXTDOMAIN ); ?>
 					</label>
 				</p>
 				<p>
 					<label for="<?php echo $this->get_field_id("excerpt_length"); ?>">
-						<?php _e( 'Excerpt length (in words):','categoryposts' ); ?>
+						<?php _e( 'Excerpt length (in words):',TEXTDOMAIN ); ?>
 					</label>
 					<input style="text-align: center; width:30%;" type="number" min="0" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" />
 				</p>
 				<p>
 					<label for="<?php echo $this->get_field_id("excerpt_allow_html"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_allow_html"); ?>" name="<?php echo $this->get_field_name("excerpt_allow_html"); ?>"<?php checked( (bool) $instance["excerpt_allow_html"], true ); ?> />
-						<?php _e( 'Allow HTML in excerpt:','categoryposts' ); ?>
+						<?php _e( 'Allow HTML in excerpt:',TEXTDOMAIN ); ?>
 					
 
 						<select class="cphtml cpwpany" multiple name="<?php echo $this->get_field_name('excerpt_allowed_elements'); ?>[]" id="<?php echo $this->get_field_id('excerpt_allowed_elements'); ?>">
@@ -1160,62 +1161,62 @@ class Widget extends \WP_Widget {
 				</p>
 				<p>
 					<label for="<?php echo $this->get_field_id("excerpt_more_text"); ?>">
-						<?php _e( 'Excerpt \'more\' text:','categoryposts' ); ?>
+						<?php _e( 'Excerpt \'more\' text:',TEXTDOMAIN ); ?>
 					</label>
-					<input class="widefat" style="width:50%;" placeholder="<?php _e('... more','categoryposts')?>" id="<?php echo $this->get_field_id("excerpt_more_text"); ?>" name="<?php echo $this->get_field_name("excerpt_more_text"); ?>" type="text" value="<?php echo esc_attr($instance["excerpt_more_text"]); ?>" />
+					<input class="widefat" style="width:50%;" placeholder="<?php _e('... more',TEXTDOMAIN)?>" id="<?php echo $this->get_field_id("excerpt_more_text"); ?>" name="<?php echo $this->get_field_name("excerpt_more_text"); ?>" type="text" value="<?php echo esc_attr($instance["excerpt_more_text"]); ?>" />
 				</p>
 				<p>
 					<label for="<?php echo $this->get_field_id("date"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("date"); ?>"<?php checked( (bool) $instance["date"], true ); ?> />
-						<?php _e( 'Show post date','categoryposts' ); ?>
+						<?php _e( 'Show post date',TEXTDOMAIN ); ?>
 					</label>
 				</p>
 				<p>
 					<label for="<?php echo $this->get_field_id("date_format"); ?>">
-						<?php _e( 'Date format:','categoryposts' ); ?>
+						<?php _e( 'Date format:',TEXTDOMAIN ); ?>
 					</label>
 					<input class="text" placeholder="j M Y" id="<?php echo $this->get_field_id("date_format"); ?>" name="<?php echo $this->get_field_name("date_format"); ?>" type="text" value="<?php echo esc_attr($instance["date_format"]); ?>" size="8" />
 				</p>
 				<p>
 					<label for="<?php echo $this->get_field_id("date_link"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date_link"); ?>" name="<?php echo $this->get_field_name("date_link"); ?>"<?php checked( (bool) $instance["date_link"], true ); ?> />
-						<?php _e( 'Make widget date link','categoryposts' ); ?>
+						<?php _e( 'Make widget date link',TEXTDOMAIN ); ?>
 					</label>
 				</p>
 				<p>
 					<label for="<?php echo $this->get_field_id("comment_num"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("comment_num"); ?>" name="<?php echo $this->get_field_name("comment_num"); ?>"<?php checked( (bool) $instance["comment_num"], true ); ?> />
-						<?php _e( 'Show number of comments','categoryposts' ); ?>
+						<?php _e( 'Show number of comments',TEXTDOMAIN ); ?>
 					</label>
 				</p>
 				<p>
 					<label for="<?php echo $this->get_field_id("author"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("author"); ?>" name="<?php echo $this->get_field_name("author"); ?>"<?php checked( (bool) $instance["author"], true ); ?> />
-						<?php _e( 'Show post author','categoryposts' ); ?>
+						<?php _e( 'Show post author',TEXTDOMAIN ); ?>
 					</label>
 				</p>
 			</div>
-			<h4 data-panel="general"><?php _e('General','categoryposts')?></h4>
+			<h4 data-panel="general"><?php _e('General',TEXTDOMAIN)?></h4>
 			<div>
 				<p>
 					<label for="<?php echo $this->get_field_id("disable_css"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_css"); ?>" name="<?php echo $this->get_field_name("disable_css"); ?>"<?php checked( (bool) $instance["disable_css"], true ); ?> />
-						<?php _e( 'Disable the built-in CSS for this widget','categoryposts' ); ?>
+						<?php _e( 'Disable the built-in CSS for this widget',TEXTDOMAIN ); ?>
 					</label>
 				</p>
 				<p>
 					<label for="<?php echo $this->get_field_id("hide_if_empty"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_if_empty"); ?>" name="<?php echo $this->get_field_name("hide_if_empty"); ?>"<?php checked( (bool) $instance["hide_if_empty"], true ); ?> />
-						<?php _e( 'Hide widget if there are no matching posts','categoryposts' ); ?>
+						<?php _e( 'Hide widget if there are no matching posts',TEXTDOMAIN ); ?>
 					</label>
 				</p>
 			</div>
-			<h4 data-panel="footer"><?php _e('Footer','categoryposts')?></h4>
+			<h4 data-panel="footer"><?php _e('Footer',TEXTDOMAIN)?></h4>
 			<div>
 				<p>
 					<label for="<?php echo $this->get_field_id("footer_link"); ?>">
-						<?php _e( 'Footer link text','categoryposts' ); ?>:
-						<input class="widefat" style="width:60%;" placeholder="<?php _e('... more by this topic','categoryposts')?>" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
+						<?php _e( 'Footer link text',TEXTDOMAIN ); ?>:
+						<input class="widefat" style="width:60%;" placeholder="<?php _e('... more by this topic',TEXTDOMAIN)?>" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
 					</label>
 				</p>
 			</div>
@@ -1370,7 +1371,7 @@ function customize_register($wp_customize) {
     
     if (count($posts) > 0) {
         $wp_customize->add_section( __NAMESPACE__, array(
-            'title'           => __( 'Category posts shortcode', 'categoryposts' ),
+            'title'           => __( 'Category posts shortcode', TEXTDOMAIN ),
             'priority'        => 200
         ) );
         
