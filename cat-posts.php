@@ -543,7 +543,7 @@ class Widget extends \WP_Widget {
 				has_post_thumbnail() ) {
 			$use_css_cropping = isset($this->instance['use_css_cropping']) ? "cat-post-css-cropping" : "";
             $class = '';
-            if( !isset( $this->instance['disable_css'] )) { 
+            if( !(isset( $this->instance['disable_css'] ) && $this->instance['disable_css'])) { 
                 if( isset($this->instance['thumb_hover'] )) {
                     $class = "class=\"cat-post-thumbnail " . $use_css_cropping ." cat-post-" . $instance['thumb_hover'] . "\"";
                 } else {
