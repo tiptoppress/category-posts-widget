@@ -1370,11 +1370,7 @@ function customize_register($wp_customize) {
     
     if (count($posts) > 0) {
         $wp_customize->add_section( __NAMESPACE__, array(
-            'title'           => __( 'Category posts shortcode', 'twentyfourteen' ),
-            'description'     => sprintf( __( 'Use a <a href="%1$s">tag</a> to feature your posts. If no posts match the tag, <a href="%2$s">sticky posts</a> will be displayed instead.', 'twentyfourteen' ),
-                esc_url( add_query_arg( 'tag', _x( 'featured', 'featured content default tag slug', 'twentyfourteen' ), admin_url( 'edit.php' ) ) ),
-                admin_url( 'edit.php?show_sticky=1' )
-            ),
+            'title'           => __( 'Category posts shortcode', 'categoryposts' ),
             'priority'        => 200
         ) );
         
