@@ -539,7 +539,7 @@ class Widget extends \WP_Widget {
 	function show_thumb($instance) {
         $ret = '';
         
-		if ( isset( $instance["thumb"] ) &&
+		if ( isset( $instance["thumb"] ) && $instance["thumb"] &&
 				has_post_thumbnail() ) {
 			$use_css_cropping = isset($this->instance['use_css_cropping']) ? "cat-post-css-cropping" : "";
             $class = '';
