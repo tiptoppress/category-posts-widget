@@ -374,7 +374,7 @@ class testWidgetFront extends WP_UnitTestCase {
                                 
                                 // test single post page
                                 if ($exclude)
-                                    $expected['post__not_in'] = $pid;
+                                    $expected['post__not_in'] = array($pid);
                                 $this->go_to('/?p='.$pid);
                                 $this->assertEquals($expected,$widget->queryArgs($instance));
                             }
