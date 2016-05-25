@@ -1345,11 +1345,6 @@ function save_post($pid,$post) {
 add_action('save_post',__NAMESPACE__.'\save_post',10,2);
 
 function customize_register($wp_customize) {
-    class shortCodeControlNoop extends \WP_Customize_Control {
-       
-        public function render_content() {
-        }
-    }    
 
     class shortCodeControl extends \WP_Customize_Control {
         public $form;
