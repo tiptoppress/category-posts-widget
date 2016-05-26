@@ -590,6 +590,7 @@ class testShortCode extends WP_UnitTestCase {
 
     const SHORTCODE_NAME = 'catposts';
     const SHORTCODE_META = 'categoryPosts-shorcode';
+    const WIDGET_BASE_ID = 'category-posts';
 
     /**
      *  Test the generation and removal of met values when a shortcode is 
@@ -675,4 +676,124 @@ class testShortCode extends WP_UnitTestCase {
         wp_update_post(array('ID'=>$pid,'post_content' => '['.$this->SHORTCODE_NAME.'bla] '.$this->SHORTCODE_NAME));
         $this->assertEmpty(get_post_meta($pid,self::SHORTCODE_META,true));
     }
+    
+    /**
+     *  test the customize_save_after function to make sure the shortcode meta is updated (or not)
+     *  when the customizer save.
+     *  
+     */
+    function test_customize_save_after() {
+        $pid = $this->factory->post->create(array('title'=>'test','post_status'=>'publish','post_content'=>'')); 
+        $pid2 = $this->factory->post->create(array('title'=>'test2','post_status'=>'publish','post_content'=>'')); 
+        wp_update_post(array('ID'=>$pid,'post_content' => '['.self::SHORTCODE_NAME.']'));
+        wp_update_post(array('ID'=>$pid2,'post_content' => '['.self::SHORTCODE_NAME.']'));
+
+        // no update at all
+        categoryPosts\customize_save_after();
+        $this->assertEquals(array (
+                                'title' => '',
+                                'title_link' => false,
+                                'hide_title' => false,
+                                'cat'                  => '',
+                                'num'                  => get_option('posts_per_page'),
+                                'sort_by'              => 'date',
+                                'asc_sort_order'       => false,
+                                'exclude_current_post' => false,
+                                'hideNoThumb'          => false,
+                                'footer_link'          => '',
+                                'thumb'                => false,
+                                'thumbTop'             => false,
+                                'thumb_w'              => '',
+                                'thumb_h'              => '',
+                                'use_css_cropping'     => false,
+                                'thumb_hover'          => 'none',
+                                'hide_post_titles'     => false,
+                                'excerpt'              => false,
+                                'excerpt_length'       => 55,
+                                'excerpt_allow_html'   => false,
+                                'excerpt_allowed_elements' => array('0'),
+                                'excerpt_more_text'    => '',
+                                'comment_num'          => false,
+                                'author'               => false,
+                                'date'                 => false,
+                                'date_link'            => false,
+                                'date_format'          => '',
+                                'disable_css'          => false,
+                                'hide_if_empty'        => false
+                               ),
+                               get_post_meta($pid,self::SHORTCODE_META,true));
+
+        // update some other post
+        update_option('_virtual-'.self::WIDGET_BASE_ID,array($pid2 => array('title' => 'bla')));
+        categoryPosts\customize_save_after();
+        $this->assertEquals(array (
+                                'title' => '',
+                                'title_link' => false,
+                                'hide_title' => false,
+                                'cat'                  => '',
+                                'num'                  => get_option('posts_per_page'),
+                                'sort_by'              => 'date',
+                                'asc_sort_order'       => false,
+                                'exclude_current_post' => false,
+                                'hideNoThumb'          => false,
+                                'footer_link'          => '',
+                                'thumb'                => false,
+                                'thumbTop'             => false,
+                                'thumb_w'              => '',
+                                'thumb_h'              => '',
+                                'use_css_cropping'     => false,
+                                'thumb_hover'          => 'none',
+                                'hide_post_titles'     => false,
+                                'excerpt'              => false,
+                                'excerpt_length'       => 55,
+                                'excerpt_allow_html'   => false,
+                                'excerpt_allowed_elements' => array('0'),
+                                'excerpt_more_text'    => '',
+                                'comment_num'          => false,
+                                'author'               => false,
+                                'date'                 => false,
+                                'date_link'            => false,
+                                'date_format'          => '',
+                                'disable_css'          => false,
+                                'hide_if_empty'        => false
+                               ),
+                               get_post_meta($pid,self::SHORTCODE_META,true));
+                               
+        // update some property on "our" post, title
+        update_option('_virtual-'.self::WIDGET_BASE_ID,array($pid => array('title' => 'bla')));
+        categoryPosts\customize_save_after();
+        $this->assertEquals(array (
+                                'title' => 'bla',
+                                'title_link' => false,
+                                'hide_title' => false,
+                                'cat'                  => '',
+                                'num'                  => get_option('posts_per_page'),
+                                'sort_by'              => 'date',
+                                'asc_sort_order'       => false,
+                                'exclude_current_post' => false,
+                                'hideNoThumb'          => false,
+                                'footer_link'          => '',
+                                'thumb'                => false,
+                                'thumbTop'             => false,
+                                'thumb_w'              => '',
+                                'thumb_h'              => '',
+                                'use_css_cropping'     => false,
+                                'thumb_hover'          => 'none',
+                                'hide_post_titles'     => false,
+                                'excerpt'              => false,
+                                'excerpt_length'       => 55,
+                                'excerpt_allow_html'   => false,
+                                'excerpt_allowed_elements' => array('0'),
+                                'excerpt_more_text'    => '',
+                                'comment_num'          => false,
+                                'author'               => false,
+                                'date'                 => false,
+                                'date_link'            => false,
+                                'date_format'          => '',
+                                'disable_css'          => false,
+                                'hide_if_empty'        => false
+                               ),
+                               get_post_meta($pid,self::SHORTCODE_META,true));                           
+    }
+    
 }
