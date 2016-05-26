@@ -120,7 +120,7 @@ function widget_styles() {
     $enqueue = false;
     // check first for shortcode settings
     if (is_singular()) {
-        $meta = get_post_meta(get_the_ID(),SHORTCODE_META,true);
+        $meta = shortcode_settings();
         if (is_array($meta) && !(isset($meta['disable_css']) && $meta['disable_css']))
             $enqueue = true;
     }
@@ -1260,16 +1260,42 @@ add_action( 'widgets_init', __NAMESPACE__.'\register_widget' );
 
 // shortcode section
 
+/**
+ *  Get shortcode settings taking into account if it is being customized
+ *  
+ *  When not customized returns the settings as stored in the meta, but when
+ *  it is customized returns the setting stored in the virtual option used by the customizer
+ *  
+ *  @return array the shortcode settings if a short code exists or empty string
+ *  
+ */
+function shortcode_settings() {
+    $instance = get_post_meta(get_the_ID(),SHORTCODE_META,true);
+
+    if (is_array($instance)) {
+        if (is_customize_preview()) {
+            $o=get_option('virtual-'.WIDGET_BASE_ID);
+            if (is_array($o))
+                $instance=$o[get_the_ID()];
+        }
+    }
+    
+    return $instance;
+}
+/**
+ *  Handle the shortcode
+ *  
+ *  @param array $attr Array of the attributes to the short code, none is expected
+ *  @param string $content The content enclosed in the shortcode, none is expected
+ *  
+ *  @return string An HTML of the "widget" based on its settings, actual or customized
+ *  
+ */
 function shortcode($attr,$content=null) {
     if (is_singular()) {
-        $instance = get_post_meta(get_the_ID(),SHORTCODE_META,true);
+        $instance = shortcode_settings();
         
-        if ($instance!==false) {
-            if (is_customize_preview()) {
-                $o=get_option('virtual-'.WIDGET_BASE_ID);
-                if (is_array($o))
-                    $instance=$o[get_the_ID()];
-            }
+        if (is_array($instance)) {
             $widget=new Widget();
             ob_start();
             $widget->widget(array(
