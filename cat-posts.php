@@ -116,7 +116,18 @@ function wp_head() {
 add_action('wp_head',__NAMESPACE__.'\wp_head');
 
 function widget_styles() {
-	$enqueue = should_enqueue(WIDGET_BASE_ID,__NAMESPACE__.'\Widget');
+
+    $enqueue = false;
+    // check first for shortcode settings
+    if (is_singular()) {
+        $meta = get_post_meta(get_the_ID(),SHORTCODE_META,true);
+        if (is_array($meta) && !(isset($meta['disable_css']) && $meta['disable_css']))
+            $enqueue = true;
+    }
+
+    if (!$enqueue)
+        $enqueue = should_enqueue(WIDGET_BASE_ID,__NAMESPACE__.'\Widget');
+        
 	if ($enqueue) {
 		wp_register_style( 'category-posts', CAT_POST_PLUGINURL . 'cat-posts.css',array(),CAT_POST_VERSION );
 		wp_enqueue_style( 'category-posts' );
@@ -1418,7 +1429,7 @@ function customize_register($wp_customize) {
                 'section' => __NAMESPACE__,
                 'form' => $form,
                 'settings' => 'virtual-'.WIDGET_BASE_ID.'['.$p->ID.'][title]',
-                'active_callback' => function () use ($p) { return is_single($p->ID); }
+                'active_callback' => function () use ($p) { return is_singular($p->ID); }
                 )
             ) );
         }
