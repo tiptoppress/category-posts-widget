@@ -1429,7 +1429,7 @@ function customize_register($wp_customize) {
                 'section' => __NAMESPACE__,
                 'form' => $form,
                 'settings' => 'virtual-'.WIDGET_BASE_ID.'['.$p->ID.'][title]',
-                'active_callback' => function () use ($p) { return is_singular($p->ID); }
+                'active_callback' => function () use ($p) { return is_singular() && (get_the_ID()==$p->ID); }
                 )
             ) );
         }
