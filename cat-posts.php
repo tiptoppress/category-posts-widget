@@ -83,7 +83,7 @@ function should_enqueue($id_base,$class) {
 	$ret = false;
 	
 	iterator($id_base, $class, function ($settings) use (&$ret) {
-		if (!isset($settings['disable_css'])) { // checks if css disable is not set
+		if (!(isset($settings['disable_css']) && $settings['disable_css'])) { // checks if css disable is not set
 			$ret = true;
 			return false; // stop iterator
 		} else
