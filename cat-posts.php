@@ -1268,13 +1268,14 @@ add_action( 'widgets_init', __NAMESPACE__.'\register_widget' );
  *  
  *  @return array the shortcode settings if a short code exists or empty string
  *  
+ *  @since 4.6
  */
 function shortcode_settings() {
     $instance = get_post_meta(get_the_ID(),SHORTCODE_META,true);
 
     if (is_array($instance)) {
         if (is_customize_preview()) {
-            $o=get_option('virtual-'.WIDGET_BASE_ID);
+            $o=get_option('_virtual-'.WIDGET_BASE_ID);
             if (is_array($o))
                 $instance=$o[get_the_ID()];
         }
@@ -1436,7 +1437,7 @@ function customize_register($wp_customize) {
             $form = ob_get_clean();
             $form = preg_replace_callback('/<(input|select)\s+.*name=("|\').*\[\d*\]\[([^\]]*)\][^>]*>/',
                 function ($matches) use ($p, $wp_customize, $meta) {
-                    $setting = 'virtual-'.WIDGET_BASE_ID.'['.$p->ID.']['.$matches[3].']';
+                    $setting = '_virtual-'.WIDGET_BASE_ID.'['.$p->ID.']['.$matches[3].']';
                     $wp_customize->add_setting( $setting, array(
                         'default' => $meta[$matches[3]], // set default to current value
                         'type' => 'option'
@@ -1449,12 +1450,12 @@ function customize_register($wp_customize) {
 
             $wp_customize->add_control( new shortCodeControl(
                 $wp_customize,
-                'virtual-'.WIDGET_BASE_ID.'['.$p->ID.'][title]',
+                '_virtual-'.WIDGET_BASE_ID.'['.$p->ID.'][title]',
                 array(
                 'label'   => __( 'Layout', 'twentyfourteen' ),
                 'section' => __NAMESPACE__,
                 'form' => $form,
-                'settings' => 'virtual-'.WIDGET_BASE_ID.'['.$p->ID.'][title]',
+                'settings' => '_virtual-'.WIDGET_BASE_ID.'['.$p->ID.'][title]',
                 'active_callback' => function () use ($p) { return is_singular() && (get_the_ID()==$p->ID); }
                 )
             ) );
@@ -1463,3 +1464,29 @@ function customize_register($wp_customize) {
 }
 
 add_action( 'customize_register', __NAMESPACE__.'\customize_register' );
+
+/**
+ *  Save the virtual option used by the customizer into the proper meta values.
+ *
+ *  The customizer actually saves only the changed values, so a merge needs to be done.
+ *  After everything is updated the virtual option is deleted to leave a clean slate
+ *  
+ *  @return void
+ *  
+ *  @since 4.6
+ */
+function customize_save_after() {
+    $virtual = get_option('_virtual-'.WIDGET_BASE_ID);
+
+    if (is_array($virtual)) {
+        foreach ($virtual as $pid => $instance) {
+            $meta = get_post_meta($pid,SHORTCODE_META,true);
+            $instance = array_merge($meta,$instance);
+            update_post_meta($pid,SHORTCODE_META, $instance);
+        }
+    }
+    
+    delete_option('_virtual-'.WIDGET_BASE_ID);
+}
+
+add_action('customize_save_after', __NAMESPACE__.'\customize_save_after', 100);
