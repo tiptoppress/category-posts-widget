@@ -857,7 +857,7 @@ class Widget extends \WP_Widget {
             if (is_singular())
                 $current_post_id = get_the_ID();
 
-			echo "<ul>\n";
+			echo '<ul id="'.WIDGET_BASE_ID.'-'.$this->number."\">\n"; // use the internal number of the widget as a unique id
 
             $this->setExcerpFilters($instance);         
 			while ( $cat_posts->have_posts() )
@@ -1298,6 +1298,7 @@ function shortcode($attr,$content=null) {
         
         if (is_array($instance)) {
             $widget=new Widget();
+            $widget->number = 'shortcode-'.get_the_ID(); // needed to make a unique id for the widget html element
             ob_start();
             $widget->widget(array(
                                 'before_widget' => '',

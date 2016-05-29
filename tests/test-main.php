@@ -78,7 +78,7 @@ class testWidgetFront extends WP_UnitTestCase {
                         array());
         $out = removeSpaceBetweenTags(ob_get_contents());
         ob_end_clean();
-        $this->assertEquals('<ul></ul>',$out);
+        $this->assertEquals('<ul id="category-posts-"></ul>',$out);
     }
 
     
