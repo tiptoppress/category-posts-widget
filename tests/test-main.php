@@ -543,6 +543,34 @@ class testWidgetFront extends WP_UnitTestCase {
         ob_end_clean();
         $this->assertEquals($tempid,get_the_ID());
     }
+    
+    /**
+     *  test that the excerpt filters are removed after the loop
+     *  
+     */
+    function testExcerptFilterRemove() {
+        $className = NS.'\Widget';
+        $widget = new $className();
+
+        $cid = get_option('default_category');
+
+        $pid = $this->factory->post->create(array('title'=>'test','post_status'=>'publish',
+                                                    'post_content'=>'more then one word','post_excerpt'=>'more then one word')); 
+
+        $this->go_to('/?p='.$pid);
+        ob_start();
+        $widget->widget(array('before_widget'=>'',
+                              'after_widget'=>'',
+                              'before_title'=>'',
+                              'after_title'=>'',
+                              ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1));
+        ob_end_clean();
+        ob_start();
+        the_excerpt();
+        $excerpt=trim(ob_get_clean());
+        $this->assertEquals('<p>more then one word</p>',$excerpt);
+
+    }
 }
 
 class testWidgetAdmin extends WP_UnitTestCase {
