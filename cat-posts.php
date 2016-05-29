@@ -242,8 +242,8 @@ function admin_scripts($hook) {
 		if (version_compare( $GLOBALS['wp_version'], '4.4', '>=' ) || !isset($GLOBALS['wp_customize'])) {
 			
 			// select2
-			wp_enqueue_script( 'select2-css', plugins_url( 'js/select2-4.0.1/js/select2.min.js' , __FILE__ ), array( 'jquery' ),'4.0.1' );
-			wp_enqueue_style( 'select2-js', plugins_url( 'js/select2-4.0.1/css/select2.min.css' , __FILE__ ) );
+			wp_enqueue_script( 'select2-css', plugins_url( 'js/select2-4.0.3/js/select2.min.js' , __FILE__ ), array( 'jquery' ),'4.0.3' );
+			wp_enqueue_style( 'select2-js', plugins_url( 'js/select2-4.0.3/css/select2.min.css' , __FILE__ ) );
 			
 			add_action('admin_print_scripts',__NAMESPACE__.'\load_select2_scripts_footer',100);
 
