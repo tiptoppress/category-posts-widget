@@ -506,7 +506,43 @@ class testWidgetFront extends WP_UnitTestCase {
 		$this->assertEquals('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="http://example.org/wp-content/uploads/2016/05/33772-768x432.jpg" class="attachment-200x200 wp-post-image" alt="33772.jpg" srcset="http://example.org/wp-content/uploads/2016/05/33772-768x432.jpg 768w, http://example.org/wp-content/uploads/2016/05/33772-300x169.jpg 300w, http://example.org/wp-content/uploads/2016/05/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
 								str_replace(" size-200x200", "", $widget->the_post_thumbnail(array(200,200)))
 							);
-    }	
+    }
+    
+    /**
+     *  test that the global post variable is reset after widget loop
+     *  
+     */
+    function testLoopReset() {
+        $className = NS.'\Widget';
+        $widget = new $className();
+
+        $cid = get_option('default_category');
+
+        $pid = $this->factory->post->create(array('title'=>'test','post_status'=>'publish','post_content'=>'')); 
+        $pid2 = $this->factory->post->create(array('title'=>'test2','post_status'=>'publish','post_content'=>''));
+
+        $this->go_to('/');
+        $tempid = get_the_ID();
+        ob_start();
+        $widget->widget(array('before_widget'=>'',
+                              'after_widget'=>'',
+                              'before_title'=>'',
+                              'after_title'=>'',
+                              ),array('cat'=>$cid,'num'=>10));
+        ob_end_clean();
+        $this->assertEquals($tempid,get_the_ID());
+
+        $this->go_to('/?p='.$pid);
+        $tempid = get_the_ID();
+        ob_start();
+        $widget->widget(array('before_widget'=>'',
+                              'after_widget'=>'',
+                              'before_title'=>'',
+                              'after_title'=>'',
+                              ),array('cat'=>$cid,'num'=>10));
+        ob_end_clean();
+        $this->assertEquals($tempid,get_the_ID());
+    }
 }
 
 class testWidgetAdmin extends WP_UnitTestCase {
