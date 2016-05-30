@@ -548,6 +548,62 @@ class testWidgetFront extends WP_UnitTestCase {
      *  test that the excerpt filters are removed after the loop
      *  
      */
+    function testExcerptFilters() {
+        $className = NS.'\Widget';
+        $widget = new $className();
+
+        $cid = get_option('default_category');
+
+        $pid = $this->factory->post->create(array('post_title'=>'test','post_status'=>'publish',
+                                                    'post_content'=>'more then one word',
+                                                    'post_excerpt'=>'')); 
+                    
+        // test filters not applied when excerpt off                    
+        $this->go_to('/?p='.$pid);
+        ob_start();
+        $widget->widget(array('before_widget'=>'',
+                              'after_widget'=>'',
+                              'before_title'=>'',
+                              'after_title'=>'',
+                              ),array('cat'=>$cid,'num'=>10,'excerpt_length'=>1));
+        $o = removeSpaceBetweenTags(ob_get_clean());
+        $this->assertEquals('Uncategorized<ul id="category-posts-"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p=13" rel="bookmark">test</a></li></ul>',$o);
+        
+        ob_start();
+        $widget->widget(array('before_widget'=>'',
+                              'after_widget'=>'',
+                              'before_title'=>'',
+                              'after_title'=>'',
+                              ),array('cat'=>$cid,'num'=>10,'excerpt'=>false,'excerpt_length'=>1));
+        $o = removeSpaceBetweenTags(ob_get_clean());
+        $this->assertEquals('Uncategorized<ul id="category-posts-"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p=13" rel="bookmark">test</a></li></ul>',$o);
+
+        // test excerpt length filter
+        ob_start();
+        $widget->widget(array('before_widget'=>'',
+                              'after_widget'=>'',
+                              'before_title'=>'',
+                              'after_title'=>'',
+                              ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1));
+        $o = removeSpaceBetweenTags(ob_get_clean());
+        $this->assertEquals('Uncategorized<ul id="category-posts-"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p=13" rel="bookmark">test</a><p>more &hellip; <a href="http://example.org/?p=13" class="more-link">Continue reading <span class="screen-reader-text">test</span></a></p></li></ul>',$o);
+        
+        // test excerpt more filter
+        ob_start();
+        $widget->widget(array('before_widget'=>'',
+                              'after_widget'=>'',
+                              'before_title'=>'',
+                              'after_title'=>'',
+                              ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1,'excerpt_more_text'=>'blabla'));
+        $o = removeSpaceBetweenTags(ob_get_clean());
+        $this->assertEquals('Uncategorized<ul id="category-posts-"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p=13" rel="bookmark">test</a><p>more <a class="cat-post-excerpt-more" href="http://example.org/?p=13">blabla</a></p></li></ul>',$o);
+        
+    }
+                                                        
+    /**
+     *  test that the excerpt filters are removed after the loop
+     *  
+     */
     function testExcerptFilterRemove() {
         $className = NS.'\Widget';
         $widget = new $className();
