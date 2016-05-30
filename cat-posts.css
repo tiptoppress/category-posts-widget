@@ -25,7 +25,6 @@ Version: 4.6.1
 .cat-post-title {
 	display: inline-block;
 	font-size: 15px;
-	font-size: 0.9375em;
 }
 .cat-post-current .cat-post-title {
 	font-weight: bold;
@@ -34,9 +33,7 @@ Version: 4.6.1
 .cat-post-date,
 .cat-post-comment-num {
 	font-size: 12px;
-	font-size: 0.75em;
 	line-height: 18px;
-	line-height: 1.125em;
 	margin-bottom: 0;
 }
 .cat-post-date {
@@ -145,9 +142,9 @@ li a.cat-post-blur {
   overflow: hidden;
 }
 li a.cat-post-blur img:hover {
-  -webkit-filter: blur(1px);
-  -moz-filter: blur(1px);
-  -o-filter: blur(1px);
-  -ms-filter: blur(1px);
-  filter: blur(1px);
+  -webkit-filter: blur(2px);
+  -moz-filter: blur(2px);
+  -o-filter: blur(2px);
+  -ms-filter: blur(2px);
+  filter: blur(2px);
 }
