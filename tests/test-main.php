@@ -555,7 +555,8 @@ class testWidgetFront extends WP_UnitTestCase {
         $cid = get_option('default_category');
 
         $pid = $this->factory->post->create(array('title'=>'test','post_status'=>'publish',
-                                                    'post_content'=>'more then one word','post_excerpt'=>'more then one word')); 
+                                                    'post_content'=>'more then one word',
+                                                    'post_excerpt'=>'')); 
 
         $this->go_to('/?p='.$pid);
         ob_start();
