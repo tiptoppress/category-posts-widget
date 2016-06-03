@@ -390,6 +390,7 @@ class testWidgetFront extends WP_UnitTestCase {
         
         // clean upload dir for consistant file names
         $dir = wp_upload_dir();
+        $dirurl = $dir['url'];
         $dir = $dir['path'];
         array_map('unlink', glob($dir."/*"));		
         
@@ -403,35 +404,35 @@ class testWidgetFront extends WP_UnitTestCase {
         setup_postdata($post);
 
         // test no thumb width and height, should get same html
-        $this->assertEquals('<img width="640" height="480" src="http://example.org/wp-content/uploads/2016/05/canola.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="canola.jpg" srcset="http://example.org/wp-content/uploads/2016/05/canola.jpg 640w, http://example.org/wp-content/uploads/2016/05/canola-300x225.jpg 300w" sizes="(max-width: 640px) 100vw, 640px" />',$widget->the_post_thumbnail(array()));
+        $this->assertEquals('<img width="640" height="480" src="'.$dirurl.'/canola.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="canola.jpg" srcset="'.$dirurl.'/canola.jpg 640w, '.$dirurl.'/canola-300x225.jpg 300w" sizes="(max-width: 640px) 100vw, 640px" />',$widget->the_post_thumbnail(array()));
         
-        $this->assertEquals('<img width="10" height="10" src="http://example.org/wp-content/uploads/2016/05/canola-150x150.jpg" class="attachment-10x10 size-10x10 wp-post-image" alt="canola.jpg" />',$widget->the_post_thumbnail(array(10,'')));
+        $this->assertEquals('<img width="10" height="10" src="'.$dirurl.'/canola-150x150.jpg" class="attachment-10x10 size-10x10 wp-post-image" alt="canola.jpg" />',$widget->the_post_thumbnail(array(10,'')));
 
-        $this->assertEquals('<img width="10" height="10" src="http://example.org/wp-content/uploads/2016/05/canola-150x150.jpg" class="attachment-10x10 size-10x10 wp-post-image" alt="canola.jpg" />',$widget->the_post_thumbnail(array('',10)));
+        $this->assertEquals('<img width="10" height="10" src="'.$dirurl.'/canola-150x150.jpg" class="attachment-10x10 size-10x10 wp-post-image" alt="canola.jpg" />',$widget->the_post_thumbnail(array('',10)));
         
         // equal to min thumb size. no manipulation needed
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150);
 		// MODIF for older WP <4.5: class size-WxH is supported up +4.5
-        $this->assertEquals('<img width="150" height="150" src="http://example.org/wp-content/uploads/2016/05/canola-150x150.jpg" class="attachment-150x150 wp-post-image" alt="canola.jpg" />',
+        $this->assertEquals('<img width="150" height="150" src="'.$dirurl.'/canola-150x150.jpg" class="attachment-150x150 wp-post-image" alt="canola.jpg" />',
 								str_replace(" size-150x150", "", $widget->the_post_thumbnail(array(150,150)))
 							);
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200);
         // MODIF for older WP <4.5: class size-WxH is supported up +4.5
-		$this->assertEquals('<img width="200" height="150" src="http://example.org/wp-content/uploads/2016/05/canola-300x225.jpg" class="attachment-200x200 wp-post-image" alt="canola.jpg" srcset="http://example.org/wp-content/uploads/2016/05/canola-300x225.jpg 300w, http://example.org/wp-content/uploads/2016/05/canola.jpg 640w" sizes="(max-width: 200px) 100vw, 200px" />',
+		$this->assertEquals('<img width="200" height="150" src="'.$dirurl.'/canola-300x225.jpg" class="attachment-200x200 wp-post-image" alt="canola.jpg" srcset="'.$dirurl.'/canola-300x225.jpg 300w, '.$dirurl.'/canola.jpg 640w" sizes="(max-width: 200px) 100vw, 200px" />',
 								str_replace(" size-200x200", "", $widget->the_post_thumbnail(array(200,200)))
 							);
 
 		// Use with "use_css_cropping"
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150,'use_css_cropping' => true);
         // MODIF for older WP <4.5: class size-WxH is supported up +4.5
-		$this->assertEquals('<img width="150" height="150" src="http://example.org/wp-content/uploads/2016/05/canola-150x150.jpg" class="attachment-150x150 wp-post-image" alt="canola.jpg" />',
+		$this->assertEquals('<img width="150" height="150" src="'.$dirurl.'/canola-150x150.jpg" class="attachment-150x150 wp-post-image" alt="canola.jpg" />',
 								str_replace(" size-150x150", "", $widget->the_post_thumbnail(array(150,150)))
 							);
 		
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200,'use_css_cropping' => true);
         // MODIF for older WP <4.5: class size-WxH is supported up +4.5
-		$this->assertEquals('<span style="width:200px;height:200px;"><img style="margin-left:-33.333333333333px;height:200px;clip:rect(auto,233.33333333333px,auto,33.333333333333px);width:auto;max-width:initial;" width=\'266.66666666667\' height=\'200\' src="http://example.org/wp-content/uploads/2016/05/canola-300x225.jpg" class="attachment-200x200 wp-post-image" alt="canola.jpg" srcset="http://example.org/wp-content/uploads/2016/05/canola-300x225.jpg 300w, http://example.org/wp-content/uploads/2016/05/canola.jpg 640w" sizes="(max-width: 266.66666666667px) 100vw, 266.66666666667px" /></span>',
+		$this->assertEquals('<span style="width:200px;height:200px;"><img style="margin-left:-33.333333333333px;height:200px;clip:rect(auto,233.33333333333px,auto,33.333333333333px);width:auto;max-width:initial;" width=\'266.66666666667\' height=\'200\' src="'.$dirurl.'/canola-300x225.jpg" class="attachment-200x200 wp-post-image" alt="canola.jpg" srcset="'.$dirurl.'/canola-300x225.jpg 300w, '.$dirurl.'/canola.jpg 640w" sizes="(max-width: 266.66666666667px) 100vw, 266.66666666667px" /></span>',
 								str_replace(" size-200x200", "", $widget->the_post_thumbnail(array(200,200)))
 							);
 
@@ -448,26 +449,26 @@ class testWidgetFront extends WP_UnitTestCase {
 		
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150);
         // MODIF for older WP <4.5: class size-WxH is supported up +4.5
-		$this->assertEquals('<img width="50" height="50" src="http://example.org/wp-content/uploads/2016/05/test-image.jpg" class="attachment-150x150 wp-post-image" alt="test-image.jpg" />',
+		$this->assertEquals('<img width="50" height="50" src="'.$dirurl.'/test-image.jpg" class="attachment-150x150 wp-post-image" alt="test-image.jpg" />',
 								str_replace(" size-150x150", "", $widget->the_post_thumbnail(array(150,150)))
 							);
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200);
         // MODIF for older WP <4.5: class size-WxH is supported up +4.5
-		$this->assertEquals('<img width="50" height="50" src="http://example.org/wp-content/uploads/2016/05/test-image.jpg" class="attachment-200x200 wp-post-image" alt="test-image.jpg" />',
+		$this->assertEquals('<img width="50" height="50" src="'.$dirurl.'/test-image.jpg" class="attachment-200x200 wp-post-image" alt="test-image.jpg" />',
 								str_replace(" size-200x200", "", $widget->the_post_thumbnail(array(200,200)))
 							);
 
 		// Use with "use_css_cropping"
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150,'use_css_cropping' => true);
         // MODIF for older WP <4.5: class size-WxH is supported up +4.5
-		$this->assertEquals('<img width="50" height="50" src="http://example.org/wp-content/uploads/2016/05/test-image.jpg" class="attachment-150x150 wp-post-image" alt="test-image.jpg" />',
+		$this->assertEquals('<img width="50" height="50" src="'.$dirurl.'/test-image.jpg" class="attachment-150x150 wp-post-image" alt="test-image.jpg" />',
 								str_replace(" size-150x150", "", $widget->the_post_thumbnail(array(150,150)))
 							);
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200,'use_css_cropping' => true);
         // MODIF for older WP <4.5: class size-WxH is supported up +4.5
-		$this->assertEquals('<img width="50" height="50" src="http://example.org/wp-content/uploads/2016/05/test-image.jpg" class="attachment-200x200 wp-post-image" alt="test-image.jpg" />',
+		$this->assertEquals('<img width="50" height="50" src="'.$dirurl.'/test-image.jpg" class="attachment-200x200 wp-post-image" alt="test-image.jpg" />',
 								str_replace(" size-200x200", "", $widget->the_post_thumbnail(array(200,200)))
 							);
 
@@ -484,26 +485,26 @@ class testWidgetFront extends WP_UnitTestCase {
 		
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150);
         // MODIF for older WP <4.5: class size-WxH is supported up +4.5
-		$this->assertEquals('<img width="150" height="150" src="http://example.org/wp-content/uploads/2016/05/33772-150x150.jpg" class="attachment-150x150 wp-post-image" alt="33772.jpg" />',
+		$this->assertEquals('<img width="150" height="150" src="'.$dirurl.'/33772-150x150.jpg" class="attachment-150x150 wp-post-image" alt="33772.jpg" />',
 								str_replace(" size-150x150", "", $widget->the_post_thumbnail(array(150,150)))
 							);
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200);
         // MODIF for older WP <4.5: class size-WxH is supported up +4.5
-		$this->assertEquals('<img width="200" height="113" src="http://example.org/wp-content/uploads/2016/05/33772-768x432.jpg" class="attachment-200x200 wp-post-image" alt="33772.jpg" srcset="http://example.org/wp-content/uploads/2016/05/33772-768x432.jpg 768w, http://example.org/wp-content/uploads/2016/05/33772-300x169.jpg 300w, http://example.org/wp-content/uploads/2016/05/33772-1024x576.jpg 1024w" sizes="(max-width: 200px) 100vw, 200px" />',
+		$this->assertEquals('<img width="200" height="113" src="'.$dirurl.'/33772-768x432.jpg" class="attachment-200x200 wp-post-image" alt="33772.jpg" srcset="'.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 200px) 100vw, 200px" />',
 								str_replace(" size-200x200", "", $widget->the_post_thumbnail(array(200,200)))
 							);
 		
 		// Use with "use_css_cropping"
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150,'use_css_cropping' => true);
         // MODIF for older WP <4.5: class size-WxH is supported up +4.5
-		$this->assertEquals('<img width="150" height="150" src="http://example.org/wp-content/uploads/2016/05/33772-150x150.jpg" class="attachment-150x150 wp-post-image" alt="33772.jpg" />',
+		$this->assertEquals('<img width="150" height="150" src="'.$dirurl.'/33772-150x150.jpg" class="attachment-150x150 wp-post-image" alt="33772.jpg" />',
 								str_replace(" size-150x150", "", $widget->the_post_thumbnail(array(150,150)))
 							);
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200,'use_css_cropping' => true);
         // MODIF for older WP <4.5: class size-WxH is supported up +4.5
-		$this->assertEquals('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="http://example.org/wp-content/uploads/2016/05/33772-768x432.jpg" class="attachment-200x200 wp-post-image" alt="33772.jpg" srcset="http://example.org/wp-content/uploads/2016/05/33772-768x432.jpg 768w, http://example.org/wp-content/uploads/2016/05/33772-300x169.jpg 300w, http://example.org/wp-content/uploads/2016/05/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
+		$this->assertEquals('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772-768x432.jpg" class="attachment-200x200 wp-post-image" alt="33772.jpg" srcset="'.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
 								str_replace(" size-200x200", "", $widget->the_post_thumbnail(array(200,200)))
 							);
     }
@@ -567,7 +568,7 @@ class testWidgetFront extends WP_UnitTestCase {
                               'after_title'=>'',
                               ),array('cat'=>$cid,'num'=>10,'excerpt_length'=>1));
         $o = removeSpaceBetweenTags(ob_get_clean());
-        $this->assertEquals('Uncategorized<ul id="category-posts-"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p=13" rel="bookmark">test</a></li></ul>',$o);
+        $this->assertEquals('Uncategorized<ul id="category-posts-"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a></li></ul>',$o);
         
         ob_start();
         $widget->widget(array('before_widget'=>'',
@@ -576,7 +577,7 @@ class testWidgetFront extends WP_UnitTestCase {
                               'after_title'=>'',
                               ),array('cat'=>$cid,'num'=>10,'excerpt'=>false,'excerpt_length'=>1));
         $o = removeSpaceBetweenTags(ob_get_clean());
-        $this->assertEquals('Uncategorized<ul id="category-posts-"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p=13" rel="bookmark">test</a></li></ul>',$o);
+        $this->assertEquals('Uncategorized<ul id="category-posts-"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a></li></ul>',$o);
 
         // test excerpt length filter
         ob_start();
@@ -586,7 +587,7 @@ class testWidgetFront extends WP_UnitTestCase {
                               'after_title'=>'',
                               ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1));
         $o = removeSpaceBetweenTags(ob_get_clean());
-        $this->assertEquals('Uncategorized<ul id="category-posts-"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p=13" rel="bookmark">test</a><p>more &hellip; <a href="http://example.org/?p=13" class="more-link">Continue reading <span class="screen-reader-text">test</span></a></p></li></ul>',$o);
+        $this->assertEquals('Uncategorized<ul id="category-posts-"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more &hellip; <a href="http://example.org/?p='.$pid.'" class="more-link">Continue reading <span class="screen-reader-text">test</span></a></p></li></ul>',$o);
         
         // test excerpt more filter
         ob_start();
@@ -596,7 +597,7 @@ class testWidgetFront extends WP_UnitTestCase {
                               'after_title'=>'',
                               ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1,'excerpt_more_text'=>'blabla'));
         $o = removeSpaceBetweenTags(ob_get_clean());
-        $this->assertEquals('Uncategorized<ul id="category-posts-"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p=13" rel="bookmark">test</a><p>more <a class="cat-post-excerpt-more" href="http://example.org/?p=13">blabla</a></p></li></ul>',$o);
+        $this->assertEquals('Uncategorized<ul id="category-posts-"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more <a class="cat-post-excerpt-more" href="http://example.org/?p='.$pid.'">blabla</a></p></li></ul>',$o);
         
     }
                                                         
