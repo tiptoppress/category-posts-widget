@@ -478,10 +478,17 @@ class Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Explicite excerpt
+	 * Applay the_content filter for excerpt
+	 * This should show sharing buttons which comes with other widgets in the widget output in the same way as on the main content
+	 *
+     * @param  string The excerpt HTML with other applayed excerpt filters
+     *
+	 * @return string If option hide_social_buttons is unchecked applay the_content filter
+     *
+     * @since 4.1
 	 */	
-	function explicite_the_excerpt($text) {
-		return apply_filters('the_content', $text);
+	function applay_the_excerpt($text) {
+		return isset($this->instance["hide_social_buttons"])?$text:apply_filters('the_content', $text);
 	}
 	
 	/**
@@ -813,7 +820,7 @@ class Widget extends \WP_Widget {
                 remove_filter('get_the_excerpt', 'wp_trim_excerpt');
                 add_filter('the_excerpt', array($this,'allow_html_excerpt'));
             } else {
-                add_filter('the_excerpt', array($this,'explicite_the_excerpt'));
+                add_filter('the_excerpt', array($this,'applay_the_excerpt'));
             }
         }
     }
@@ -831,7 +838,7 @@ class Widget extends \WP_Widget {
         remove_filter('excerpt_more', array($this,'excerpt_more_filter'));
         add_filter('get_the_excerpt', 'wp_trim_excerpt');
         remove_filter('the_excerpt', array($this,'allow_html_excerpt'));
-        remove_filter('the_excerpt', array($this,'explicite_the_excerpt'));
+        remove_filter('the_excerpt', array($this,'applay_the_excerpt'));
     }
     
 	/**
@@ -1099,7 +1106,8 @@ class Widget extends \WP_Widget {
 			'date_link'            => '',
 			'date_format'          => '',
 			'disable_css'          => '',
-			'hide_if_empty'        => ''
+			'hide_if_empty'        => '',
+			'hide_social_buttons'  => ''
 		) );
 
 		$footer_link          = $instance['footer_link'];
@@ -1116,6 +1124,7 @@ class Widget extends \WP_Widget {
 		$date_format          = $instance['date_format'];
 		$disable_css          = $instance['disable_css'];
 		$hide_if_empty        = $instance['hide_if_empty'];
+		$hide_social_buttons  = $instance['hide_social_buttons'];
 
 		?>
 		<div class="category-widget-cont">
@@ -1235,6 +1244,12 @@ class Widget extends \WP_Widget {
 					<label for="<?php echo $this->get_field_id("hide_if_empty"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_if_empty"); ?>" name="<?php echo $this->get_field_name("hide_if_empty"); ?>"<?php checked( (bool) $instance["hide_if_empty"], true ); ?> />
 						<?php _e( 'Hide widget if there are no matching posts',TEXTDOMAIN ); ?>
+					</label>
+				</p>
+				<p>
+					<label for="<?php echo $this->get_field_id("hide_social_buttons"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_social_buttons"); ?>" name="<?php echo $this->get_field_name("hide_social_buttons"); ?>"<?php checked( (bool) $instance["hide_social_buttons"], true ); ?> />
+						<?php _e( 'Hide social buttons in widget output',TEXTDOMAIN ); ?>
 					</label>
 				</p>
 			</div>

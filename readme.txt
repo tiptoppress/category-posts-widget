@@ -27,7 +27,8 @@ It's the pro version and available on <a target="_blank" href="http://tiptoppres
 * Option to show post thumbnail & set dimension by width & height.
 * Option to crop thumbnails with CSS. <a target="_blank" href="http://tiptoppress.com/css-image-crop/">What is 'CSS Image Crop'?</a>
 * Option to set mouse hover effects for post thumbnail.
-* Jetpack 'Sharing - Show buttons on posts' support
+* Jetpack 'Social buttons on posts' support
+* Option to hide social buttons on output
 * Option to put thumbnail on top
 * Option to hide posts which have no thumbnail.
 * Option to disable widget CSS.
@@ -98,8 +99,9 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
 
-= 4.6.1 =
+= 4.6.1 - June 5th 2016 =
 * Keep panels open after save.
+* Option to hide social buttons on output.
 
 = 4.1.9 - May 5th 2016 =
 * Fixed undefined constant.
