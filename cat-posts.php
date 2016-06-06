@@ -575,7 +575,7 @@ class Widget extends \WP_Widget {
             } 
             $title_args = array('echo'=>false);
 			$ret .= '<a '.$class . ' href="'.get_the_permalink().'" title="'.the_title_attribute($title_args).'">';
-            $ret .= $this->the_post_thumbnail( array($this->instance['thumb_w'],$this->instance['thumb_h'])); 
+            $ret .= $this->the_post_thumbnail( array($this->instance['thumb_w'],$this->instance['thumb_h']));
 			$ret .= '</a>';
 		}
 
@@ -1071,7 +1071,7 @@ class Widget extends \WP_Widget {
             <p>
                 <label for="<?php echo $this->get_field_id("use_css_cropping"); ?>">
                     <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("use_css_cropping"); ?>" name="<?php echo $this->get_field_name("use_css_cropping"); ?>"<?php checked( (bool) $instance["use_css_cropping"], true ); ?> />
-                    <?php _e( 'Use CSS to crop to requested size ',TEXTDOMAIN ); ?>
+                    <?php _e( 'CSS crop to requested size ',TEXTDOMAIN ); ?>
                 </label>
             </p>					
             <p>
@@ -1426,17 +1426,9 @@ function customize_register($wp_customize) {
         public $form;
         
         public function render_content() {
-			$widget_title = __NAMESPACE__;
+			$widget_title = 'Category Posts Shortcode';
 			?>
 			<div class="widget-top">
-			<div class="widget-title-action">
-				<a class="widget-action hide-if-no-js" href="#available-widgets"></a>
-				<a class="widget-control-edit hide-if-js" href="<?php echo esc_url( add_query_arg( $query_arg ) ); ?>">
-					<span class="edit"><?php _ex( 'Edit', 'widget' ); ?></span>
-					<span class="add"><?php _ex( 'Add', 'widget' ); ?></span>
-					<span class="screen-reader-text"><?php echo $widget_title; ?></span>
-				</a>
-			</div>
 			<div class="widget-title"><h3><?php echo $widget_title; ?><span class="in-widget-title"></span></h3></div>
 			</div>
 			<div class="widget-inside" style="display: block;">
