@@ -1426,7 +1426,27 @@ function customize_register($wp_customize) {
         public $form;
         
         public function render_content() {
-            echo $this->form;
+			$widget_title = __NAMESPACE__;
+			?>
+			<div class="widget-top">
+			<div class="widget-title-action">
+				<a class="widget-action hide-if-no-js" href="#available-widgets"></a>
+				<a class="widget-control-edit hide-if-js" href="<?php echo esc_url( add_query_arg( $query_arg ) ); ?>">
+					<span class="edit"><?php _ex( 'Edit', 'widget' ); ?></span>
+					<span class="add"><?php _ex( 'Add', 'widget' ); ?></span>
+					<span class="screen-reader-text"><?php echo $widget_title; ?></span>
+				</a>
+			</div>
+			<div class="widget-title"><h3><?php echo $widget_title; ?><span class="in-widget-title"></span></h3></div>
+			</div>
+			<div class="widget-inside" style="display: block;">
+				<div class="form">
+					<div class="widget-content">
+						<?php echo $this->form;	?>
+					</div>
+				</div>
+			</div>
+			<?php
         }
     }    
 
@@ -1446,7 +1466,7 @@ function customize_register($wp_customize) {
     
     if (count($posts) > 0) {
         $wp_customize->add_section( __NAMESPACE__, array(
-            'title'           => __( 'Category posts shortcode', TEXTDOMAIN ),
+            'title'           => __( 'Category Posts Shortcode', TEXTDOMAIN ),
             'priority'        => 200
         ) );
         
