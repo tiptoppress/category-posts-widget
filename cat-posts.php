@@ -403,7 +403,7 @@ class Widget extends \WP_Widget {
 		if ($width / $height == $this->instance['thumb_w'] / $this->instance['thumb_h']) {
 			// image is same ratio as asked for, nothing to do here as the browser will handle it correctly
 			;
-		} else if (isset($this->instance['use_css_cropping'])) {
+		} else if (isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping']) {
 			$image = get_image_size($this->instance['thumb_w'],$this->instance['thumb_h'],$width,$height);			
 
 			// replace srcset
