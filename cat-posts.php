@@ -488,7 +488,12 @@ class Widget extends \WP_Widget {
      * @since 4.1
 	 */	
 	function applay_the_excerpt($text) {
-		return isset($this->instance["hide_social_buttons"])?$text:apply_filters('the_content', $text);
+		$ret = "";
+		if (isset($this->instance["hide_social_buttons"]) && $this->instance["hide_social_buttons"])
+			$ret = $text;
+		else
+			$ret = apply_filters('the_content', $text);
+		return $ret;
 	}
 	
 	/**
