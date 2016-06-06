@@ -101,7 +101,7 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
 
 = 4.6.1 - June 5th 2016 =
-* Add shortcode [catposts] edit in customizer
+* Add shortcode [catposts] edit options only in the customizer
 * Keep panels open after save.
 * Option to hide social buttons on output.
 

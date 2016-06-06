@@ -82,7 +82,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 #### <a target="_blank" href="http://tiptoppress.com/category/category-posts-widget/">Read more on our blog ...</a>
 
 #### 4.6.1 - June 5th 2016
-* Add shortcode [catposts] edit options only in customizer
+* Add shortcode [catposts] edit options only in the customizer
 * Keep panels open after save.
 * Option to hide social buttons on output.
 
