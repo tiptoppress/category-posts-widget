@@ -27,6 +27,7 @@ It's the pro version and available at on <a target="_blank" href="http://tiptopp
 * More <a target="_blank" href="http://demo.tiptoppress.com/">examples on the demo page</a>
 
 ### Features
+* Shortcode: Use [catposts] in the content and edit options in the customizer
 * Option to change ordering of posts.
 * Option to show post thumbnail & set dimension or image size by width & height.
 * Option to crop thumbnails with CSS <a target="_blank" href="http://tiptoppress.com/css-image-crop/">What is 'CSS Image Crop'?</a>
@@ -81,6 +82,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 #### <a target="_blank" href="http://tiptoppress.com/category/category-posts-widget/">Read more on our blog ...</a>
 
 #### 4.6.1 - June 5th 2016
+* Add shortcode [catposts] edit options only in customizer
 * Keep panels open after save.
 * Option to hide social buttons on output.
 
