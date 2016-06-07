@@ -637,7 +637,13 @@ class Widget extends \WP_Widget {
         }
 
         if ( isset( $instance['excerpt'] ) && $instance['excerpt']) {
-            $ret .= apply_filters('the_excerpt',\get_the_excerpt());
+            // use the_excerpt filter to get the "normal" excerpt of the post
+            // then apply our filter to let users customize excerpts in their own way
+            if (isset($instance['excerpt_length']) && ($instance['excerpt_length'] > 0))
+                $length = (int) $instance['excerpt_length'];
+            else 
+                $length = 0; // indicate that invalid length is set
+            $ret .= apply_filters('cpw_excerpt',apply_filters('the_excerpt',\get_the_excerpt()),$this,$length);
         }
         
         if ( isset( $instance['comment_num'] ) && $instance['comment_num']) {
