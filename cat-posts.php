@@ -483,16 +483,12 @@ class Widget extends \WP_Widget {
 	 *
      * @param  string The HTML with other applied excerpt filters
      *
-	 * @return string If option hide_social_buttons is unchecked applay the_content filter
+	 * @return string the result of applying the_content filter
      *
      * @since 4.6
 	 */	
 	function apply_the_excerpt($text) {
-		$ret = "";
-		if (isset($this->instance["hide_social_buttons"]) && $this->instance["hide_social_buttons"])
-			$ret = $text;
-		else
-			$ret = apply_filters('the_content', $text);
+		$ret = apply_filters('the_content', $text);
 		return $ret;
 	}
 	
@@ -1102,8 +1098,6 @@ class Widget extends \WP_Widget {
 			'hide_post_titles'     => '',
 			'excerpt'              => '',
 			'excerpt_length'       => 55,
-			'excerpt_allow_html'   => '',
-			'excerpt_allowed_elements' => array('0'),
 			'excerpt_more_text'    => '',
 			'comment_num'          => '',
 			'author'               => '',
@@ -1112,15 +1106,12 @@ class Widget extends \WP_Widget {
 			'date_format'          => '',
 			'disable_css'          => '',
 			'hide_if_empty'        => '',
-			'hide_social_buttons'  => ''
 		) );
 
 		$footer_link          = $instance['footer_link'];
 		$hide_post_titles     = $instance['hide_post_titles'];
 		$excerpt              = $instance['excerpt'];
 		$excerpt_length       = $instance['excerpt_length'];
-		$excerpt_allow_html   = $instance['excerpt_allow_html'];
-		$excerpt_allowed_elements = $instance['excerpt_allowed_elements'];
 		$excerpt_more_text    = $instance['excerpt_more_text'];
 		$comment_num          = $instance['comment_num'];
 		$author               = $instance['author'];
@@ -1129,7 +1120,6 @@ class Widget extends \WP_Widget {
 		$date_format          = $instance['date_format'];
 		$disable_css          = $instance['disable_css'];
 		$hide_if_empty        = $instance['hide_if_empty'];
-		$hide_social_buttons  = $instance['hide_social_buttons'];
 
 		?>
 		<div class="category-widget-cont">
@@ -1159,46 +1149,6 @@ class Widget extends \WP_Widget {
 						<?php _e( 'Excerpt length (in words):',TEXTDOMAIN ); ?>
 					</label>
 					<input style="text-align: center; width:30%;" type="number" min="0" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" />
-				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("excerpt_allow_html"); ?>">
-						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_allow_html"); ?>" name="<?php echo $this->get_field_name("excerpt_allow_html"); ?>"<?php checked( (bool) $instance["excerpt_allow_html"], true ); ?> />
-						<?php _e( 'Allow HTML in excerpt:',TEXTDOMAIN ); ?>
-					
-
-						<select class="cphtml cpwpany" multiple name="<?php echo $this->get_field_name('excerpt_allowed_elements'); ?>[]" id="<?php echo $this->get_field_id('excerpt_allowed_elements'); ?>">
-						<?php									
-						if (isset($instance['excerpt_allowed_elements']))
-							$selected = $instance['excerpt_allowed_elements'];
-
-						if (in_array('0',$selected,true))
-							echo '<option value="0" selected="selected">&lt;a&gt;</option>';
-						else
-							echo '<option value="0">&lt;a&gt;</option>';		
-							
-						$cphtml = array(
-								'&lt;br&gt;',
-								'&lt;em&gt;',
-								'&lt;i&gt;',
-								'&lt;ul&gt;',
-								'&lt;ol&gt;',
-								'&lt;li&gt;',
-								'&lt;p&gt;',
-								'&lt;img&gt;',
-								'&lt;script&gt;',
-								'&lt;style&gt;',								
-								'&lt;video&gt;',
-								'&lt;audio&gt;'
-						);
-						foreach ($cphtml as $index => $name) {
-							$sel = '';
-							if (in_array((string)($index+1),$selected,true))
-								$sel = 'selected="selected"';
-							echo '<option value="'.($index+1).'"'.$sel.'>'.$name.'</option>';
-						}
-						?>
-						</select>
-					</label>
 				</p>
 				<p>
 					<label for="<?php echo $this->get_field_id("excerpt_more_text"); ?>">
@@ -1249,12 +1199,6 @@ class Widget extends \WP_Widget {
 					<label for="<?php echo $this->get_field_id("hide_if_empty"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_if_empty"); ?>" name="<?php echo $this->get_field_name("hide_if_empty"); ?>"<?php checked( (bool) $instance["hide_if_empty"], true ); ?> />
 						<?php _e( 'Hide widget if there are no matching posts',TEXTDOMAIN ); ?>
-					</label>
-				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("hide_social_buttons"); ?>">
-						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_social_buttons"); ?>" name="<?php echo $this->get_field_name("hide_social_buttons"); ?>"<?php checked( (bool) $instance["hide_social_buttons"], true ); ?> />
-						<?php _e( 'Hide social buttons in widget output',TEXTDOMAIN ); ?>
 					</label>
 				</p>
 			</div>
@@ -1404,8 +1348,6 @@ function save_post($pid,$post) {
                         'hide_post_titles'     => false,
                         'excerpt'              => false,
                         'excerpt_length'       => 55,
-                        'excerpt_allow_html'   => false,
-                        'excerpt_allowed_elements' => array('0'),
                         'excerpt_more_text'    => '',
                         'comment_num'          => false,
                         'author'               => false,
