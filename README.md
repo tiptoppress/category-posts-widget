@@ -21,16 +21,19 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 It's the pro version and available at on <a target="_blank" href="http://tiptoppress.com/">Tip Top Press</a> created for big Wordpress sites.
 
 ### Pro features
-* Custom Post Types, Terms and Custom Taxonomies
+* Custom Post Types, Terms and Custom Taxonomies (e.g. WooCommerce products)
 * Multi selection
 * Different styles, like vertical scrolling ticker
+* More <a target="_blank" href="http://demo.tiptoppress.com/">examples on the demo page</a>
 
 ### Features
+* Shortcode: Use [catposts] in the content and edit options in the customizer
 * Option to change ordering of posts.
 * Option to show post thumbnail & set dimension or image size by width & height.
 * Option to crop thumbnails with CSS <a target="_blank" href="http://tiptoppress.com/css-image-crop/">What is 'CSS Image Crop'?</a>
 * Option to set mouse hover effects for post thumbnail.
-* Jetpack 'Sharing - Show buttons on posts' support
+* Jetpack 'Social buttons on posts' support
+* Option to hide social buttons on output
 * Option to put thumbnail on top.
 * Option to hide posts which have no thumbnail.
 * Option to disable widget CSS.
@@ -76,7 +79,12 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 
 ## Changelog
-[Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
+#### <a target="_blank" href="http://tiptoppress.com/category/category-posts-widget/">Read more on our blog ...</a>
+
+#### 4.6.1 - June 5th 2016
+* Add shortcode [catposts] edit options only in the customizer
+* Keep panels open after save.
+* Option to hide social buttons on output.
 
 #### 4.1.9 - May 5th 2016
 * Fixed undefined constant.
