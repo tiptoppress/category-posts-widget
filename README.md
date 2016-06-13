@@ -20,14 +20,19 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 ### Term and Category based Posts Widget
 It's the pro version and available at on <a target="_blank" href="http://tiptoppress.com/">Tip Top Press</a> created for big Wordpress sites.
 
+### Shortcode
+* Use [catposts] <a target="_blank" href="http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content">in the content and edit options in the customizer</a>
+
 ### Pro features
-* Custom Post Types, Terms and Custom Taxonomies (e.g. WooCommerce products)
+* Custom Post Types, Terms and Custom Taxonomies (e.g. WooCommerce)
 * Multi selection
-* Different styles, like vertical scrolling ticker
-* More <a target="_blank" href="http://demo.tiptoppress.com/">examples on the demo page</a>
+* Vertical Scrolling News Ticker
+* <a target="_blank" href="http://demo.tiptoppress.com/masonry/">Masonry</a> (with up-coming version 4.6)
+* Grid and Columns, Alignment (with up-coming version 4.6)
+* More [examples on the demo page](http://demo.tiptoppress.com/)
 
 ### Features
-* Shortcode: Use [catposts] in the content and edit options in the customizer
+* Shortcode
 * Option to change ordering of posts.
 * Option to show post thumbnail & set dimension or image size by width & height.
 * Option to crop thumbnails with CSS <a target="_blank" href="http://tiptoppress.com/css-image-crop/">What is 'CSS Image Crop'?</a>
