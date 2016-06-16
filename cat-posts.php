@@ -375,12 +375,16 @@ class Widget extends \WP_Widget {
 	 *
      * @param  string The HTML with other applied excerpt filters
      *
-	 * @return string the result of applying the_content filter
+	 * @return string If option hide_social_buttons is unchecked applay the_content filter
      *
      * @since 4.6
 	 */	
 	function apply_the_excerpt($text) {
-		$ret = apply_filters('the_content', $text);
+		$ret = "";
+ 		if (isset($this->instance["hide_social_buttons"]) && $this->instance["hide_social_buttons"])
+ 			$ret = $text;
+ 		else
+ 			$ret = apply_filters('the_content', $text);
 		return $ret;
 	}
 	
@@ -1099,6 +1103,12 @@ class Widget extends \WP_Widget {
 						<?php _e( 'Hide widget if there are no matching posts',TEXTDOMAIN ); ?>
 					</label>
 				</p>
+				<p>
+ 					<label for="<?php echo $this->get_field_id("hide_social_buttons"); ?>">
+ 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_social_buttons"); ?>" name="<?php echo $this->get_field_name("hide_social_buttons"); ?>"<?php checked( (bool) $instance["hide_social_buttons"], true ); ?> />
+ 						<?php _e( 'Hide social buttons in widget output',TEXTDOMAIN ); ?>
+ 					</label>
+ 				</p>
 			</div>
 			<h4 data-panel="footer"><?php _e('Footer',TEXTDOMAIN)?></h4>
 			<div>
@@ -1253,7 +1263,8 @@ function save_post($pid,$post) {
                         'date_link'            => false,
                         'date_format'          => '',
                         'disable_css'          => false,
-                        'hide_if_empty'        => false
+                        'hide_if_empty'        => false,
+						'hide_social_buttons'  => ''
                         ),
                         true);
 }
