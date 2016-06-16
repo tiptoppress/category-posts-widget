@@ -456,7 +456,7 @@ class Widget extends \WP_Widget {
         
 		if ( isset( $instance["thumb"] ) && $instance["thumb"] &&
 				has_post_thumbnail() ) {
-			$use_css_cropping = isset($this->instance['use_css_cropping']) ? "cat-post-css-cropping" : "";
+			$use_css_cropping = (isset($this->instance['use_css_cropping'])&&$this->instance['use_css_cropping']) ? "cat-post-css-cropping" : "";
             $class = '';
             if( !(isset( $this->instance['disable_css'] ) && $this->instance['disable_css'])) { 
                 if( isset($this->instance['thumb_hover'] )) {
@@ -1008,6 +1008,7 @@ class Widget extends \WP_Widget {
 			'date_format'          => '',
 			'disable_css'          => '',
 			'hide_if_empty'        => '',
+			'hide_social_buttons'  => ''
 		) );
 
 		$footer_link          = $instance['footer_link'];
