@@ -1184,7 +1184,7 @@ function shortcode($attr,$content=null) {
                                 'after_title' => ''
                             ), $instance);
             $ret = ob_get_clean();
-            $ret = '<div id="'.WIDGET_BASE_ID.'-'.$widget->number.'">'.$ret.'</div>';
+            $ret = '<div id="'.WIDGET_BASE_ID.'-'.$widget->number.'" class="'.WIDGET_BASE_ID.'-shortcode">'.$ret.'</div>';
             return $ret;
         }       
     }
