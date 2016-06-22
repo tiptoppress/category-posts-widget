@@ -20,15 +20,10 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 ### Term and Category based Posts Widget
 It's the pro version and available at on <a target="_blank" href="http://tiptoppress.com/">Tip Top Press</a> created for big Wordpress sites.
 
-### Shortcode
-* Use [catposts] <a target="_blank" href="http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content">in the content and edit options in the customizer</a>
-
 ### Pro features
-* Custom Post Types, Terms and Custom Taxonomies (e.g. WooCommerce)
+* Custom Post Types, Terms and Custom Taxonomies
 * Multi selection
 * Vertical Scrolling News Ticker
-* <a target="_blank" href="http://demo.tiptoppress.com/masonry/">Masonry</a> (with up-coming version 4.6)
-* Grid and Columns, Alignment (with up-coming version 4.6)
 * More [examples on the demo page](http://demo.tiptoppress.com/)
 
 ### Features
@@ -60,7 +55,10 @@ It's the pro version and available at on <a target="_blank" href="http://tiptopp
 * Localization support.
 
 ### Documentation
+Shortcode: Use [catposts] <a target="_blank" href="http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content">in the content and edit options in the customizer</a>
+Full documentation on [Tiptoppress](http://tiptoppress.com/category-posts-widget/documentation/).
 Formatting date and time: See [Formatting Date and Time] (https://codex.wordpress.org/Formatting_Date_and_Time).
+
 
 ### Contribute
 While using this plugin if you find any bug or any conflict, please submit an issue at 
