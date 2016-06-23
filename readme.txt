@@ -52,8 +52,8 @@ It's the pro version and available on <a target="_blank" href="http://tiptoppres
 
 = Documentation =
 * Shortcode: Use [catposts] [in the content and edit options in the customizer](http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content)
-* Full documentation on [Tiptoppress](http://tiptoppress.com/category-posts-widget/documentation/)
 * Formatting date and time: See <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>.
+* Full documentation on [Tiptoppress](http://tiptoppress.com/category-posts-widget/documentation/)
 
 = Contribute =
 While using this plugin if you find any bug or any conflict, please submit an issue at 
@@ -96,7 +96,7 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 == Screenshots ==
 1. The widget configuration dialog.
 2. Front end of the widget using a default WordPress Theme.
-3. Use shortcode [catposts] edit options only in the customizer.
+3. Use shortcode [catposts] in the content and edit options in the customizer.
 
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)

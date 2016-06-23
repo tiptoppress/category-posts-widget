@@ -56,9 +56,10 @@ It's the pro version and available at on <a target="_blank" href="http://tiptopp
 
 ### Documentation
 Shortcode: Use [catposts] <a target="_blank" href="http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content">in the content and edit options in the customizer</a>
-Full documentation on [Tiptoppress](http://tiptoppress.com/category-posts-widget/documentation/).
+
 Formatting date and time: See [Formatting Date and Time] (https://codex.wordpress.org/Formatting_Date_and_Time).
 
+Full documentation on [Tiptoppress](http://tiptoppress.com/category-posts-widget/documentation/).
 
 ### Contribute
 While using this plugin if you find any bug or any conflict, please submit an issue at 
