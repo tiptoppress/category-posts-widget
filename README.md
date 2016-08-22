@@ -27,7 +27,8 @@ It's the pro version and available at on <a target="_blank" href="http://tiptopp
 * More [examples on the demo page](http://demo.tiptoppress.com/)
 
 ### Features
-* Shortcode
+* Shortcode (Edit in the customizer)
+* For editing shortcode adds a customizer link to the admin-bar if page/post is in edit mode
 * Option to change ordering of posts.
 * Option to show post thumbnail & set dimension or image size by width & height.
 * Option to crop thumbnails with CSS <a target="_blank" href="http://tiptoppress.com/css-image-crop/">What is 'CSS Image Crop'?</a>
@@ -84,6 +85,9 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 ## Changelog
 #### <a target="_blank" href="http://tiptoppress.com/category/category-posts-widget/">Read more on our blog ...</a>
+
+#### 4.7 - Dezember 31th 2016
+* For editing shortcode adds a customizer link to the admin-bar if page/post is in edit mode
 
 #### 4.6.1 - June 5th 2016
 * Add shortcode [catposts] edit options only in the customizer

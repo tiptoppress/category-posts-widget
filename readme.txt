@@ -23,7 +23,8 @@ It's the pro version and available on <a target="_blank" href="http://tiptoppres
 * More [examples on the demo page](http://demo.tiptoppress.com/)
 
 = Features =
-* Shortcode
+* Shortcode (Edit in the customizer)
+* For editing shortcode adds a customizer link to the admin-bar if page/post is in edit mode
 * Option to change ordering of posts.
 * Option to show post thumbnail & set dimension by width & height.
 * Option to crop thumbnails with CSS. <a target="_blank" href="http://tiptoppress.com/css-image-crop/">What is 'CSS Image Crop'?</a>
@@ -100,6 +101,9 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
+
+= 4.7 - Dezember 31th 2016 =
+* For editing shortcode adds a customizer link to the admin-bar if page/post is in edit mode
 
 = 4.6.1 - June 5th 2016 =
 * Add shortcode [catposts] edit options only in the customizer
