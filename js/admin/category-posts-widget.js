@@ -36,11 +36,6 @@ jQuery(document).ready( function () {
     }
 
 	jQuery('.category-widget-cont h4').click(function () { // for widgets page
-		// close all open panels if open
-		if(!jQuery(this).hasClass('open')) {
-			var jCloseElement = jQuery(this).parent().find('.open');
-			cwp_namespace.clickHandler(jCloseElement);
-		}		
 		// toggle panel open/close
         cwp_namespace.clickHandler(this);
 	});
@@ -48,11 +43,6 @@ jQuery(document).ready( function () {
 	// needed to reassign click handlers after widget refresh
 	jQuery(document).on('widget-added widget-updated', function(root,element){ // for customize and after save on widgets page
 		jQuery('.category-widget-cont h4').off('click').on('click', function () {	
-			// close all open panels if open
-			if(!jQuery(this).hasClass('open')) {
-				var jCloseElement = jQuery(this).parent().find('.open');
-				cwp_namespace.clickHandler(jCloseElement);
-			}		
 			// toggle panel open/close
             cwp_namespace.clickHandler(this);
 		})
