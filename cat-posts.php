@@ -1038,7 +1038,8 @@ class Widget extends \WP_Widget {
 			'date_format'          => '',
 			'disable_css'          => '',
 			'hide_if_empty'        => '',
-			'hide_social_buttons'  => ''
+			'hide_social_buttons'  => '',
+			'auto_close_panels'    => false,
 		) );
 
 		$footer_link          = $instance['footer_link'];
@@ -1053,6 +1054,7 @@ class Widget extends \WP_Widget {
 		$date_format          = $instance['date_format'];
 		$disable_css          = $instance['disable_css'];
 		$hide_if_empty        = $instance['hide_if_empty'];
+		$auto_close_panels    = $instance['auto_close_panels'];
 
 		?>
 		<div class="category-widget-cont">
@@ -1147,6 +1149,15 @@ class Widget extends \WP_Widget {
 					<label for="<?php echo $this->get_field_id("footer_link"); ?>">
 						<?php _e( 'Footer link text',TEXTDOMAIN ); ?>:
 						<input class="widefat" style="width:60%;" placeholder="<?php _e('... more by this topic',TEXTDOMAIN)?>" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
+					</label>
+				</p>
+			</div>
+			<h4 data-panel="mysettings"><?php _e('My settings',TEXTDOMAIN)?></h4>
+			<div class="categoryposts-mysettings-panel-auto-close-panels">
+				<p>
+					<label for="<?php echo $this->get_field_id("auto_close_panels"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("auto_close_panels"); ?>" name="<?php echo $this->get_field_name("auto_close_panels"); ?>"<?php checked( (bool) $instance["auto_close_panels"], true ); ?> />
+						<?php _e( 'Auto close panels',TEXTDOMAIN ); ?>
 					</label>
 				</p>
 			</div>
@@ -1297,7 +1308,8 @@ function save_post($pid,$post) {
                         'date_format'          => '',
                         'disable_css'          => false,
                         'hide_if_empty'        => false,
-						'hide_social_buttons'  => ''
+						'hide_social_buttons'  => '',
+						'auto_close_panels'    => false,
                         ),
                         true);
 }

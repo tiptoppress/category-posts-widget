@@ -32,17 +32,29 @@ jQuery(document).ready( function () {
             else 
                 o[panel] = true;
             this.open_panels[id] = o;
-        }
+        },
+		
+		// Close all open panels if open
+		autoCloseOpenPanels: function(_this) {
+			if(jQuery('.categoryposts-mysettings-panel-auto-close-panels').find('input[type="checkbox"]').is(':checked')) {
+				if(!jQuery(_this).hasClass('open')) {
+					var jCloseElement = jQuery(_this).parent().find('.open');
+					cpwp_namespace.clickHandler(jCloseElement);
+				}
+			}
+		},
     }
 
 	jQuery('.category-widget-cont h4').click(function () { // for widgets page
+		cwp_namespace.autoCloseOpenPanels(this);
 		// toggle panel open/close
         cwp_namespace.clickHandler(this);
 	});
-		
+
 	// needed to reassign click handlers after widget refresh
 	jQuery(document).on('widget-added widget-updated', function(root,element){ // for customize and after save on widgets page
-		jQuery('.category-widget-cont h4').off('click').on('click', function () {	
+		jQuery('.category-widget-cont h4').off('click').on('click', function () {
+			cwp_namespace.autoCloseOpenPanels(this);
 			// toggle panel open/close
             cwp_namespace.clickHandler(this);
 		})
