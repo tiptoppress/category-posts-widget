@@ -36,10 +36,13 @@ jQuery(document).ready( function () {
 		
 		// Close all open panels if open
 		autoCloseOpenPanels: function(_this) {
-			if(jQuery('.categoryposts-mysettings-panel-auto-close-panels').find('input[type="checkbox"]').is(':checked')) {
-				if(!jQuery(_this).hasClass('open')) {
-					var jCloseElement = jQuery(_this).parent().find('.open');
-					cpwp_namespace.clickHandler(jCloseElement);
+			if( jQuery(_this)
+				.parent()
+				.find('.categoryposts-mysettings-panel-auto-close-panels input[type="checkbox"]')
+				.is(':checked') ) {
+					if(!jQuery(_this).hasClass('open')) {
+						var jCloseElement = jQuery(_this).parent().find('.open');
+						cpwp_namespace.clickHandler(jCloseElement);
 				}
 			}
 		},
