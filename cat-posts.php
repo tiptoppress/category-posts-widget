@@ -1341,6 +1341,7 @@ function customize_register($wp_customize) {
     $args = array(
         'post_type' => 'any',
         'post_status' => 'any',
+		'posts_per_page' => -1,
         'update_post_term_cache' => false,
         'meta_query' => array(
 					array(
