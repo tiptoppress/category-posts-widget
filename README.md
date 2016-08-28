@@ -86,8 +86,9 @@ Automatic installation is the easiest option as WordPress handles the file trans
 ## Changelog
 #### <a target="_blank" href="http://tiptoppress.com/category/category-posts-widget/">Read more on our blog ...</a>
 
-#### 4.7 - Dezember 31th 2016
-* For editing shortcode adds a customizer link to the admin-bar if page/post is in edit mode
+#### 4.6.2 - August 28th 2016
+* Fixed only five widget instances can be costumized with shortcodes.
+* For editing shortcode adds a customizer link to the admin-bar if page/post is in edit mode.
 
 #### 4.6.1 - June 5th 2016
 * Add shortcode [catposts] edit options only in the customizer

@@ -102,8 +102,9 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
 
-= 4.7 - Dezember 31th 2016 =
-* For editing shortcode adds a customizer link to the admin-bar if page/post is in edit mode
+= 4.6.2 - August 28th 2016 =
+* Fixed only five widget instances can be costumized with shortcodes.
+* For editing shortcode adds a customizer link to the admin-bar if page/post is in edit mode.
 
 = 4.6.1 - June 5th 2016 =
 * Add shortcode [catposts] edit options only in the customizer
