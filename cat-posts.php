@@ -577,9 +577,9 @@ class Widget extends \WP_Widget {
         if( !(isset ( $instance["hide_title"] ) && $instance["hide_title"])) {
             $ret = $before_title;
             if( isset ( $instance["title_link"]) && $instance["title_link"] && isset($instance["cat"]) && (get_category($instance["cat"]) != null))  {
-                $ret .= '<a href="' . get_category_link($instance["cat"]) . '">' . esc_html(apply_filters( 'widget_title', $instance["title"] )) . '</a>';
+                $ret .= '<a href="' . get_category_link($instance["cat"]) . '">' . apply_filters( 'widget_title', $instance["title"] ) . '</a>';
             } else {
-                $ret .= esc_html(apply_filters( 'widget_title', $instance["title"] ));
+                $ret .= apply_filters( 'widget_title', $instance["title"] );
             }
             $ret .= $after_title;
         }
