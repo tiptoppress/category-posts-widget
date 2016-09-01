@@ -576,10 +576,15 @@ class Widget extends \WP_Widget {
 
         if( !(isset ( $instance["hide_title"] ) && $instance["hide_title"])) {
             $ret = $before_title;
+			if (isset($instance['is_shortcode']))
+				$title = esc_html($instance["title"]);
+			else
+				$title = apply_filters( 'widget_title', $instance["title"] );
+			
             if( isset ( $instance["title_link"]) && $instance["title_link"] && isset($instance["cat"]) && (get_category($instance["cat"]) != null))  {
-                $ret .= '<a href="' . get_category_link($instance["cat"]) . '">' . apply_filters( 'widget_title', $instance["title"] ) . '</a>';
+                $ret .= '<a href="' . get_category_link($instance["cat"]) . '">' . $title . '</a>';
             } else {
-                $ret .= apply_filters( 'widget_title', $instance["title"] );
+                $ret .= $title;
             }
             $ret .= $after_title;
         }
@@ -1214,7 +1219,8 @@ function shortcode_settings() {
 function shortcode($attr,$content=null) {
     if (is_singular()) {
         $instance = shortcode_settings();
-        
+        $instance['is_shortcode'] = true;  // indicate that we are doing shortcode processing to outputting funtions
+		
         if (is_array($instance)) {
             $widget=new Widget();
             $widget->number = 'shortcode-'.get_the_ID(); // needed to make a unique id for the widget html element
