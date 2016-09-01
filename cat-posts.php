@@ -830,6 +830,7 @@ class Widget extends \WP_Widget {
 	 */
 	function update($new_instance, $old_instance) {
 
+		$new_instance['title'] = sanitize_text_field( $new_instance['title'] );  // sanitize the title like core widgets do
 		return $new_instance;
 	}
 
