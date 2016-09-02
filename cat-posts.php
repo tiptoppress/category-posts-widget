@@ -1265,6 +1265,45 @@ function shortcode_exist($shortcode_name,$content) {
 }
 
 /**
+ *  Organized way to have rhw default widget settings accessible
+ *  
+ *  @since 4.6
+ */
+function default_settings()  {
+    return array(
+				'title' => '',
+				'title_link' => false,
+				'hide_title' => false,
+				'cat'                  => '',
+				'num'                  => get_option('posts_per_page'),
+				'sort_by'              => 'date',
+				'asc_sort_order'       => false,
+				'exclude_current_post' => false,
+				'hideNoThumb'          => false,
+				'footer_link'          => '',
+				'thumb'                => false,
+				'thumbTop'             => false,
+				'thumb_w'              => '',
+				'thumb_h'              => '',
+				'use_css_cropping'     => false,
+				'thumb_hover'          => 'none',
+				'hide_post_titles'     => false,
+				'excerpt'              => false,
+				'excerpt_length'       => 55,
+				'excerpt_more_text'    => '',
+				'comment_num'          => false,
+				'author'               => false,
+				'date'                 => false,
+				'date_link'            => false,
+				'date_format'          => '',
+				'disable_css'          => false,
+				'hide_if_empty'        => false,
+				'hide_social_buttons'  => '',
+				'auto_close_panels'    => false,
+				);
+}
+
+/**
  *  Manipulate the relevant meta related to the short code when a post is save
  *  
  *  If A post has a short code, a meta holder is created, If it does not the meta holder is deleted
@@ -1287,38 +1326,7 @@ function save_post($pid,$post) {
     if (!$exist)
         delete_post_meta($pid,SHORTCODE_META);
     else if (!is_array($has_meta))  // get_post_meta have strang return vaules when do not exist so just check it is expected structure
-        add_post_meta($pid,SHORTCODE_META,array(
-                        'title' => '',
-                        'title_link' => false,
-                        'hide_title' => false,
-                        'cat'                  => '',
-                        'num'                  => get_option('posts_per_page'),
-                        'sort_by'              => 'date',
-                        'asc_sort_order'       => false,
-                        'exclude_current_post' => false,
-                        'hideNoThumb'          => false,
-                        'footer_link'          => '',
-                        'thumb'                => false,
-                        'thumbTop'             => false,
-                        'thumb_w'              => '',
-                        'thumb_h'              => '',
-                        'use_css_cropping'     => false,
-                        'thumb_hover'          => 'none',
-                        'hide_post_titles'     => false,
-                        'excerpt'              => false,
-                        'excerpt_length'       => 55,
-                        'excerpt_more_text'    => '',
-                        'comment_num'          => false,
-                        'author'               => false,
-                        'date'                 => false,
-                        'date_link'            => false,
-                        'date_format'          => '',
-                        'disable_css'          => false,
-                        'hide_if_empty'        => false,
-						'hide_social_buttons'  => '',
-						'auto_close_panels'    => false,
-                        ),
-                        true);
+        add_post_meta($pid,SHORTCODE_META,default_settings(),true);
 }
 
 add_action('save_post',__NAMESPACE__.'\save_post',10,2);
@@ -1373,6 +1381,8 @@ function customize_register($wp_customize) {
             if (!is_array($meta))
                 continue;
             
+            $meta = get_post_meta($p->ID,SHORTCODE_META,true);
+
             ob_start();
             $widget->form(array());
             $form = ob_get_clean();
