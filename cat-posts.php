@@ -4,7 +4,7 @@ Plugin Name: Category Posts Widget
 Plugin URI: http://mkrdip.me/category-posts-widget
 Description: Adds a widget that shows the most recent posts from a single category.
 Author: Mrinal Kanti Roy
-Version: 4.6.1
+Version: 4.6.2
 Author URI: http://mkrdip.me
 */
 
@@ -92,6 +92,36 @@ function should_enqueue($id_base,$class) {
 	
 	return $ret;
 }
+
+/***
+ *  Adds the "Customize" link to the Toolbar on edit mode.
+ *  
+ */
+function wp_admin_bar_customize_menu() {
+	global $wp_admin_bar;
+
+		if ( ! isset($_GET['action']) || $_GET['action'] !== 'edit' )
+			return;
+
+		if ( !current_user_can( 'customize' ) || !is_admin() || !is_user_logged_in() || !is_admin_bar_showing() )
+			return;
+
+		$current_url = "";
+		if ( isset($_GET['post']) || $_GET['post'] !== '' )
+			$current_url = get_permalink( $_GET['post'] );		
+		$customize_url = add_query_arg( 'url', urlencode( $current_url ), wp_customize_url() );
+
+		$wp_admin_bar->add_menu( array(
+				'id'     => 'customize',
+				'title'  => __( 'Customize' ),
+				'href'   => $customize_url,
+				'meta'   => array(
+						'class' => 'hide-if-no-customize',
+				),
+		) );
+		add_action( 'wp_before_admin_bar_render', 'wp_customize_support_script' );
+}
+add_action('admin_bar_menu',__NAMESPACE__.'\wp_admin_bar_customize_menu', 35);
 
 /**
  * Register our styles
@@ -387,12 +417,16 @@ class Widget extends \WP_Widget {
 	 *
      * @param  string The HTML with other applied excerpt filters
      *
-	 * @return string the result of applying the_content filter
+	 * @return string If option hide_social_buttons is unchecked applay the_content filter
      *
      * @since 4.6
 	 */	
 	function apply_the_excerpt($text) {
-		$ret = apply_filters('the_content', $text);
+		$ret = "";
+ 		if (isset($this->instance["hide_social_buttons"]) && $this->instance["hide_social_buttons"])
+ 			$ret = $text;
+ 		else
+ 			$ret = apply_filters('the_content', $text);
 		return $ret;
 	}
 	
@@ -464,7 +498,7 @@ class Widget extends \WP_Widget {
         
 		if ( isset( $instance["thumb"] ) && $instance["thumb"] &&
 				has_post_thumbnail() ) {
-			$use_css_cropping = isset($this->instance['use_css_cropping']) ? "cat-post-css-cropping" : "";
+			$use_css_cropping = (isset($this->instance['use_css_cropping'])&&$this->instance['use_css_cropping']) ? "cat-post-css-cropping" : "";
             $class = '';
             if( !(isset( $this->instance['disable_css'] ) && $this->instance['disable_css'])) { 
                 if( isset($this->instance['thumb_hover'] )) {
@@ -554,10 +588,15 @@ class Widget extends \WP_Widget {
 
         if( !(isset ( $instance["hide_title"] ) && $instance["hide_title"])) {
             $ret = $before_title;
+			if (isset($instance['is_shortcode']))
+				$title = esc_html($instance["title"]);
+			else
+				$title = apply_filters( 'widget_title', $instance["title"] );
+			
             if( isset ( $instance["title_link"]) && $instance["title_link"] && isset($instance["cat"]) && (get_category($instance["cat"]) != null))  {
-                $ret .= '<a href="' . get_category_link($instance["cat"]) . '">' . esc_html(apply_filters( 'widget_title', $instance["title"] )) . '</a>';
+                $ret .= '<a href="' . get_category_link($instance["cat"]) . '">' . $title . '</a>';
             } else {
-                $ret .= esc_html(apply_filters( 'widget_title', $instance["title"] ));
+                $ret .= $title;
             }
             $ret .= $after_title;
         }
@@ -779,7 +818,7 @@ class Widget extends \WP_Widget {
             if (is_singular())
                 $current_post_id = get_the_ID();
 
-			echo '<ul id="'.WIDGET_BASE_ID.'-'.$this->number."\">\n"; // use the internal number of the widget as a unique id
+			echo "<ul>\n";
 
             $this->setExcerpFilters($instance);         
 			while ( $cat_posts->have_posts() )
@@ -808,6 +847,7 @@ class Widget extends \WP_Widget {
 	 */
 	function update($new_instance, $old_instance) {
 
+		$new_instance['title'] = sanitize_text_field( $new_instance['title'] );  // sanitize the title like core widgets do
 		return $new_instance;
 	}
 
@@ -1016,6 +1056,8 @@ class Widget extends \WP_Widget {
 			'date_format'          => '',
 			'disable_css'          => '',
 			'hide_if_empty'        => '',
+			'hide_social_buttons'  => '',
+			'auto_close_panels'    => false,
 		) );
 
 		$footer_link          = $instance['footer_link'];
@@ -1030,6 +1072,7 @@ class Widget extends \WP_Widget {
 		$date_format          = $instance['date_format'];
 		$disable_css          = $instance['disable_css'];
 		$hide_if_empty        = $instance['hide_if_empty'];
+		$auto_close_panels    = $instance['auto_close_panels'];
 
 		?>
 		<div class="category-widget-cont">
@@ -1111,6 +1154,12 @@ class Widget extends \WP_Widget {
 						<?php _e( 'Hide widget if there are no matching posts',TEXTDOMAIN ); ?>
 					</label>
 				</p>
+				<p>
+ 					<label for="<?php echo $this->get_field_id("hide_social_buttons"); ?>">
+ 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_social_buttons"); ?>" name="<?php echo $this->get_field_name("hide_social_buttons"); ?>"<?php checked( (bool) $instance["hide_social_buttons"], true ); ?> />
+ 						<?php _e( 'Hide social buttons in widget output',TEXTDOMAIN ); ?>
+ 					</label>
+ 				</p>
 			</div>
 			<h4 data-panel="footer"><?php _e('Footer',TEXTDOMAIN)?></h4>
 			<div>
@@ -1118,6 +1167,15 @@ class Widget extends \WP_Widget {
 					<label for="<?php echo $this->get_field_id("footer_link"); ?>">
 						<?php _e( 'Footer link text',TEXTDOMAIN ); ?>:
 						<input class="widefat" style="width:60%;" placeholder="<?php _e('... more by this topic',TEXTDOMAIN)?>" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
+					</label>
+				</p>
+			</div>
+			<h4 data-panel="mysettings"><?php _e('My settings',TEXTDOMAIN)?></h4>
+			<div class="categoryposts-mysettings-panel-auto-close-panels">
+				<p>
+					<label for="<?php echo $this->get_field_id("auto_close_panels"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("auto_close_panels"); ?>" name="<?php echo $this->get_field_name("auto_close_panels"); ?>"<?php checked( (bool) $instance["auto_close_panels"], true ); ?> />
+						<?php _e( 'Auto close panels',TEXTDOMAIN ); ?>
 					</label>
 				</p>
 			</div>
@@ -1173,7 +1231,8 @@ function shortcode_settings() {
 function shortcode($attr,$content=null) {
     if (is_singular()) {
         $instance = shortcode_settings();
-        
+        $instance['is_shortcode'] = true;  // indicate that we are doing shortcode processing to outputting funtions
+		
         if (is_array($instance)) {
             $widget=new Widget();
             $widget->number = 'shortcode-'.get_the_ID(); // needed to make a unique id for the widget html element
@@ -1184,7 +1243,9 @@ function shortcode($attr,$content=null) {
                                 'before_title' => '',
                                 'after_title' => ''
                             ), $instance);
-            return ob_get_clean();
+            $ret = ob_get_clean();
+            $ret = '<div id="'.WIDGET_BASE_ID.'-'.$widget->number.'" class="'.WIDGET_BASE_ID.'-shortcode">'.$ret.'</div>';
+            return $ret;
         }       
     }
     
@@ -1216,6 +1277,45 @@ function shortcode_exist($shortcode_name,$content) {
 }
 
 /**
+ *  Organized way to have rhw default widget settings accessible
+ *  
+ *  @since 4.6
+ */
+function default_settings()  {
+    return array(
+				'title' => '',
+				'title_link' => false,
+				'hide_title' => false,
+				'cat'                  => '',
+				'num'                  => get_option('posts_per_page'),
+				'sort_by'              => 'date',
+				'asc_sort_order'       => false,
+				'exclude_current_post' => false,
+				'hideNoThumb'          => false,
+				'footer_link'          => '',
+				'thumb'                => false,
+				'thumbTop'             => false,
+				'thumb_w'              => '',
+				'thumb_h'              => '',
+				'use_css_cropping'     => false,
+				'thumb_hover'          => 'none',
+				'hide_post_titles'     => false,
+				'excerpt'              => false,
+				'excerpt_length'       => 55,
+				'excerpt_more_text'    => '',
+				'comment_num'          => false,
+				'author'               => false,
+				'date'                 => false,
+				'date_link'            => false,
+				'date_format'          => '',
+				'disable_css'          => false,
+				'hide_if_empty'        => false,
+				'hide_social_buttons'  => '',
+				'auto_close_panels'    => false,
+				);
+}
+
+/**
  *  Manipulate the relevant meta related to the short code when a post is save
  *  
  *  If A post has a short code, a meta holder is created, If it does not the meta holder is deleted
@@ -1238,36 +1338,7 @@ function save_post($pid,$post) {
     if (!$exist)
         delete_post_meta($pid,SHORTCODE_META);
     else if (!is_array($has_meta))  // get_post_meta have strang return vaules when do not exist so just check it is expected structure
-        add_post_meta($pid,SHORTCODE_META,array(
-                        'title' => '',
-                        'title_link' => false,
-                        'hide_title' => false,
-                        'cat'                  => '',
-                        'num'                  => get_option('posts_per_page'),
-                        'sort_by'              => 'date',
-                        'asc_sort_order'       => false,
-                        'exclude_current_post' => false,
-                        'hideNoThumb'          => false,
-                        'footer_link'          => '',
-                        'thumb'                => false,
-                        'thumbTop'             => false,
-                        'thumb_w'              => '',
-                        'thumb_h'              => '',
-                        'use_css_cropping'     => false,
-                        'thumb_hover'          => 'none',
-                        'hide_post_titles'     => false,
-                        'excerpt'              => false,
-                        'excerpt_length'       => 55,
-                        'excerpt_more_text'    => '',
-                        'comment_num'          => false,
-                        'author'               => false,
-                        'date'                 => false,
-                        'date_link'            => false,
-                        'date_format'          => '',
-                        'disable_css'          => false,
-                        'hide_if_empty'        => false
-                        ),
-                        true);
+        add_post_meta($pid,SHORTCODE_META,default_settings(),true);
 }
 
 add_action('save_post',__NAMESPACE__.'\save_post',10,2);
@@ -1297,6 +1368,7 @@ function customize_register($wp_customize) {
     $args = array(
         'post_type' => 'any',
         'post_status' => 'any',
+		'posts_per_page' => -1,
         'update_post_term_cache' => false,
         'meta_query' => array(
 					array(
@@ -1321,6 +1393,8 @@ function customize_register($wp_customize) {
             if (!is_array($meta))
                 continue;
             
+            $meta = get_post_meta($p->ID,SHORTCODE_META,true);
+
             ob_start();
             $widget->form(array());
             $form = ob_get_clean();

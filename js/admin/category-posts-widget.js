@@ -22,7 +22,7 @@ jQuery(document).ready( function () {
             jQuery(element).toggleClass('open')
                         .next().stop().slideToggle();
             // mark the change of state in the open panels array
-            var panel = element.getAttribute('data-panel');
+            var panel = jQuery(element).data('panel');
             var id = jQuery(element).parent().parent().parent().parent().parent().attr('id');
             var o = {};
             if (this.open_panels.hasOwnProperty(id))
@@ -32,16 +32,33 @@ jQuery(document).ready( function () {
             else 
                 o[panel] = true;
             this.open_panels[id] = o;
-        }
+        },
+		
+		// Close all open panels if open
+		autoCloseOpenPanels: function(_this) {
+			if( jQuery(_this)
+				.parent()
+				.find('.categoryposts-mysettings-panel-auto-close-panels input[type="checkbox"]')
+				.is(':checked') ) {
+					if(!jQuery(_this).hasClass('open')) {
+						var jCloseElement = jQuery(_this).parent().find('.open');
+						cpwp_namespace.clickHandler(jCloseElement);
+				}
+			}
+		},
     }
 
 	jQuery('.category-widget-cont h4').click(function () { // for widgets page
+		cwp_namespace.autoCloseOpenPanels(this);
+		// toggle panel open/close
         cwp_namespace.clickHandler(this);
 	});
-		
+
 	// needed to reassign click handlers after widget refresh
 	jQuery(document).on('widget-added widget-updated', function(root,element){ // for customize and after save on widgets page
-		jQuery('.category-widget-cont h4').off('click').on('click', function () {	
+		jQuery('.category-widget-cont h4').off('click').on('click', function () {
+			cwp_namespace.autoCloseOpenPanels(this);
+			// toggle panel open/close
             cwp_namespace.clickHandler(this);
 		})
         // refresh panels to state before the refresh

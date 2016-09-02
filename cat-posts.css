@@ -1,6 +1,6 @@
 /*
 Default CSS Styles for the Category Posts Widget plugin
-Version: 4.6.1
+Version: 4.6.2
 */
 
 /*--------------------------------------------------------------
@@ -34,10 +34,10 @@ Version: 4.6.1
 .cat-post-comment-num {
 	font-size: 12px;
 	line-height: 18px;
-	margin-bottom: 0;
 }
 .cat-post-date {
 	font-style: italic;
+	margin-bottom: 10px;
 }
 .cat-post-author {
 	margin-bottom: 0;
