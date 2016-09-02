@@ -86,6 +86,9 @@ Automatic installation is the easiest option as WordPress handles the file trans
 ## Changelog
 #### <a target="_blank" href="http://tiptoppress.com/category/category-posts-widget/">Read more on our blog ...</a>
 
+#### 4.7.1 - 
+* Add option for post offset (use two or more widgets after another)
+
 #### 4.6.2 - August 28th 2016
 * Fixed only five widget instances can be costumized with shortcodes.
 * For editing shortcode adds a customizer link to the admin-bar if page/post is in edit mode.
