@@ -4,6 +4,7 @@ Plugin Name: Category Posts Widget
 Plugin URI: http://mkrdip.me/category-posts-widget
 Description: Adds a widget that shows the most recent posts from a single category.
 Author: Mrinal Kanti Roy
+Version: 4.7.beta1
 Author URI: http://mkrdip.me
 */
 
@@ -529,6 +530,9 @@ class Widget extends \WP_Widget {
         if (isset($instance["num"])) 
             $args['showposts'] = (int) $instance["num"];
 		
+        if (isset($instance["offset"]) && ($instance["offset"] > 1)) 
+            $args['offset'] = (int) $instance["offset"] - 1;
+		
         if (isset($instance["cat"])) 
             $args['cat'] = (int) $instance["cat"];
 
@@ -892,13 +896,15 @@ class Widget extends \WP_Widget {
 		$instance = wp_parse_args( ( array ) $instance, array(
 			'cat'                  => '',
 			'num'                  => get_option('posts_per_page'),
+			'offset'               => 1,
 			'sort_by'              => '',
 			'asc_sort_order'       => '',
 			'exclude_current_post' => '',
-			'hideNoThumb'          => ''
+			'hideNoThumb'          => '',
         ));
 		$cat                  = $instance['cat'];
 		$num                  = $instance['num'];
+		$offset               = $instance['offset'];
 		$sort_by              = $instance['sort_by'];
 		$asc_sort_order       = $instance['asc_sort_order'];
 		$exclude_current_post = $instance['exclude_current_post'];
@@ -916,6 +922,12 @@ class Widget extends \WP_Widget {
                 <label for="<?php echo $this->get_field_id("num"); ?>">
                     <?php _e('Number of posts to show',TEXTDOMAIN); ?>:
                     <input style="text-align: center; width: 30%;" id="<?php echo $this->get_field_id("num"); ?>" name="<?php echo $this->get_field_name("num"); ?>" type="number" min="0" value="<?php echo absint($instance["num"]); ?>" />
+                </label>
+            </p>
+            <p>
+                <label for="<?php echo $this->get_field_id("offset"); ?>">
+                    <?php _e('Start offsett',TEXTDOMAIN); ?>:
+                    <input style="text-align: center; width: 30%;" id="<?php echo $this->get_field_id("offset"); ?>" name="<?php echo $this->get_field_name("offset"); ?>" type="number" min="1" value="<?php echo absint($instance["offset"]); ?>" />
                 </label>
             </p>
             <p>
@@ -1275,6 +1287,7 @@ function default_settings()  {
 				'hide_title' => false,
 				'cat'                  => '',
 				'num'                  => get_option('posts_per_page'),
+				'offset'               => 1,
 				'sort_by'              => 'date',
 				'asc_sort_order'       => false,
 				'exclude_current_post' => false,
@@ -1380,7 +1393,7 @@ function customize_register($wp_customize) {
             if (!is_array($meta))
                 continue;
             
-            $meta = get_post_meta($p->ID,SHORTCODE_META,true);
+            $meta = wp_parse_args($meta,default_settings());
 
             ob_start();
             $widget->form(array());
