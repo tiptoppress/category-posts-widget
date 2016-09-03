@@ -1381,7 +1381,7 @@ function customize_register($wp_customize) {
             if (!is_array($meta))
                 continue;
             
-            $meta = get_post_meta($p->ID,SHORTCODE_META,true);
+            $meta = wp_parse_args($meta,default_settings());
 
             ob_start();
             $widget->form(array());
