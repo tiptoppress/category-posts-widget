@@ -71,19 +71,4 @@ jQuery(document).ready( function () {
             }
         }
 	});	
-	
-	jQuery('.cpw_collapseall').on('click', function(){
-		var widget = jQuery(this).parent().parent(); // get the root element
-		jQuery(widget).find('h4.open').each(function () {
-			cwp_namespace.clickHandler(this);
-		});	
-	});
-	
-	jQuery('.cpw_expandall').on('click', function(){
-		var widget = jQuery(this).parent().parent(); // get the root element
-		jQuery(widget).find('h4:not(.open)').each(function () {
-			cwp_namespace.clickHandler(this);
-		});	
-	});
-
 });
