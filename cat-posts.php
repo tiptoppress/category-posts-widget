@@ -1171,6 +1171,11 @@ class Widget extends \WP_Widget {
                 Follow us on <a target="_blank" href="https://www.facebook.com/TipTopPress">Facebook</a> and 
 				<a target="_blank" href="https://twitter.com/TipTopPress">Twitter</a></br></br>
             </p>
+			<p>
+               <a class="cpw_collapseall" href="#"><?php _e( 'Close all',TEXTDOMAIN ); ?></a>/
+               <a class="cpw_expandall" href="#"><?php _e( 'Open all',TEXTDOMAIN ); ?></a>
+           </p>
+
 		</div>
 		<?php
 	}
