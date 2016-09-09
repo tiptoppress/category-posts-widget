@@ -378,14 +378,14 @@ class Widget extends \WP_Widget {
             $size[0] = (int) $size[0];
             $size[1] = (int) $size[1];
             if (($size[0] == 0) && ($size[1] == 0)) //both values zero then revert to thumbnail
-                $size= 'post-thumbnail';
+                $size= array(get_option('thumbnail_size_w',150),get_option('thumbnail_size_h',150));
             // if one value is zero make a square using the other value
             else if (($size[0] == 0) && ($size[1] != 0))
                 $size[0] = $size[1];
             else if (($size[0] != 0) && ($size[1] == 0))
                 $size[1] = $size[0];
-        } else $size= 'post-thumbnail'; // yet another form of junk
-            
+        } else $size= array(get_option('thumbnail_size_w',150),get_option('thumbnail_size_h',150)); // yet another form of junk
+
 		add_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
 		$ret = get_the_post_thumbnail( null,$size,'');
 		remove_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
@@ -964,8 +964,8 @@ class Widget extends \WP_Widget {
 		$instance = wp_parse_args( ( array ) $instance, array(
 			'thumb'                => '',
 			'thumbTop'             => '',
-			'thumb_w'              => '',
-			'thumb_h'              => '',
+			'thumb_w'              => get_option('thumbnail_size_w',150),
+			'thumb_h'              => get_option('thumbnail_size_h',150),
 			'use_css_cropping'     => '',
 			'thumb_hover'          => ''
         ));
