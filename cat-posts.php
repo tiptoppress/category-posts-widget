@@ -24,7 +24,7 @@ const WIDGET_BASE_ID = 'category-posts';
 const TEXTDOMAIN = 'categoryposts';
 /*
  * Iterate over all the widgets active at the page and call the callback for them
- * 
+ *
  * callback - accepts the widget settings, return true to continue iteration or false to stop
 */
 function iterator($id_base,$class,$callback) {
@@ -56,12 +56,12 @@ function iterator($id_base,$class,$callback) {
 /*
 	Check if CSS needs to be added to support cropping by traversing all active widgets on the page
 	and checking if any has cropping enabled.
-	
+
 	Return: false if cropping is not active, false otherwise
 */
 function cropping_active($id_base,$class) {
 	$ret = false;
-	
+
 	iterator($id_base, $class, function ($settings) use (&$ret) {
 		if (isset($settings['use_css_cropping'])) { // checks if cropping is active
 			$ret = true;
@@ -69,19 +69,19 @@ function cropping_active($id_base,$class) {
 		} else
 			return true; // continue iteration to next widget
 	});
-	
+
 	return $ret;
 }
 
 /*
 	Check if CSS needs to be enqueued by traversing all active widgets on the page
 	and checking if they all have disabled CSS.
-	
+
 	Return: false if CSS should not be enqueued, true if it should
 */
 function should_enqueue($id_base,$class) {
 	$ret = false;
-	
+
 	iterator($id_base, $class, function ($settings) use (&$ret) {
 		if (!(isset($settings['disable_css']) && $settings['disable_css'])) { // checks if css disable is not set
 			$ret = true;
@@ -89,13 +89,13 @@ function should_enqueue($id_base,$class) {
 		} else
 			return true; // continue iteration to next widget
 	});
-	
+
 	return $ret;
 }
 
 /***
  *  Adds the "Customize" link to the Toolbar on edit mode.
- *  
+ *
  */
 function wp_admin_bar_customize_menu() {
 	global $wp_admin_bar;
@@ -108,7 +108,7 @@ function wp_admin_bar_customize_menu() {
 
 		$current_url = "";
 		if ( isset($_GET['post']) || $_GET['post'] !== '' )
-			$current_url = get_permalink( $_GET['post'] );		
+			$current_url = get_permalink( $_GET['post'] );
 		$customize_url = add_query_arg( 'url', urlencode( $current_url ), wp_customize_url() );
 
 		$wp_admin_bar->add_menu( array(
@@ -139,7 +139,7 @@ function wp_head() {
 	display:inline-block;
 }
 </style>
-<?php	
+<?php
 	}
 }
 
@@ -157,7 +157,7 @@ function widget_styles() {
 
     if (!$enqueue)
         $enqueue = should_enqueue(WIDGET_BASE_ID,__NAMESPACE__.'\Widget');
-        
+
 	if ($enqueue) {
 		wp_register_style( 'category-posts', CAT_POST_PLUGINURL . 'cat-posts.css',array(),CAT_POST_VERSION );
 		wp_enqueue_style( 'category-posts' );
@@ -166,15 +166,15 @@ function widget_styles() {
 
 /*
 	Enqueue widget related scripts for the widget admin page and customizer
-*/	
+*/
 function admin_scripts($hook) {
- 
+
 	if ($hook == 'widgets.php') { // enqueue only for widget admin and customizer
-		
+
 		// control open and close the widget section
         wp_register_script( 'category-posts-widget-admin-js', CAT_POST_PLUGINURL.'/js/admin/category-posts-widget.js',array('jquery'),CAT_POST_VERSION,true );
-        wp_enqueue_script( 'category-posts-widget-admin-js' );	
-	}	
+        wp_enqueue_script( 'category-posts-widget-admin-js' );
+	}
 }
 
 add_action('admin_enqueue_scripts', __NAMESPACE__.'\admin_scripts'); // "called on widgets.php and costumizer since 3.9
@@ -184,10 +184,10 @@ add_action('admin_enqueue_scripts', __NAMESPACE__.'\admin_scripts'); // "called 
  * Load plugin textdomain.
  *
  */
-add_action( 'admin_init', __NAMESPACE__.'\load_textdomain' );
+add_action( 'plugins_loaded', __NAMESPACE__.'\load_textdomain' );
 
 function load_textdomain() {
-  load_plugin_textdomain( TEXTDOMAIN, false, plugin_basename( dirname( __FILE__ ) ) . '/languages' ); 
+  load_plugin_textdomain( TEXTDOMAIN, false, plugin_basename( dirname( __FILE__ ) ) . '/languages' );
 }
 
 /**
@@ -195,7 +195,7 @@ function load_textdomain() {
  *
  */
 add_action( 'admin_print_styles-widgets.php', __NAMESPACE__.'\admin_styles' );
- 
+
 function admin_styles() {
 ?>
 <style>
@@ -206,7 +206,7 @@ function admin_styles() {
     border: 1px solid #E5E5E5;
 }
 .category-widget-cont h4:first-child {
-	margin-top: 10px;	
+	margin-top: 10px;
 }
 .category-widget-cont h4:last-of-type {
 	margin-bottom: 10px;
@@ -222,25 +222,25 @@ function admin_styles() {
 	-ms-transition: all 600ms;
 	-webkit-transition: all 600ms;
 	-moz-transition: all 600ms;
-    transition: all 600ms;	
-}	
+    transition: all 600ms;
+}
 .category-widget-cont h4.open:after {
 	-ms-transition: all 600ms;
 	-webkit-transition: all 600ms;
 	-moz-transition: all 600ms;
-    transition: all 600ms;	
+    transition: all 600ms;
 	-ms-transform: rotate(180deg);
     -webkit-transform: rotate(180deg);
 	-moz-transform: rotate(180deg);
 	transform: rotate(180deg);
-}	
+}
 .category-widget-cont > div {
 	display:none;
 	overflow: hidden;
-}	
+}
 .category-widget-cont > div.open {
 	display:block;
-}	
+}
 </style>
 <?php
 }
@@ -254,17 +254,17 @@ function admin_styles() {
  * return: an array with the width and height of the element containing the image
  */
 function get_image_size( $thumb_w,$thumb_h,$image_w,$image_h) {
-	
+
 	$image_size = array('image_h' => $thumb_h, 'image_w' => $thumb_w, 'marginAttr' => '', 'marginVal' => '');
 	$relation_thumbnail = $thumb_w / $thumb_h;
 	$relation_cropped = $image_w / $image_h;
-	
+
 	if ($relation_thumbnail < $relation_cropped) {
 		// crop left and right site
 		// thumbnail width/height ration is smaller, need to inflate the height of the image to thumb height
 		// and adjust width to keep aspect ration of image
 		$image_size['image_h'] = $thumb_h;
-		$image_size['image_w'] = $thumb_h / $image_h * $image_w; 
+		$image_size['image_w'] = $thumb_h / $image_h * $image_w;
 		$image_size['marginAttr'] = 'margin-left';
 		$image_size['marginVal'] = ($image_size['image_w'] - $thumb_w) / 2;
 	} else {
@@ -272,11 +272,11 @@ function get_image_size( $thumb_w,$thumb_h,$image_w,$image_h) {
 		// thumbnail width/height ration is bigger, need to inflate the width of the image to thumb width
 		// and adjust height to keep aspect ration of image
 		$image_size['image_w'] = $thumb_w;
-		$image_size['image_h'] = $thumb_w / $image_w * $image_h; 
+		$image_size['image_h'] = $thumb_w / $image_w * $image_h;
 		$image_size['marginAttr'] = 'margin-top';
 		$image_size['marginVal'] = ($image_size['image_h'] - $thumb_h) / 2;
 	}
-	
+
 	return $image_size;
 }
 
@@ -312,8 +312,8 @@ class Widget extends \WP_Widget {
 			return $html; // bail out if no full dimensions defined
 
 		$meta = image_get_intermediate_size($post_thumbnail_id,$size);
-		
-		if ( empty( $meta )) {		
+
+		if ( empty( $meta )) {
 			$post_img = wp_get_attachment_metadata($post_thumbnail_id, $size);
 			$meta['file'] = basename( $post_img['file'] );
 		}
@@ -367,7 +367,7 @@ class Widget extends \WP_Widget {
 		}
 		return $html;
 	}
-	
+
 	/*
 		wrapper to execute the the_post_thumbnail with filters
 	*/
@@ -397,13 +397,13 @@ class Widget extends \WP_Widget {
             else if (($size[0] != 0) && ($size[1] == 0))
                 $size[1] = $size[0];
         } else $size= 'post-thumbnail'; // yet another form of junk
-            
+
 		add_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
 		$ret = get_the_post_thumbnail( null,$size,'');
 		remove_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
         return $ret;
 	}
-	
+
 	/**
 	 * Excerpt more link filter
 	 */
@@ -420,7 +420,7 @@ class Widget extends \WP_Widget {
 	 * @return string If option hide_social_buttons is unchecked applay the_content filter
      *
      * @since 4.6
-	 */	
+	 */
 	function apply_the_excerpt($text) {
 		$ret = "";
  		if (isset($this->instance["hide_social_buttons"]) && $this->instance["hide_social_buttons"])
@@ -429,7 +429,7 @@ class Widget extends \WP_Widget {
  			$ret = apply_filters('the_content', $text);
 		return $ret;
 	}
-	
+
 	/**
 	 * Excerpt allow HTML
 	 */
@@ -453,7 +453,7 @@ class Widget extends \WP_Widget {
 				'&lt;p&gt;',
 				'&lt;img&gt;',
 				'&lt;script&gt;',
-				'&lt;style&gt;',								
+				'&lt;style&gt;',
 				'&lt;video&gt;',
 				'&lt;audio&gt;'
 			);
@@ -461,18 +461,18 @@ class Widget extends \WP_Widget {
 			foreach ($cphtml as $index => $name) {
 				if (in_array((string)($index),$this->instance['excerpt_allowed_elements'],true))
 					$allowed_HTML .= $cphtml[$index];
-			}			
+			}
 			$text = strip_tags($text, htmlspecialchars_decode($allowed_HTML));
-			$excerpt_length = $new_excerpt_length;		
+			$excerpt_length = $new_excerpt_length;
 
 			if( !empty($this->instance["excerpt_more_text"]) ) {
-				$excerpt_more = $this->excerpt_more_filter($this->instance["excerpt_more_text"]); 
+				$excerpt_more = $this->excerpt_more_filter($this->instance["excerpt_more_text"]);
 			}else if($filterName = key($wp_filter['excerpt_more'][10])) {
 				$excerpt_more = $wp_filter['excerpt_more'][10][$filterName]['function'](0);
 			}else {
 				$excerpt_more = '[...]';
 			}
-			
+
 			$words = explode(' ', $text, $excerpt_length + 1);
 			if (count($words)> $excerpt_length) {
 				array_pop($words);
@@ -483,7 +483,7 @@ class Widget extends \WP_Widget {
 
 		return '<p>' . $text . '</p>';
 	}
-	
+
 	/**
 	 * Calculate the HTML for showing the thumb of a post item.
      * Expected to be called from a loop with globals properly set
@@ -495,18 +495,18 @@ class Widget extends \WP_Widget {
 	 */
 	function show_thumb($instance) {
         $ret = '';
-        
+
 		if ( isset( $instance["thumb"] ) && $instance["thumb"] &&
 				has_post_thumbnail() ) {
 			$use_css_cropping = (isset($this->instance['use_css_cropping'])&&$this->instance['use_css_cropping']) ? "cat-post-css-cropping" : "";
             $class = '';
-            if( !(isset( $this->instance['disable_css'] ) && $this->instance['disable_css'])) { 
+            if( !(isset( $this->instance['disable_css'] ) && $this->instance['disable_css'])) {
                 if( isset($this->instance['thumb_hover'] )) {
                     $class = "class=\"cat-post-thumbnail " . $use_css_cropping ." cat-post-" . $instance['thumb_hover'] . "\"";
                 } else {
                     $class = "class=\"cat-post-thumbnail " . $use_css_cropping . "\"";
                 }
-            } 
+            }
             $title_args = array('echo'=>false);
 			$ret .= '<a '.$class . ' href="'.get_the_permalink().'" title="'.the_title_attribute($title_args).'">';
             $ret .= $this->the_post_thumbnail( array($this->instance['thumb_w'],$this->instance['thumb_h']));
@@ -515,7 +515,7 @@ class Widget extends \WP_Widget {
 
         return $ret;
 	}
-	
+
 	/**
 	 * Calculate the wp-query arguments matching the filter settings of the widget
 	 *
@@ -532,20 +532,20 @@ class Widget extends \WP_Widget {
 			$sort_by = 'date';
 		}
         $sort_order = (isset( $instance['asc_sort_order'] ) && $instance['asc_sort_order']) ? 'ASC' : 'DESC';
-		
+
 		// Get array of post info.
 		$args = array(
 			'orderby' => $sort_by,
 			'order' => $sort_order
 		);
-        
-        if (isset($instance["num"])) 
+
+        if (isset($instance["num"]))
             $args['showposts'] = (int) $instance["num"];
-		
-        if (isset($instance["cat"])) 
+
+        if (isset($instance["cat"]))
             $args['cat'] = (int) $instance["cat"];
 
-        if (is_singular() && isset( $instance['exclude_current_post'] ) && $instance['exclude_current_post']) 
+        if (is_singular() && isset( $instance['exclude_current_post'] ) && $instance['exclude_current_post'])
             $args['post__not_in'] = array(get_the_ID());
 
         if( isset( $instance['hideNoThumb'] ) && $instance['hideNoThumb']) {
@@ -554,13 +554,13 @@ class Widget extends \WP_Widget {
 					 'key' => '_thumbnail_id',
 					 'compare' => 'EXISTS' )
 					)
-				)	
+				)
 			);
 		}
-        
+
         return $args;
     }
-    
+
 	/**
 	 * Calculate the HTML of the title based on the widget settings
 	 *
@@ -575,7 +575,7 @@ class Widget extends \WP_Widget {
 	 */
     function titleHTML($before_title,$after_title,$instance) {
         $ret = '';
-        
+
 		// If not title, use the name of the category.
 		if( !isset($instance["title"]) || !$instance["title"] ) {
             $instance["title"] = '';
@@ -592,7 +592,7 @@ class Widget extends \WP_Widget {
 				$title = esc_html($instance["title"]);
 			else
 				$title = apply_filters( 'widget_title', $instance["title"] );
-			
+
             if( isset ( $instance["title_link"]) && $instance["title_link"] && isset($instance["cat"]) && (get_category($instance["cat"]) != null))  {
                 $ret .= '<a href="' . get_category_link($instance["cat"]) . '">' . $title . '</a>';
             } else {
@@ -600,10 +600,10 @@ class Widget extends \WP_Widget {
             }
             $ret .= $after_title;
         }
-        
+
         return $ret;
     }
-    
+
 	/**
 	 * Calculate the HTML of the footer based on the widget settings
 	 *
@@ -614,16 +614,16 @@ class Widget extends \WP_Widget {
 	 */
     function footerHTML($instance) {
         $ret = '';
-        
+
         if( isset ( $instance["footer_link"] ) && $instance["footer_link"] && isset($instance["cat"]) && (get_category($instance["cat"]) != null) ) {
             $ret = "<a";
                 if( !(isset( $instance['disable_css'] ) && $instance['disable_css'])) { $ret.= " class=\"cat-post-footer-link\""; }
             $ret .= " href=\"" . get_category_link($instance["cat"]) . "\">" . esc_html($instance["footer_link"]) . "</a>";
         }
-        
+
         return $ret;
     }
-    
+
 	/**
 	 * Calculate the HTML for a post item based on the widget settings and post.
      * Expected to be called in an active loop with all the globals set
@@ -637,51 +637,51 @@ class Widget extends \WP_Widget {
 	 */
     function itemHTML($instance,$current_post_id) {
         global $post;
-        
+
         $ret = '<li ';
-                    
-        if ( $current_post_id == $post->ID ) { 
-            $ret .= "class='cat-post-item cat-post-current'"; 
+
+        if ( $current_post_id == $post->ID ) {
+            $ret .= "class='cat-post-item cat-post-current'";
         } else {
             $ret .= "class='cat-post-item'";
         }
         $ret.='>'; // close the li opening tag
-        
+
         // Thumbnail position to top
         if( isset( $instance["thumbTop"] ) && $instance["thumbTop"]) {
-            $ret .= $this->show_thumb($instance); 
+            $ret .= $this->show_thumb($instance);
         }
-        
-        if( !(isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'])) { 
+
+        if( !(isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'])) {
             $ret .= '<a class="post-title';
-            if( !isset( $instance['disable_css'] ) ) { 
-                $ret .= " cat-post-title"; 
+            if( !isset( $instance['disable_css'] ) ) {
+                $ret .= " cat-post-title";
             }
             $ret .= '" href="'.get_the_permalink().'" rel="bookmark">'.get_the_title();
             $ret .= '</a> ';
         }
 
         if ( isset( $instance['date']) && $instance['date']) {
-            if ( isset( $instance['date_format'] ) && strlen( trim( $instance['date_format'] ) ) > 0 ) { 
-                $date_format = $instance['date_format']; 
+            if ( isset( $instance['date_format'] ) && strlen( trim( $instance['date_format'] ) ) > 0 ) {
+                $date_format = $instance['date_format'];
             } else {
-                $date_format = "j M Y"; 
-            } 
+                $date_format = "j M Y";
+            }
             $ret .= '<p class="post-date ';
-            if( !isset( $instance['disable_css'] ) ) { 
+            if( !isset( $instance['disable_css'] ) ) {
                 $ret .= "cat-post-date";
-            } 
+            }
             $ret .= '">';
-            if ( isset ( $instance["date_link"] ) && $instance["date_link"]) { 
+            if ( isset ( $instance["date_link"] ) && $instance["date_link"]) {
                 $ret .= '<a href="'.\get_the_permalink().'">';
             }
             $ret .= get_the_time($date_format);
-            if ( isset ( $instance["date_link"] ) ) { 
+            if ( isset ( $instance["date_link"] ) ) {
                 $ret .= '</a>';
             }
             $ret .= '</p>';
         }
-        
+
         // Thumbnail position normal
         if( !(isset( $instance["thumbTop"] ) && $instance["thumbTop"])) {
             $ret .= $this->show_thumb($instance);
@@ -692,16 +692,16 @@ class Widget extends \WP_Widget {
             // then apply our filter to let users customize excerpts in their own way
             if (isset($instance['excerpt_length']) && ($instance['excerpt_length'] > 0))
                 $length = (int) $instance['excerpt_length'];
-            else 
+            else
                 $length = 0; // indicate that invalid length is set
             $ret .= apply_filters('cpw_excerpt',apply_filters('the_excerpt',\get_the_excerpt()),$this,$length);
         }
-        
+
         if ( isset( $instance['comment_num'] ) && $instance['comment_num']) {
             $ret .= '<p class="comment-num';
             if ( !isset( $instance['disable_css'] ) ) {
-                $ret .= " cat-post-comment-num"; 
-            } 
+                $ret .= " cat-post-comment-num";
+            }
             $ret .= '">';
             $ret .= '('.\get_comments_number().')';
             $ret .= '</p>';
@@ -709,9 +709,9 @@ class Widget extends \WP_Widget {
 
         if ( isset( $instance['author'] ) && $instance['author']) {
             $ret .= '<p class="post-author ';
-            if( !isset( $instance['disable_css'] ) ) { 
-                $ret .= "cat-post-author"; 
-            } 
+            if( !isset( $instance['disable_css'] ) ) {
+                $ret .= "cat-post-author";
+            }
             $ret .= '">';
             global $authordata;
             $link = sprintf(
@@ -720,19 +720,19 @@ class Widget extends \WP_Widget {
                 esc_attr( sprintf( __( 'Posts by %s' ), get_the_author() ) ),
                 get_the_author()
             );
-            $ret .= $link; 
+            $ret .= $link;
             $ret .= '</p>';
         }
-        
+
         $ret .= '</li>';
         return $ret;
     }
-    
+
 	/**
 	 * Filter to set the number of words in an excerpt
 	 *
 	 * @param  int $length The number of words as configured by wordpress core or set by previous filters
-	 * @return int The number of words configured for the widget, 
+	 * @return int The number of words configured for the widget,
      *             or the $length parameter if it is not configured or garbage value
      *
      * @since 4.6
@@ -743,7 +743,7 @@ class Widget extends \WP_Widget {
 
         return $length;
     }
-    
+
 	/**
 	 * Set the proper excerpt filters based on the settings
 	 *
@@ -753,14 +753,14 @@ class Widget extends \WP_Widget {
      * @since 4.6
 	 */
     function setExcerpFilters($instance) {
-        
+
         if (isset($instance['excerpt']) && $instance['excerpt']) {
-        
+
             // Excerpt length filter
             if ( isset($instance["excerpt_length"]) && ((int) $instance["excerpt_length"]) > 0 ) {
                 add_filter('excerpt_length', array($this,'excerpt_length_filter'));
             }
-            
+
             if( isset($instance["excerpt_more_text"]) && ltrim($instance["excerpt_more_text"]) != '' )
             {
                 add_filter('excerpt_more', array($this,'excerpt_more_filter'));
@@ -774,7 +774,7 @@ class Widget extends \WP_Widget {
             }
         }
     }
-    
+
 	/**
 	 * Remove the excerpt filter
 	 *
@@ -790,14 +790,14 @@ class Widget extends \WP_Widget {
         remove_filter('the_excerpt', array($this,'allow_html_excerpt'));
         remove_filter('the_excerpt', array($this,'apply_the_excerpt'));
     }
-    
+
 	/**
 	 * The main widget display controller
      *
      * Called by the sidebar processing core logic to display the widget
 	 *
 	 * @param array $args An array containing the "environment" setting for the widget,
-     *                     namely, the enclosing tags for the widget and its title. 
+     *                     namely, the enclosing tags for the widget and its title.
 	 * @param array $instance The settings associate with the widget
      *
      * @since 4.1
@@ -806,11 +806,11 @@ class Widget extends \WP_Widget {
 
 		extract( $args );
 		$this->instance = $instance;
-		
+
         $args = $this->queryArgs($instance);
 		$cat_posts = new \WP_Query( $args );
-		
-		if ( !isset ( $instance["hide_if_empty"] ) || !$instance["hide_if_empty"] || $cat_posts->have_posts() ) {				
+
+		if ( !isset ( $instance["hide_if_empty"] ) || !$instance["hide_if_empty"] || $cat_posts->have_posts() ) {
 			echo $before_widget;
             echo $this->titleHTML($before_title,$after_title,$instance);
 
@@ -820,23 +820,23 @@ class Widget extends \WP_Widget {
 
 			echo "<ul>\n";
 
-            $this->setExcerpFilters($instance);         
+            $this->setExcerpFilters($instance);
 			while ( $cat_posts->have_posts() )
 			{
-                $cat_posts->the_post();              
+                $cat_posts->the_post();
 				echo $this->itemHTML($instance,$current_post_id);
 			}
 			echo "</ul>\n";
 
             echo $this->footerHTML($instance);
 			echo $after_widget;
-       
+
             $this->removeExcerpFilters($instance);
-			
+
 			wp_reset_postdata();
-			
-		} 
-	} 
+
+		}
+	}
 
 	/**
 	 * Update the options
@@ -867,8 +867,8 @@ class Widget extends \WP_Widget {
         ));
 		$title                = $instance['title'];
 		$hide_title           = $instance['hide_title'];
-		$title_link           = $instance['title_link'];        
-?>    
+		$title_link           = $instance['title_link'];
+?>
         <h4 data-panel="title"><?php _e('Title',TEXTDOMAIN)?></h4>
         <div>
             <p>
@@ -889,10 +889,10 @@ class Widget extends \WP_Widget {
                     <?php _e( 'Hide title',TEXTDOMAIN ); ?>
                 </label>
             </p>
-        </div>			
-<?php            
+        </div>
+<?php
     }
-    
+
 	/**
 	 * Output the filter panel of the widget configuration form.
 	 *
@@ -959,11 +959,11 @@ class Widget extends \WP_Widget {
                     <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hideNoThumb"); ?>" name="<?php echo $this->get_field_name("hideNoThumb"); ?>"<?php checked( (bool) $instance["hideNoThumb"], true ); ?> />
                     <?php _e( 'Exclude posts which have no thumbnail',TEXTDOMAIN ); ?>
                 </label>
-            </p>					
-        </div>			
+            </p>
+        </div>
 <?php
     }
-    
+
 	/**
 	 * Output the filter panel of the widget configuration form.
 	 *
@@ -987,7 +987,7 @@ class Widget extends \WP_Widget {
 		$thumb_h              = $instance['thumb_h'];
 		$use_css_cropping     = $instance['use_css_cropping'];
 		$thumb_hover          = $instance['thumb_hover'];
-?>        
+?>
         <h4 data-panel="thumbnail"><?php _e('Thumbnails',TEXTDOMAIN)?></h4>
         <div>
             <p>
@@ -1008,7 +1008,7 @@ class Widget extends \WP_Widget {
                     <label for="<?php echo $this->get_field_id("thumb_w"); ?>">
                         <?php _e('Width:',TEXTDOMAIN)?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo esc_attr($instance["thumb_w"]); ?>" />
                     </label>
-                    
+
                     <label for="<?php echo $this->get_field_id("thumb_h"); ?>">
                         <?php _e('Height:',TEXTDOMAIN)?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo esc_attr($instance["thumb_h"]); ?>" />
                     </label>
@@ -1019,7 +1019,7 @@ class Widget extends \WP_Widget {
                     <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("use_css_cropping"); ?>" name="<?php echo $this->get_field_name("use_css_cropping"); ?>"<?php checked( (bool) $instance["use_css_cropping"], true ); ?> />
                     <?php _e( 'CSS crop to requested size ',TEXTDOMAIN ); ?>
                 </label>
-            </p>					
+            </p>
             <p>
                 <label for="<?php echo $this->get_field_id("thumb_hover"); ?>">
                     <?php _e( 'Animation on mouse hover:',TEXTDOMAIN ); ?>
@@ -1035,7 +1035,7 @@ class Widget extends \WP_Widget {
         </div>
 <?php
     }
-    
+
 	/**
 	 * The widget configuration form back end.
 	 *
@@ -1076,8 +1076,8 @@ class Widget extends \WP_Widget {
 
 		?>
 		<div class="category-widget-cont">
-            <p><a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/">Get the Pro Version</a></p>
-            <p><a target="_blank" href="http://tiptoppress.com/category-posts-widget/documentation/">Documentation</a></p>
+            <p><a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/"><?php _e('Get the Pro Version',TEXTDOMAIN)?></a></p>
+            <p><a target="_blank" href="http://tiptoppress.com/category-posts-widget/documentation/"><?php _e('Documentation',TEXTDOMAIN)?></a></p>
         <?php
             $this->formTitlePanel($instance);
             $this->formFilterPanel($instance);
@@ -1180,7 +1180,7 @@ class Widget extends \WP_Widget {
 				</p>
 			</div>
             <p style="text-align:right;">
-                Follow us on <a target="_blank" href="https://www.facebook.com/TipTopPress">Facebook</a> and 
+                <?php _e('Follow us on',TEXTDOMAIN)?> <a target="_blank" href="https://www.facebook.com/TipTopPress">Facebook</a> <?php _e('and',TEXTDOMAIN)?>
 				<a target="_blank" href="https://twitter.com/TipTopPress">Twitter</a></br></br>
             </p>
 		</div>
@@ -1198,12 +1198,12 @@ add_action( 'widgets_init', __NAMESPACE__.'\register_widget' );
 
 /**
  *  Get shortcode settings taking into account if it is being customized
- *  
+ *
  *  When not customized returns the settings as stored in the meta, but when
  *  it is customized returns the setting stored in the virtual option used by the customizer
- *  
+ *
  *  @return array the shortcode settings if a short code exists or empty string
- *  
+ *
  *  @since 4.6
  */
 function shortcode_settings() {
@@ -1216,23 +1216,23 @@ function shortcode_settings() {
                 $instance=$o[get_the_ID()];
         }
     }
-    
+
     return $instance;
 }
 /**
  *  Handle the shortcode
- *  
+ *
  *  @param array $attr Array of the attributes to the short code, none is expected
  *  @param string $content The content enclosed in the shortcode, none is expected
- *  
+ *
  *  @return string An HTML of the "widget" based on its settings, actual or customized
- *  
+ *
  */
 function shortcode($attr,$content=null) {
     if (is_singular()) {
         $instance = shortcode_settings();
         $instance['is_shortcode'] = true;  // indicate that we are doing shortcode processing to outputting funtions
-		
+
         if (is_array($instance)) {
             $widget=new Widget();
             $widget->number = 'shortcode-'.get_the_ID(); // needed to make a unique id for the widget html element
@@ -1246,9 +1246,9 @@ function shortcode($attr,$content=null) {
             $ret = ob_get_clean();
             $ret = '<div id="'.WIDGET_BASE_ID.'-'.$widget->number.'" class="'.WIDGET_BASE_ID.'-shortcode">'.$ret.'</div>';
             return $ret;
-        }       
+        }
     }
-    
+
     return '';
 }
 
@@ -1256,11 +1256,11 @@ add_shortcode(SHORTCODE_NAME,__NAMESPACE__.'\shortcode');
 
 /**
  *  Find if a specific shortcode is used in a content
- *  
+ *
  *  @param string $shortcode_name The name of the shortcode
  *  #param string The content to look at
  *  @return boolean True if used, otherwise false
- *  
+ *
  */
 function shortcode_exist($shortcode_name,$content) {
 
@@ -1272,13 +1272,13 @@ function shortcode_exist($shortcode_name,$content) {
 			}
 		}
 	}
-	
+
 	return false;
 }
 
 /**
  *  Organized way to have rhw default widget settings accessible
- *  
+ *
  *  @since 4.6
  */
 function default_settings()  {
@@ -1317,13 +1317,13 @@ function default_settings()  {
 
 /**
  *  Manipulate the relevant meta related to the short code when a post is save
- *  
+ *
  *  If A post has a short code, a meta holder is created, If it does not the meta holder is deleted
- *  
+ *
  *  @param integer $pid  The post ID of the post being saved
  *  @param WP_Post $post The post being saved
  *  @return void
- *  
+ *
  *  @since 4.6
  */
 function save_post($pid,$post) {
@@ -1331,7 +1331,7 @@ function save_post($pid,$post) {
 	// ignore revisions and auto saves
 	if ( wp_is_post_revision( $pid ) || wp_is_post_autosave($pid))
 		return;
-		
+
     $has_meta = get_post_meta($pid,SHORTCODE_META,true);
 	$exist = shortcode_exist(SHORTCODE_NAME,$post->post_content);
 
@@ -1347,7 +1347,7 @@ function customize_register($wp_customize) {
 
     class shortCodeControl extends \WP_Customize_Control {
         public $form;
-        
+
         public function render_content() {
 			$widget_title = 'Category Posts Shortcode';
 			?>
@@ -1363,7 +1363,7 @@ function customize_register($wp_customize) {
 			</div>
 			<?php
         }
-    }    
+    }
 
     $args = array(
         'post_type' => 'any',
@@ -1373,26 +1373,26 @@ function customize_register($wp_customize) {
         'meta_query' => array(
 					array(
 					 'key' => SHORTCODE_META,
-					 'compare' => 'EXISTS' 
+					 'compare' => 'EXISTS'
                      )
 				),
-                 
+
     );
     $posts = get_posts($args);
-    
+
     if (count($posts) > 0) {
         $wp_customize->add_section( __NAMESPACE__, array(
             'title'           => __( 'Category Posts Shortcode', TEXTDOMAIN ),
             'priority'        => 200
         ) );
-        
+
         foreach($posts as $p) {
             $widget = new Widget();
             $widget->number = $p->ID;
             $meta = get_post_meta($p->ID,SHORTCODE_META,true);
             if (!is_array($meta))
                 continue;
-            
+
             $meta = get_post_meta($p->ID,SHORTCODE_META,true);
 
             ob_start();
@@ -1435,9 +1435,9 @@ add_action( 'customize_register', __NAMESPACE__.'\customize_register' );
  *
  *  The customizer actually saves only the changed values, so a merge needs to be done.
  *  After everything is updated the virtual option is deleted to leave a clean slate
- *  
+ *
  *  @return void
- *  
+ *
  *  @since 4.6
  */
 function customize_save_after() {
@@ -1450,7 +1450,7 @@ function customize_save_after() {
             update_post_meta($pid,SHORTCODE_META, $instance);
         }
     }
-    
+
     delete_option('_virtual-'.WIDGET_BASE_ID);
 }
 

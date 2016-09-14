@@ -1,0 +1,242 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Category Posts Widget\n"
+"POT-Creation-Date: 2016-09-13 13:25-0300\n"
+"PO-Revision-Date: 2016-09-13 13:25-0300\n"
+"Last-Translator: Henrique Vianna <hvianna@gmail.com>\n"
+"Language-Team: \n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.7.1\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: _e;__\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../cat-posts.php:116
+msgid "Customize"
+msgstr ""
+
+#: ../cat-posts.php:291
+msgid "List single category posts"
+msgstr ""
+
+#: ../cat-posts.php:292
+msgid "Category Posts"
+msgstr ""
+
+#: ../cat-posts.php:720
+#, php-format
+msgid "Posts by %s"
+msgstr ""
+
+#: ../cat-posts.php:872 ../cat-posts.php:876 ../cat-posts.php:939
+msgid "Title"
+msgstr ""
+
+#: ../cat-posts.php:883
+msgid "Make widget title link"
+msgstr ""
+
+#: ../cat-posts.php:889
+msgid "Hide title"
+msgstr ""
+
+#: ../cat-posts.php:920
+msgid "Filter"
+msgstr ""
+
+#: ../cat-posts.php:924
+msgid "Category"
+msgstr ""
+
+#: ../cat-posts.php:930
+msgid "Number of posts to show"
+msgstr ""
+
+#: ../cat-posts.php:936
+msgid "Sort by"
+msgstr ""
+
+#: ../cat-posts.php:938
+msgid "Date"
+msgstr ""
+
+#: ../cat-posts.php:940
+msgid "Number of comments"
+msgstr ""
+
+#: ../cat-posts.php:941
+msgid "Random"
+msgstr ""
+
+#: ../cat-posts.php:948
+msgid "Reverse sort order (ascending)"
+msgstr ""
+
+#: ../cat-posts.php:954
+msgid "Exclude current post"
+msgstr ""
+
+#: ../cat-posts.php:960
+msgid "Exclude posts which have no thumbnail"
+msgstr ""
+
+#: ../cat-posts.php:991
+msgid "Thumbnails"
+msgstr ""
+
+#: ../cat-posts.php:996
+msgid "Show post thumbnail"
+msgstr ""
+
+#: ../cat-posts.php:1002
+msgid "Show thumbnails above text"
+msgstr ""
+
+#: ../cat-posts.php:1007
+msgid "Thumbnail dimensions (in pixels)"
+msgstr ""
+
+#: ../cat-posts.php:1009
+msgid "Width:"
+msgstr ""
+
+#: ../cat-posts.php:1013
+msgid "Height:"
+msgstr ""
+
+#: ../cat-posts.php:1020
+msgid "CSS crop to requested size "
+msgstr ""
+
+#: ../cat-posts.php:1025
+msgid "Animation on mouse hover:"
+msgstr ""
+
+#: ../cat-posts.php:1028
+msgid "None"
+msgstr ""
+
+#: ../cat-posts.php:1029
+msgid "Darker"
+msgstr ""
+
+#: ../cat-posts.php:1030
+msgid "Brighter"
+msgstr ""
+
+#: ../cat-posts.php:1031
+msgid "Zoom in"
+msgstr ""
+
+#: ../cat-posts.php:1032
+msgid "Blur"
+msgstr ""
+
+#: ../cat-posts.php:1079
+msgid "Get the Pro Version"
+msgstr ""
+
+#: ../cat-posts.php:1080
+msgid "Documentation"
+msgstr ""
+
+#: ../cat-posts.php:1086
+msgid "Post details"
+msgstr ""
+
+#: ../cat-posts.php:1091
+msgid "Hide post titles"
+msgstr ""
+
+#: ../cat-posts.php:1097
+msgid "Show post excerpt"
+msgstr ""
+
+#: ../cat-posts.php:1102
+msgid "Excerpt length (in words):"
+msgstr ""
+
+#: ../cat-posts.php:1108
+msgid "Excerpt 'more' text:"
+msgstr ""
+
+#: ../cat-posts.php:1110
+msgid "... more"
+msgstr ""
+
+#: ../cat-posts.php:1115
+msgid "Show post date"
+msgstr ""
+
+#: ../cat-posts.php:1120
+msgid "Date format:"
+msgstr ""
+
+#: ../cat-posts.php:1127
+msgid "Make widget date link"
+msgstr ""
+
+#: ../cat-posts.php:1133
+msgid "Show number of comments"
+msgstr ""
+
+#: ../cat-posts.php:1139
+msgid "Show post author"
+msgstr ""
+
+#: ../cat-posts.php:1143
+msgid "General"
+msgstr ""
+
+#: ../cat-posts.php:1148
+msgid "Disable the built-in CSS for this widget"
+msgstr ""
+
+#: ../cat-posts.php:1154
+msgid "Hide widget if there are no matching posts"
+msgstr ""
+
+#: ../cat-posts.php:1160
+msgid "Hide social buttons in widget output"
+msgstr ""
+
+#: ../cat-posts.php:1164
+msgid "Footer"
+msgstr ""
+
+#: ../cat-posts.php:1168
+msgid "Footer link text"
+msgstr ""
+
+#: ../cat-posts.php:1169
+msgid "... more by this topic"
+msgstr ""
+
+#: ../cat-posts.php:1173
+msgid "My settings"
+msgstr ""
+
+#: ../cat-posts.php:1178
+msgid "Auto close panels"
+msgstr ""
+
+#: ../cat-posts.php:1183
+msgid "Follow us on"
+msgstr ""
+
+#: ../cat-posts.php:1183
+msgid "and"
+msgstr ""
+
+#: ../cat-posts.php:1385
+msgid "Category Posts Shortcode"
+msgstr ""
+
+#: ../cat-posts.php:1420
+msgid "Layout"
+msgstr ""

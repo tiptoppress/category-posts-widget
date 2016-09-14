@@ -1,0 +1,242 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Category Posts Widget\n"
+"POT-Creation-Date: 2016-09-13 13:25-0300\n"
+"PO-Revision-Date: 2016-09-13 13:29-0300\n"
+"Last-Translator: Henrique Vianna <hvianna@gmail.com>\n"
+"Language-Team: Henrique Vianna <hvianna@gmail.com>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.7.1\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../cat-posts.php:116
+msgid "Customize"
+msgstr "Personalizar"
+
+#: ../cat-posts.php:291
+msgid "List single category posts"
+msgstr "Lista posts de uma categoria específica"
+
+#: ../cat-posts.php:292
+msgid "Category Posts"
+msgstr "Posts por Categoria"
+
+#: ../cat-posts.php:720
+#, php-format
+msgid "Posts by %s"
+msgstr "Posts por %s"
+
+#: ../cat-posts.php:872 ../cat-posts.php:876 ../cat-posts.php:939
+msgid "Title"
+msgstr "Título"
+
+#: ../cat-posts.php:883
+msgid "Make widget title link"
+msgstr "Fazer do título um link para a categoria"
+
+#: ../cat-posts.php:889
+msgid "Hide title"
+msgstr "Ocultar título"
+
+#: ../cat-posts.php:920
+msgid "Filter"
+msgstr "Filtro"
+
+#: ../cat-posts.php:924
+msgid "Category"
+msgstr "Categoria"
+
+#: ../cat-posts.php:930
+msgid "Number of posts to show"
+msgstr "Número de posts a exibir"
+
+#: ../cat-posts.php:936
+msgid "Sort by"
+msgstr "Ordenar por"
+
+#: ../cat-posts.php:938
+msgid "Date"
+msgstr "Data"
+
+#: ../cat-posts.php:940
+msgid "Number of comments"
+msgstr "Número de comentários"
+
+#: ../cat-posts.php:941
+msgid "Random"
+msgstr "Aleatório"
+
+#: ../cat-posts.php:948
+msgid "Reverse sort order (ascending)"
+msgstr "Ordenação inversa (ascendente)"
+
+#: ../cat-posts.php:954
+msgid "Exclude current post"
+msgstr "Suprimir post atual"
+
+#: ../cat-posts.php:960
+msgid "Exclude posts which have no thumbnail"
+msgstr "Suprimir posts sem imagem destacada"
+
+#: ../cat-posts.php:991
+msgid "Thumbnails"
+msgstr "Imagens destacadas"
+
+#: ../cat-posts.php:996
+msgid "Show post thumbnail"
+msgstr "Exibir imagem destacada do post"
+
+#: ../cat-posts.php:1002
+msgid "Show thumbnails above text"
+msgstr "Exibir imagens destacadas acima do texto"
+
+#: ../cat-posts.php:1007
+msgid "Thumbnail dimensions (in pixels)"
+msgstr "Dimensões da imagem destacada (em pixels)"
+
+#: ../cat-posts.php:1009
+msgid "Width:"
+msgstr "Largura:"
+
+#: ../cat-posts.php:1013
+msgid "Height:"
+msgstr "Altura:"
+
+#: ../cat-posts.php:1020
+msgid "CSS crop to requested size "
+msgstr "Cortar imagem no tamanho especificado"
+
+#: ../cat-posts.php:1025
+msgid "Animation on mouse hover:"
+msgstr "Animação ao passar o mouse:"
+
+#: ../cat-posts.php:1028
+msgid "None"
+msgstr "Nenhuma"
+
+#: ../cat-posts.php:1029
+msgid "Darker"
+msgstr "Escurecer"
+
+#: ../cat-posts.php:1030
+msgid "Brighter"
+msgstr "Clarear"
+
+#: ../cat-posts.php:1031
+msgid "Zoom in"
+msgstr "Ampliar"
+
+#: ../cat-posts.php:1032
+msgid "Blur"
+msgstr "Desfocar"
+
+#: ../cat-posts.php:1079
+msgid "Get the Pro Version"
+msgstr "Obtenha a Versão Pro"
+
+#: ../cat-posts.php:1080
+msgid "Documentation"
+msgstr "Documentação (em inglês)"
+
+#: ../cat-posts.php:1086
+msgid "Post details"
+msgstr "Detalhes do post"
+
+#: ../cat-posts.php:1091
+msgid "Hide post titles"
+msgstr "Ocultar títulos dos posts"
+
+#: ../cat-posts.php:1097
+msgid "Show post excerpt"
+msgstr "Exibir resumo do post"
+
+#: ../cat-posts.php:1102
+msgid "Excerpt length (in words):"
+msgstr "Tamanho do resumo (em palavras):"
+
+#: ../cat-posts.php:1108
+msgid "Excerpt 'more' text:"
+msgstr "Texto para o 'leia mais' do resumo:"
+
+#: ../cat-posts.php:1110
+msgid "... more"
+msgstr "... leia mais"
+
+#: ../cat-posts.php:1115
+msgid "Show post date"
+msgstr "Exibir data do post"
+
+#: ../cat-posts.php:1120
+msgid "Date format:"
+msgstr "Formato da data:"
+
+#: ../cat-posts.php:1127
+msgid "Make widget date link"
+msgstr "Fazer da data um link para o post"
+
+#: ../cat-posts.php:1133
+msgid "Show number of comments"
+msgstr "Exibir número de comentários"
+
+#: ../cat-posts.php:1139
+msgid "Show post author"
+msgstr "Exibir autor do post"
+
+#: ../cat-posts.php:1143
+msgid "General"
+msgstr "Geral"
+
+#: ../cat-posts.php:1148
+msgid "Disable the built-in CSS for this widget"
+msgstr "Desativar o CSS integrado do widget"
+
+#: ../cat-posts.php:1154
+msgid "Hide widget if there are no matching posts"
+msgstr "Ocultar widget quando não houver nenhum post"
+
+#: ../cat-posts.php:1160
+msgid "Hide social buttons in widget output"
+msgstr "Ocultar botões de redes sociais no conteúdo do widget"
+
+#: ../cat-posts.php:1164
+msgid "Footer"
+msgstr "Rodapé"
+
+#: ../cat-posts.php:1168
+msgid "Footer link text"
+msgstr "Texto do link do rodapé"
+
+#: ../cat-posts.php:1169
+msgid "... more by this topic"
+msgstr "mais posts dessa categoria..."
+
+#: ../cat-posts.php:1173
+msgid "My settings"
+msgstr "Minhas configurações"
+
+#: ../cat-posts.php:1178
+msgid "Auto close panels"
+msgstr "Fechar painéis automaticamente"
+
+#: ../cat-posts.php:1183
+msgid "Follow us on"
+msgstr "Siga-nos no"
+
+#: ../cat-posts.php:1183
+msgid "and"
+msgstr "e"
+
+#: ../cat-posts.php:1385
+msgid "Category Posts Shortcode"
+msgstr "Shortcode do Posts por Categoria"
+
+#: ../cat-posts.php:1420
+msgid "Layout"
+msgstr "Layout"
