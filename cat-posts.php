@@ -100,26 +100,31 @@ function should_enqueue($id_base,$class) {
 function wp_admin_bar_customize_menu() {
 	global $wp_admin_bar;
 
-		if ( ! isset($_GET['action']) || $_GET['action'] !== 'edit' )
-			return;
+	$post =  get_post(get_the_ID());		
+	$exist = shortcode_exist(SHORTCODE_NAME,$post->post_content);
+	if( !$exist )
+		return;
 
-		if ( !current_user_can( 'customize' ) || !is_admin() || !is_user_logged_in() || !is_admin_bar_showing() )
-			return;
+	if ( !isset($_GET['action']) || $_GET['action'] !== 'edit' )
+		return;
 
-		$current_url = "";
-		if ( isset($_GET['post']) || $_GET['post'] !== '' )
-			$current_url = get_permalink( $_GET['post'] );		
-		$customize_url = add_query_arg( 'url', urlencode( $current_url ), wp_customize_url() );
+	if ( !current_user_can( 'customize' ) || !is_admin() || !is_user_logged_in() || !is_admin_bar_showing() )
+		return;
 
-		$wp_admin_bar->add_menu( array(
-				'id'     => 'customize',
-				'title'  => __( 'Customize' ),
-				'href'   => $customize_url,
-				'meta'   => array(
-						'class' => 'hide-if-no-customize',
-				),
-		) );
-		add_action( 'wp_before_admin_bar_render', 'wp_customize_support_script' );
+	$current_url = "";
+	if ( isset($_GET['post']) || $_GET['post'] !== '' )
+		$current_url = get_permalink( $_GET['post'] );		
+	$customize_url = add_query_arg( 'url', urlencode( $current_url ), wp_customize_url() );
+
+	$wp_admin_bar->add_menu( array(
+			'id'     => 'customize',
+			'title'  => __( 'Customize' ),
+			'href'   => $customize_url,
+			'meta'   => array(
+					'class' => 'hide-if-no-customize',
+			),
+	) );
+	add_action( 'wp_before_admin_bar_render', 'wp_customize_support_script' );
 }
 add_action('admin_bar_menu',__NAMESPACE__.'\wp_admin_bar_customize_menu', 35);
 
