@@ -100,14 +100,14 @@ function should_enqueue($id_base,$class) {
 function wp_admin_bar_customize_menu() {
 	global $wp_admin_bar;
 
+	if ( !isset($_GET['action']) || $_GET['action'] !== 'edit' )
+		return;
+	
 	$post =  get_post(get_the_ID());		
 	$exist = shortcode_exist(SHORTCODE_NAME,$post->post_content);
 	if( !$exist )
 		return;
-
-	if ( !isset($_GET['action']) || $_GET['action'] !== 'edit' )
-		return;
-
+		
 	if ( !current_user_can( 'customize' ) || !is_admin() || !is_user_logged_in() || !is_admin_bar_showing() )
 		return;
 
