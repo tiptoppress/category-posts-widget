@@ -1069,7 +1069,7 @@ class Widget extends \WP_Widget {
 
 		?>
 		<div class="category-widget-cont">
-            <p><a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/">Get the Pro Version</a></p>
+            <p><a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/">Get the Pro version</a></p>
             <p><a target="_blank" href="http://tiptoppress.com/category-posts-widget/documentation/">Documentation</a></p>
         <?php
             $this->formTitlePanel($instance);
@@ -1179,6 +1179,27 @@ class Widget extends \WP_Widget {
 		</div>
 		<?php
 	}
+}
+
+// Plugin action links section
+
+/**
+ *  Applied to the list of links to display on the plugins page (beside the activate/deactivate links).
+ *  
+ *  @return array of the widget links
+ *  
+ *  @since 4.6.3
+ */
+add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), __NAMESPACE__.'\add_action_links' );
+
+function add_action_links ( $links ) {
+    $pro_link = array(
+        '<a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/">'.__('Get the Pro version',TEXTDOMAIN).'</a>',
+    );
+	
+	$links = array_merge($pro_link, $links);
+    
+    return $links;
 }
 
 function register_widget() {
