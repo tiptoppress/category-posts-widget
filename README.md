@@ -18,19 +18,20 @@ Adds a widget that shows the most recent posts from a single category.
 Category Posts Widget is a light widget designed to do one thing and do it well: display the most recent posts from a certain category.
 
 ### Term and Category based Posts Widget
-It's the pro version and available at on <a target="_blank" href="http://tiptoppress.com/">Tip Top Press</a> created for big Wordpress sites.
+It's the premium version and available at on <a target="_blank" href="http://tiptoppress.com/">Tip Top Press</a> created for big Wordpress sites.
 
-### Pro features
+### Premium features
 * Post item "Alterations"
 * Masonry (Responsive grid layouts)
 * Grid and Column full page layouts
 * Slider (Vertical and horizontal)
-* Custom Post Types, Taxonomies, Events, Products
-* Full background images
-* CSS image cropping
-* Mouse hover evvects
-* Shortcode (Just edit in in the Customizer)
-* More [examples on the demo page](http://demo.tiptoppress.com/)
+* Categories, Custom Post Types, Taxonomies, Events, Products, ...
+* Full background post images
+* Mouse hover effects for post thumbnail
+* Shortcode (Just edit all Shortcode options in the customizer)
+* Set post thumbnail dimension by width & height (CSS cropping)
+* E-Mail support
+* More [examples on the demo pages](http://demo.tiptoppress.com/)
 
 ### Features
 * Shortcode (Edit in the customizer)
@@ -62,11 +63,13 @@ It's the pro version and available at on <a target="_blank" href="http://tiptopp
 * Localization support.
 
 ### Documentation
-Shortcode: Use [catposts] <a target="_blank" href="http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content">in the content and edit options in the customizer</a>
+Full documentation on [Tiptoppress](http://tiptoppress.com/category-posts-widget/documentation/)
 
-Formatting date and time: See [Formatting Date and Time] (https://codex.wordpress.org/Formatting_Date_and_Time).
+Shortcode: Use [catposts] [in the content and edit options in the customizer](http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content)
 
-Full documentation on [Tiptoppress](http://tiptoppress.com/category-posts-widget/documentation/).
+Formatting date and time: See <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>
+
+Widget <a target="_blank" href="http://tiptoppress.com/category/widget-customization-and-filter-extensions/">customization and filter extensions</a>
 
 ### Contribute
 While using this plugin if you find any bug or any conflict, please submit an issue at 
