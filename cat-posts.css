@@ -70,7 +70,8 @@ Version: 4.6.2
 --------------------------------------------------------------*/
 .cat-post-item .cat-post-css-cropping span {
 	float: left;
-	margin: 5px 10px 5px 0;	
+	margin: 5px 10px 5px 0;
+  overflow: hidden;
 }
 /*--------------------------------------------------------------
 4.0 Thumbnail hover effects
