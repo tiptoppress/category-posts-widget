@@ -455,10 +455,15 @@ class testWidgetFront extends WP_UnitTestCase {
 								$widget,array(150,150));
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200);
-		$this->postThumbnailTester('<img width="200" height="150" src="'.$dirurl.'/canola-300x225.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="canola.jpg" srcset="'.$dirurl.'/canola-300x225.jpg 300w, '.$dirurl.'/canola.jpg 640w" sizes="(max-width: 200px) 100vw, 200px" />',
+        if (version_compare($wp_version, '4.6','<'))  
+			$this->postThumbnailTester('<img width="200" height="150" src="'.$dirurl.'/canola-300x225.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="canola.jpg" srcset="'.$dirurl.'/canola-300x225.jpg 300w, '.$dirurl.'/canola.jpg 640w" sizes="(max-width: 200px) 100vw, 200px" />',
 								$widget,array(200,200)
 							);
-
+		else
+			$this->postThumbnailTester('<img width="200" height="150" src="'.$dirurl.'/canola.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="canola.jpg" srcset="'.$dirurl.'/canola.jpg 640w, '.$dirurl.'/canola-300x225.jpg 300w" sizes="(max-width: 200px) 100vw, 200px" />',
+								$widget,array(200,200)
+							);
+			
 		// Use with "use_css_cropping"
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150,'use_css_cropping' => true);
 		$this->postThumbnailTester('<img width="150" height="150" src="'.$dirurl.'/canola-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="canola.jpg" />',
@@ -466,7 +471,12 @@ class testWidgetFront extends WP_UnitTestCase {
 							);
 		
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200,'use_css_cropping' => true);
-		$this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-33.333333333333px;height:200px;clip:rect(auto,233.33333333333px,auto,33.333333333333px);width:auto;max-width:initial;" width=\'266.66666666667\' height=\'200\' src="'.$dirurl.'/canola-300x225.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="canola.jpg" srcset="'.$dirurl.'/canola-300x225.jpg 300w, '.$dirurl.'/canola.jpg 640w" sizes="(max-width: 266.66666666667px) 100vw, 266.66666666667px" /></span>',
+        if (version_compare($wp_version, '4.6','<'))  
+			$this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-33.333333333333px;height:200px;clip:rect(auto,233.33333333333px,auto,33.333333333333px);width:auto;max-width:initial;" width=\'266.66666666667\' height=\'200\' src="'.$dirurl.'/canola-300x225.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="canola.jpg" srcset="'.$dirurl.'/canola-300x225.jpg 300w, '.$dirurl.'/canola.jpg 3w" sizes="(max-width: 266.66666666667px) 100vw, 266.66666666667px" /></span>',
+								 $widget,array(200,200)
+							);
+        else 
+			$this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-33.333333333333px;height:200px;clip:rect(auto,233.33333333333px,auto,33.333333333333px);width:auto;max-width:initial;" width=\'266.66666666667\' height=\'200\' src="'.$dirurl.'/canola.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="canola.jpg" srcset="'.$dirurl.'/canola.jpg 640w, '.$dirurl.'/canola-300x225.jpg 300w" sizes="(max-width: 266.66666666667px) 100vw, 266.66666666667px" /></span>',
 								 $widget,array(200,200)
 							);
 
@@ -521,11 +531,15 @@ class testWidgetFront extends WP_UnitTestCase {
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200);
         if (version_compare($wp_version, '4.5','<'))  
             $this->postThumbnailTester('<img width="825" height="510" src="'.$dirurl.'/33772-825x510.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="33772.jpg" />',$widget,array());
-        else
+        else if (version_compare($wp_version, '4.6','<'))  
             $this->postThumbnailTester('<img width="200" height="113" src="'.$dirurl.'/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="'.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 200px) 100vw, 200px" />',
 								$widget,array(200,200)
 							);
-		
+		else
+			$this->postThumbnailTester('<img width="200" height="113" src="'.$dirurl.'/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="'.$dirurl.'/33772.jpg 1920w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 200px) 100vw, 200px" />',
+					$widget,array(200,200)
+				);
+
 		// Use with "use_css_cropping"
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150,'use_css_cropping' => true);
 		$this->postThumbnailTester('<img width="150" height="150" src="'.$dirurl.'/33772-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="33772.jpg" />',
@@ -536,8 +550,12 @@ class testWidgetFront extends WP_UnitTestCase {
         if (version_compare($wp_version, '4.5','<'))  
             $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" /></span>',
 								$widget,array(200,200));
-        else
+        else if (version_compare($wp_version, '4.6','<'))  
             $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="'.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
+								$widget,array(200,200)
+							);
+        else
+            $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="http://example.org/wp-content/uploads/2016/10/33772.jpg 1920w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
 								$widget,array(200,200)
 							);
     }
