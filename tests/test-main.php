@@ -188,17 +188,28 @@ class testWidgetFront extends WP_UnitTestCase {
         add_filter('widget_title','titleFilterTest');
 
         // widget_filte filter for link to category with no manual title
+		
+		// for a widget, the title should be escaped by the filtering code
         $out = $widget->titleHTML('<h3>','</h3>',array(
                                             'cat'=>$cid,
                                             'title_link' => true
                                         ));
-        $this->assertEquals('<h3><a href="http://example.org/?cat='.$cid.'">Me &gt; You</a></h3>',$out);
+        $this->assertEquals('<h3><a href="http://example.org/?cat='.$cid.'">Me > You</a></h3>',$out);
         
+		// for a shortcode the filter is not applied
+		
+         $out = $widget->titleHTML('<h3>','</h3>',array(
+                                            'cat'=>$cid,
+                                            'title_link' => true,
+											'is_shortcode' => true,
+                                        ));
+        $this->assertEquals('<h3><a href="http://example.org/?cat='.$cid.'">test cat</a></h3>',$out);
+		
         // widget_filte filter fortitle without a link
         $out = $widget->titleHTML('<h3>','</h3>',array(
                                             'cat'=>$cid,
                                         ));
-        $this->assertEquals('<h3>Me &gt; You</h3>',$out);
+        $this->assertEquals('<h3>Me > You</h3>',$out);
         
         remove_filter('widget_title','titleFilterTest');
         
