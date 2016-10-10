@@ -1236,20 +1236,20 @@ function footer_script($number,$widgetsettings) {
 			// if the layout-width have not enough space to show the regular source-width
 			// @since 4.7 
 			var jWidget = jQuery('#category-posts-<?php echo $number?>'),
-			jFirstPostItem = jWidget.find('li:first'),	
-			jFirstThumb = jFirstPostItem.find('.cat-post-thumbnail > span'),
-			thumbInitWidth = jFirstThumb.width(),	
+			jFirstListItem = jWidget.find('li:first'),	// First: use first for calculation
+			jFirstThumb = jFirstListItem.find('.cat-post-thumbnail > span'),	// Thumb: with span (for image cropping)
+			maxThumbWidth = jFirstThumb.width(),
 			ratio = jFirstThumb.width() / jFirstThumb.height(),
-			ratioHeight = jFirstThumb.height()/jFirstPostItem.find('.cat-post-thumbnail > span > img').height(),
-			jAllThumbs = jWidget.find('li .cat-post-thumbnail > span'),
-			jAllImgs = jWidget.find('li .cat-post-thumbnail > span > img');
+			ratioHeight = jFirstThumb.height() / jFirstThumb.find('img').height(),	// ratioHeight: between cropped- and source-image height
+			jAllThumbs = jWidget.find('li .cat-post-thumbnail > span'),		// All: change all queried images
+			jAllImgs = jWidget.find('li .cat-post-thumbnail > span > img');		// Img: source-image
 			
 			jQuery(window).on('load resize', function() {
-				if(jFirstPostItem.width() < jFirstThumb.width()-10 ||
-					jFirstThumb.width() < thumbInitWidth) {
-						jAllThumbs.width(jFirstPostItem.width());
-						jAllThumbs.height(jFirstPostItem.width()/ratio);
-						jAllImgs.height(jFirstPostItem.width()/ratio/ratioHeight);
+				if(jFirstListItem.width() < jFirstThumb.width()-10 ||
+					jFirstThumb.width() < maxThumbWidth) {
+						jAllThumbs.width(jFirstListItem.width());
+						jAllThumbs.height(jFirstListItem.width()/ratio);
+						jAllImgs.height(jFirstListItem.width()/ratio/ratioHeight);
 				}
 			});			
 		});
