@@ -341,6 +341,9 @@ class testWidgetFront extends WP_UnitTestCase {
         $nums = array('10', 7, null,'oops');
         $nums_results = array(10, 7, null,0);
 
+		$offsets = array (null,1,2,4);
+		$offset_results = array(null,null,1,3); // nuul for offset not set at all
+		
         $hidethumbs = array(true,null,false);
         $hidethumbs_results = array(array(
 					array(
@@ -357,38 +360,44 @@ class testWidgetFront extends WP_UnitTestCase {
                 foreach ($cats as $kcat => $cat) 
                     foreach ($nums as $knum => $num) 
                         foreach ($hidethumbs as $kt => $thumb) 
-                            foreach ($exclude_current as $ke => $exclude) {
-                                $instance = array(
-                                    'sort_by' => $sc,
-                                    'asc_sort_order' => $so,
-                                    'cat' => $cat,
-                                    'hideNoThumb' => $thumb,
-                                    'exclude_current_post' => $exclude,
-                                    'num' => $num
-                                );
-                                $expected = array(
-                                            'orderby' => $sort_criteria_results[$ksc],
-                                            'order' => $sort_order_results[$kso]
-                                            );
-                                if ($cat)
-                                    $expected['cat'] = $cats_results[$kcat];
-                                    
-                                if ($num)
-                                    $expected['showposts'] = $nums_results[$knum];
-                                    
-                                if ($thumb)
-                                    $expected['meta_query'] = $hidethumbs_results[$kt];
-                                    
-                                // test archive type of page
-                                $this->go_to('/');
-                                $this->assertEquals($expected,$widget->queryArgs($instance));
-                                
-                                // test single post page
-                                if ($exclude)
-                                    $expected['post__not_in'] = array($pid);
-                                $this->go_to('/?p='.$pid);
-                                $this->assertEquals($expected,$widget->queryArgs($instance));
-                            }
+                            foreach ($exclude_current as $ke => $exclude) 
+								foreach ($offsets as $of => $offset) {
+									$instance = array(
+										'sort_by' => $sc,
+										'asc_sort_order' => $so,
+										'cat' => $cat,
+										'hideNoThumb' => $thumb,
+										'exclude_current_post' => $exclude,
+										'num' => $num,
+										'offset' => $offset,
+									);
+									$expected = array(
+												'orderby' => $sort_criteria_results[$ksc],
+												'order' => $sort_order_results[$kso]
+												);
+									if ($cat)
+										$expected['cat'] = $cats_results[$kcat];
+										
+									if ($num)
+										$expected['showposts'] = $nums_results[$knum];
+										
+									if ($offset) 
+										if ($offset_results[$of] ) 
+											$expected['offset'] = $offset_results[$of];
+
+									if ($thumb)
+										$expected['meta_query'] = $hidethumbs_results[$kt];
+										
+									// test archive type of page
+									$this->go_to('/');
+									$this->assertEquals($expected,$widget->queryArgs($instance));
+									
+									// test single post page
+									if ($exclude)
+										$expected['post__not_in'] = array($pid);
+									$this->go_to('/?p='.$pid);
+									$this->assertEquals($expected,$widget->queryArgs($instance));
+								}
                     
     }
 
@@ -804,7 +813,10 @@ class testShortCode extends WP_UnitTestCase {
                                 'date_link'            => false,
                                 'date_format'          => '',
                                 'disable_css'          => false,
-                                'hide_if_empty'        => false
+                                'hide_if_empty'        => false,
+								'offset' 			   => 1,
+								'hide_social_buttons'  => '',
+								'auto_close_panels'    => false,
                                ),
                                get_post_meta($pid,self::SHORTCODE_META,true));
                                
@@ -837,7 +849,10 @@ class testShortCode extends WP_UnitTestCase {
                                 'date_link'            => false,
                                 'date_format'          => '',
                                 'disable_css'          => false,
-                                'hide_if_empty'        => false
+                                'hide_if_empty'        => false,
+								'offset' 			   => 1,
+								'hide_social_buttons'  => '',
+								'auto_close_panels'    => false,
                                ),
                                get_post_meta($pid,self::SHORTCODE_META,true));
                                
@@ -886,8 +901,11 @@ class testShortCode extends WP_UnitTestCase {
                                 'date_link'            => false,
                                 'date_format'          => '',
                                 'disable_css'          => false,
-                                'hide_if_empty'        => false
-                               ),
+                                'hide_if_empty'        => false,
+ 								'offset' 			   => 1,
+								'hide_social_buttons'  => '',
+								'auto_close_panels'    => false,
+                              ),
                                get_post_meta($pid,self::SHORTCODE_META,true));
 
         // update some other post
@@ -920,7 +938,11 @@ class testShortCode extends WP_UnitTestCase {
                                 'date_link'            => false,
                                 'date_format'          => '',
                                 'disable_css'          => false,
-                                'hide_if_empty'        => false
+                                'hide_if_empty'        => false,
+								'offset' 			   => 1,
+								'hide_social_buttons'  => '',
+								'auto_close_panels'    => false,
+
                                ),
                                get_post_meta($pid,self::SHORTCODE_META,true));
                                
@@ -954,7 +976,10 @@ class testShortCode extends WP_UnitTestCase {
                                 'date_link'            => false,
                                 'date_format'          => '',
                                 'disable_css'          => false,
-                                'hide_if_empty'        => false
+                                'hide_if_empty'        => false,
+								'offset' 			   => 1,
+								'hide_social_buttons'  => '',
+								'auto_close_panels'    => false,								
                                ),
                                get_post_meta($pid,self::SHORTCODE_META,true));                           
     }

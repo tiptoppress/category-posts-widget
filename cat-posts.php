@@ -530,7 +530,7 @@ class Widget extends \WP_Widget {
         if (isset($instance["num"])) 
             $args['showposts'] = (int) $instance["num"];
 		
-        if (isset($instance["offset"]) && ($instance["offset"] > 1)) 
+        if (isset($instance["offset"]) && ((int) $instance["offset"] > 1)) 
             $args['offset'] = (int) $instance["offset"] - 1;
 		
         if (isset($instance["cat"])) 
