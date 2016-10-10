@@ -355,8 +355,9 @@ class Widget extends \WP_Widget {
 			$html = '<span style="width:'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px;">'
 				.$html.'</span>';
 		} else {
-			// if use_css_cropping not used
-			// no interface changes: leave without change
+			// use_css_cropping is not used
+			// wrap span
+			$html = '<span>'.$html.'</span>';
 		}
 		return $html;
 	}

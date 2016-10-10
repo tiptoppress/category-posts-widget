@@ -73,29 +73,17 @@ Version: 4.6.2
 	margin: 5px 10px 5px 0;
   overflow: hidden;
 }
+.cat-post-item .cat-post-css-cropping img {
+  margin: initial;
+}
 /*--------------------------------------------------------------
 4.0 Thumbnail hover effects
 --------------------------------------------------------------*/
-/* For White, Dark, Scale */
-li a.cat-post-white,
-li a.cat-post-dark,
-li a.cat-post-scale,
-li a.cat-post-blur {
-  display: inline-block;
-  float: left;
-  margin: 5px 10px 5px 0;
-}
-li.cat-post-item a.cat-post-white span,
-li.cat-post-item a.cat-post-dark span,
-li.cat-post-item a.cat-post-scale span,
-li.cat-post-item a.cat-post-blur span {
-    margin: 0;
-}
+/* White, Dark, Scale, Blur */
 li a.cat-post-white img,
 li a.cat-post-dark img,
 li a.cat-post-scale img,
 li a.cat-post-blur img {
-  margin: 0;
   padding-bottom: 0 !important;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -103,14 +91,14 @@ li a.cat-post-blur img {
   -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
-/* Only for White */
+/* White */
 li a.cat-post-white {
   background-color: white;
 }
 li a.cat-post-white img:hover {
   opacity: 0.8;
 }
-/* Only for Dark */
+/* Dark */
 li a.cat-post-dark img:hover {
   -webkit-filter: brightness(75%);
   -moz-filter: brightness(75%);
@@ -118,13 +106,14 @@ li a.cat-post-dark img:hover {
   -o-filter: brightness(75%);
   filter: brightness(75%);
 }
-/* Only for Scale */
-li a.cat-post-scale {
+/* Scale */
+li a.cat-post-scale span {
   overflow: hidden;
+  float: left;
+  margin: 5px 10px 5px 0;
 }
-li a.cat-post-scale.cat-post-css-cropping span {
-  margin: 0;
-  overflow: initial;
+li a.cat-post-scale img {
+  margin: initial;
 }
 li a.cat-post-scale img {
   -webkit-transition: all 0.3s ease;
@@ -137,10 +126,6 @@ li a.cat-post-scale img:hover {
   -webkit-transform: scale(1.1, 1.1);
   -ms-transform: scale(1.1, 1.1);
   transform: scale(1.1, 1.1);
-}
-/* Only for Blur */
-li a.cat-post-blur {
-  overflow: hidden;
 }
 li a.cat-post-blur img:hover {
   -webkit-filter: blur(2px);
