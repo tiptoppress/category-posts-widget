@@ -100,26 +100,31 @@ function should_enqueue($id_base,$class) {
 function wp_admin_bar_customize_menu() {
 	global $wp_admin_bar;
 
-		if ( ! isset($_GET['action']) || $_GET['action'] !== 'edit' )
-			return;
+	if ( !isset($_GET['action']) || $_GET['action'] !== 'edit' )
+		return;
+	
+	$post =  get_post(get_the_ID());		
+	$exist = shortcode_exist(SHORTCODE_NAME,$post->post_content);
+	if( !$exist )
+		return;
+		
+	if ( !current_user_can( 'customize' ) || !is_admin() || !is_user_logged_in() || !is_admin_bar_showing() )
+		return;
 
-		if ( !current_user_can( 'customize' ) || !is_admin() || !is_user_logged_in() || !is_admin_bar_showing() )
-			return;
+	$current_url = "";
+	if ( isset($_GET['post']) || $_GET['post'] !== '' )
+		$current_url = get_permalink( $_GET['post'] );		
+	$customize_url = add_query_arg( 'url', urlencode( $current_url ), wp_customize_url() );
 
-		$current_url = "";
-		if ( isset($_GET['post']) || $_GET['post'] !== '' )
-			$current_url = get_permalink( $_GET['post'] );		
-		$customize_url = add_query_arg( 'url', urlencode( $current_url ), wp_customize_url() );
-
-		$wp_admin_bar->add_menu( array(
-				'id'     => 'customize',
-				'title'  => __( 'Customize' ),
-				'href'   => $customize_url,
-				'meta'   => array(
-						'class' => 'hide-if-no-customize',
-				),
-		) );
-		add_action( 'wp_before_admin_bar_render', 'wp_customize_support_script' );
+	$wp_admin_bar->add_menu( array(
+			'id'     => 'customize',
+			'title'  => __( 'Customize' ),
+			'href'   => $customize_url,
+			'meta'   => array(
+					'class' => 'hide-if-no-customize',
+			),
+	) );
+	add_action( 'wp_before_admin_bar_render', 'wp_customize_support_script' );
 }
 add_action('admin_bar_menu',__NAMESPACE__.'\wp_admin_bar_customize_menu', 35);
 
@@ -350,8 +355,9 @@ class Widget extends \WP_Widget {
 			$html = '<span style="width:'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px;">'
 				.$html.'</span>';
 		} else {
-			// if use_css_cropping not used
-			// no interface changes: leave without change
+			// use_css_cropping is not used
+			// wrap span
+			$html = '<span>'.$html.'</span>';
 		}
 		return $html;
 	}
@@ -378,14 +384,14 @@ class Widget extends \WP_Widget {
             $size[0] = (int) $size[0];
             $size[1] = (int) $size[1];
             if (($size[0] == 0) && ($size[1] == 0)) //both values zero then revert to thumbnail
-                $size= 'post-thumbnail';
+                $size= array(get_option('thumbnail_size_w',150),get_option('thumbnail_size_h',150));
             // if one value is zero make a square using the other value
             else if (($size[0] == 0) && ($size[1] != 0))
                 $size[0] = $size[1];
             else if (($size[0] != 0) && ($size[1] == 0))
                 $size[1] = $size[0];
-        } else $size= 'post-thumbnail'; // yet another form of junk
-            
+        } else $size= array(get_option('thumbnail_size_w',150),get_option('thumbnail_size_h',150)); // yet another form of junk
+
 		add_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
 		$ret = get_the_post_thumbnail( null,$size,'');
 		remove_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
@@ -975,8 +981,8 @@ class Widget extends \WP_Widget {
 		$instance = wp_parse_args( ( array ) $instance, array(
 			'thumb'                => '',
 			'thumbTop'             => '',
-			'thumb_w'              => '',
-			'thumb_h'              => '',
+			'thumb_w'              => get_option('thumbnail_size_w',150),
+			'thumb_h'              => get_option('thumbnail_size_h',150),
 			'use_css_cropping'     => '',
 			'thumb_hover'          => ''
         ));
@@ -1075,7 +1081,7 @@ class Widget extends \WP_Widget {
 
 		?>
 		<div class="category-widget-cont">
-            <p><a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/">Get the Pro Version</a></p>
+            <p><a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/">Get the Pro version</a></p>
             <p><a target="_blank" href="http://tiptoppress.com/category-posts-widget/documentation/">Documentation</a></p>
         <?php
             $this->formTitlePanel($instance);
@@ -1187,6 +1193,27 @@ class Widget extends \WP_Widget {
 	}
 }
 
+// Plugin action links section
+
+/**
+ *  Applied to the list of links to display on the plugins page (beside the activate/deactivate links).
+ *  
+ *  @return array of the widget links
+ *  
+ *  @since 4.6.3
+ */
+add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), __NAMESPACE__.'\add_action_links' );
+
+function add_action_links ( $links ) {
+    $pro_link = array(
+        '<a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/">'.__('Get the Pro version',TEXTDOMAIN).'</a>',
+    );
+	
+	$links = array_merge($pro_link, $links);
+    
+    return $links;
+}
+
 function register_widget() {
     return \register_widget(__NAMESPACE__.'\Widget');
 }
@@ -1295,8 +1322,8 @@ function default_settings()  {
 				'footer_link'          => '',
 				'thumb'                => false,
 				'thumbTop'             => false,
-				'thumb_w'              => '',
-				'thumb_h'              => '',
+				'thumb_w'              => get_option('thumbnail_size_w',150),
+				'thumb_h'              => get_option('thumbnail_size_h',150),
 				'use_css_cropping'     => false,
 				'thumb_hover'          => 'none',
 				'hide_post_titles'     => false,
