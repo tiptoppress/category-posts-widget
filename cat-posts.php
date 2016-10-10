@@ -828,7 +828,9 @@ class Widget extends \WP_Widget {
             $this->removeExcerpFilters($instance);
 			
 			wp_reset_postdata();
-			
+
+            $number = $this->number;
+            add_action('wp_footer',function () use ($number,$instance) { footer_script($number,$instance);},100);
 		} 
 	} 
 
@@ -1216,6 +1218,44 @@ function register_widget() {
 }
 
 add_action( 'widgets_init', __NAMESPACE__.'\register_widget' );
+
+/*
+	Output initialization Javascript code for Styles
+	
+	Params:
+	  number: The widget number used to identify the specific list
+	  widgetsettings: The "instance" parameters of the widget
+*/
+function footer_script($number,$widgetsettings) {
+	?>
+	<script type="text/javascript">
+		jQuery( document ).ready(function () {
+
+			// fluid image dimentions
+			// calculate new image dimentions:
+			// if the layout-width have not enough space to show the regular source-width
+			// @since 4.7 
+			var jWidget = jQuery('#category-posts-<?php echo $number?>'),
+			jFirstPostItem = jWidget.find('li:first'),	
+			jFirstThumb = jFirstPostItem.find('.cat-post-thumbnail > span'),
+			thumbInitWidth = jFirstThumb.width(),	
+			ratio = jFirstThumb.width() / jFirstThumb.height(),
+			ratioHeight = jFirstThumb.height()/jFirstPostItem.find('.cat-post-thumbnail > span > img').height(),
+			jAllThumbs = jWidget.find('li .cat-post-thumbnail > span'),
+			jAllImgs = jWidget.find('li .cat-post-thumbnail > span > img');
+			
+			jQuery(window).on('load resize', function() {
+				if(jFirstPostItem.width() < jFirstThumb.width()-10 ||
+					jFirstThumb.width() < thumbInitWidth) {
+						jAllThumbs.width(jFirstPostItem.width());
+						jAllThumbs.height(jFirstPostItem.width()/ratio);
+						jAllImgs.height(jFirstPostItem.width()/ratio/ratioHeight);
+				}
+			});			
+		});
+	</script>
+	<?php
+}
 
 // shortcode section
 
