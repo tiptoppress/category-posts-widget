@@ -460,26 +460,27 @@ class testWidgetFront extends WP_UnitTestCase {
         
         // equal to min thumb size. no manipulation needed
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150);
-        $this->postThumbnailTester('<img width="150" height="150" src="'.$dirurl.'/canola-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="canola.jpg" />',
+        $this->postThumbnailTester('<span><img width="150" height="150" src="'.$dirurl.'/canola-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="canola.jpg" /></span>',
 								$widget,array(150,150));
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200);
+
         if (version_compare($wp_version, '4.6','<'))  
 			$this->postThumbnailTester('<img width="200" height="150" src="'.$dirurl.'/canola-300x225.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="canola.jpg" srcset="'.$dirurl.'/canola-300x225.jpg 300w, '.$dirurl.'/canola.jpg 640w" sizes="(max-width: 200px) 100vw, 200px" />',
 								$widget,array(200,200)
 							);
 		else
-			$this->postThumbnailTester('<img width="200" height="150" src="'.$dirurl.'/canola.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="canola.jpg" srcset="'.$dirurl.'/canola.jpg 640w, '.$dirurl.'/canola-300x225.jpg 300w" sizes="(max-width: 200px) 100vw, 200px" />',
+			$this->postThumbnailTester('<span><img width="200" height="150" src="'.$dirurl.'/canola.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="canola.jpg" srcset="'.$dirurl.'/canola.jpg 640w, '.$dirurl.'/canola-300x225.jpg 300w" sizes="(max-width: 200px) 100vw, 200px" /></span>',
 								$widget,array(200,200)
 							);
 			
 		// Use with "use_css_cropping"
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150,'use_css_cropping' => true);
-		$this->postThumbnailTester('<img width="150" height="150" src="'.$dirurl.'/canola-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="canola.jpg" />',
+		$this->postThumbnailTester('<span style="width:150px;height:150px;"><img style="margin-top:-0px;height:150px;clip:rect(auto,150px,auto,0px);width:auto;max-width:initial;" width=\'150\' height=\'150\' src="'.$dirurl.'/canola-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="canola.jpg" /></span>',
 								$widget,array(150,150)
 							);
-		
-        $widget->instance=array('thumb_h' => 200,'thumb_w' => 200,'use_css_cropping' => true);
+
+		$widget->instance=array('thumb_h' => 200,'thumb_w' => 200,'use_css_cropping' => true);
         if (version_compare($wp_version, '4.6','<'))  
 			$this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-33.333333333333px;height:200px;clip:rect(auto,233.33333333333px,auto,33.333333333333px);width:auto;max-width:initial;" width=\'266.66666666667\' height=\'200\' src="'.$dirurl.'/canola-300x225.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="canola.jpg" srcset="'.$dirurl.'/canola-300x225.jpg 300w, '.$dirurl.'/canola.jpg 3w" sizes="(max-width: 266.66666666667px) 100vw, 266.66666666667px" /></span>',
 								 $widget,array(200,200)
@@ -501,23 +502,23 @@ class testWidgetFront extends WP_UnitTestCase {
 		$widget->instance=array('use_css_cropping' => false);
 		
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150);
-		$this->postThumbnailTester('<img width="50" height="50" src="'.$dirurl.'/test-image.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="test-image.jpg" />',
+		$this->postThumbnailTester('<span><img width="50" height="50" src="'.$dirurl.'/test-image.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="test-image.jpg" /></span>',
 								$widget,array(150,150)
 							);
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200);
-		$this->postThumbnailTester('<img width="50" height="50" src="'.$dirurl.'/test-image.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="test-image.jpg" />',
+		$this->postThumbnailTester('<span><img width="50" height="50" src="'.$dirurl.'/test-image.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="test-image.jpg" /></span>',
 								$widget,array(200,200)
 							);
 
 		// Use with "use_css_cropping"
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150,'use_css_cropping' => true);
-		$this->postThumbnailTester('<img width="50" height="50" src="'.$dirurl.'/test-image.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="test-image.jpg" />',
+		$this->postThumbnailTester('<span style="width:150px;height:150px;"><img style="margin-top:-0px;height:150px;clip:rect(auto,150px,auto,0px);width:auto;max-width:initial;" width=\'150\' height=\'150\' src="'.$dirurl.'/test-image.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="test-image.jpg" /></span>',
 								$widget,array(150,150)
 							);
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200,'use_css_cropping' => true);
-		$this->postThumbnailTester('<img width="50" height="50" src="'.$dirurl.'/test-image.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="test-image.jpg" />',
+		$this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-top:-0px;height:200px;clip:rect(auto,200px,auto,0px);width:auto;max-width:initial;" width=\'200\' height=\'200\' src="'.$dirurl.'/test-image.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="test-image.jpg" /></span>',
 								$widget,array(200,200)
 							);
 
@@ -533,7 +534,7 @@ class testWidgetFront extends WP_UnitTestCase {
 		$widget->instance=array('use_css_cropping' => false);
 		
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150);
-		$this->postThumbnailTester('<img width="150" height="150" src="'.$dirurl.'/33772-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="33772.jpg" />',
+		$this->postThumbnailTester('<span><img width="150" height="150" src="'.$dirurl.'/33772-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="33772.jpg" /></span>',
 								$widget,array(150,150)
 							);
 
@@ -545,13 +546,13 @@ class testWidgetFront extends WP_UnitTestCase {
 								$widget,array(200,200)
 							);
 		else
-			$this->postThumbnailTester('<img width="200" height="113" src="'.$dirurl.'/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="'.$dirurl.'/33772.jpg 1920w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 200px) 100vw, 200px" />',
+			$this->postThumbnailTester('<span><img width="200" height="113" src="'.$dirurl.'/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="'.$dirurl.'/33772.jpg 1920w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 200px) 100vw, 200px" /></span>',
 					$widget,array(200,200)
 				);
 
 		// Use with "use_css_cropping"
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150,'use_css_cropping' => true);
-		$this->postThumbnailTester('<img width="150" height="150" src="'.$dirurl.'/33772-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="33772.jpg" />',
+		$this->postThumbnailTester('<span style="width:150px;height:150px;"><img style="margin-top:-0px;height:150px;clip:rect(auto,150px,auto,0px);width:auto;max-width:initial;" width=\'150\' height=\'150\' src="'.$dirurl.'/33772-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="33772.jpg" /></span>',
 								$widget,array(150,150)
 							);
 
