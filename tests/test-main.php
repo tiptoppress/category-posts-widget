@@ -984,5 +984,29 @@ class testShortCode extends WP_UnitTestCase {
                                ),
                                get_post_meta($pid,self::SHORTCODE_META,true));                           
     }
+
+    /**
+     *  test tthat the DB is cleaned after uninstall
+     *  
+     */
+    function test_uninstall() {
+		// test widget option
+		add_option('widget-category-posts', 'dummy');
+		$uninstall = NS.'\uninstall';
+		$uninstall();
+		$this->assertEquals(false,get_option('widget-category-posts', false));
+
+		// test meta 
+		$pid = $this->factory->post->create(array('title'=>'test','post_status'=>'publish','post_content'=>'')); 
+        $pid2 = $this->factory->post->create(array('title'=>'test2','post_status'=>'publish','post_content'=>'')); 
+        $pid3 = $this->factory->post->create(array('title'=>'test2','post_status'=>'publish','post_content'=>'')); 
+        wp_update_post(array('ID'=>$pid,'post_content' => '['.self::SHORTCODE_NAME.']'));
+        wp_update_post(array('ID'=>$pid2,'post_content' => 'dummy'));
+        wp_update_post(array('ID'=>$pid3,'post_content' => '['.self::SHORTCODE_NAME.']'));
+		$uninstall();
+		$this->assertEquals(false,get_post_meta($pid,'categoryPosts-shorcode',true));
+		$this->assertEquals(false,get_post_meta($pid2,'categoryPosts-shorcode',true));
+		$this->assertEquals(false,get_post_meta($pid3,'categoryPosts-shorcode',true));
+	}
     
 }

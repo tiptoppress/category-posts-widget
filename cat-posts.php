@@ -1519,3 +1519,17 @@ function customize_save_after() {
 }
 
 add_action('customize_save_after', __NAMESPACE__.'\customize_save_after', 100);
+
+/**
+ *  Uninstall handler, cleanup DB from options and meta
+ *  
+ *  @return void
+ *  
+ *  @since 4.7
+ */
+function uninstall() {
+	delete_option('widget-'.WIDGET_BASE_ID); // delete the option storing the widget options
+	delete_post_meta_by_key( SHORTCODE_META ); // delete the meta storing the shortcode	
+}
+
+register_uninstall_hook(__FILE__, __NAMESPACE__.'uninstall');
