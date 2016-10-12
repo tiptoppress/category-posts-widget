@@ -1217,30 +1217,35 @@ function register_widget() {
 
 add_action( 'widgets_init', __NAMESPACE__.'\register_widget' );
 
-/*
-	Output initialization Javascript code for Styles
-	
-	Params:
-	  number: The widget number used to identify the specific list
-	  widgetsettings: The "instance" parameters of the widget
-*/
+/**
+ * Output js code to handle responsive thumbnails
+ *	
+ * @param  int number: The widget number used to identify the specific list
+ * @param  array widgetsettings: The "instance" parameters of the widget
+ *
+ * @return void
+ *
+ * @since 4.7
+ *
+ **/
 function footer_script($number,$widgetsettings) {
 	?>
 	<script type="text/javascript">
 		jQuery( document ).ready(function () {
-
+<?php
 			// fluid image dimentions
 			// calculate new image dimentions:
 			// if the layout-width have not enough space to show the regular source-width
 			// @since 4.7 
+?>
 			var jWidget = jQuery('#category-posts-<?php echo $number?>'),
-			jFirstListItem = jWidget.find('li:first'),	// First: use first for calculation
-			jFirstThumb = jFirstListItem.find('.cat-post-thumbnail > span'),	// Thumb: with span (for image cropping)
+			jFirstListItem = jWidget.find('li:first'),	<?php // First: use first for calculation ?>
+			jFirstThumb = jFirstListItem.find('.cat-post-thumbnail > span'),	<?php // Thumb: with span (for image cropping) ?>
 			maxThumbWidth = jFirstThumb.width(),
 			ratio = jFirstThumb.width() / jFirstThumb.height(),
-			ratioHeight = jFirstThumb.height() / jFirstThumb.find('img').height(),	// ratioHeight: between cropped- and source-image height
-			jAllThumbs = jWidget.find('li .cat-post-thumbnail > span'),		// All: change all queried images
-			jAllImgs = jWidget.find('li .cat-post-thumbnail > span > img');		// Img: source-image
+			ratioHeight = jFirstThumb.height() / jFirstThumb.find('img').height(),	<?php // ratioHeight: between cropped- and source-image height ?>
+			jAllThumbs = jWidget.find('li .cat-post-thumbnail > span'),		<?php // All: change all queried images ?>
+			jAllImgs = jWidget.find('li .cat-post-thumbnail > span > img');		<?php // Img: source-image ?>
 			
 			jQuery(window).on('load resize', function() {
 				if(jFirstListItem.width() < jFirstThumb.width()-10 ||
