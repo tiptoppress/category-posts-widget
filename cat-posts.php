@@ -1233,23 +1233,27 @@ function footer_script($number,$widgetsettings) {
 	<script type="text/javascript">
 		jQuery( document ).ready(function () {
 <?php
-			// fluid image dimentions
-			// calculate new image dimentions:
+			// fluid image dimensions
+			// calculate new image dimensions:
 			// if the layout-width have not enough space to show the regular source-width
 			// @since 4.7 
 ?>
+			<?php // listener variables ?>
 			var jWidget = jQuery('#category-posts-<?php echo $number?>'),
 			jFirstListItem = jWidget.find('li:first'),	<?php // First: use first for calculation ?>
 			jFirstThumb = jFirstListItem.find('.cat-post-thumbnail > span'),	<?php // Thumb: with span (for image cropping) ?>
+			<?php // perf. opt.: declare this variables once and outside the callback ?>
 			maxThumbWidth = jFirstThumb.width(),
 			ratio = jFirstThumb.width() / jFirstThumb.height(),
 			ratioHeight = jFirstThumb.height() / jFirstThumb.find('img').height(),	<?php // ratioHeight: between cropped- and source-image height ?>
 			jAllThumbs = jWidget.find('li .cat-post-thumbnail > span'),		<?php // All: change all queried images ?>
 			jAllImgs = jWidget.find('li .cat-post-thumbnail > span > img');		<?php // Img: source-image ?>
 			
+			<?php // do only once at page load or on resize browser window ?>
 			jQuery(window).on('load resize', function() {
-				if(jFirstListItem.width() < jFirstThumb.width()-10 ||
-					jFirstThumb.width() < maxThumbWidth) {
+				if(jFirstListItem.width() < jFirstThumb.width()-10 ||	<?php // if the layout-width have not enough space to show the regular source-width ?>
+					jFirstThumb.width() < maxThumbWidth) {				<?php // defined start and stop working width for the image: accomplish only the image width will be get smaller as the source-width ?>
+						<?php // set new image dimensions, as CSS attributes for the maybe or not CSS cropped image ?>
 						jAllThumbs.width(jFirstListItem.width());
 						jAllThumbs.height(jFirstListItem.width()/ratio);
 						jAllImgs.height(jFirstListItem.width()/ratio/ratioHeight);
