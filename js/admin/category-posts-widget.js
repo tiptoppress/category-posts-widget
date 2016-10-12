@@ -46,8 +46,43 @@ jQuery(document).ready( function () {
 				}
 			}
 		},
-    }
+		
+		defaultThumbnailSelection: function (elem, title, button_title) {
 
+			var frame = wp.media({
+				title : title,
+				multiple : false,
+				library : { type : 'image' },
+				button : { text : button_title },
+			});
+
+			// Handle results from media manager.
+			frame.on('close',function( ) {
+				var attachments = frame.state().get('selection').toJSON();
+				if (attachments.length == 1) {
+					var attachment = attachments[0];
+					var img_html = '<img src="' + attachment.url + '" ';
+					img_html += 'width="60" ';
+					img_html += 'height="60" ';
+					img_html += '/>';
+					jQuery(elem).parent().find('.default_thumb_img').html(img_html);
+					jQuery(elem).parent().find('.default_thumb_id').val(attachment.id);
+					jQuery(elem).parent().find('.cwp_default_thumb_remove').show();
+				}
+			});
+
+			frame.open();
+			return false;
+		},
+		
+		removeDefaultThumbnailSelection : function (elem) {
+			jQuery(elem).parent().find('.default_thumb_img').html(cwp_default_thumb_selection.none);
+			jQuery(elem).hide();
+			return false;
+		},
+			
+    }
+	
 	jQuery('.category-widget-cont h4').click(function () { // for widgets page
 		cwp_namespace.autoCloseOpenPanels(this);
 		// toggle panel open/close
@@ -71,4 +106,14 @@ jQuery(document).ready( function () {
             }
         }
 	});	
+	
+	jQuery('.cwp_default_thumb_select').click(function () { // select default thum
+		cwp_namespace.defaultThumbnailSelection(this, cwp_default_thumb_selection.frame_title,cwp_default_thumb_selection.button_title);
+	});
+
+	jQuery('.cwp_default_thumb_remove').click(function () { // remove default thumb
+		cwp_namespace.removeDefaultThumbnailSelection(this);
+	});
+	
 });
+

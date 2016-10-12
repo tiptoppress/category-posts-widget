@@ -177,6 +177,12 @@ function admin_scripts($hook) {
 		// control open and close the widget section
         wp_register_script( 'category-posts-widget-admin-js', plugins_url('js/admin/category-posts-widget.js',__FILE__),array('jquery'),CAT_POST_VERSION,true );
         wp_enqueue_script( 'category-posts-widget-admin-js' );	
+		wp_enqueue_media();
+		wp_localize_script( 'category-posts-widget-admin-js', 'cwp_default_thumb_selection', array(
+			'frame_title' => __( 'Select a default thumbnail', TEXTDOMAIN ),
+			'button_title' => __( 'Select', TEXTDOMAIN ),
+			'none' => __( 'None', TEXTDOMAIN ),
+		) );
 	}	
 }
 
@@ -981,7 +987,8 @@ class Widget extends \WP_Widget {
 			'thumb_w'              => get_option('thumbnail_size_w',150),
 			'thumb_h'              => get_option('thumbnail_size_h',150),
 			'use_css_cropping'     => '',
-			'thumb_hover'          => ''
+			'thumb_hover'          => '',
+			'default_thunmbnail'   => 0,
         ));
 		$thumb                = $instance['thumb'];
 		$thumbTop             = $instance['thumbTop'];
@@ -989,6 +996,7 @@ class Widget extends \WP_Widget {
 		$thumb_h              = $instance['thumb_h'];
 		$use_css_cropping     = $instance['use_css_cropping'];
 		$thumb_hover          = $instance['thumb_hover'];
+		$default_thunmbnail    = $instance['default_thunmbnail'];
 ?>        
         <h4 data-panel="thumbnail"><?php _e('Thumbnails',TEXTDOMAIN)?></h4>
         <div>
@@ -1021,6 +1029,32 @@ class Widget extends \WP_Widget {
                     <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("use_css_cropping"); ?>" name="<?php echo $this->get_field_name("use_css_cropping"); ?>"<?php checked( (bool) $instance["use_css_cropping"], true ); ?> />
                     <?php _e( 'CSS crop to requested size ',TEXTDOMAIN ); ?>
                 </label>
+            </p>					
+            <p>
+                <label >
+                    <?php _e( 'Default thumbnail ',TEXTDOMAIN ); ?>
+                </label>
+				<div>
+					<input type="hidden" class="default_thumb_id" name="<?php echo $this->get_field_name("default_thunmbnail"); ?>" value="<?php echo esc_attr($default_thunmbnail)?>"/>
+					<span class="default_thumb_img">
+						<?php
+							if (!$default_thunmbnail) 
+								_e('None',TEXTDOMAIN);
+							else {
+								$img = wp_get_attachment_image_src($default_thunmbnail);
+								echo '<img width="60" height="60" src="'.$img[0].'" />';
+							}
+						?>
+					</span>
+					<button type="button" class="cwp_default_thumb_select">
+						<?php _e('Select image',TEXTDOMAIN)?>
+					</button>
+					<?php if (!$default_thunmbnail) { ?>
+					<button type="button" class="cwp_default_thumb_remove" <?php if (!$default_thunmbnail) echo 'style="display:none"' ?> >
+						<?php _e('No default',TEXTDOMAIN)?>
+					</button>
+					<?php } ?>
+				</div>
             </p>					
             <p>
                 <label for="<?php echo $this->get_field_id("thumb_hover"); ?>">
