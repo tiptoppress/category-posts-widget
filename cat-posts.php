@@ -13,9 +13,7 @@ namespace categoryPosts;
 // Don't call the file directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
-define( 'CAT_POST_PLUGINURL', plugins_url(basename( dirname(__FILE__))) . "/");
-define( 'CAT_POST_PLUGINPATH', dirname(__FILE__) . "/");
-define( 'CAT_POST_VERSION', "4.6.1");
+const CAT_POST_VERSION = "4.7.beta1";
 
 const SHORTCODE_NAME = 'catposts';
 const SHORTCODE_META = 'categoryPosts-shorcode';
@@ -164,7 +162,7 @@ function widget_styles() {
         $enqueue = should_enqueue(WIDGET_BASE_ID,__NAMESPACE__.'\Widget');
         
 	if ($enqueue) {
-		wp_register_style( 'category-posts', CAT_POST_PLUGINURL . 'cat-posts.css',array(),CAT_POST_VERSION );
+		wp_register_style( 'category-posts', plugins_url('cat-posts.css',__FILE__),array(),CAT_POST_VERSION );
 		wp_enqueue_style( 'category-posts' );
 	}
 }
@@ -177,7 +175,7 @@ function admin_scripts($hook) {
 	if ($hook == 'widgets.php') { // enqueue only for widget admin and customizer
 		
 		// control open and close the widget section
-        wp_register_script( 'category-posts-widget-admin-js', CAT_POST_PLUGINURL.'/js/admin/category-posts-widget.js',array('jquery'),CAT_POST_VERSION,true );
+        wp_register_script( 'category-posts-widget-admin-js', plugins_url('js/admin/category-posts-widget.js',__FILE__),array('jquery'),CAT_POST_VERSION,true );
         wp_enqueue_script( 'category-posts-widget-admin-js' );	
 	}	
 }
