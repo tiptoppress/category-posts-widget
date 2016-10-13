@@ -568,6 +568,37 @@ class testWidgetFront extends WP_UnitTestCase {
             $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="http://example.org/wp-content/uploads/2016/10/33772.jpg 1920w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
 								$widget,array(200,200)
 							);
+			
+		// test default thumb
+		
+        $pidd = $this->factory->post->create(array('title'=>'default thumb','post_status'=>'publish')); 
+        $post = get_post($pidd);
+        setup_postdata($post);		
+
+        $widget->instance=array('thumb_h' => 200,'thumb_w' => 200,'use_css_cropping' => true, 'default_thunmbnail' => $thumbnail_id);
+        if (version_compare($wp_version, '4.5','<'))  
+            $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" /></span>',
+								$widget,array(200,200));
+        else if (version_compare($wp_version, '4.6','<'))  
+            $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="'.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
+								$widget,array(200,200)
+							);
+        else
+            $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="http://example.org/wp-content/uploads/2016/10/33772.jpg 1920w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
+								$widget,array(200,200)
+							);
+
+        $widget->instance=array('thumb_h' => 200,'thumb_w' => 200, 'default_thunmbnail' => $thumbnail_id);
+        if (version_compare($wp_version, '4.5','<'))  
+            $this->postThumbnailTester('<img width="825" height="510" src="'.$dirurl.'/33772-825x510.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="33772.jpg" />',$widget,array());
+        else if (version_compare($wp_version, '4.6','<'))  
+            $this->postThumbnailTester('<img width="200" height="113" src="'.$dirurl.'/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="'.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 200px) 100vw, 200px" />',
+								$widget,array(200,200)
+							);
+		else
+			$this->postThumbnailTester('<span><img width="200" height="113" src="'.$dirurl.'/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="'.$dirurl.'/33772.jpg 1920w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 200px) 100vw, 200px" /></span>',
+					$widget,array(200,200)
+				);
     }
     
     /**
