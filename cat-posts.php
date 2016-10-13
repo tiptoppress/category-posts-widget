@@ -393,9 +393,17 @@ class Widget extends \WP_Widget {
                 $size[1] = $size[0];
         } else $size= array(get_option('thumbnail_size_w',150),get_option('thumbnail_size_h',150)); // yet another form of junk
 
-		add_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
-		$ret = get_the_post_thumbnail( null,$size,'');
-		remove_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
+//		add_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
+		$post_thumbnail_id = get_post_thumbnail_id( get_the_ID() );
+		if (!$post_thumbnail_id && $this->instance['default_thunmbnail'])
+			$post_thumbnail_id = $this->instance['default_thunmbnail'];
+			
+		$html = wp_get_attachment_image( $post_thumbnail_id, $size, false, '' );
+		if (!$html)
+			$ret = '';
+		else
+			$ret = $this->post_thumbnail_html($html,get_the_ID(),$post_thumbnail_id,$size,'');
+//		remove_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
         return $ret;
 	}
 	
@@ -492,7 +500,7 @@ class Widget extends \WP_Widget {
         $ret = '';
         
 		if ( isset( $instance["thumb"] ) && $instance["thumb"] &&
-				has_post_thumbnail() ) {
+			((isset($instance['default_thunmbnail']) && ($instance['default_thunmbnail']!= 0)) || has_post_thumbnail()) ) {
 			$use_css_cropping = (isset($this->instance['use_css_cropping'])&&$this->instance['use_css_cropping']) ? "cat-post-css-cropping" : "";
             $class = '';
             if( !(isset( $this->instance['disable_css'] ) && $this->instance['disable_css'])) { 
@@ -1035,7 +1043,7 @@ class Widget extends \WP_Widget {
                     <?php _e( 'Default thumbnail ',TEXTDOMAIN ); ?>
                 </label>
 				<div>
-					<input type="hidden" class="default_thumb_id" name="<?php echo $this->get_field_name("default_thunmbnail"); ?>" value="<?php echo esc_attr($default_thunmbnail)?>"/>
+					<input type="hidden" class="default_thumb_id" id="<?php echo $this->get_field_id("default_thunmbnail"); ?>" name="<?php echo $this->get_field_name("default_thunmbnail"); ?>" value="<?php echo esc_attr($default_thunmbnail)?>"/>
 					<span class="default_thumb_img">
 						<?php
 							if (!$default_thunmbnail) 
@@ -1049,11 +1057,9 @@ class Widget extends \WP_Widget {
 					<button type="button" class="cwp_default_thumb_select">
 						<?php _e('Select image',TEXTDOMAIN)?>
 					</button>
-					<?php if (!$default_thunmbnail) { ?>
 					<button type="button" class="cwp_default_thumb_remove" <?php if (!$default_thunmbnail) echo 'style="display:none"' ?> >
 						<?php _e('No default',TEXTDOMAIN)?>
 					</button>
-					<?php } ?>
 				</div>
             </p>					
             <p>
