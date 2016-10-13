@@ -329,36 +329,38 @@ class Widget extends \WP_Widget {
 
 		$origfile = get_attached_file( $post_thumbnail_id, true); // the location of the full file
 		$file =	dirname($origfile) .'/'.$meta['file']; // the location of the file displayed as thumb
-		list( $width, $height ) = getimagesize($file);  // get actual size of the thumb file
+		if (file_exist($file)) {
+			list( $width, $height ) = getimagesize($file);  // get actual size of the thumb file
 
-		if (isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping']) {
-			$image = get_image_size($this->instance['thumb_w'],$this->instance['thumb_h'],$width,$height);			
+			if (isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping']) {
+				$image = get_image_size($this->instance['thumb_w'],$this->instance['thumb_h'],$width,$height);			
 
-			// replace srcset
-			$array = array();
-			preg_match( '/width="([^"]*)"/i', $html, $array ) ;
-			$pattern = "/".$array[1]."w/";
-			$html = preg_replace($pattern, $image['image_w']."w", $html);			
-			// replace size
-			$pattern = "/".$array[1]."px/";
-			$html = preg_replace($pattern, $image['image_w']."px", $html);						
-			// replace width
-			$pattern = "/width=\"[0-9]*\"/";
-			$html = preg_replace($pattern, "width='".$image['image_w']."'", $html);
-			// replace height
-			$pattern = "/height=\"[0-9]*\"/";
-			$html = preg_replace($pattern, "height='".$image['image_h']."'", $html);			
-			// set margin
-			$html = str_replace('<img ','<img style="'.$image['marginAttr'].':-'.$image['marginVal'].'px;height:'.$image['image_h']
-				.'px;clip:rect(auto,'.($this->instance['thumb_w']+$image['marginVal']).'px,auto,'.$image['marginVal']
-				.'px);width:auto;max-width:initial;" ',$html);
-			// wrap span
-			$html = '<span style="width:'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px;">'
-				.$html.'</span>';
-		} else {
-			// use_css_cropping is not used
-			// wrap span
-			$html = '<span>'.$html.'</span>';
+				// replace srcset
+				$array = array();
+				preg_match( '/width="([^"]*)"/i', $html, $array ) ;
+				$pattern = "/".$array[1]."w/";
+				$html = preg_replace($pattern, $image['image_w']."w", $html);			
+				// replace size
+				$pattern = "/".$array[1]."px/";
+				$html = preg_replace($pattern, $image['image_w']."px", $html);						
+				// replace width
+				$pattern = "/width=\"[0-9]*\"/";
+				$html = preg_replace($pattern, "width='".$image['image_w']."'", $html);
+				// replace height
+				$pattern = "/height=\"[0-9]*\"/";
+				$html = preg_replace($pattern, "height='".$image['image_h']."'", $html);			
+				// set margin
+				$html = str_replace('<img ','<img style="'.$image['marginAttr'].':-'.$image['marginVal'].'px;height:'.$image['image_h']
+					.'px;clip:rect(auto,'.($this->instance['thumb_w']+$image['marginVal']).'px,auto,'.$image['marginVal']
+					.'px);width:auto;max-width:initial;" ',$html);
+				// wrap span
+				$html = '<span style="width:'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px;">'
+					.$html.'</span>';
+			} else {
+				// use_css_cropping is not used
+				// wrap span
+				$html = '<span>'.$html.'</span>';
+			}
 		}
 		return $html;
 	}
