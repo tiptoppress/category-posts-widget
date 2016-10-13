@@ -329,7 +329,7 @@ class Widget extends \WP_Widget {
 
 		$origfile = get_attached_file( $post_thumbnail_id, true); // the location of the full file
 		$file =	dirname($origfile) .'/'.$meta['file']; // the location of the file displayed as thumb
-		if (file_exist($file)) {
+		if (file_exists($file)) {
 			list( $width, $height ) = getimagesize($file);  // get actual size of the thumb file
 
 			if (isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping']) {
