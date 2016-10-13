@@ -1040,28 +1040,26 @@ class Widget extends \WP_Widget {
                 </label>
             </p>					
             <p>
-                <label >
+                <label style="display:block">
                     <?php _e( 'Default thumbnail ',TEXTDOMAIN ); ?>
                 </label>
-				<div>
-					<input type="hidden" class="default_thumb_id" id="<?php echo $this->get_field_id("default_thunmbnail"); ?>" name="<?php echo $this->get_field_name("default_thunmbnail"); ?>" value="<?php echo esc_attr($default_thunmbnail)?>"/>
-					<span class="default_thumb_img">
-						<?php
-							if (!$default_thunmbnail) 
-								_e('None',TEXTDOMAIN);
-							else {
-								$img = wp_get_attachment_image_src($default_thunmbnail);
-								echo '<img width="60" height="60" src="'.$img[0].'" />';
-							}
-						?>
-					</span>
-					<button type="button" class="cwp_default_thumb_select">
-						<?php _e('Select image',TEXTDOMAIN)?>
-					</button>
-					<button type="button" class="cwp_default_thumb_remove" <?php if (!$default_thunmbnail) echo 'style="display:none"' ?> >
-						<?php _e('No default',TEXTDOMAIN)?>
-					</button>
-				</div>
+				<input type="hidden" class="default_thumb_id" id="<?php echo $this->get_field_id("default_thunmbnail"); ?>" name="<?php echo $this->get_field_name("default_thunmbnail"); ?>" value="<?php echo esc_attr($default_thunmbnail)?>"/>
+				<span class="default_thumb_img">
+					<?php
+						if (!$default_thunmbnail) 
+							_e('None',TEXTDOMAIN);
+						else {
+							$img = wp_get_attachment_image_src($default_thunmbnail);
+							echo '<img width="60" height="60" src="'.$img[0].'" />';
+						}
+					?>
+				</span>
+				<button type="button" class="cwp_default_thumb_select">
+					<?php _e('Select image',TEXTDOMAIN)?>
+				</button>
+				<button type="button" class="cwp_default_thumb_remove" <?php if (!$default_thunmbnail) echo 'style="display:none"' ?> >
+					<?php _e('No default',TEXTDOMAIN)?>
+				</button>
             </p>					
             <p>
                 <label for="<?php echo $this->get_field_id("thumb_hover"); ?>">
