@@ -393,17 +393,18 @@ class Widget extends \WP_Widget {
                 $size[1] = $size[0];
         } else $size= array(get_option('thumbnail_size_w',150),get_option('thumbnail_size_h',150)); // yet another form of junk
 
-//		add_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
 		$post_thumbnail_id = get_post_thumbnail_id( get_the_ID() );
 		if (!$post_thumbnail_id && $this->instance['default_thunmbnail'])
 			$post_thumbnail_id = $this->instance['default_thunmbnail'];
-			
+		
+		do_action( 'begin_fetch_post_thumbnail_html', get_the_ID(), $post_thumbnail_id, $size ); 
 		$html = wp_get_attachment_image( $post_thumbnail_id, $size, false, '' );
 		if (!$html)
 			$ret = '';
 		else
 			$ret = $this->post_thumbnail_html($html,get_the_ID(),$post_thumbnail_id,$size,'');
-//		remove_filter('post_thumbnail_html',array($this,'post_thumbnail_html'),1,5);
+		do_action( 'end_fetch_post_thumbnail_html', get_the_ID(), $post_thumbnail_id, $size );
+
         return $ret;
 	}
 	
