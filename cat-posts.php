@@ -1307,10 +1307,10 @@ function footer_script($number,$widgetsettings) {
 					this.changeImageSize = function changeImageSize() {
 
 						this.listItemLayoutWidth = this.firstListItem.width();
-						this.ImageLayoutWidth = this.firstThumb.outerWidth(true);
+						this.ImageLayoutWidth = this.firstThumb.width();
 
 						if(this.listItemLayoutWidth < this.ImageLayoutWidth ||	<?php /* if the layout-width have not enough space to show the regular source-width */ echo "\r\n" ?>
-							this.ImageLayoutWidth < this.maxThumbSourceWidth) {				<?php /* defined start and stop working width for the image: Accomplish only the image width will be get smaller as the source-width */ echo "\r\n" ?>
+							this.listItemLayoutWidth < this.maxThumbSourceWidth) {				<?php /* defined start and stop working width for the image: Accomplish only the image width will be get smaller as the source-width */ echo "\r\n" ?>
 								this.allThumbs.width(this.listItemLayoutWidth);
 								this.allThumbs.height(this.listItemLayoutWidth/this.ratio);
 								this.allImages.height(this.listItemLayoutWidth/this.ratio/this.ratioHeight);
