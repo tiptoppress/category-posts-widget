@@ -102,8 +102,8 @@ function wp_admin_bar_customize_menu() {
 		return;
 	
 	$post =  get_post(get_the_ID());		
-	$exist = shortcode_exist(SHORTCODE_NAME,$post->post_content);
-	if( !$exist )
+	$names = shortcode_names(SHORTCODE_NAME,$post->post_content);
+	if( !empty($names) )
 		return;
 		
 	if ( !current_user_can( 'customize' ) || !is_admin() || !is_user_logged_in() || !is_admin_bar_showing() )
@@ -149,13 +149,18 @@ function wp_head() {
 add_action('wp_head',__NAMESPACE__.'\wp_head');
 
 function widget_styles() {
+	global $post;
 
     $enqueue = false;
     // check first for shortcode settings
     if (is_singular()) {
-        $meta = shortcode_settings();
-        if (is_array($meta) && !(isset($meta['disable_css']) && $meta['disable_css']))
-            $enqueue = true;
+		$names = shortcode_names(SHORTCODE_NAME,$post->post_content);
+		
+		foreach ($names as $name) {
+			$meta = shortcode_settings($name);
+			if (is_array($meta) && !(isset($meta['disable_css']) && $meta['disable_css']))
+				$enqueue = true;
+		}
     }
 
     if (!$enqueue)
@@ -1328,23 +1333,31 @@ function footer_script($number,$widgetsettings) {
  *  When not customized returns the settings as stored in the meta, but when
  *  it is customized returns the setting stored in the virtual option used by the customizer
  *  
- *  @return array the shortcode settings if a short code exists or empty string
+ *  @parm string name The name of the shortcode to retun, empty string indicates the nameless
+ *  
+ *  @return array the shortcode settings if a short code exists or empty string, empty array if name not found
  *  
  *  @since 4.6
  */
-function shortcode_settings() {
-    $instance = get_post_meta(get_the_ID(),SHORTCODE_META,true);
+function shortcode_settings($name) {
+    $meta = get_post_meta(get_the_ID(),SHORTCODE_META,true);
 
-    if (is_array($instance)) {
-        if (is_customize_preview()) {
-            $o=get_option('_virtual-'.WIDGET_BASE_ID);
-            if (is_array($o))
-                $instance=$o[get_the_ID()];
-        }
-    }
+	if (!empty($meta) && !is_array(reset($meta)))
+		$meta = array ('' => $meta);  // the coversion
+
+	if (!isset($meta[$name])) // name do not exists? return empty array
+		return array();
+	
+	$instance = $meta[$name];
+	if (is_customize_preview()) {
+		$o=get_option('_virtual-'.WIDGET_BASE_ID);
+		if (is_array($o))
+			$instance=$o[get_the_ID()][$name];
+	}
     
-    return $instance;
+	return $instance;
 }
+
 /**
  *  Handle the shortcode
  *  
@@ -1355,13 +1368,23 @@ function shortcode_settings() {
  *  
  */
 function shortcode($attr,$content=null) {
+	
+	$name = '';
+	if (isset($attr['name']))
+		$name = $attr['name'];
+	
     if (is_singular()) {
-        $instance = shortcode_settings();
+        $instance = shortcode_settings($name);
+		if (empty($instance)) // should not happen but just bail out if there is a bug somewhere
+			return ''; 
+			
         $instance['is_shortcode'] = true;  // indicate that we are doing shortcode processing to outputting funtions
 		
         if (is_array($instance)) {
             $widget=new Widget();
             $widget->number = 'shortcode-'.get_the_ID(); // needed to make a unique id for the widget html element
+			if ($name != '') // if not defualt name append to the id
+				$widget->number .= '-' . sanitize_title($name); // sanitize to be on the safe side, not sure where when and how this will be used 
             ob_start();
             $widget->widget(array(
                                 'before_widget' => '',
@@ -1385,21 +1408,31 @@ add_shortcode(SHORTCODE_NAME,__NAMESPACE__.'\shortcode');
  *  
  *  @param string $shortcode_name The name of the shortcode
  *  #param string The content to look at
- *  @return boolean True if used, otherwise false
+ *  
+ *  @return array An array containing the name attributes of the shortcodes. Empty array is 
+ *                an indication there were no shourcodes
+ *  
+ *  @since 4.7
  *  
  */
-function shortcode_exist($shortcode_name,$content) {
+function shortcode_names($shortcode_name,$content) {
 
+	$names = array();
+	
 	$regex_pattern = get_shortcode_regex();
 	if (preg_match_all ('/'.$regex_pattern.'/s', $content, $matches)) {
 		foreach ($matches[2] as $k=>$shortcode) {
 			if ($shortcode == SHORTCODE_NAME) {
-                return true;
+                $name ='';
+				$atts = shortcode_parse_atts( $matches[3][$k] );
+				if (! empty( $atts['name']))
+					$name = $atts['name'];
+				$names[] = $name;
 			}
 		}
 	}
 	
-	return false;
+	return $names;
 }
 
 /**
@@ -1459,13 +1492,28 @@ function save_post($pid,$post) {
 	if ( wp_is_post_revision( $pid ) || wp_is_post_autosave($pid))
 		return;
 		
-    $has_meta = get_post_meta($pid,SHORTCODE_META,true);
-	$exist = shortcode_exist(SHORTCODE_NAME,$post->post_content);
+    $meta = get_post_meta($pid,SHORTCODE_META,true);
+	// check if only one shortcode format - non array of arrays, and convert it
+	if (!empty($meta) && !is_array(reset($meta)))
+		$meta = array ('' => $meta);  // the coversion
+	
+	$old_names = array_keys($meta); // keep list of curren shorcodes names to delete lter whatever was deleted
+	$names = shortcode_names(SHORTCODE_NAME,$post->post_content);
 
-    if (!$exist)
-        delete_post_meta($pid,SHORTCODE_META);
-    else if (!is_array($has_meta))  // get_post_meta have strang return vaules when do not exist so just check it is expected structure
-        add_post_meta($pid,SHORTCODE_META,default_settings(),true);
+	// remove setting for unused names
+	$to_delete = array_diff($old_names,$names);
+	foreach ($to_delete as $k)
+		unset($meta[$k]);
+		
+	foreach ($names as $name) {
+		if (!isset($meta[$name])) {
+			$meta[$name] = default_settings();
+		}
+	}
+
+	delete_post_meta($pid,SHORTCODE_META);
+    if (!empty($meta)) 
+        add_post_meta($pid,SHORTCODE_META,$meta,true);
 }
 
 add_action('save_post',__NAMESPACE__.'\save_post',10,2);
@@ -1474,9 +1522,10 @@ function customize_register($wp_customize) {
 
     class shortCodeControl extends \WP_Customize_Control {
         public $form;
+		public $title_postfix;
         
         public function render_content() {
-			$widget_title = 'Category Posts Shortcode';
+			$widget_title = 'Category Posts Shortcode'.$this->title_postfix;
 			?>
 			<div class="widget-top">
 			<div class="widget-title"><h3><?php echo $widget_title; ?><span class="in-widget-title"></span></h3></div>
@@ -1520,37 +1569,46 @@ function customize_register($wp_customize) {
             if (!is_array($meta))
                 continue;
             
-            $meta = wp_parse_args($meta,default_settings());
+			if (!is_array(reset($meta))) // 4.6 format
+				$meta = array('' => $meta);
+				
+			foreach ($meta as $k => $m) {
+				$m = wp_parse_args($m,default_settings());
 
-            ob_start();
-            $widget->form(array());
-            $form = ob_get_clean();
-            $form = preg_replace_callback('/<(input|select)\s+.*name=("|\').*\[\d*\]\[([^\]]*)\][^>]*>/',
-                function ($matches) use ($p, $wp_customize, $meta) {
-                    $setting = '_virtual-'.WIDGET_BASE_ID.'['.$p->ID.']['.$matches[3].']';
-                    if (!isset($meta[$matches[3]]))
-                        $meta[$matches[3]] = null;
-                    $wp_customize->add_setting( $setting, array(
-                        'default' => $meta[$matches[3]], // set default to current value
-                        'type' => 'option'
-                    ) );
+				ob_start();
+				$widget->form(array());
+				$form = ob_get_clean();
+				$form = preg_replace_callback('/<(input|select)\s+.*name=("|\').*\[\d*\]\[([^\]]*)\][^>]*>/',
+					function ($matches) use ($p, $wp_customize, $m, $k) {
+						$setting = '_virtual-'.WIDGET_BASE_ID.'['.$p->ID.']['.$k.']['.$matches[3].']';
+						if (!isset($m[$matches[3]]))
+							$m[$matches[3]] = null;
+						$wp_customize->add_setting( $setting, array(
+							'default' => $m[$matches[3]], // set default to current value
+							'type' => 'option'
+						) );
 
-                    return str_replace('<'.$matches[1],'<'.$matches[1].' data-customize-setting-link="'.$setting.'"',$matches[0]);
-                },
-                $form
-            );
+						return str_replace('<'.$matches[1],'<'.$matches[1].' data-customize-setting-link="'.$setting.'"',$matches[0]);
+					},
+					$form
+				);
 
-            $wp_customize->add_control( new shortCodeControl(
-                $wp_customize,
-                '_virtual-'.WIDGET_BASE_ID.'['.$p->ID.'][title]',
-                array(
-                'label'   => __( 'Layout', 'twentyfourteen' ),
-                'section' => __NAMESPACE__,
-                'form' => $form,
-                'settings' => '_virtual-'.WIDGET_BASE_ID.'['.$p->ID.'][title]',
-                'active_callback' => function () use ($p) { return is_singular() && (get_the_ID()==$p->ID); }
-                )
-            ) );
+				$sc = new shortCodeControl(
+					$wp_customize,
+					'_virtual-'.WIDGET_BASE_ID.'['.$p->ID.']['.$k.'][title]',
+					array(
+						'label'   => __( 'Layout', 'twentyfourteen' ),
+						'section' => __NAMESPACE__,
+						'form' => $form,
+						'settings' => '_virtual-'.WIDGET_BASE_ID.'['.$p->ID.']['.$k.'][title]',
+						'active_callback' => function () use ($p) { return is_singular() && (get_the_ID()==$p->ID); }
+						)
+					);
+				
+				if ($k != '')
+					$sc->title_postfix = ' '.$k;
+				$wp_customize->add_control($sc);
+			}
         }
     }
 }
