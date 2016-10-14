@@ -1283,44 +1283,47 @@ function footer_script($number,$widgetsettings) {
 			// calculate new image dimensions:
 			// if the layout-width have not enough space to show the regular source-width
 			// @since 4.7 
-?>			
-			var AllPosts = {};
-			var widget = jQuery('#category-posts-<?php echo $number?>');
-			AllPosts['<?php echo $number?>'] = new Posts(widget);
+?>
+			// namespace 			
+			var cwp_namespace = cwp_namespace || {};
+			var cwp_namespace = {
+				Posts : {},
+				widget : null,
+
+				// constructor		
+				WidgetPosts : function Posts(widget) {	
+					<?php // variables ?>
+					this.firstListItem = widget.find('li:first');	<?php // First: use first for calculation ?>
+					this.firstThumb = this.firstListItem.find('.cat-post-thumbnail > span');	<?php // Thumb: with span (for image cropping) ?>
+					<?php // perf. opt.: declare this variables once and outside the callback ?>
+					this.maxThumbWidth = this.firstThumb.width();
+					this.ratio = this.firstThumb.width() / this.firstThumb.height();
+					this.ratioHeight = this.firstThumb.height() / this.firstThumb.find('img').height();	<?php // ratioHeight: between cropped- and source-image height ?>
+					this.allThumbs = widget.find('li .cat-post-thumbnail > span');		<?php // All: change all queried images ?>
+					this.allImgs = widget.find('li .cat-post-thumbnail > span > img');		<?php // Img: source-image ?>
+
+					<?php // functions ?>
+					this.changeImageSize = function changeImageSize() {
+						if(this.firstListItem.width() < this.firstThumb.width()-10 ||	<?php // if the layout-width have not enough space to show the regular source-width ?>
+							this.firstThumb.width() < this.maxThumbWidth) {				<?php // defined start and stop working width for the image: accomplish only the image width will be get smaller as the source-width ?>
+								this.allThumbs.width(this.firstListItem.width());
+								this.allThumbs.height(this.firstListItem.width()/this.ratio);
+								this.allImgs.height(this.firstListItem.width()/this.ratio/this.ratioHeight);
+						}				
+					}
+				},
+			}
+
+			cwp_namespace.widget = jQuery('#category-posts-<?php echo $number?>');
+			cwp_namespace.Posts['<?php echo $number?>'] = new cwp_namespace.WidgetPosts(cwp_namespace.widget);
 
 			<?php // do only once on page load or on resize browser window ?>
 			jQuery(window).on('load resize', function() {
-				for (var post in AllPosts) {
-					AllPosts[post].changeImageSize();
+				for (var post in cwp_namespace.Posts) {
+					cwp_namespace.Posts[post].changeImageSize();
 				}
 			});				
 		});
-
-		// constructor		
-		Posts = function Posts(widget) {	
-			<?php // listener variables ?>
-			this.firstListItem = widget.find('li:first');	<?php // First: use first for calculation ?>
-			this.firstThumb = this.firstListItem.find('.cat-post-thumbnail > span');	<?php // Thumb: with span (for image cropping) ?>
-			<?php // perf. opt.: declare this variables once and outside the callback ?>
-			this.maxThumbWidth = this.firstThumb.width();
-			this.ratio = this.firstThumb.width() / this.firstThumb.height();
-			this.ratioHeight = this.firstThumb.height() / this.firstThumb.find('img').height();	<?php // ratioHeight: between cropped- and source-image height ?>
-			this.allThumbs = widget.find('li .cat-post-thumbnail > span');		<?php // All: change all queried images ?>
-			this.allImgs = widget.find('li .cat-post-thumbnail > span > img');		<?php // Img: source-image ?>						
-		};		
-		// functions
-		Posts.prototype = {
-			// changeImageSize
-			changeImageSize: function changeImageSize() {
-				if(this.firstListItem.width() < this.firstThumb.width()-10 ||	<?php // if the layout-width have not enough space to show the regular source-width ?>
-					this.firstThumb.width() < this.maxThumbWidth) {				<?php // defined start and stop working width for the image: accomplish only the image width will be get smaller as the source-width ?>
-						this.allThumbs.width(this.firstListItem.width());
-						this.allThumbs.height(this.firstListItem.width()/this.ratio);
-						this.allImgs.height(this.firstListItem.width()/this.ratio/this.ratioHeight);
-				}				
-			}
-		}		
-
 	</script>
 	<?php
 }
