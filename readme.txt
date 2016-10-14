@@ -111,7 +111,10 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
 
 = 4.7.1 - =
+* Support multiple shortcodes in content
+* Fluid images for Responsive Design
 * Add option for post offset (use two or more widgets after another)
+* Remove allow_html option (We recommend: Use [manual excerpt](https://codex.wordpress.org/Excerpt#How_to_add_excerpts_to_posts) or we support this option furthermore as filter hook in the premium version)
 
 = 4.6.2 - August 28th 2016 =
 * Fixed only five widget instances can be costumized with shortcodes.

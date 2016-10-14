@@ -96,7 +96,10 @@ Automatic installation is the easiest option as WordPress handles the file trans
 #### <a target="_blank" href="http://tiptoppress.com/category/category-posts-widget/">Read more on our blog ...</a>
 
 #### 4.7.1 - 
+* Support multiple shortcodes in content
+* Fluid images for Responsive Design
 * Add option for post offset (use two or more widgets after another)
+* Remove allow_html option (We recommend: Use <a target="_blank" href="https://codex.wordpress.org/Excerpt#How_to_add_excerpts_to_posts) or we support it as filter hook in the premium version">manual excerpt</a> or we support this option furthermore as filter hook in the premium version)
 
 #### 4.6.2 - August 28th 2016
 * Fixed only five widget instances can be costumized with shortcodes.
