@@ -1672,3 +1672,27 @@ function uninstall() {
 }
 
 register_uninstall_hook(__FILE__, __NAMESPACE__.'uninstall');
+
+/**
+ *  Register the tinymce shortcode plugin
+ *  
+ *  @since 4.7
+ */
+function mce_external_plugins($plugin_array)
+{
+    //enqueue TinyMCE plugin script with its ID.
+    $plugin_array[__NAMESPACE__] =  plugins_url('js/admin/tinymce.js?ver='.CAT_POST_VERSION,__FILE__);
+    return $plugin_array;
+}
+
+add_filter("mce_external_plugins", __NAMESPACE__."\mce_external_plugins");
+
+function mce_buttons($buttons)
+{
+    //register buttons with their id.
+    array_push($buttons, "green");
+    return $buttons;
+}
+
+add_filter("mce_buttons", __NAMESPACE__."\mce_buttons");
+
