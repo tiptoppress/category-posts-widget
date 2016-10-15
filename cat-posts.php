@@ -101,11 +101,6 @@ function wp_admin_bar_customize_menu() {
 	if ( !isset($_GET['action']) || $_GET['action'] !== 'edit' )
 		return;
 	
-	$post =  get_post(get_the_ID());		
-	$names = shortcode_names(SHORTCODE_NAME,$post->post_content);
-	if( !empty($names) )
-		return;
-		
 	if ( !current_user_can( 'customize' ) || !is_admin() || !is_user_logged_in() || !is_admin_bar_showing() )
 		return;
 
@@ -114,6 +109,11 @@ function wp_admin_bar_customize_menu() {
 		$current_url = get_permalink( $_GET['post'] );		
 	$customize_url = add_query_arg( 'url', urlencode( $current_url ), wp_customize_url() );
 
+	$p =  get_post( $_GET['post']);		
+	$names = shortcode_names(SHORTCODE_NAME,$p->post_content);
+	if( empty($names) )
+		return;
+		
 	$wp_admin_bar->add_menu( array(
 			'id'     => 'customize',
 			'title'  => __( 'Customize' ),
@@ -1501,6 +1501,9 @@ function save_post($pid,$post) {
 		return;
 		
     $meta = get_post_meta($pid,SHORTCODE_META,true);
+	if (empty($meta))
+		$meta = array();
+	
 	// check if only one shortcode format - non array of arrays, and convert it
 	if (!empty($meta) && !is_array(reset($meta)))
 		$meta = array ('' => $meta);  // the coversion
