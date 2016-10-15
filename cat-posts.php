@@ -1639,9 +1639,16 @@ function customize_save_after() {
     if (is_array($virtual)) {
         foreach ($virtual as $pid => $instance) {
             $meta = get_post_meta($pid,SHORTCODE_META,true);
-            $instance = array_merge($meta,$instance);
-            update_post_meta($pid,SHORTCODE_META, $instance);
+			
+			if (!empty($meta) && !is_array(reset($meta)))
+				$meta = array ('' => $meta);  // the coversion
+			
+			foreach ($instance as $name=>$new) {
+				if (isset($meta[$name]))  // unlikely but maybe that short code was deleted by other session
+					$meta[$name] = array_merge($meta[$name],$new);
+			}
         }
+        update_post_meta($pid,SHORTCODE_META, $meta);
     }
     
     delete_option('_virtual-'.WIDGET_BASE_ID);
