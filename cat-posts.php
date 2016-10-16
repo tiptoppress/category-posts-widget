@@ -1687,6 +1687,11 @@ function mce_external_plugins($plugin_array)
 
 add_filter("mce_external_plugins", __NAMESPACE__."\mce_external_plugins");
 
+/**
+ *  Register the tinymce buttons for the add shortcode
+ *  
+ *  @since 4.7
+ */
 function mce_buttons($buttons)
 {
     //register buttons with their id.
@@ -1696,3 +1701,14 @@ function mce_buttons($buttons)
 
 add_filter("mce_buttons", __NAMESPACE__."\mce_buttons");
 
+/**
+ *  Register the tinymcetranslation file
+ *  
+ *  @since 4.7
+ */
+function mce_external_languages($locales) {
+    $locales[TEXTDOMAIN] = plugin_dir_path ( __FILE__ ) . 'tinymce_translations.php';
+    return $locales;
+}
+ 
+add_filter( 'mce_external_languages', __NAMESPACE__.'\mce_external_languages');

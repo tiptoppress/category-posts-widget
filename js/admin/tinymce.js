@@ -1,14 +1,16 @@
 (function($) {
     tinymce.create("tinymce.plugins.categoryPosts", {
-
+		
         //url argument holds the absolute url of our plugin directory
         init : function(ed, url) {
 
-            //add new button    
+			var textdomain = 'categoryposts';
+            
+			//add new button    
             ed.addButton("green", {
-                title : "Insert Category Posts shortcode",
+                title : ed.getLang(textdomain+'.tooltip'),
                 cmd : "categoryPosts_shortcode",
-                text : "C"
+                text : "+[CP]",
             });
 
             //button functionality.
@@ -16,14 +18,13 @@
 				ed.windowManager.open(  
 					//  Properties of the window.
 					{
-						title: "Category Posts Insert Shortcode",   //    The title of the dialog window.
+						title: ed.getLang(textdomain+'.title'),
 						body: [{
 							type: 'textbox',
 							name: 'title',
-							label: 'Name'
+							label: ed.getLang(textdomain+'.name'),
 						}],
 						onsubmit: function( e ) {
-							//editor.insertContent( '&lt;h3&gt;' + e.data.title + '&lt;/h3&gt;');
 							var shortcode = '[catposts';
 							if ( e.data.title != "" ) {
 								shortcode += ' name="' + e.data.title + '"';
