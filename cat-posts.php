@@ -183,6 +183,13 @@ function admin_scripts($hook) {
 		// control open and close the widget section
         wp_register_script( 'category-posts-widget-admin-js', plugins_url('js/admin/category-posts-widget.js',__FILE__),array('jquery'),CAT_POST_VERSION,true );
         wp_enqueue_script( 'category-posts-widget-admin-js' );	
+		
+		$user_data = array('accordion' => false);
+		$meta = get_user_meta(get_current_user_id(),__NAMESPACE__,true);
+		if (is_array($meta) && isset($meta['panels']))
+			$user_data['accordion'] = true;
+		
+		wp_localize_script('category-posts-widget-admin-js',__NAMESPACE__,$user_data);
 		wp_enqueue_media();
 		wp_localize_script( 'category-posts-widget-admin-js', 'cwp_default_thumb_selection', array(
 			'frame_title' => __( 'Select a default thumbnail', TEXTDOMAIN ),
@@ -1121,12 +1128,12 @@ class Widget extends \WP_Widget {
 		$date_format          = $instance['date_format'];
 		$disable_css          = $instance['disable_css'];
 		$hide_if_empty        = $instance['hide_if_empty'];
-		$auto_close_panels    = $instance['auto_close_panels'];
 
 		?>
 		<div class="category-widget-cont">
             <p><a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/">Get the Pro version</a></p>
             <p><a target="_blank" href="<?php echo CAT_POST_DOC_URL ?>">Documentation</a></p>
+            <p><a href="<?php echo get_edit_user_link().'#'.__NAMESPACE__ ?>"><?php _e('Panels behaviour settings',TEXTDOMAIN)?></a></p>
         <?php
             $this->formTitlePanel($instance);
             $this->formFilterPanel($instance);
@@ -1216,15 +1223,6 @@ class Widget extends \WP_Widget {
 					<label for="<?php echo $this->get_field_id("footer_link"); ?>">
 						<?php _e( 'Footer link text',TEXTDOMAIN ); ?>:
 						<input class="widefat" style="width:60%;" placeholder="<?php _e('... more by this topic',TEXTDOMAIN)?>" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
-					</label>
-				</p>
-			</div>
-			<h4 data-panel="mysettings"><?php _e('My settings',TEXTDOMAIN)?></h4>
-			<div class="categoryposts-mysettings-panel-auto-close-panels">
-				<p>
-					<label for="<?php echo $this->get_field_id("auto_close_panels"); ?>">
-						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("auto_close_panels"); ?>" name="<?php echo $this->get_field_name("auto_close_panels"); ?>"<?php checked( (bool) $instance["auto_close_panels"], true ); ?> />
-						<?php _e( 'Auto close panels',TEXTDOMAIN ); ?>
 					</label>
 				</p>
 			</div>
@@ -1661,6 +1659,8 @@ function customize_save_after() {
 
 add_action('customize_save_after', __NAMESPACE__.'\customize_save_after', 100);
 
+// tinymce related functions
+
 /**
  *  Uninstall handler, cleanup DB from options and meta
  *  
@@ -1671,6 +1671,7 @@ add_action('customize_save_after', __NAMESPACE__.'\customize_save_after', 100);
 function uninstall() {
 	delete_option('widget-'.WIDGET_BASE_ID); // delete the option storing the widget options
 	delete_post_meta_by_key( SHORTCODE_META ); // delete the meta storing the shortcode	
+	delete_metadata( 'user', 0, __NAMESPACE__, '', true );  // delete all user metadata
 }
 
 register_uninstall_hook(__FILE__, __NAMESPACE__.'uninstall');
@@ -1732,3 +1733,57 @@ function mce_external_languages($locales) {
 }
  
 add_filter( 'mce_external_languages', __NAMESPACE__.'\mce_external_languages');
+
+// user profile related functions
+
+add_action( 'show_user_profile', __NAMESPACE__.'\show_user_profile' );
+add_action( 'edit_user_profile', __NAMESPACE__.'\show_user_profile' );
+
+function show_user_profile( $user ) { 
+
+	if ( !current_user_can( 'edit_user', $user->ID ) )
+		return;
+
+	if ( !current_user_can( 'edit_theme_options', $user->ID ) )
+		return;
+
+	$meta = get_the_author_meta( __NAMESPACE__, $user->ID );
+	
+	if (empty($meta))
+		$meta = array();
+	
+	$accordion = false;
+	if (isset($meta['panels']))
+		$accordion = true;
+?>
+	<h3 id="<?php echo __NAMESPACE__ ?>"><?php _e('Category Posts admin behaviour',TEXTDOMAIN)?></h3>
+
+	<table class="form-table">
+		<tr>
+			<th><label for="<?php echo __NAMESPACE__?>[panels]"><?php _e('Open/Close panels accordion style',TEXTDOMAIN)?></label></th>
+			<td>
+				<input type="checkbox" name="<?php echo __NAMESPACE__?>[panels]" id="<?php echo __NAMESPACE__?>[panels]" <?php checked($accordion); ?>"> </br>
+				<span class="description"><?php _e('Select if you want open panels to close when opening a new one',TEXTDOMAIN)?></span>
+			</td>
+		</tr>
+
+	</table>
+<?php 
+}
+
+add_action( 'personal_options_update', __NAMESPACE__.'\personal_options_update' );
+add_action( 'edit_user_profile_update', __NAMESPACE__.'\personal_options_update' );
+
+function personal_options_update( $user_id ) {
+
+	if ( !current_user_can( 'edit_user', $user_id ) )
+		return false;
+
+	if ( !current_user_can( 'edit_theme_options', $user_id ) )
+		return;
+	
+	if (isset($_POST[__NAMESPACE__]))
+		update_usermeta( $user_id, __NAMESPACE__, $_POST[__NAMESPACE__] );
+	else
+		delete_usermeta( $user_id, __NAMESPACE__);		
+}
