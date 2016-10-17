@@ -1132,8 +1132,6 @@ class Widget extends \WP_Widget {
 		?>
 		<div class="category-widget-cont">
             <p><a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/">Get the Pro version</a></p>
-            <p><a target="_blank" href="<?php echo CAT_POST_DOC_URL ?>">Documentation</a></p>
-            <p><a href="<?php echo get_edit_user_link().'#'.__NAMESPACE__ ?>"><?php _e('Panels behaviour settings',TEXTDOMAIN)?></a></p>
         <?php
             $this->formTitlePanel($instance);
             $this->formFilterPanel($instance);
@@ -1226,8 +1224,9 @@ class Widget extends \WP_Widget {
 					</label>
 				</p>
 			</div>
-            <p style="text-align:right;">
-                Follow us on <a target="_blank" href="https://www.facebook.com/TipTopPress">Facebook</a> and 
+            <p><a href="<?php echo get_edit_user_link().'#'.__NAMESPACE__ ?>"><?php _e('Widget behaviour settings',TEXTDOMAIN)?></a></p>			
+            <p><a target="_blank" href="<?php echo CAT_POST_DOC_URL ?>">Documentation</a></p>
+            <p>We're on <a target="_blank" href="https://www.facebook.com/TipTopPress">Facebook</a> and 
 				<a target="_blank" href="https://twitter.com/TipTopPress">Twitter</a></br></br>
             </p>
 		</div>
@@ -1772,20 +1771,20 @@ function show_user_profile( $user ) {
 	if (isset($meta['editor']))
 		$editor = true;
 ?>
-	<h3 id="<?php echo __NAMESPACE__ ?>"><?php _e('Category Posts admin behaviour',TEXTDOMAIN)?></h3>
+	<h3 id="<?php echo __NAMESPACE__ ?>"><?php _e('Category Posts Widget behaviour settings',TEXTDOMAIN)?></h3>
 
 	<table class="form-table">
 		<tr>
 			<th><label for="<?php echo __NAMESPACE__?>[panels]"><?php _e('Open/Close panels accordion style',TEXTDOMAIN)?></label></th>
 			<td>
-				<input type="checkbox" name="<?php echo __NAMESPACE__?>[panels]" id="<?php echo __NAMESPACE__?>[panels]" <?php checked($accordion); ?>"> </br>
+				<input type="checkbox" name="<?php echo __NAMESPACE__?>[panels]" id="<?php echo __NAMESPACE__?>[panels]" <?php checked($accordion); ?>">
 				<span class="description"><?php _e('Select if you want open panels to close when opening a new one',TEXTDOMAIN)?></span>
 			</td>
 		</tr>
 		<tr>
-			<th><label for="<?php echo __NAMESPACE__?>[editor]"><?php _e('Hide "insert shortcode" in the editor',TEXTDOMAIN)?></label></th>
+			<th><label for="<?php echo __NAMESPACE__?>[editor]"><?php _e('Hide "Insert shortcode" icon in the editor',TEXTDOMAIN)?></label></th>
 			<td>
-				<input type="checkbox" name="<?php echo __NAMESPACE__?>[editor]" id="<?php echo __NAMESPACE__?>[editor]" <?php checked($editor); ?>"> </br>
+				<input type="checkbox" name="<?php echo __NAMESPACE__?>[editor]" id="<?php echo __NAMESPACE__?>[editor]" <?php checked($editor); ?>">
 				<span class="description"><?php _e('Select if you want to hide the "insert shortcode" button from the editor',TEXTDOMAIN)?></span>
 			</td>
 		</tr>
