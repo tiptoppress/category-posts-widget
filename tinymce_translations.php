@@ -18,6 +18,8 @@ function tinymce_translation() {
         'name' => __('Name', TEXTDOMAIN),
         'tooltip' => __('Insert Category Posts shortcode', TEXTDOMAIN),
 		'title' => __('Category Posts Insert Shortcode', TEXTDOMAIN),
+		'hide_message' => __('Hide the button', TEXTDOMAIN),
+		'profiile_url' => get_edit_user_link().'#'.__NAMESPACE__,
     );
  
     $locale = \_WP_Editors::$mce_locale;

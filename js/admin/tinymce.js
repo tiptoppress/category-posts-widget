@@ -20,11 +20,17 @@
 					//  Properties of the window.
 					{
 						title: ed.getLang(textdomain+'.title'),
-						body: [{
-							type: 'textbox',
-							name: 'title',
-							label: ed.getLang(textdomain+'.name'),
-						}],
+						body: [
+								{
+									type: 'textbox',
+									name: 'title',
+									label: ed.getLang(textdomain+'.name'),
+								},
+								{
+									type:'container',
+									html:'<a style="color:blue;textdecoration:underline;cursor:pointer" href="'+ed.getLang(textdomain+'.profiile_url')+'">'+ed.getLang(textdomain+'.hide_message')+'</a>',
+								}
+						],
 						onsubmit: function( e ) {
 							var shortcode = '[catposts';
 							if ( e.data.title != "" ) {

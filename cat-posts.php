@@ -1689,7 +1689,11 @@ function mce_external_plugins($plugin_array)
 {
 	if (current_user_can('edit_theme_options')) { // don't load the code if the user can not customize the shortcode
 		//enqueue TinyMCE plugin script with its ID.
-		$plugin_array[__NAMESPACE__] =  plugins_url('js/admin/tinymce.js?ver='.CAT_POST_VERSION,__FILE__);
+		$meta = get_user_meta(get_current_user_id(),__NAMESPACE__,true);
+		if (is_array($meta) && isset($meta['editor']))
+			;
+		else
+			$plugin_array[__NAMESPACE__] =  plugins_url('js/admin/tinymce.js?ver='.CAT_POST_VERSION,__FILE__);
 	}
 	
     return $plugin_array;
@@ -1710,7 +1714,11 @@ function mce_buttons($buttons)
 {
 	if (current_user_can('edit_theme_options')) { // don't load the code if the user can not customize the shortcode
 		//register buttons with their id.
-		array_push($buttons, __NAMESPACE__);
+		$meta = get_user_meta(get_current_user_id(),__NAMESPACE__,true);
+		if (is_array($meta) && isset($meta['editor']))
+			;
+		else
+			array_push($buttons, __NAMESPACE__);
 	}
     return $buttons;
 }
@@ -1728,7 +1736,11 @@ add_filter("mce_buttons", __NAMESPACE__."\mce_buttons");
  */
 function mce_external_languages($locales) {
 	if (current_user_can('edit_theme_options'))  // don't load the code if the user can not customize the shortcode
-		$locales[TEXTDOMAIN] = plugin_dir_path ( __FILE__ ) . 'tinymce_translations.php';
+		$meta = get_user_meta(get_current_user_id(),__NAMESPACE__,true);
+		if (is_array($meta) && isset($meta['editor']))
+			;
+		else
+			$locales[TEXTDOMAIN] = plugin_dir_path ( __FILE__ ) . 'tinymce_translations.php';
     return $locales;
 }
  
@@ -1755,6 +1767,10 @@ function show_user_profile( $user ) {
 	$accordion = false;
 	if (isset($meta['panels']))
 		$accordion = true;
+	
+	$editor = false;
+	if (isset($meta['editor']))
+		$editor = true;
 ?>
 	<h3 id="<?php echo __NAMESPACE__ ?>"><?php _e('Category Posts admin behaviour',TEXTDOMAIN)?></h3>
 
@@ -1766,7 +1782,13 @@ function show_user_profile( $user ) {
 				<span class="description"><?php _e('Select if you want open panels to close when opening a new one',TEXTDOMAIN)?></span>
 			</td>
 		</tr>
-
+		<tr>
+			<th><label for="<?php echo __NAMESPACE__?>[editor]"><?php _e('Hide "insert shortcode" in the editor',TEXTDOMAIN)?></label></th>
+			<td>
+				<input type="checkbox" name="<?php echo __NAMESPACE__?>[editor]" id="<?php echo __NAMESPACE__?>[editor]" <?php checked($editor); ?>"> </br>
+				<span class="description"><?php _e('Select if you want to hide the "insert shortcode" button from the editor',TEXTDOMAIN)?></span>
+			</td>
+		</tr>
 	</table>
 <?php 
 }
