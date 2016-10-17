@@ -1570,7 +1570,8 @@ function customize_register($wp_customize) {
     if (count($posts) > 0) {
         $wp_customize->add_section( __NAMESPACE__, array(
             'title'           => __( 'Category Posts Shortcode', TEXTDOMAIN ),
-            'priority'        => 200
+            'priority'        => 200,
+			'capability' => 'edit_theme_options',
         ) );
         
         foreach($posts as $p) {
@@ -1676,12 +1677,19 @@ register_uninstall_hook(__FILE__, __NAMESPACE__.'uninstall');
 /**
  *  Register the tinymce shortcode plugin
  *  
+ *  @param array $plugin_array An array containing the current plugins to be used by tinymce
+ *  
+ *  @return array An array containing the plugins to be used by tinymce, our plugin added to the $plugin_array parameter
+ *
  *  @since 4.7
  */
 function mce_external_plugins($plugin_array)
 {
-    //enqueue TinyMCE plugin script with its ID.
-    $plugin_array[__NAMESPACE__] =  plugins_url('js/admin/tinymce.js?ver='.CAT_POST_VERSION,__FILE__);
+	if (current_user_can('edit_theme_options')) { // don't load the code if the user can not customize the shortcode
+		//enqueue TinyMCE plugin script with its ID.
+		$plugin_array[__NAMESPACE__] =  plugins_url('js/admin/tinymce.js?ver='.CAT_POST_VERSION,__FILE__);
+	}
+	
     return $plugin_array;
 }
 
@@ -1690,12 +1698,18 @@ add_filter("mce_external_plugins", __NAMESPACE__."\mce_external_plugins");
 /**
  *  Register the tinymce buttons for the add shortcode
  *  
+ *  @param array $buttons An array containing the current buttons to be used by tinymce
+ *  
+ *  @return array An array containing the buttons to be used by tinymce, our button added to the $buttons parameter
+ *
  *  @since 4.7
  */
 function mce_buttons($buttons)
 {
-    //register buttons with their id.
-    array_push($buttons, "green");
+	if (current_user_can('edit_theme_options')) { // don't load the code if the user can not customize the shortcode
+		//register buttons with their id.
+		array_push($buttons, __NAMESPACE__);
+	}
     return $buttons;
 }
 
@@ -1704,10 +1718,15 @@ add_filter("mce_buttons", __NAMESPACE__."\mce_buttons");
 /**
  *  Register the tinymcetranslation file
  *  
+ *  @param array $locales An array containing the current translations to be used by tinymce
+ *  
+ *  @return array An array containing the translations to be used by tinymce, our localization added to the $locale parameter
+ *  
  *  @since 4.7
  */
 function mce_external_languages($locales) {
-    $locales[TEXTDOMAIN] = plugin_dir_path ( __FILE__ ) . 'tinymce_translations.php';
+	if (current_user_can('edit_theme_options'))  // don't load the code if the user can not customize the shortcode
+		$locales[TEXTDOMAIN] = plugin_dir_path ( __FILE__ ) . 'tinymce_translations.php';
     return $locales;
 }
  

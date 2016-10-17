@@ -1,13 +1,14 @@
 (function($) {
-    tinymce.create("tinymce.plugins.categoryPosts", {
+	var namespace = 'categoryPosts';
+	var textdomain = 'categoryposts';
+	
+    tinymce.create("tinymce.plugins."+namespace, {
 		
         //url argument holds the absolute url of our plugin directory
         init : function(ed, url) {
-
-			var textdomain = 'categoryposts';
             
 			//add new button    
-            ed.addButton("green", {
+            ed.addButton(namespace, {
                 title : ed.getLang(textdomain+'.tooltip'),
                 cmd : "categoryPosts_shortcode",
                 text : "+[CP]",
