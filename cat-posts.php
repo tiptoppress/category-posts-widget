@@ -14,7 +14,7 @@ namespace categoryPosts;
 if ( !defined( 'ABSPATH' ) ) exit;
 
 const CAT_POST_VERSION = "4.7.beta2";
-const CAT_POST_DOC_URL = "http://tiptoppress.com/category-posts-widget/documentation/4.7";
+const CAT_POST_DOC_URL = "http://tiptoppress.com/category-posts-widget/4-7";
 
 const SHORTCODE_NAME = 'catposts';
 const SHORTCODE_META = 'categoryPosts-shorcode';
