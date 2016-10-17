@@ -14,6 +14,7 @@ namespace categoryPosts;
 if ( !defined( 'ABSPATH' ) ) exit;
 
 const CAT_POST_VERSION = "4.7.beta2";
+const CAT_POST_DOC_URL = "http://tiptoppress.com/category-posts-widget/documentation/4.7";
 
 const SHORTCODE_NAME = 'catposts';
 const SHORTCODE_META = 'categoryPosts-shorcode';
@@ -1125,7 +1126,7 @@ class Widget extends \WP_Widget {
 		?>
 		<div class="category-widget-cont">
             <p><a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/">Get the Pro version</a></p>
-            <p><a target="_blank" href="http://tiptoppress.com/category-posts-widget/documentation/">Documentation</a></p>
+            <p><a target="_blank" href="<?php echo CAT_POST_DOC_URL ?>">Documentation</a></p>
         <?php
             $this->formTitlePanel($instance);
             $this->formFilterPanel($instance);
