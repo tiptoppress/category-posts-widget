@@ -59,7 +59,7 @@ It's the premium version and available on <a target="_blank" href="http://tiptop
 * Localization support.
 
 = Documentation =
-* Full documentation on [Tiptoppress](http://tiptoppress.com/category-posts-widget/documentation/)
+* Full documentation on [Tiptoppress](http://tiptoppress.com/category-posts-widget/4-6/)
 * Shortcode: Use [catposts] [in the content and edit options in the customizer](http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content)
 * Formatting date and time: See <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>
 * Widget <a target="_blank" href="http://tiptoppress.com/category/widget-customization-and-filter-extensions/">customization and filter extensions</a>

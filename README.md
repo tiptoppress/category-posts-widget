@@ -63,7 +63,7 @@ It's the premium version and available at on <a target="_blank" href="http://tip
 * Localization support.
 
 ### Documentation
-Full documentation on [Tiptoppress](http://tiptoppress.com/category-posts-widget/documentation/)
+Full documentation on [Tiptoppress](http://tiptoppress.com/category-posts-widget/4-6/)
 
 Shortcode: Use [catposts] [in the content and edit options in the customizer](http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content)
 
