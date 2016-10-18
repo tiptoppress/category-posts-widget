@@ -21,10 +21,15 @@ const SHORTCODE_META = 'categoryPosts-shorcode';
 const WIDGET_BASE_ID = 'category-posts';
 
 const TEXTDOMAIN = 'categoryposts';
+
 /*
  * Iterate over all the widgets active at the page and call the callback for them
  * 
- * callback - accepts the widget settings, return true to continue iteration or false to stop
+ * @param callback - accepts the widget settings, return true to continue iteration or false to stop
+ *
+ * @return void
+ *
+ * @since 4.1
 */
 function iterator($id_base,$class,$callback) {
 	global $wp_registered_widgets;
@@ -49,6 +54,13 @@ function iterator($id_base,$class,$callback) {
 				}
 			}
 		}
+	}
+	
+	// check "widgets" registered with the external API
+	
+	foreach (virtualWidget::getAllSettings() as $settings) {
+		if (!$callback($settings))
+			return;
 	}
 }
 
@@ -1805,4 +1817,98 @@ function personal_options_update( $user_id ) {
 		update_usermeta( $user_id, __NAMESPACE__, $_POST[__NAMESPACE__] );
 	else
 		delete_usermeta( $user_id, __NAMESPACE__);		
+}
+
+// external API
+
+/**
+ *  Class that represent a virtual widget. Each widget being created will have relevant 
+ *  CSS output in the header, but strill requires a call for getHTML method or renderHTML
+ *  to get or output the HTML
+ *  
+ *  @since 4.7
+ */
+class virtualWidget {
+	private static $collection = array();
+	private $id;
+	
+	/**
+	 *  Construct the virtual widget. This should happen before wp_head action with priority
+	 *  10 is executed if any CSS output should be generated.
+	 *  
+	 *  @param string $id    The identifier use as the id of the root html element when the HTML
+	 *                       is generated
+	 *  
+	 *  @param array $args   The setting to be applied to the widget
+	 *  
+	 *  @since 4.7
+	 */
+	function __construct($id, $args) {
+		$this->id = $id;
+		self::$collection[$id] = wp_parse_args($args,default_settings());
+	}
+	
+	function __destruct() {
+		 unset(self::$collection[$this->id]);
+	}
+
+	/**
+	 *  return the HTML of the widget as is generated based on the settings passed at construction time
+	 *  
+	 *  @return string
+	 *  
+	 *  @since 4.7
+	 */
+	function getHTML() {
+		
+		$widget=new Widget();
+		$widget->number = $this->id; // needed to make a unique id for the widget html element
+		ob_start();
+		$widget->widget(array(
+							'before_widget' => '',
+							'after_widget' => '',
+							'before_title' => '',
+							'after_title' => ''
+						), $this->args);
+		$ret = ob_get_clean();
+		$ret = '<div id="'.$this->id.'">'.$ret.'</div>';
+		return $ret;
+		
+	}
+	
+	/**
+	 *  Output the widget HTML 
+	 *  
+	 *  Just a wrapper that output getHTML
+	 *  
+	 *  @return void
+	 *  
+	 *  @since 4.7
+	 */
+	function renderHTML() {
+		echo $this->getHTML();
+	}
+	
+	/**
+	 *  Get the id the virtual widget was registered with
+	 *  
+	 *  @return string
+	 *  
+	 *  @since 4.7
+	 */
+	function id() {
+		return $this->id;
+	}
+	
+	/**
+	 *  Get all the setting of the virtual widgets in an array
+	 *  
+	 *  @return array
+	 *  
+	 *  @since 4.7
+	 */
+	static function getAllSettings() {
+		return self::$collection;
+	}
+	
 }
