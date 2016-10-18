@@ -1113,7 +1113,6 @@ class Widget extends \WP_Widget {
 			'disable_css'          => '',
 			'hide_if_empty'        => '',
 			'hide_social_buttons'  => '',
-			'auto_close_panels'    => false,
 		) );
 
 		$footer_link          = $instance['footer_link'];
@@ -1477,7 +1476,6 @@ function default_settings()  {
 				'disable_css'          => false,
 				'hide_if_empty'        => false,
 				'hide_social_buttons'  => '',
-				'auto_close_panels'    => false,
 				);
 }
 
