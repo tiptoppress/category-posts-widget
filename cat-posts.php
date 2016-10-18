@@ -1224,9 +1224,9 @@ class Widget extends \WP_Widget {
 					</label>
 				</p>
 			</div>
-            <p><a href="<?php echo get_edit_user_link().'#'.__NAMESPACE__ ?>"><?php _e('Widget behaviour settings',TEXTDOMAIN)?></a></p>			
+            <p><a href="<?php echo get_edit_user_link().'#'.__NAMESPACE__ ?>"><?php _e('Widget admin behaviour settings',TEXTDOMAIN)?></a></p>			
             <p><a target="_blank" href="<?php echo CAT_POST_DOC_URL ?>">Documentation</a></p>
-            <p>We're on <a target="_blank" href="https://www.facebook.com/TipTopPress">Facebook</a> and 
+            <p>We are on <a target="_blank" href="https://www.facebook.com/TipTopPress">Facebook</a> and 
 				<a target="_blank" href="https://twitter.com/TipTopPress">Twitter</a></br></br>
             </p>
 		</div>
@@ -1775,17 +1775,17 @@ function show_user_profile( $user ) {
 
 	<table class="form-table">
 		<tr>
-			<th><label for="<?php echo __NAMESPACE__?>[panels]"><?php _e('Open/Close panels accordion style',TEXTDOMAIN)?></label></th>
+			<th><label for="<?php echo __NAMESPACE__?>[panels]"><?php _e('Open panels behavior',TEXTDOMAIN)?></label></th>
 			<td>
 				<input type="checkbox" name="<?php echo __NAMESPACE__?>[panels]" id="<?php echo __NAMESPACE__?>[panels]" <?php checked($accordion); ?>">
-				<span class="description"><?php _e('Select if you want open panels to close when opening a new one',TEXTDOMAIN)?></span>
+				<label for=<?php echo __NAMESPACE__?>[panels]><?php _e('Close the curremtly open panel when opening a new one',TEXTDOMAIN)?></label>
 			</td>
 		</tr>
 		<tr>
-			<th><label for="<?php echo __NAMESPACE__?>[editor]"><?php _e('Hide "Insert shortcode" icon in the editor',TEXTDOMAIN)?></label></th>
+			<th><label for="<?php echo __NAMESPACE__?>[editor]"><?php _e('Visual editor button',TEXTDOMAIN)?></label></th>
 			<td>
 				<input type="checkbox" name="<?php echo __NAMESPACE__?>[editor]" id="<?php echo __NAMESPACE__?>[editor]" <?php checked($editor); ?>">
-				<span class="description"><?php _e('Select if you want to hide the "insert shortcode" button from the editor',TEXTDOMAIN)?></span>
+				<label for="<?php echo __NAMESPACE__?>[editor]"><?php _e('Hide the "insert shortcode" button from the editor',TEXTDOMAIN)?></label>
 			</td>
 		</tr>
 	</table>
