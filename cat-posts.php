@@ -1219,12 +1219,6 @@ class Widget extends \WP_Widget {
 						<?php _e( 'Hide widget if there are no matching posts',TEXTDOMAIN ); ?>
 					</label>
 				</p>
-				<p>
- 					<label for="<?php echo $this->get_field_id("hide_social_buttons"); ?>">
- 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_social_buttons"); ?>" name="<?php echo $this->get_field_name("hide_social_buttons"); ?>"<?php checked( (bool) $instance["hide_social_buttons"], true ); ?> />
- 						<?php _e( 'Hide social buttons in widget output',TEXTDOMAIN ); ?>
- 					</label>
- 				</p>
 			</div>
 			<h4 data-panel="footer"><?php _e('Footer',TEXTDOMAIN)?></h4>
 			<div>
