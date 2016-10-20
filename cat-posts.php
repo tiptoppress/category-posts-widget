@@ -22,84 +22,24 @@ const WIDGET_BASE_ID = 'category-posts';
 
 const TEXTDOMAIN = 'categoryposts';
 
-/*
- * Iterate over all the widgets active at the page and call the callback for them
- * 
- * @param callback - accepts the widget settings, return true to continue iteration or false to stop
- *
- * @return void
- *
- * @since 4.1
-*/
-function iterator($id_base,$class,$callback) {
-	global $wp_registered_widgets;
-	$sidebars_widgets = wp_get_sidebars_widgets();
-
-	if ( is_array($sidebars_widgets) ) {
-		foreach ( $sidebars_widgets as $sidebar => $widgets ) {
-			if ( 'wp_inactive_widgets' === $sidebar || 'orphaned_widgets' === substr( $sidebar, 0, 16 ) ) {
-				continue;
-			}
-
-			if ( is_array($widgets) ) {
-				foreach ( $widgets as $widget ) {
-					$widget_base = _get_widget_id_base($widget);
-					if ( $widget_base == $id_base )  {
-						$widgetclass = new $class();
-						$allsettings = $widgetclass->get_settings();
-						$settings = isset($allsettings[str_replace($widget_base.'-','',$widget)]) ? $allsettings[str_replace($widget_base.'-','',$widget)] : false;
-						if (!$callback($settings))
-							return;
-					}
-				}
-			}
+/***
+ *	Check if CSS needs to be added to support cropping by traversing all active widgets on the page
+ *	and checking if any has cropping enabled.
+ *	
+ *	@return bool false if cropping is not active, false otherwise
+ *	
+ *	@since 4.1
+ ***/
+function cropping_active() {
+	$ret = false;
+	
+    if (is_singular()) {
+		$widgets = virtualWidget::getAllSettings();
+		foreach ($widgets as $setting) {
+			if (isset($setting['use_css_cropping']))
+				$ret = true;
 		}
-	}
-	
-	// check "widgets" registered with the external API
-	
-	foreach (virtualWidget::getAllSettings() as $settings) {
-		if (!$callback($settings))
-			return;
-	}
-}
-
-/*
-	Check if CSS needs to be added to support cropping by traversing all active widgets on the page
-	and checking if any has cropping enabled.
-	
-	Return: false if cropping is not active, false otherwise
-*/
-function cropping_active($id_base,$class) {
-	$ret = false;
-	
-	iterator($id_base, $class, function ($settings) use (&$ret) {
-		if (isset($settings['use_css_cropping'])) { // checks if cropping is active
-			$ret = true;
-			return false; // stop iterator
-		} else
-			return true; // continue iteration to next widget
-	});
-	
-	return $ret;
-}
-
-/*
-	Check if CSS needs to be enqueued by traversing all active widgets on the page
-	and checking if they all have disabled CSS.
-	
-	Return: false if CSS should not be enqueued, true if it should
-*/
-function should_enqueue($id_base,$class) {
-	$ret = false;
-	
-	iterator($id_base, $class, function ($settings) use (&$ret) {
-		if (!(isset($settings['disable_css']) && $settings['disable_css'])) { // checks if css disable is not set
-			$ret = true;
-			return false; // stop iterator
-		} else
-			return true; // continue iteration to next widget
-	});
+    }
 	
 	return $ret;
 }
@@ -107,7 +47,8 @@ function should_enqueue($id_base,$class) {
 /***
  *  Adds the "Customize" link to the Toolbar on edit mode.
  *  
- */
+ *  @since 4.6
+ **/
 function wp_admin_bar_customize_menu() {
 	global $wp_admin_bar;
 
@@ -144,10 +85,10 @@ add_action('admin_bar_menu',__NAMESPACE__.'\wp_admin_bar_customize_menu', 35);
  *
  * @return void
  */
-add_action( 'wp_enqueue_scripts', __NAMESPACE__.'\widget_styles' );
+add_action( 'wp_enqueue_scripts', __NAMESPACE__.'\wp_enqueue_scripts' );
 
 function wp_head() {
-	if (cropping_active(WIDGET_BASE_ID,__NAMESPACE__.'\Widget')) {
+	if (cropping_active()) {
 ?>
 <style type="text/css">
 .cat-post-item .cat-post-css-cropping span {
@@ -159,25 +100,81 @@ function wp_head() {
 	}
 }
 
-add_action('wp_head',__NAMESPACE__.'\wp_head');
+add_action('wp_head',__NAMESPACE__.'\register_virtual_widgets',0);
 
-function widget_styles() {
+/**
+ *  Hold a registry of widget virtual widgets to avoid them being distructed
+ */
+global $widgetCollection;
+$widgetCollection = array();
+
+/**
+ *  Hold a registry of shortcode virtual widgets to avoid them being distructed
+ */
+global $shortcodeCollection;
+$shortcodeCollection = array();
+
+/**
+ *  Register virtual widgets for all widgets and shortcodes that are going to be displayed on the page
+ *  
+ *  @return void
+ *  
+ *  @since 4.7
+ */
+function register_virtual_widgets() {
 	global $post;
+	global $wp_registered_widgets;
+	global $widgetCollection;
+	global $shortcodeCollection;
 
-    $enqueue = false;
     // check first for shortcode settings
     if (is_singular()) {
 		$names = shortcode_names(SHORTCODE_NAME,$post->post_content);
 		
 		foreach ($names as $name) {
 			$meta = shortcode_settings($name);
-			if (is_array($meta) && !(isset($meta['disable_css']) && $meta['disable_css']))
+			if (is_array($meta))
+				$shortcodeCollection[$name] = new virtualWidget($name,$meta);
+		}
+    }
+	
+	$sidebars_widgets = wp_get_sidebars_widgets();
+
+	if ( is_array($sidebars_widgets) ) {
+		foreach ( $sidebars_widgets as $sidebar => $widgets ) {
+			if ( 'wp_inactive_widgets' === $sidebar || 'orphaned_widgets' === substr( $sidebar, 0, 16 ) ) {
+				continue;
+			}
+
+			if ( is_array($widgets) ) {
+				foreach ( $widgets as $widget ) {
+					$widget_base = _get_widget_id_base($widget);
+					if ( $widget_base == WIDGET_BASE_ID )  {
+						$class = __NAMESPACE__.'\Widget';
+						$widgetclass = new $class();
+						$allsettings = $widgetclass->get_settings();
+						$settings = isset($allsettings[str_replace($widget_base.'-','',$widget)]) ? $allsettings[str_replace($widget_base.'-','',$widget)] : false;
+						$widgetCollection[$widget] = new virtualWidget($widget,$settings);
+					}
+				}
+			}
+		}
+	}
+}
+
+add_action('wp_head',__NAMESPACE__.'\wp_head');
+
+function wp_enqueue_scripts() {
+	
+    $enqueue = false;
+    // check first for shortcode settings
+    if (is_singular()) {
+		$widgets = virtualWidget::getAllSettings();
+		foreach ($widgets as $setting) {
+			if (!(isset($setting['disable_css']) && $setting['disable_css']))
 				$enqueue = true;
 		}
     }
-
-    if (!$enqueue)
-        $enqueue = should_enqueue(WIDGET_BASE_ID,__NAMESPACE__.'\Widget');
         
 	if ($enqueue) {
 		wp_register_style( 'category-posts', plugins_url('cat-posts.css',__FILE__),array(),CAT_POST_VERSION );
@@ -214,12 +211,15 @@ function admin_scripts($hook) {
 add_action('admin_enqueue_scripts', __NAMESPACE__.'\admin_scripts'); // "called on widgets.php and costumizer since 3.9
 
 
+add_action( 'admin_init', __NAMESPACE__.'\load_textdomain' );
+
 /**
  * Load plugin textdomain.
  *
- */
-add_action( 'admin_init', __NAMESPACE__.'\load_textdomain' );
-
+ * @return void
+ *
+ * @since 4.1
+ **/
 function load_textdomain() {
   load_plugin_textdomain( TEXTDOMAIN, false, plugin_basename( dirname( __FILE__ ) ) . '/languages' ); 
 }
