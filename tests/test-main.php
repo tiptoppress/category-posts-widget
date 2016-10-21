@@ -818,7 +818,7 @@ class testShortCode extends WP_UnitTestCase {
 
         // initialization to defaults when inserted
         wp_update_post(array('ID'=>$pid,'post_content' => '['.self::SHORTCODE_NAME.']'));
-        $this->assertEquals(array (
+        $this->assertEquals(array('' => array (
                                 'title' => '',
                                 'title_link' => false,
                                 'hide_title' => false,
@@ -831,8 +831,8 @@ class testShortCode extends WP_UnitTestCase {
                                 'footer_link'          => '',
                                 'thumb'                => false,
                                 'thumbTop'             => false,
-                                'thumb_w'              => 150,
-                                'thumb_h'              => 150,
+                                'thumb_w'              => '150',
+                                'thumb_h'              => '150',
                                 'use_css_cropping'     => false,
                                 'thumb_hover'          => 'none',
                                 'hide_post_titles'     => false,
@@ -848,13 +848,12 @@ class testShortCode extends WP_UnitTestCase {
                                 'hide_if_empty'        => false,
 								'offset' 			   => 1,
 								'hide_social_buttons'  => '',
-								'auto_close_panels'    => false,
-                               ),
+                               )),
                                get_post_meta($pid,self::SHORTCODE_META,true));
                                
         // test change in other parts of the content
         wp_update_post(array('ID'=>$pid,'post_content' => '['.self::SHORTCODE_NAME.'] lovely day'));
-        $this->assertEquals(array (
+        $this->assertEquals(array('' => array (
                                 'title' => '',
                                 'title_link' => false,
                                 'hide_title' => false,
@@ -867,8 +866,8 @@ class testShortCode extends WP_UnitTestCase {
                                 'footer_link'          => '',
                                 'thumb'                => false,
                                 'thumbTop'             => false,
-                                'thumb_w'              => 150,
-                                'thumb_h'              => 150,
+                                'thumb_w'              => '150',
+                                'thumb_h'              => '150',
                                 'use_css_cropping'     => false,
                                 'thumb_hover'          => 'none',
                                 'hide_post_titles'     => false,
@@ -884,8 +883,7 @@ class testShortCode extends WP_UnitTestCase {
                                 'hide_if_empty'        => false,
 								'offset' 			   => 1,
 								'hide_social_buttons'  => '',
-								'auto_close_panels'    => false,
-                               ),
+                               )),
                                get_post_meta($pid,self::SHORTCODE_META,true));
                                
         // test removal
@@ -906,7 +904,7 @@ class testShortCode extends WP_UnitTestCase {
 
         // no update at all
         categoryPosts\customize_save_after();
-        $this->assertEquals(array (
+        $this->assertEquals(array('' => array (
                                 'title' => '',
                                 'title_link' => false,
                                 'hide_title' => false,
@@ -936,14 +934,13 @@ class testShortCode extends WP_UnitTestCase {
                                 'hide_if_empty'        => false,
  								'offset' 			   => 1,
 								'hide_social_buttons'  => '',
-								'auto_close_panels'    => false,
-                              ),
+                              )),
                                get_post_meta($pid,self::SHORTCODE_META,true));
 
         // update some other post
         update_option('_virtual-'.self::WIDGET_BASE_ID,array($pid2 => array('title' => 'bla')));
         categoryPosts\customize_save_after();
-        $this->assertEquals(array (
+        $this->assertEquals(array ('' => array (
                                 'title' => '',
                                 'title_link' => false,
                                 'hide_title' => false,
@@ -973,15 +970,13 @@ class testShortCode extends WP_UnitTestCase {
                                 'hide_if_empty'        => false,
 								'offset' 			   => 1,
 								'hide_social_buttons'  => '',
-								'auto_close_panels'    => false,
-
-                               ),
+                               )),
                                get_post_meta($pid,self::SHORTCODE_META,true));
                                
         // update some property on "our" post, title
-        update_option('_virtual-'.self::WIDGET_BASE_ID,array($pid => array('title' => 'bla')));
+        update_option('_virtual-'.self::WIDGET_BASE_ID,array($pid => array('' => array('title' => 'bla'))));
         categoryPosts\customize_save_after();
-        $this->assertEquals(array (
+        $this->assertEquals(array('' => array (
                                 'title' => 'bla',
                                 'title_link' => false,
                                 'hide_title' => false,
@@ -994,8 +989,8 @@ class testShortCode extends WP_UnitTestCase {
                                 'footer_link'          => '',
                                 'thumb'                => false,
                                 'thumbTop'             => false,
-                                'thumb_w'              => 150,
-                                'thumb_h'              => 150,
+                                'thumb_w'              => '150',
+                                'thumb_h'              => '150',
                                 'use_css_cropping'     => false,
                                 'thumb_hover'          => 'none',
                                 'hide_post_titles'     => false,
@@ -1011,8 +1006,7 @@ class testShortCode extends WP_UnitTestCase {
                                 'hide_if_empty'        => false,
 								'offset' 			   => 1,
 								'hide_social_buttons'  => '',
-								'auto_close_panels'    => false,								
-                               ),
+                               )),
                                get_post_meta($pid,self::SHORTCODE_META,true));                           
     }
 
