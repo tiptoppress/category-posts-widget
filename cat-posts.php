@@ -133,8 +133,13 @@ function register_virtual_widgets() {
 		
 		foreach ($names as $name) {
 			$meta = shortcode_settings($name);
-			if (is_array($meta))
-				$shortcodeCollection[$name] = new virtualWidget($name,$meta);
+			if (is_array($meta)) {
+				$id = 'shortcode-'.get_the_ID(); // needed to make a unique id for the widget html element
+				if ($name != '') // if not defualt name append to the id
+					$id .= '-' . sanitize_title($name); // sanitize to be on the safe side, not sure where when and how this will be used 
+
+				$shortcodeCollection[$name] = new virtualWidget($id,$meta);
+			}
 		}
     }
 	
@@ -1379,33 +1384,15 @@ function shortcode_settings($name) {
  *  
  */
 function shortcode($attr,$content=null) {
+	global $shortcodeCollection;
 	
 	$name = '';
 	if (isset($attr['name']))
 		$name = $attr['name'];
 	
     if (is_singular()) {
-        $instance = shortcode_settings($name);
-		if (empty($instance)) // should not happen but just bail out if there is a bug somewhere
-			return ''; 
-			
-        $instance['is_shortcode'] = true;  // indicate that we are doing shortcode processing to outputting funtions
-		
-        if (is_array($instance)) {
-            $widget=new Widget();
-            $widget->number = 'shortcode-'.get_the_ID(); // needed to make a unique id for the widget html element
-			if ($name != '') // if not defualt name append to the id
-				$widget->number .= '-' . sanitize_title($name); // sanitize to be on the safe side, not sure where when and how this will be used 
-            ob_start();
-            $widget->widget(array(
-                                'before_widget' => '',
-                                'after_widget' => '',
-                                'before_title' => '',
-                                'after_title' => ''
-                            ), $instance);
-            $ret = ob_get_clean();
-            $ret = '<div id="'.WIDGET_BASE_ID.'-'.$widget->number.'" class="'.WIDGET_BASE_ID.'-shortcode">'.$ret.'</div>';
-            return $ret;
+		if (isset($shortcodeCollection[$name])) {
+			return $shortcodeCollection[$name]->getHTML();
         }       
     }
     
@@ -1858,12 +1845,14 @@ class virtualWidget {
 		$widget=new Widget();
 		$widget->number = $this->id; // needed to make a unique id for the widget html element
 		ob_start();
+		$args = self::$collection[$this->id];
+		$args['is_shortcode'] = true;  // indicate that we are doing shortcode processing to outputting funtions
 		$widget->widget(array(
 							'before_widget' => '',
 							'after_widget' => '',
 							'before_title' => '',
 							'after_title' => ''
-						), $this->args);
+						), $args);
 		$ret = ob_get_clean();
 		$ret = '<div id="'.$this->id.'">'.$ret.'</div>';
 		return $ret;
