@@ -31,17 +31,17 @@ It's the premium version and available at on <a target="_blank" href="http://tip
 * Shortcode (Just edit all Shortcode options in the customizer)
 * Set post thumbnail dimension by width & height (CSS cropping)
 * E-Mail support
-* More [examples on the demo pages](http://demo.tiptoppress.com/)
+* More [examples on the demo pages](http://demo.tiptoppress.com/?utm_source=wordpress_org&utm_campaign=demo_cpw&utm_medium=web)
 
-### Features
-* Shortcode (Edit in the customizer)
-* For editing shortcode adds a customizer link to the admin-bar if page/post is in edit mode
+= Features =
+* Shortcode (Edit in the customizer.)
+* For editing shortcode adds a customizer link to the admin-bar if page/post is in edit mode.
 * Option to change ordering of posts.
-* Option to show post thumbnail & set dimension or image size by width & height.
-* Option to crop thumbnails with CSS <a target="_blank" href="http://tiptoppress.com/css-image-crop/">What is 'CSS Image Crop'?</a>
+* Option to show post thumbnail & set dimensions by width & height.
+* Option to crop thumbnails with CSS. <a target="_blank" href="http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=features_crop_cpw&utm_medium=web">What is 'CSS Image Crop'?</a>.
 * Option to set mouse hover effects for post thumbnail.
-* Jetpack 'Social buttons on posts' support
-* Option to hide social buttons on output
+* Jetpack 'Social buttons on posts' support.
+* Option to hide social buttons on output.
 * Option to put thumbnail on top.
 * Option to hide posts which have no thumbnail.
 * Option to disable widget CSS.
@@ -63,13 +63,10 @@ It's the premium version and available at on <a target="_blank" href="http://tip
 * Localization support.
 
 ### Documentation
-Full documentation on [Tiptoppress](http://tiptoppress.com/category-posts-widget/4-6/)
-
-Shortcode: Use [catposts] [in the content and edit options in the customizer](http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content)
-
-Formatting date and time: See <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>
-
-Widget <a target="_blank" href="http://tiptoppress.com/category/widget-customization-and-filter-extensions/">customization and filter extensions</a>
+* Full documentation on [Tiptoppress](http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=documentation_4_6_cpw&utm_medium=web)
+* Shortcode: Use [catposts] [in the content and edit options in the customizer](http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=documentation_shortcode_cpw&utm_medium=web)
+* Formatting date and time: See <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>
+* Widget <a target="_blank" href="http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=documentation_filter_cpw&utm_medium=web">customization and filter extensions</a>
 
 ### Contribute
 While using this plugin if you find any bug or any conflict, please submit an issue at 
@@ -91,15 +88,37 @@ Automatic installation is the easiest option as WordPress handles the file trans
 3. Activate the plugin through the 'Plugins' menu in WordPress
 4. Now, goto the Widgets page of the Appearance section and configure the Category Posts widget.
 
+## Upgrade Notice
+* Please consider to re-configure the widget as the latest version has numerous changes from previous.
+* Version 4.0 uses CSS file for styling the widget in front end.
+* Version 3.0 or later version uses WordPress 2.9's built in post thumbnail functionality.
+
+## Frequently Asked Questions
+= The font-size is different from that of other widgets or Theme elements? =
+Please use the option: "Disable widget CSS".
+
+### I want the title as a link pointing to the selected Categorie page? =
+Enable the check box "Make widget title link".
+
+### Parse error: syntax error, unexpected T_FUNCTION in /home/www/blog/wp-content/plugins/category-posts/cat-posts.php on line 58 =
+Some of the features that were used in that version needs PHP 5.3+.
+We apologies for any headache this may cause you, but frankly it is better for you to check with your hosting company how can you upgrade the PHP version that you are using, and not only in order to use this plugin. PHP 5.2 should be considered insecure now, and for your own sake you should upgrade.
+PHP 5.2 is very old and any support for it from the php developers had ended more then 5 years ago [php.net/eol.php](http://php.net/eol.php).
+We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wordpress.org/about/stats/) and we can't imagine this people will have no other problems, if they don't update.
+
+## Screenshots
+1. The widget configuration dialog.
+2. Front end of the widget using a default WordPress Theme.
+3. Use shortcode [catposts] in the content and edit options in the customizer.
 
 ## Changelog
-#### <a target="_blank" href="http://tiptoppress.com/category/category-posts-widget/">Read more on our blog ...</a>
+#### [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=wordpress_org&utm_campaign=changelog_cpw&utm_medium=web)
 
 #### 4.7.1 - 
 * Support multiple shortcodes in content
 * Fluid images for Responsive Design
 * Add option for post offset (use two or more widgets after another)
-* Remove allow_html option (We recommend: Use <a target="_blank" href="https://codex.wordpress.org/Excerpt#How_to_add_excerpts_to_posts) or we support it as filter hook in the premium version">manual excerpt</a> or we support this option furthermore as filter hook in the premium version)
+* Remove allow_html option (We recommend: Use [manual excerpt](https://codex.wordpress.org/Excerpt#How_to_add_excerpts_to_posts) or we support this option furthermore as filter hook in the premium version)
 
 #### 4.6.2 - August 28th 2016
 * Fixed only five widget instances can be costumized with shortcodes.
@@ -117,7 +136,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 * Add mouse hover effects: blur
 * Add option to choose allowed HTML in the excerpt
 * Add Jetpack 'Sharing - Show buttons on posts' support
-* Fixed division by zero bug (for small uploaded images).
+* Fixed division by zero bug (for small uploaded images)
 
 ##### 4.1.7 - April 14th 2016
 * Fixed division by zero bug.
@@ -140,7 +159,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 * Added option exclude current post.
 * Added option to hide posts which have no thumbnail.
 * Added option to make the widget date link to the category page.
-* Addd option to link to the category page below posts list.
+* Added option to link to the category page below posts list.
 * Added option show post author.
 * Added option to format the outputted date string.
 
@@ -151,19 +170,19 @@ Automatic installation is the easiest option as WordPress handles the file trans
 * Fixed hide title bug.
 
 ##### 4.1.1
-* Added Option to put thumbnail on top
-* Added Option to show/hide the title
+* Added option to put thumbnail on top.
+* Added option to show/hide the title.
 * Fixed no background bug.
 
 ##### 4.1.0
-* Added PHP5 Constructor 
-* Added Option to allow/disallow widget CSS
-* Now, compatible with WordPress 4.3
+* Added PHP5 Constructor.
+* Added Option to allow/disallow widget CSS.
+* Now, compatible with WordPress 4.3.
 * Meet new plugin author [kometschuh](https://profiles.wordpress.org/kometschuh)
 
 ##### 4.0
-* Added CSS file for post styling 
-* Now compaitable with latest versions of WordPress
+* Added CSS file for post styling.
+* Now compatible with latest versions of WordPress.
 
 ##### 3.3
 * Fixed random sort bug.
@@ -182,11 +201,11 @@ Automatic installation is the easiest option as WordPress handles the file trans
 * Added option to show the number of comments.
 
 ##### 2.3
-* Really tried to fix bug where wp_query global was getting over written by manually instantiating a WP_Query object
+* Really tried to fix bug where wp_query global was getting over written by manually instantiating a WP_Query object.
 
 ##### 2.1
 * Fixed bug where wp_query global was getting over written.
 
 ##### 2.0
 * Updated to use the WP 2.8 widget API.
-* Added support for [Simple Post Thumbnails plugin](http://wordpress.org/extend/plugins/simple-post-thumbnails/)
+* Added support for [Simple Post Thumbnails plugin](http://wordpress.org/extend/plugins/simple-post-thumbnails/).

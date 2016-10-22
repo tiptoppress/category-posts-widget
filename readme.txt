@@ -14,7 +14,7 @@ Adds a widget that shows the most recent posts from a single category.
 Category Posts Widget is a light widget designed to do one thing and do it well: display the most recent posts from a certain category.
 
 = Term and Category based Posts Widget =
-It's the premium version and available on <a target="_blank" href="http://tiptoppress.com/">Tip Top Press</a> created for big Wordpress sites.
+It's the premium version and available on <a target="_blank" href="http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=premium_widget_cpw&utm_medium=web">Tip Top Press</a> created for big Wordpress sites.
 
 = Premium features =
 * Post item "Alterations"
@@ -27,18 +27,18 @@ It's the premium version and available on <a target="_blank" href="http://tiptop
 * Shortcode (Just edit all Shortcode options in the customizer)
 * Set post thumbnail dimension by width & height (CSS cropping)
 * E-Mail support
-* More [examples on the demo pages](http://demo.tiptoppress.com/)
+* More [examples on the demo pages](http://demo.tiptoppress.com/?utm_source=wordpress_org&utm_campaign=demo_cpw&utm_medium=web)
 
 = Features =
-* Shortcode (Edit in the customizer)
-* For editing shortcode adds a customizer link to the admin-bar if page/post is in edit mode
+* Shortcode (Edit in the customizer.)
+* For editing shortcode adds a customizer link to the admin-bar if page/post is in edit mode.
 * Option to change ordering of posts.
-* Option to show post thumbnail & set dimension by width & height.
-* Option to crop thumbnails with CSS. <a target="_blank" href="http://tiptoppress.com/css-image-crop/">What is 'CSS Image Crop'?</a>
+* Option to show post thumbnail & set dimensions by width & height.
+* Option to crop thumbnails with CSS. <a target="_blank" href="http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=features_crop_cpw&utm_medium=web">What is 'CSS Image Crop'?</a>.
 * Option to set mouse hover effects for post thumbnail.
-* Jetpack 'Social buttons on posts' support
-* Option to hide social buttons on output
-* Option to put thumbnail on top
+* Jetpack 'Social buttons on posts' support.
+* Option to hide social buttons on output.
+* Option to put thumbnail on top.
 * Option to hide posts which have no thumbnail.
 * Option to disable widget CSS.
 * Set how many posts to show.
@@ -59,10 +59,10 @@ It's the premium version and available on <a target="_blank" href="http://tiptop
 * Localization support.
 
 = Documentation =
-* Full documentation on [Tiptoppress](http://tiptoppress.com/category-posts-widget/4-6/)
-* Shortcode: Use [catposts] [in the content and edit options in the customizer](http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content)
+* Full documentation on [Tiptoppress](http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=documentation_4_6_cpw&utm_medium=web)
+* Shortcode: Use [catposts] [in the content and edit options in the customizer](http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=documentation_shortcode_cpw&utm_medium=web)
 * Formatting date and time: See <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>
-* Widget <a target="_blank" href="http://tiptoppress.com/category/widget-customization-and-filter-extensions/">customization and filter extensions</a>
+* Widget <a target="_blank" href="http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=documentation_filter_cpw&utm_medium=web">customization and filter extensions</a>
 
 = Contribute =
 While using this plugin if you find any bug or any conflict, please submit an issue at 
@@ -108,7 +108,7 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 3. Use shortcode [catposts] in the content and edit options in the customizer.
 
 == Changelog ==
-[Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
+[Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=wordpress_org&utm_campaign=changelog_cpw&utm_medium=web)
 
 = 4.7.1 - =
 * Support multiple shortcodes in content
@@ -144,11 +144,10 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 * Add option to allow links in the excerpt
 * Add filter 'widget_title' for the title
 * Add option to hide post titles.
- 
+
 = 4.1.5 - February 4th 2016 =
 * Support for multi sites.
 * Support for localization.
-* Generate thumbs from existing images.
 * Area UI.
 * Meet new plugin author [mark-k](https://profiles.wordpress.org/mark-k/)
 
@@ -178,7 +177,7 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 * Meet new plugin author [kometschuh](https://profiles.wordpress.org/kometschuh)
 
 = 4.0 =
-* Added CSS file for post styling .
+* Added CSS file for post styling.
 * Now compatible with latest versions of WordPress.
 
 = 3.3 =
