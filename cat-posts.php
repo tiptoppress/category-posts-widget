@@ -1632,7 +1632,6 @@ function customize_save_after() {
     if (is_array($virtual)) {
         foreach ($virtual as $pid => $instance) {
             $meta = get_post_meta($pid,SHORTCODE_META,true);
-			
 			if (!empty($meta) && !is_array(reset($meta)))
 				$meta = array ('' => $meta);  // the coversion
 			

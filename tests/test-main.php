@@ -863,6 +863,33 @@ class testShortCode extends WP_UnitTestCase {
         // test removal
         wp_update_post(array('ID'=>$pid,'post_content' => '['.$this->SHORTCODE_NAME.'bla] '.$this->SHORTCODE_NAME));
         $this->assertEmpty(get_post_meta($pid,self::SHORTCODE_META,true));
+		
+		// same as above with name parameter
+		
+        // initialization to defaults when inserted
+        wp_update_post(array('ID'=>$pid,'post_content' => '['.self::SHORTCODE_NAME.' name="test"]'));
+        $this->assertEquals(array('test' => $this->default_settings()),
+                               get_post_meta($pid,self::SHORTCODE_META,true));
+                               
+        // test change in other parts of the content
+        wp_update_post(array('ID'=>$pid,'post_content' => '['.self::SHORTCODE_NAME.' name="test"] lovely day'));
+        $this->assertEquals(array('test' => $this->default_settings()),
+                               get_post_meta($pid,self::SHORTCODE_META,true));
+                               
+        // test removal
+        wp_update_post(array('ID'=>$pid,'post_content' => '['.$this->SHORTCODE_NAME.'bla] '.$this->SHORTCODE_NAME));
+        $this->assertEmpty(get_post_meta($pid,self::SHORTCODE_META,true));
+
+		// test multiple shortcodes
+		
+        wp_update_post(array('ID'=>$pid,'post_content' => '['.self::SHORTCODE_NAME.' name="test"]'.
+		                                                  '['.self::SHORTCODE_NAME.' mistake="test2"]'.
+		                                                  '['.self::SHORTCODE_NAME.' name="test testing"]'));
+        $this->assertEquals(array('' => $this->default_settings(),
+		                          'test' => $this->default_settings(),
+								  'test testing' => $this->default_settings()
+								  ),
+                               get_post_meta($pid,self::SHORTCODE_META,true));
     }
     
     /**
@@ -893,7 +920,29 @@ class testShortCode extends WP_UnitTestCase {
 		$out = $this->default_settings();
 		$out['title'] = 'bla';
         $this->assertEquals(array('' => $out),
-                               get_post_meta($pid,self::SHORTCODE_META,true));                           
+                               get_post_meta($pid,self::SHORTCODE_META,true));   
+							   
+		// test multiple shortcodes
+		
+        wp_update_post(array('ID'=>$pid,'post_content' => '['.self::SHORTCODE_NAME.' name="test"]'.
+		                                                  '['.self::SHORTCODE_NAME.' mistake="test2"]'.
+		                                                  '['.self::SHORTCODE_NAME.' name="test testing"]'));
+        update_option('_virtual-'.self::WIDGET_BASE_ID,array($pid => array('' => array('title' => 'bla'),
+		                                                                   'test' => array('title' => 'ble'),
+																		   'test testing' => array('title' => 'bla2'),
+																		   )));
+        categoryPosts\customize_save_after();
+
+		$out1 = $this->default_settings();
+		$out1['title'] = 'bla';
+		$out2 = $this->default_settings();
+		$out2['title'] = 'ble';
+		$out3 = $this->default_settings();
+		$out3['title'] = 'bla2';
+        $this->assertEquals(array('' => $out1,
+		                          'test' => $out2,
+								  'test testing' => $out3,
+                               ),get_post_meta($pid,self::SHORTCODE_META,true));
     }
 
     /**
