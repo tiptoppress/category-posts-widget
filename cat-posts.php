@@ -581,8 +581,12 @@ class Widget extends \WP_Widget {
         if (isset($instance["offset"]) && ((int) $instance["offset"] > 1)) 
             $args['offset'] = (int) $instance["offset"] - 1;
 		
-        if (isset($instance["cat"])) 
-            $args['cat'] = (int) $instance["cat"];
+        if (isset($instance["cat"]))  {
+			if (isset($instance["no_cat_childs"]) && $instance["no_cat_childs"])
+				$args['category__in'] = (int) $instance["cat"];	
+			else
+				$args['cat'] = (int) $instance["cat"];			
+		}
 
         if (is_singular() && isset( $instance['exclude_current_post'] ) && $instance['exclude_current_post']) 
             $args['post__not_in'] = array(get_the_ID());
@@ -951,6 +955,7 @@ class Widget extends \WP_Widget {
 			'asc_sort_order'       => '',
 			'exclude_current_post' => '',
 			'hideNoThumb'          => '',
+			'no_cat_childs'       => false,
         ));
 		$cat                  = $instance['cat'];
 		$num                  = $instance['num'];
@@ -959,6 +964,7 @@ class Widget extends \WP_Widget {
 		$asc_sort_order       = $instance['asc_sort_order'];
 		$exclude_current_post = $instance['exclude_current_post'];
 		$hideNoThumb          = $instance['hideNoThumb'];
+		$noCatChilds          = $instance['no_cat_childs'];
 ?>
         <h4 data-panel="filter"><?php _e('Filter',TEXTDOMAIN);?></h4>
         <div>
@@ -966,6 +972,12 @@ class Widget extends \WP_Widget {
                 <label>
                     <?php _e( 'Category',TEXTDOMAIN ); ?>:
                     <?php wp_dropdown_categories( array( 'hide_empty'=> 0, 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"] ) ); ?>
+                </label>
+            </p>
+            <p>
+                <label for="<?php echo $this->get_field_id("no_cat_childs"); ?>">
+                    <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("no_cat_childs"); ?>" name="<?php echo $this->get_field_name("no_cat_childs"); ?>"<?php checked( (bool) $instance["no_cat_childs"], true ); ?> />
+                    <?php _e( 'Exclude child categories',TEXTDOMAIN ); ?>
                 </label>
             </p>
             <p>
@@ -1469,6 +1481,7 @@ function default_settings()  {
 				'disable_css'          => false,
 				'hide_if_empty'        => false,
 				'hide_social_buttons'  => '',
+				'no_cat_childs'        => false
 				);
 }
 
