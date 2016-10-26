@@ -971,7 +971,7 @@ class Widget extends \WP_Widget {
             <p>
                 <label>
                     <?php _e( 'Category',TEXTDOMAIN ); ?>:
-                    <?php wp_dropdown_categories( array( 'hide_empty'=> 0, 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"] ) ); ?>
+                    <?php wp_dropdown_categories( array( 'show_option_all' => __('All categories',TEXTDOMAIN), 'hide_empty'=> 0, 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"] ) ); ?>
                 </label>
             </p>
             <p>
