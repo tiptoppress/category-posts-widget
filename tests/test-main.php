@@ -351,6 +351,9 @@ class testWidgetFront extends WP_UnitTestCase {
 					 'compare' => 'EXISTS' )
 				), null,null);
         
+		$no_cat_childs = array(null,false,true);
+		$cat_param = array('cat','cat','category__in');
+
         $pid = $this->factory->post->create(array('title'=>'test','post_status'=>'publish')); 
         
         $exclude_current = array('whatever',true, null,false);
@@ -361,43 +364,45 @@ class testWidgetFront extends WP_UnitTestCase {
                     foreach ($nums as $knum => $num) 
                         foreach ($hidethumbs as $kt => $thumb) 
                             foreach ($exclude_current as $ke => $exclude) 
-								foreach ($offsets as $of => $offset) {
-									$instance = array(
-										'sort_by' => $sc,
-										'asc_sort_order' => $so,
-										'cat' => $cat,
-										'hideNoThumb' => $thumb,
-										'exclude_current_post' => $exclude,
-										'num' => $num,
-										'offset' => $offset,
-									);
-									$expected = array(
-												'orderby' => $sort_criteria_results[$ksc],
-												'order' => $sort_order_results[$kso]
-												);
-									if ($cat)
-										$expected['cat'] = $cats_results[$kcat];
-										
-									if ($num)
-										$expected['showposts'] = $nums_results[$knum];
-										
-									if ($offset) 
-										if ($offset_results[$of] ) 
-											$expected['offset'] = $offset_results[$of];
+								foreach ($offsets as $of => $offset) 
+									foreach ($no_cat_childs as $onc => $no_child) {
+										$instance = array(
+											'sort_by' => $sc,
+											'asc_sort_order' => $so,
+											'cat' => $cat,
+											'hideNoThumb' => $thumb,
+											'exclude_current_post' => $exclude,
+											'num' => $num,
+											'offset' => $offset,
+											'no_cat_childs' => $no_child,
+										);
+										$expected = array(
+													'orderby' => $sort_criteria_results[$ksc],
+													'order' => $sort_order_results[$kso]
+													);
+										if ($cat)
+											$expected[$cat_param[$onc]] = $cats_results[$kcat];
+											
+										if ($num)
+											$expected['showposts'] = $nums_results[$knum];
+											
+										if ($offset) 
+											if ($offset_results[$of] ) 
+												$expected['offset'] = $offset_results[$of];
 
-									if ($thumb)
-										$expected['meta_query'] = $hidethumbs_results[$kt];
+										if ($thumb)
+											$expected['meta_query'] = $hidethumbs_results[$kt];
+											
+										// test archive type of page
+										$this->go_to('/');
+										$this->assertEquals($expected,$widget->queryArgs($instance));
 										
-									// test archive type of page
-									$this->go_to('/');
-									$this->assertEquals($expected,$widget->queryArgs($instance));
-									
-									// test single post page
-									if ($exclude)
-										$expected['post__not_in'] = array($pid);
-									$this->go_to('/?p='.$pid);
-									$this->assertEquals($expected,$widget->queryArgs($instance));
-								}
+										// test single post page
+										if ($exclude)
+											$expected['post__not_in'] = array($pid);
+										$this->go_to('/?p='.$pid);
+										$this->assertEquals($expected,$widget->queryArgs($instance));
+									}
                     
     }
 
@@ -837,6 +842,7 @@ class testShortCode extends WP_UnitTestCase {
 					'hide_if_empty'        => false,
 					'offset' 			   => 1,
 					'hide_social_buttons'  => '',
+					'no_cat_childs'        => false,
 				   );
 	}
 	
@@ -968,5 +974,4 @@ class testShortCode extends WP_UnitTestCase {
 		$this->assertEquals(false,get_post_meta($pid2,'categoryPosts-shorcode',true));
 		$this->assertEquals(false,get_post_meta($pid3,'categoryPosts-shorcode',true));
 	}
-    
 }
