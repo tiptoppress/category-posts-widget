@@ -626,6 +626,8 @@ class Widget extends \WP_Widget {
                 $category_info = get_category($instance["cat"]);
                 if ($category_info && !is_wp_error($category_info))
                     $instance["title"] = $category_info->name;
+				else 
+					$instance["title"] = __('Recent Posts',TEXTDOMAIN);
             }
 		}
 
@@ -639,7 +641,13 @@ class Widget extends \WP_Widget {
             if( isset ( $instance["title_link"]) && $instance["title_link"] && isset($instance["cat"]) && (get_category($instance["cat"]) != null))  {
                 $ret .= '<a href="' . get_category_link($instance["cat"]) . '">' . $title . '</a>';
             } else {
-                $ret .= $title;
+				// link to posts page if category not found. 
+				// this maybe the blog page or home page
+				$blog_page = get_option('page_for_posts');
+				if ($blog_page)
+					$ret .= '<a href="' . get_permalink($blog_page) . '">' . $title . '</a>';
+				else
+					$ret .= '<a href="' . home_url() . '">' . $title . '</a>';
             }
             $ret .= $after_title;
         }
@@ -658,11 +666,24 @@ class Widget extends \WP_Widget {
     function footerHTML($instance) {
         $ret = '';
         
-        if( isset ( $instance["footer_link"] ) && $instance["footer_link"] && isset($instance["cat"]) && (get_category($instance["cat"]) != null) ) {
-            $ret = "<a";
-                if( !(isset( $instance['disable_css'] ) && $instance['disable_css'])) { $ret.= " class=\"cat-post-footer-link\""; }
-            $ret .= " href=\"" . get_category_link($instance["cat"]) . "\">" . esc_html($instance["footer_link"]) . "</a>";
-        }
+        if( isset ( $instance["footer_link"] ) && $instance["footer_link"]) {
+			$ret = "<a";
+			if( !(isset( $instance['disable_css'] ) && $instance['disable_css'])) { 
+				$ret.= " class=\"cat-post-footer-link\""; 
+			}
+			if (isset($instance["cat"]) && ($instance["cat"] != 0) && (get_category($instance["cat"]) != null) ) {
+				$ret .= " href=\"" . get_category_link($instance["cat"]) . "\">" . esc_html($instance["footer_link"]) . "</a>";
+			} else {
+				// link to posts page if category not found. 
+				// this maybe the blog page or home page
+				$blog_page = get_option('page_for_posts');
+				if ($blog_page)
+					$ret .= " href=\"" . get_permalink($blog_page) . "\">" . esc_html($instance["footer_link"]) . "</a>";
+				else
+					$ret .= " href=\"" . home_url() . "\">" . esc_html($instance["footer_link"]) . "</a>";
+			}
+		}
+		
         
         return $ret;
     }
