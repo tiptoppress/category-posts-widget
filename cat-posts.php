@@ -638,17 +638,21 @@ class Widget extends \WP_Widget {
 			else
 				$title = apply_filters( 'widget_title', $instance["title"] );
 			
-            if( isset ( $instance["title_link"]) && $instance["title_link"] && isset($instance["cat"]) && (get_category($instance["cat"]) != null))  {
-                $ret .= '<a href="' . get_category_link($instance["cat"]) . '">' . $title . '</a>';
-            } else {
-				// link to posts page if category not found. 
-				// this maybe the blog page or home page
-				$blog_page = get_option('page_for_posts');
-				if ($blog_page)
-					$ret .= '<a href="' . get_permalink($blog_page) . '">' . $title . '</a>';
-				else
-					$ret .= '<a href="' . home_url() . '">' . $title . '</a>';
-            }
+            if( isset ( $instance["title_link"]) && $instance["title_link"]) {
+				if (isset($instance["cat"]) && (get_category($instance["cat"]) != null))  {
+					$ret .= '<a href="' . get_category_link($instance["cat"]) . '">' . $title . '</a>';
+				} else {
+					// link to posts page if category not found. 
+					// this maybe the blog page or home page
+					$blog_page = get_option('page_for_posts');
+					if ($blog_page)
+						$ret .= '<a href="' . get_permalink($blog_page) . '">' . $title . '</a>';
+					else
+						$ret .= '<a href="' . home_url() . '">' . $title . '</a>';
+				}
+			} else 
+				$ret .= $title;
+			
             $ret .= $after_title;
         }
         
