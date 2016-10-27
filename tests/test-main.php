@@ -212,6 +212,17 @@ class testWidgetFront extends WP_UnitTestCase {
         $this->assertEquals('<h3>Me > You</h3>',$out);
         
         remove_filter('widget_title','titleFilterTest');
+		
+		// test all categies links point tothe post page when appropriate
+		
+        $page = $this->factory->post->create(array('post_type' => 'page','title'=>'test','post_status'=>'publish')); 
+
+		update_option('page_for_posts',$page);
+        $out = $widget->titleHTML('<h3>','</h3>',array(
+                                            'title_link' => true
+                                        ));
+        $this->assertEquals('<h3><a href="http://example.org/?page_id='.$page.'">Recent Posts</a></h3>',$out);
+		
         
     }
     
@@ -278,6 +289,18 @@ class testWidgetFront extends WP_UnitTestCase {
                                     'disable_css' => true
                                     ));
         $this->assertEquals('<a href="http://example.org/?cat='.$cid.'">test</a>',$out);
+		
+		// test footer link for "all categories" when a posts page is set
+		
+        $page = $this->factory->post->create(array('post_type' => 'page','title'=>'test','post_status'=>'publish')); 
+
+		update_option('page_for_posts',$page);
+        $out = $widget->footerHTML(array(
+                                    'footer_link'=>'test',
+                                    'cat'=>0
+                                    ));
+        $this->assertEquals('<a class="cat-post-footer-link" href="http://example.org/?page_id='.$page.'">test</a>',$out);
+
 
     }
     
