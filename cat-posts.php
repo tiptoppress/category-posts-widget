@@ -628,8 +628,9 @@ class Widget extends \WP_Widget {
                     $instance["title"] = $category_info->name;
 				else 
 					$instance["title"] = __('Recent Posts',TEXTDOMAIN);
-            }
-		}
+            } else 
+					$instance["title"] = __('Recent Posts',TEXTDOMAIN);
+		} 
 
         if( !(isset ( $instance["hide_title"] ) && $instance["hide_title"])) {
             $ret = $before_title;

@@ -91,7 +91,7 @@ class testWidgetFront extends WP_UnitTestCase {
         
         // test no setting, should return empty  striing
         $out = $widget->titleHTML('','',array());
-        $this->assertEquals('',$out);
+        $this->assertEquals('Recent Posts',$out);
         
         // test simple title
         $out = $widget->titleHTML('<h3>','</h3>',array(
@@ -154,7 +154,7 @@ class testWidgetFront extends WP_UnitTestCase {
                                             'test' => '',
                                             'cat'=>10000,
                                         ));
-        $this->assertEquals('<h3></h3>',$out);
+        $this->assertEquals('<h3>Recent Posts</h3>',$out);
         
         // link to category with manual title
         $out = $widget->titleHTML('<h3>','</h3>',array(
@@ -182,7 +182,7 @@ class testWidgetFront extends WP_UnitTestCase {
         $out = $widget->titleHTML('<h3>','</h3>',array(
                                             'title_link' => true
                                         ));
-        $this->assertEquals('<h3></h3>',$out);
+        $this->assertEquals('<h3><a href="http://example.org">Recent Posts</a></h3>',$out);
         
         // test widget_title filtering
         add_filter('widget_title','titleFilterTest');
