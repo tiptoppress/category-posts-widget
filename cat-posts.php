@@ -905,7 +905,9 @@ class Widget extends \WP_Widget {
 			wp_reset_postdata();
 
             $number = $this->number;
-            add_action('wp_footer',function () use ($number,$instance) { footer_script($number,$instance);},100);
+			
+			// add Javascript to change change cropped image dimensions on load and window resize
+            add_action('wp_footer', function () use ($number,$instance) { change_cropped_image_dimensions($number, $instance); }, 100);
 		} 
 	} 
 
@@ -1320,61 +1322,66 @@ add_action( 'widgets_init', __NAMESPACE__.'\register_widget' );
  * @since 4.7
  *
  **/
-function footer_script($number,$widgetsettings) {
+function change_cropped_image_dimensions($number,$widgetsettings) {
 	?>
 	<script type="text/javascript">
-		jQuery( document ).ready(function () {
+		if (typeof jQuery !== 'undefined' && <?php echo (isset($widgetsettings['use_css_cropping']) && $widgetsettings['use_css_cropping'])?"true":"false" ?>) {
+			jQuery( document ).ready(function () {
 <?php
-			// change cropped image dimensions
-			// @description: Calculate new image dimensions, if the layout-width have not enough space to show the regular source-width
-			// @since 4.7 
+				// change cropped image dimensions
+				// @description: Calculate new image dimensions, if the layout-width have not enough space to show the regular source-width
+				// @since 4.7
+				
+?>
+<?php			// namespace ?>
+				var cwp_namespace = window.cwp_namespace || {};
+				cwp_namespace.fluid_images = cwp_namespace.fluid_images || {};
+				
+				cwp_namespace.fluid_images = {
 
-			// namespace 
-?>		
-			var cwp_namespace = cwp_namespace || {};
-			var cwp_namespace = {
+<?php 				/* variables */ ?>				
+					Posts : {},
+					widget : null,
 
-				Posts : {},
-				widget : null,
+<?php				/* class - constructor */ ?>	
+					WidgetPosts : function Posts(widget) {
 
-<?php			/* constructor */	?>	
-				WidgetPosts : function Posts(widget) {
+<?php 					/* variables */ ?>
+						this.firstListItem = widget.find('li:first');
+						this.firstSpan = this.firstListItem.find('.cat-post-thumbnail > span');
+						this.maxSpanWidth = this.firstSpan.width();
+						this.ratio = this.firstSpan.width() / this.firstSpan.height();
+						this.ratioHeight = this.firstSpan.height() / this.firstSpan.find('img').height(); <?php /* ratioHeight: between cropped- and source-image height */ echo "\r\n" ?>
+						this.allSpans = widget.find('.cat-post-thumbnail > span');
+						this.allImages = widget.find('.cat-post-thumbnail > span > img');		<?php /* Image: source-image */ echo "\r\n" ?>
 
-<?php 				/* variables */ ?>
-					this.firstListItem = widget.find('li:first');
-					this.firstThumb = this.firstListItem.find('.cat-post-thumbnail > span');
-					this.maxThumbSourceWidth = this.firstThumb.width();
-					this.ratio = this.firstThumb.width() / this.firstThumb.height();
-					this.ratioHeight = this.firstThumb.height() / this.firstThumb.find('img').height(); <?php /* ratioHeight: between cropped- and source-image height */ echo "\r\n" ?>
-					this.allThumbs = widget.find('.cat-post-thumbnail > span');
-					this.allImages = widget.find('.cat-post-thumbnail > span > img');		<?php /* Image: source-image */ echo "\r\n" ?>
+<?php 					/* functions */ ?>
+						this.changeImageSize = function changeImageSize() {
 
-<?php 				/* functions */ ?>
-					this.changeImageSize = function changeImageSize() {
+							this.listItemLayoutWidth = this.firstListItem.width();
+							this.ImageLayoutWidth = this.firstSpan.width();
 
-						this.listItemLayoutWidth = this.firstListItem.width();
-						this.ImageLayoutWidth = this.firstThumb.width();
-
-						if(this.listItemLayoutWidth < this.ImageLayoutWidth ||	<?php /* if the layout-width have not enough space to show the regular source-width */ echo "\r\n" ?>
-							this.listItemLayoutWidth < this.maxThumbSourceWidth) {				<?php /* defined start and stop working width for the image: Accomplish only the image width will be get smaller as the source-width */ echo "\r\n" ?>
-								this.allThumbs.width(this.listItemLayoutWidth);
-								this.allThumbs.height(this.listItemLayoutWidth/this.ratio);
-								this.allImages.height(this.listItemLayoutWidth/this.ratio/this.ratioHeight);
-						}				
-					}
-				},
-			}
-
-			cwp_namespace.widget = jQuery('#category-posts-<?php echo $number?>');
-			cwp_namespace.Posts['<?php echo $number?>'] = new cwp_namespace.WidgetPosts(cwp_namespace.widget);
-
-<?php 		/* do on page load or on resize the browser window */ echo "\r\n" ?>
-			jQuery(window).on('load resize', function() {
-				for (var post in cwp_namespace.Posts) {
-					cwp_namespace.Posts[post].changeImageSize();
+							if(this.listItemLayoutWidth < this.ImageLayoutWidth ||	<?php /* if the layout-width have not enough space to show the regular source-width */ echo "\r\n" ?>
+								this.listItemLayoutWidth < this.maxSpanWidth) {				<?php /* defined start and stop working width for the image: Accomplish only the image width will be get smaller as the source-width */ echo "\r\n" ?>
+									this.allSpans.width(this.listItemLayoutWidth);
+									this.allSpans.height(this.listItemLayoutWidth/this.ratio);
+									this.allImages.height(this.listItemLayoutWidth/this.ratio/this.ratioHeight);
+							}				
+						}
+					},
 				}
-			});				
-		});
+
+				cwp_namespace.fluid_images.widget = jQuery('#<?php echo $number?>');
+				cwp_namespace.fluid_images.Posts['<?php echo $number?>'] = new cwp_namespace.fluid_images.WidgetPosts(cwp_namespace.fluid_images.widget);
+
+<?php 			/* do on page load or on resize the browser window */ echo "\r\n" ?>
+				jQuery(window).on('load resize', function() {
+					for (var post in cwp_namespace.fluid_images.Posts) {
+						cwp_namespace.fluid_images.Posts[post].changeImageSize();
+					}
+				});				
+			});
+		}
 	</script>
 	<?php
 }
