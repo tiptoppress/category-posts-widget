@@ -1342,30 +1342,48 @@ function change_cropped_image_dimensions($number,$widgetsettings) {
 <?php 				/* variables */ ?>				
 					Posts : {},
 					widget : null,
-
-<?php				/* class - constructor */ ?>	
-					WidgetPosts : function Posts(widget) {
-
+					Spans : {},
+					
+<?php				/* class: Span - constructor */ ?>
+					Span : function (_self, _imageRatio) {
 <?php 					/* variables */ ?>
-						this.firstListItem = widget.find('li:first');
-						this.firstSpan = this.firstListItem.find('.cat-post-thumbnail > span');
-						this.maxSpanWidth = this.firstSpan.width();
-						this.ratio = this.firstSpan.width() / this.firstSpan.height();
-						this.ratioHeight = this.firstSpan.height() / this.firstSpan.find('img').height(); <?php /* ratioHeight: between cropped- and source-image height */ echo "\r\n" ?>
-						this.allSpans = widget.find('.cat-post-thumbnail > span');
-						this.allImages = widget.find('.cat-post-thumbnail > span > img');		<?php /* Image: source-image */ echo "\r\n" ?>
+						this.self = _self;
+						this.imageRatio = _imageRatio;
+					},
+					
+<?php				/* class: WidgetPosts - constructor */ ?>	
+					WidgetPosts : function (widget) {
+<?php 					/* variables */ ?>
+						this.firstListItem = widget.find( 'li:first' );
+						this.firstSpan = this.firstListItem.find( '.cat-post-thumbnail > span' );
+						this.maxSpanWidth = this.firstSpan.width();						
+						this.ratio = this.firstSpan.width() / this.firstSpan.height();						
+						this.allSpans = widget.find( '.cat-post-thumbnail > span' );
+
+						for( var i = 0; i < this.allSpans.length; i++ ){
+							var imageRatio = this.firstSpan.width() / jQuery(this.allSpans[i]).find( 'img' ).height();
+							cwp_namespace.fluid_images.Spans[i] = new cwp_namespace.fluid_images.Span( jQuery(this.allSpans[i]), imageRatio );
+						}
 
 <?php 					/* functions */ ?>
 						this.changeImageSize = function changeImageSize() {
 
-							this.listItemLayoutWidth = this.firstListItem.width();
-							this.ImageLayoutWidth = this.firstSpan.width();
+							this.listItemWidth = this.firstListItem.width();
+							this.SpanWidth = this.firstSpan.width();
 
-							if(this.listItemLayoutWidth < this.ImageLayoutWidth ||	<?php /* if the layout-width have not enough space to show the regular source-width */ echo "\r\n" ?>
-								this.listItemLayoutWidth < this.maxSpanWidth) {				<?php /* defined start and stop working width for the image: Accomplish only the image width will be get smaller as the source-width */ echo "\r\n" ?>
-									this.allSpans.width(this.listItemLayoutWidth);
-									this.allSpans.height(this.listItemLayoutWidth/this.ratio);
-									this.allImages.height(this.listItemLayoutWidth/this.ratio/this.ratioHeight);
+							if(this.listItemWidth < this.SpanWidth ||	<?php /* if the layout-width have not enough space to show the regular source-width */ echo "\r\n" ?>
+								this.listItemWidth < this.maxSpanWidth) {				<?php /* defined start and stop working width for the image: Accomplish only the image width will be get smaller as the source-width */ echo "\r\n" ?>
+									this.allSpans.width( this.listItemWidth );
+									var spanHeight = this.listItemWidth / this.ratio;
+									this.allSpans.height( spanHeight );
+									
+									for( var index in cwp_namespace.fluid_images.Spans ){									
+										var imageHeight = this.listItemWidth / cwp_namespace.fluid_images.Spans[index].imageRatio;
+										jQuery(cwp_namespace.fluid_images.Spans[index].self).find( 'img' ).css({
+											height: imageHeight,
+											marginTop: -(imageHeight - spanHeight) / 2
+										});										
+									};
 							}				
 						}
 					},
