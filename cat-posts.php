@@ -1329,15 +1329,13 @@ add_action( 'widgets_init', __NAMESPACE__.'\register_widget' );
 function change_cropped_image_dimensions($number,$widgetsettings) {
 	?>
 	<script type="text/javascript">
+
 		if (typeof jQuery !== 'undefined' && 
 				<?php echo (isset($widgetsettings['use_css_cropping']) && $widgetsettings['use_css_cropping'])?"true":"false" ?> &&
 				<?php echo (isset($widgetsettings['thumb']) && $widgetsettings['thumb'])?"true":"false" ?>) {
+
 			jQuery( document ).ready(function () {
-<?php
-				// change cropped image dimensions
-				// @description: Calculate new image dimensions, if the layout-width have not enough space to show the regular source-width
-				// @since 4.7
-?>
+
 <?php			// namespace ?>
 				var cwp_namespace = window.cwp_namespace || {};
 				cwp_namespace.fluid_images = cwp_namespace.fluid_images || {};
@@ -1349,15 +1347,17 @@ function change_cropped_image_dimensions($number,$widgetsettings) {
 					widget : null,
 					Spans : {},
 					
-<?php				/* class: Span - constructor */ ?>
+<?php				/* class */ ?>
 					Span : function (_self, _imageRatio) {
+
 <?php 					/* variables */ ?>
 						this.self = _self;
 						this.imageRatio = _imageRatio;
 					},
 					
-<?php				/* class: WidgetPosts - constructor */ ?>	
+<?php				/* class */ ?>	
 					WidgetPosts : function (widget) {
+
 <?php 					/* variables */ ?>
 						this.firstListItem = widget.find( 'li:first' );
 						this.firstSpan = this.firstListItem.find( '.cat-post-thumbnail > span' );
