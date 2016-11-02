@@ -1958,3 +1958,14 @@ class virtualWidget {
 	}
 	
 }
+
+add_action('wp_loaded',__NAMESPACE__.'\wp_loaded');
+
+/**
+ *  Run after wordpress finished bootstrapping, do whatever is needed at this stage
+ *  like registering the meta
+ */
+function wp_loaded() {
+	register_meta('post', SHORTCODE_META,null,'__return_false'); // do not allow access to the shortcode meta
+                                                           // use the pre 4.6 format for backward compatibility
+}
