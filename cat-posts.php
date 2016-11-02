@@ -1361,8 +1361,12 @@ function change_cropped_image_dimensions($number,$widgetsettings) {
 <?php 					/* variables */ ?>
 						this.firstListItem = widget.find( 'li:first' );
 						this.firstSpan = this.firstListItem.find( '.cat-post-thumbnail > span' );
-						this.maxSpanWidth = this.firstSpan.width();						
-						this.ratio = this.firstSpan.width() / this.firstSpan.height();						
+						this.maxSpanWidth = this.firstSpan.width();
+<?php if(empty($widgetsettings['thumb_w']) || empty($widgetsettings['thumb_h'])) : ?>
+						this.ratio = this.firstSpan.width() / this.firstSpan.height();
+<?php else : ?>
+						this.ratio = <?php echo $widgetsettings['thumb_w'] / $widgetsettings['thumb_h']; ?>;
+<?php endif; ?>
 						this.allSpans = widget.find( '.cat-post-thumbnail > span' );
 
 						for( var i = 0; i < this.allSpans.length; i++ ){
