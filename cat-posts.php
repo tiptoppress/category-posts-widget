@@ -134,11 +134,11 @@ function register_virtual_widgets() {
 		foreach ($names as $name) {
 			$meta = shortcode_settings($name);
 			if (is_array($meta)) {
-				$id = 'shortcode-'.get_the_ID(); // needed to make a unique id for the widget html element
+				$id = WIDGET_BASE_ID.'-shortcode-'.get_the_ID(); // needed to make a unique id for the widget html element
 				if ($name != '') // if not defualt name append to the id
 					$id .= '-' . sanitize_title($name); // sanitize to be on the safe side, not sure where when and how this will be used 
 
-				$shortcodeCollection[$name] = new virtualWidget($id,$meta);
+				$shortcodeCollection[$name] = new virtualWidget($id,'',$meta);
 			}
 		}
     }
@@ -159,7 +159,7 @@ function register_virtual_widgets() {
 						$widgetclass = new $class();
 						$allsettings = $widgetclass->get_settings();
 						$settings = isset($allsettings[str_replace($widget_base.'-','',$widget)]) ? $allsettings[str_replace($widget_base.'-','',$widget)] : false;
-						$widgetCollection[$widget] = new virtualWidget($widget,$settings);
+						$widgetCollection[$widget] = new virtualWidget($widget,WIDGET_BASE_ID.'-shortcode',$settings);
 					}
 				}
 			}
@@ -905,6 +905,10 @@ class Widget extends \WP_Widget {
 			wp_reset_postdata();
 
             $number = $this->number;
+			// a temporary hack to handle difference in the number in a true widget
+			// and the number format expected at the rest of the places
+			if (is_numeric($number))
+				$number = WIDGET_BASE_ID .'-'.$number;
 			
 			// add Javascript to change change cropped image dimensions on load and window resize
             add_action('wp_footer', function () use ($number,$instance) { change_cropped_image_dimensions($number, $instance); }, 100);
@@ -1881,6 +1885,7 @@ function personal_options_update( $user_id ) {
 class virtualWidget {
 	private static $collection = array();
 	private $id;
+	private $class;
 	
 	/**
 	 *  Construct the virtual widget. This should happen before wp_head action with priority
@@ -1889,12 +1894,15 @@ class virtualWidget {
 	 *  @param string $id    The identifier use as the id of the root html element when the HTML
 	 *                       is generated
 	 *  
+	 *  @param string $class The class name to be use us the class attribute on the root html element
+	 *  
 	 *  @param array $args   The setting to be applied to the widget
 	 *  
 	 *  @since 4.7
 	 */
-	function __construct($id, $args) {
+	function __construct($id, $class, $args) {
 		$this->id = $id;
+		$this->class = $class;
 		self::$collection[$id] = wp_parse_args($args,default_settings());
 	}
 	
@@ -1923,7 +1931,10 @@ class virtualWidget {
 							'after_title' => ''
 						), $args);
 		$ret = ob_get_clean();
-		$ret = '<div id="'.$this->id.'">'.$ret.'</div>';
+		$class = '';
+		if ($this->class != '')
+			$class = ' class="'.esc_attr($this->class).'"';
+		$ret = '<div id="'.$this->id.'"'.$class.'>'.$ret.'</div>';
 		return $ret;
 		
 	}
