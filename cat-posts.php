@@ -1658,16 +1658,22 @@ function customize_register($wp_customize) {
 					$form
 				);
 
-				$sc = new shortCodeControl(
-					$wp_customize,
-					'_virtual-'.WIDGET_BASE_ID.'['.$p->ID.']['.$k.'][title]',
-					array(
+				$args = array(
 						'label'   => __( 'Layout', 'twentyfourteen' ),
 						'section' => __NAMESPACE__,
 						'form' => $form,
 						'settings' => '_virtual-'.WIDGET_BASE_ID.'['.$p->ID.']['.$k.'][title]',
 						'active_callback' => function () use ($p) { return is_singular() && (get_the_ID()==$p->ID); }
-						)
+						);
+
+				if (get_option('page_on_front') == $p->ID) {
+					$args['active_callback'] = function () { return is_front_page(); };
+				}
+
+				$sc = new shortCodeControl(
+					$wp_customize,
+					'_virtual-'.WIDGET_BASE_ID.'['.$p->ID.']['.$k.'][title]',
+					$args
 					);
 				
 				if ($k != '')
