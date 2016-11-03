@@ -593,7 +593,7 @@ class testWidgetFront extends WP_UnitTestCase {
 								$widget,array(200,200)
 							);
         else
-            $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="http://example.org/wp-content/uploads/2016/10/33772.jpg 1920w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
+            $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="'.$dirurl.'/33772.jpg 1920w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
 								$widget,array(200,200)
 							);
 			
@@ -612,7 +612,7 @@ class testWidgetFront extends WP_UnitTestCase {
 								$widget,array(200,200)
 							);
         else
-            $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="http://example.org/wp-content/uploads/2016/10/33772.jpg 1920w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
+            $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="'.$dirurl.'/33772.jpg 1920w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
 								$widget,array(200,200)
 							);
 
