@@ -1868,9 +1868,9 @@ function personal_options_update( $user_id ) {
 		return;
 	
 	if (isset($_POST[__NAMESPACE__]))
-		update_usermeta( $user_id, __NAMESPACE__, $_POST[__NAMESPACE__] );
+		update_user_meta( $user_id, __NAMESPACE__, $_POST[__NAMESPACE__] );
 	else
-		delete_usermeta( $user_id, __NAMESPACE__);		
+		delete_user_meta( $user_id, __NAMESPACE__);		
 }
 
 // external API
