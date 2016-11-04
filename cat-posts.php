@@ -1650,7 +1650,7 @@ function customize_register($wp_customize) {
 				$m = wp_parse_args($m,default_settings());
 
 				ob_start();
-				$widget->form(array());
+				$widget->form($m);
 				$form = ob_get_clean();
 				$form = preg_replace_callback('/<(input|select)\s+.*name=("|\').*\[\d*\]\[([^\]]*)\][^>]*>/',
 					function ($matches) use ($p, $wp_customize, $m, $k) {
