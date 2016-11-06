@@ -763,7 +763,15 @@ class Widget extends \WP_Widget {
                 $length = (int) $instance['excerpt_length'];
             else 
                 $length = 0; // indicate that invalid length is set
-            $ret .= apply_filters('cpw_excerpt',apply_filters('the_excerpt',\get_the_excerpt()),$this,$length);
+
+			if (!isset($instance['excerpt_filters']) || $instance['excerpt_filters']) // pre 4.7 widgets has filters on
+				$excerpt = \get_the_excerpt();
+			else { // if filters off replicate functionality of core generating excerpt
+				$text = get_the_content('');
+				$text = strip_shortcodes( $text );
+				$excerpt = \wp_trim_words( $text, $length, ltrim($instance["excerpt_more_text"]) );
+			}
+            $ret .= apply_filters('cpw_excerpt',apply_filters('the_excerpt',$excerpt,$this,$length));
         }
         
         if ( isset( $instance['comment_num'] ) && $instance['comment_num']) {
@@ -925,6 +933,8 @@ class Widget extends \WP_Widget {
 	function update($new_instance, $old_instance) {
 
 		$new_instance['title'] = sanitize_text_field( $new_instance['title'] );  // sanitize the title like core widgets do
+		if (!isset($new_instance['excerpt_filters']))
+			$new_instance['excerpt_filters'] = '';
 		return $new_instance;
 	}
 
@@ -1160,12 +1170,19 @@ class Widget extends \WP_Widget {
 	 * @return void
 	 */
 	function form($instance) {
+		if (count($instance) == 0) { // new widget, use defaults
+			$instance = default_settings();
+		} else { // in pre 4.7 widget the excerpt filter is on
+			if (!isset($instance['excerpt_filters']))
+				$instance['excerpt_filters'] = 'on';
+		}
 		$instance = wp_parse_args( ( array ) $instance, array(
 			'footer_link'          => '',
 			'hide_post_titles'     => '',
 			'excerpt'              => '',
 			'excerpt_length'       => 55,
 			'excerpt_more_text'    => '',
+			'excerpt_filters'      => '',
 			'comment_num'          => '',
 			'author'               => '',
 			'date'                 => '',
@@ -1181,6 +1198,7 @@ class Widget extends \WP_Widget {
 		$excerpt              = $instance['excerpt'];
 		$excerpt_length       = $instance['excerpt_length'];
 		$excerpt_more_text    = $instance['excerpt_more_text'];
+		$excerpt_filters      = $instance['excerpt_filters'];
 		$comment_num          = $instance['comment_num'];
 		$author               = $instance['author'];
 		$date                 = $instance['date'];
@@ -1209,6 +1227,12 @@ class Widget extends \WP_Widget {
 					<label for="<?php echo $this->get_field_id("excerpt"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt"); ?>" name="<?php echo $this->get_field_name("excerpt"); ?>"<?php checked( (bool) $instance["excerpt"], true ); ?> />
 						<?php _e( 'Show post excerpt',TEXTDOMAIN ); ?>
+					</label>
+				</p>
+				<p>
+					<label for="<?php echo $this->get_field_id("excerpt_filters"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_filters"); ?>" name="<?php echo $this->get_field_name("excerpt_filters"); ?>"<?php checked( !empty($excerpt_filters), true ); ?> />
+						<?php _e( 'Themes and plugins may override',TEXTDOMAIN ); ?>
 					</label>
 				</p>
 				<p>
@@ -1541,7 +1565,8 @@ function default_settings()  {
 				'disable_css'          => false,
 				'hide_if_empty'        => false,
 				'hide_social_buttons'  => '',
-				'no_cat_childs'        => false
+				'no_cat_childs'        => false,
+				'excerpt_filter'	   => false,
 				);
 }
 
