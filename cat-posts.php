@@ -769,10 +769,11 @@ class Widget extends \WP_Widget {
 			else { // if filters off replicate functionality of core generating excerpt
 				$text = get_the_content('');
 				$text = strip_shortcodes( $text );
+				$more_text = '[&hellip;]';
 				if( isset($instance["excerpt_more_text"]) && $instance["excerpt_more_text"] )
-					$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '">' . ltrim($instance["excerpt_more_text"]) . '</a>';
-				else
-					$excerpt_more_text = ' [...]';				
+					$more_text = ltrim($instance["excerpt_more_text"]);
+
+				$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
 				$excerpt = \wp_trim_words( $text, $length, $excerpt_more_text );
 			}
             $ret .= apply_filters('cpw_excerpt',apply_filters('the_excerpt',$excerpt,$this,$length));
