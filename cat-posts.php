@@ -6,6 +6,8 @@ Description: Adds a widget that shows the most recent posts from a single catego
 Author: Mrinal Kanti Roy
 Version: 4.7.beta2
 Author URI: http://mkrdip.me
+Text Domain: cat-posts
+Domain Path: /languages
 */
 
 namespace categoryPosts;
@@ -20,7 +22,7 @@ const SHORTCODE_NAME = 'catposts';
 const SHORTCODE_META = 'categoryPosts-shorcode';
 const WIDGET_BASE_ID = 'category-posts';
 
-const TEXTDOMAIN = 'categoryposts';
+const TEXTDOMAIN = 'cat-posts';
 
 /***
  *	Check if CSS needs to be added to support cropping by traversing all active widgets on the page
