@@ -1214,7 +1214,7 @@ class Widget extends \WP_Widget {
 
 		?>
 		<div class="category-widget-cont">
-            <p><a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=widget_cpw&utm_campaign=get_pro_cpw&utm_medium=form">Get the Pro version</a></p>
+            <p><a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=widget_cpw&utm_campaign=get_pro_cpw&utm_medium=form"><?php _e('Get the Pro version','category-posts'); ?></a></p>
         <?php
             $this->formTitlePanel($instance);
             $this->formFilterPanel($instance);
@@ -1308,10 +1308,8 @@ class Widget extends \WP_Widget {
 				</p>
 			</div>
             <p><a href="<?php echo get_edit_user_link().'#'.__NAMESPACE__ ?>"><?php _e('Widget admin behaviour settings','category-posts')?></a></p>			
-            <p><a target="_blank" href="<?php echo CAT_POST_DOC_URL ?>">Documentation</a></p>
-            <p>We are on <a target="_blank" href="https://www.facebook.com/TipTopPress">Facebook</a> and 
-				<a target="_blank" href="https://twitter.com/TipTopPress">Twitter</a></br></br>
-            </p>
+            <p><a target="_blank" href="<?php echo CAT_POST_DOC_URL ?>"><?php _e('Documentation','category-posts'); ?></a></p>
+            <p><?php echo sprintf( wp_kses( __( 'We are on <a href="%1$s">Facebook</a> and <a href="%2$s">Twitter</a>.', 'category-posts' ), array(  'a' => array( 'href' => array() ) ) ), esc_url( 'https://www.facebook.com/TipTopPress' ), esc_url( 'https://twitter.com/TipTopPress' ) ); ?></br></br></p>
 		</div>
 		<?php
 	}
