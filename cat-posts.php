@@ -900,7 +900,7 @@ class Widget extends \WP_Widget {
             if (is_singular())
                 $current_post_id = get_the_ID();
 
-			echo "<ul>\n";
+			echo '<ul id="'.WIDGET_BASE_ID.'-'.$this->number.'-internal'.'" class="'.WIDGET_BASE_ID.'-internal'."\">\n";
 
             $this->setExcerpFilters($instance);         
 			while ( $cat_posts->have_posts() )
