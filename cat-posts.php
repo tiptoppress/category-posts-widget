@@ -80,14 +80,31 @@ function wp_admin_bar_customize_menu() {
 }
 add_action('admin_bar_menu',__NAMESPACE__.'\wp_admin_bar_customize_menu', 35);
 
-/**
- * Register our styles
- *
- * @return void
- */
-add_action( 'wp_enqueue_scripts', __NAMESPACE__.'\wp_enqueue_scripts' );
-
 function wp_head() {
+	global $shortcodeCollection;
+	global $widgetCollection;
+	
+	$rules = array();
+	foreach ($shortcodeCollection as $widget) {
+		$widget->getCSSRules(true,$rules);
+	}
+	
+	foreach ($widgetCollection as $widget) {
+		$widget->getCSSRules(false,$rules);
+	}
+	
+    if (!empty($rules)) {
+    ?>
+<style type="text/css">
+    <?php
+        foreach ($rules as $rule) {
+            echo "$rule\n";
+        }
+    ?>
+</style>
+    <?php
+    }
+
 	if (cropping_active()) {
 ?>
 <style type="text/css">
@@ -168,24 +185,6 @@ function register_virtual_widgets() {
 }
 
 add_action('wp_head',__NAMESPACE__.'\wp_head');
-
-function wp_enqueue_scripts() {
-	
-    $enqueue = false;
-    // check first for shortcode settings
-    if (is_singular()) {
-		$widgets = virtualWidget::getAllSettings();
-		foreach ($widgets as $setting) {
-			if (!(isset($setting['disable_css']) && $setting['disable_css']))
-				$enqueue = true;
-		}
-    }
-        
-	if ($enqueue) {
-		wp_register_style( 'category-posts', plugins_url('cat-posts.css',__FILE__),array(),CAT_POST_VERSION );
-		wp_enqueue_style( 'category-posts' );
-	}
-}
 
 /*
 	Enqueue widget related scripts for the widget admin page and customizer
@@ -1985,7 +1984,88 @@ class virtualWidget {
 	function renderHTML() {
 		echo $this->getHTML();
 	}
+
+	/**
+	 *  Calculate the CSS rules required for the widget as is generated based on the settings passed at construction time
+	 *  
+	 *  @return string
+	 *  
+	 *  @since 4.7
+	 */
+	function getCSSRules($is_shortcode,&$ret) {
+		$rules = array( // ruless that should be applied to all widgets
+			'.cat-post-item span.cat-post-css-cropping img {max-width: initial;	max-height: initial;}',
+			'.cat-post-title {display: inline-block; font-size: 15px;}',
+			'.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}'.
+			'.cat-post-date {font-size: 12px;	line-height: 18px; font-style: italic; margin-bottom: 10px;}',
+			'.cat-post-comment-num {font-size: 12px; line-height: 18px;}',
+			'.cat-post-author {margin-bottom: 0;}',
+			'.cat-post-thumbnail {display: block;}',
+			'.cat-post-thumbnail img {margin: 5px 10px 5px 0;}',
+			'.cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}',
+			'.cat-post-item:before {content: ""; display: table; clear: both;}',
+			'.cat-post-item:after {content: ""; display: table;	clear: both;}',
+			'.cat-post-item:last-child {border-bottom: none;}',
+			'.cat-post-item .cat-post-css-cropping span {float: left; margin: 5px 10px 5px 0;  overflow: hidden;}',
+			'.cat-post-item .cat-post-css-cropping img {margin: initial;}',
+	/* White, Dark, Scale, Blur */
+			'li a.cat-post-white img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
+			'li a.cat-post-dark img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
+			'li a.cat-post-scale img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
+			'li a.cat-post-blur img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
+	/* White */
+			'li a.cat-post-white {background-color: white;}',
+			'li a.cat-post-white img:hover {opacity: 0.8;}',
+	/* Dark */
+			'li a.cat-post-dark img:hover {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}',
+	/* Scale */
+			'li a.cat-post-scale span {overflow: hidden; float: left; margin: 5px 10px 5px 0;}',
+			'li a.cat-post-scale img {margin: initial; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
+			'li a.cat-post-scale img:hover {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}',
+			'li a.cat-post-blur img:hover {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}',
+		);
+		
+		$settings = self::$collection[$this->id];
+		$widget_id = WIDGET_BASE_ID.'-'.$this->id.'-internal';
+		
+		if (!(isset($settings['disable_css']) && $settings['disable_css'])) { // checks if css disable is not set
+			
+			if (!(isset($settings['thumbTop']) || $settings['thumbTop']))
+				$rules[] = '.cat-post-thumbnail img {float:left;}';
+			
+			foreach ($rules as $rule) {
+				$ret[] = '#'.$widget_id.' '.$rule;
+			}
+			
+			if ($is_shortcode) {
+				// 2016 theme adds underlines to links with box whadow wtf....
+				$ret[] = '#'.$widget_id.' .cat-post-thumbnail a {box-shadow:none}'; // this for the thumb link
+				// 2015 adds border....
+				$ret[] = '#'.$widget_id.' .cat-post-thumbnail a {border:0}'; // this for the thumb link
+
+				// probably all theme have too much margin on their p element when used in the shortcode
+				$ret[] = '#'.$widget_id.' p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
+	                                                 // bigger (add to the padding) use only top for now				
+			}
+		}    
+	}
 	
+	/**
+	 *  Output the widget CSS 
+	 *  
+	 *  Just a wrapper that output getCSSRules
+	 *  
+	 *  @return void
+	 *  
+	 *  @since 4.7
+	 */
+	function outputCSS($is_shortcode) {
+		$rules = array();
+		getCSSRules($is_shortcode, $rules);
+		foreach ($rules as $rule) {
+			echo "$rule\n";
+		}
+	}
 	/**
 	 *  Get the id the virtual widget was registered with
 	 *  
