@@ -17,7 +17,7 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 It's the premium version and available on <a target="_blank" href="http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=premium_widget_cpw&utm_medium=web">Tip Top Press</a> created for big Wordpress sites.
 
 = Premium features =
-* Post item "Alterations"
+* "Post List Alterations"
 * Masonry (Responsive grid layouts)
 * Grid and Column full page layouts
 * Slider (Vertical and horizontal)
