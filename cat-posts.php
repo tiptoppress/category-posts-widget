@@ -176,7 +176,7 @@ function register_virtual_widgets() {
 						$widgetclass = new $class();
 						$allsettings = $widgetclass->get_settings();
 						$settings = isset($allsettings[str_replace($widget_base.'-','',$widget)]) ? $allsettings[str_replace($widget_base.'-','',$widget)] : false;
-						$widgetCollection[$widget] = new virtualWidget($widget,WIDGET_BASE_ID.'-shortcode',$settings);
+						$widgetCollection[$widget] = new virtualWidget($widget,WIDGET_BASE_ID,$settings);
 					}
 				}
 			}
@@ -2006,7 +2006,7 @@ class virtualWidget {
 			'.cat-post-item:before {content: ""; display: table; clear: both;}',
 			'.cat-post-item:after {content: ""; display: table;	clear: both;}',
 			'.cat-post-item:last-child {border-bottom: none;}',
-			'.cat-post-item .cat-post-css-cropping span {float: left; margin: 5px 10px 5px 0;  overflow: hidden;}',
+			'.cat-post-item .cat-post-css-cropping span {margin: 5px 10px 5px 0;  overflow: hidden;}',
 			'.cat-post-item .cat-post-css-cropping img {margin: initial;}',
 	/* White, Dark, Scale, Blur */
 			'li a.cat-post-white img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
@@ -2026,12 +2026,13 @@ class virtualWidget {
 		);
 		
 		$settings = self::$collection[$this->id];
-		$widget_id = WIDGET_BASE_ID.'-'.$this->id.'-internal';
+		$widget_id = $this->id.'-internal';
 		
 		if (!(isset($settings['disable_css']) && $settings['disable_css'])) { // checks if css disable is not set
 			
-			if (!(isset($settings['thumbTop']) || $settings['thumbTop']))
-				$rules[] = '.cat-post-thumbnail img {float:left;}';
+			if (!(isset($settings['thumbTop']) && $settings['thumbTop'])) {
+				$rules[] = '.cat-post-thumbnail {float:left;}';
+			}
 			
 			foreach ($rules as $rule) {
 				$ret[] = '#'.$widget_id.' '.$rule;
