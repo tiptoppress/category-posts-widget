@@ -155,7 +155,7 @@ function register_virtual_widgets() {
 				if ($name != '') // if not defualt name append to the id
 					$id .= '-' . sanitize_title($name); // sanitize to be on the safe side, not sure where when and how this will be used 
 
-				$shortcodeCollection[$name] = new virtualWidget($id,'',$meta);
+				$shortcodeCollection[$name] = new virtualWidget($id,WIDGET_BASE_ID.'-shortcode',$meta);
 			}
 		}
     }
@@ -176,7 +176,7 @@ function register_virtual_widgets() {
 						$widgetclass = new $class();
 						$allsettings = $widgetclass->get_settings();
 						$settings = isset($allsettings[str_replace($widget_base.'-','',$widget)]) ? $allsettings[str_replace($widget_base.'-','',$widget)] : false;
-						$widgetCollection[$widget] = new virtualWidget($widget,WIDGET_BASE_ID,$settings);
+						$widgetCollection[$widget] = new virtualWidget($widget,$widget,$settings);
 					}
 				}
 			}
@@ -899,7 +899,8 @@ class Widget extends \WP_Widget {
             if (is_singular())
                 $current_post_id = get_the_ID();
 
-			echo '<ul id="'.WIDGET_BASE_ID.'-'.$this->number.'-internal'.'" class="'.WIDGET_BASE_ID.'-internal'."\">\n";
+			if (!(isset($instance['is_shortcode']) && $instance['is_shortcode'])) // the intenal id is needed only for widgets
+				echo '<ul id="'.WIDGET_BASE_ID.'-'.$this->number.'-internal'.'" class="'.WIDGET_BASE_ID.'-internal'."\">\n";
 
             $this->setExcerpFilters($instance);         
 			while ( $cat_posts->have_posts() )
@@ -1964,12 +1965,8 @@ class virtualWidget {
 							'after_title' => ''
 						), $args);
 		$ret = ob_get_clean();
-		$class = '';
-		if ($this->class != '')
-			$class = ' class="'.esc_attr($this->class).'"';
-		$ret = '<div id="'.$this->id.'"'.$class.'>'.$ret.'</div>';
-		return $ret;
-		
+		$ret = '<div id="'.esc_attr($this->id).'" class="'.esc_attr($this->id).'">'.$ret.'</div>';
+		return $ret;		
 	}
 	
 	/**
