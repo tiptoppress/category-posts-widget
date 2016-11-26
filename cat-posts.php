@@ -1984,7 +1984,7 @@ class virtualWidget {
 			'.cat-post-item:before {content: ""; display: table; clear: both;}',
 			'.cat-post-item:after {content: ""; display: table;	clear: both;}',
 			'.cat-post-item:last-child {border-bottom: none;}',
-			'.cat-post-item .cat-post-css-cropping span {margin: 5px 10px 5px 0;  overflow: hidden;}',
+			'.cat-post-item .cat-post-css-cropping span {margin: 5px 10px 5px 0;  overflow: hidden; display:inline-block}',
 			'.cat-post-item .cat-post-css-cropping img {margin: initial;}',
 	/* White, Dark, Scale, Blur */
 			'li a.cat-post-white img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
@@ -2013,11 +2013,7 @@ class virtualWidget {
 			if (!(isset($settings['thumbTop']) && $settings['thumbTop'])) {
 				$rules[] = '.cat-post-thumbnail {float:left;}';
 			}
-			
-			if (!(isset($settings['use_css_cropping']) && $settings['use_css_cropping'])) {
-				$rules[] = '.cat-post-item .cat-post-css-cropping span {overflow: hidden; display:inline-block;}';
-			}
-						
+								
 			foreach ($rules as $rule) {
 				$ret[] = '#'.$widget_id.' '.$rule;
 			}
