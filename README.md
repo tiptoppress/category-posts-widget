@@ -18,7 +18,7 @@ Adds a widget that shows the most recent posts from a single category.
 Category Posts Widget is a light widget designed to do one thing and do it well: display the most recent posts from a certain category.
 
 ### Term and Category based Posts Widget
-It's the premium version and available at on <a target="_blank" href="http://tiptoppress.com/">Tip Top Press</a> created for big Wordpress sites.
+It's the premium version and available on <a target="_blank" href="http://tiptoppress.com/">Tip Top Press</a> created for big Wordpress sites.
 
 ### Premium features
 * "Post List Alterations"
@@ -28,36 +28,35 @@ It's the premium version and available at on <a target="_blank" href="http://tip
 * Categories, Custom Post Types, Taxonomies, Events, Products, ...
 * Full background post images
 * Mouse hover effects for post thumbnail
-* Shortcode (Just edit all Shortcode options in the customizer)
-* Set post thumbnail dimension by width & height (CSS cropping)
 * E-Mail support
+* All free features
 * More [examples on the demo pages](http://demo.tiptoppress.com/?utm_source=wordpress_org&utm_campaign=demo_cpw&utm_medium=web)
 
 = Features =
-* Shortcode (Edit in the customizer.)
-* For editing shortcode adds a customizer link to the admin-bar if page/post is in edit mode.
-* Option to change ordering of posts.
+* Shortcode (Easily change all Shortcode options in the customizer.)
+* For editing shortcode adds a Customizer link to the admin-bar ("With one click to the Customizer").
 * Option to show post thumbnail & set dimensions by width & height.
-* Option to crop thumbnails with CSS. <a target="_blank" href="http://tiptoppress.com/css-image-crop/?utm_source=wordpress_org&utm_campaign=features_crop_cpw&utm_medium=web">What is 'CSS Image Crop'?</a>.
+* Option for <a target="_blank" href="http://tiptoppress.com/css-image-crop/?utm_source=wordpress_org&utm_campaign=features_crop_cpw&utm_medium=web">client-side cropped thumbnail dimensions</a> by width & height.
 * Option to set mouse hover effects for post thumbnail.
 * Jetpack 'Social buttons on posts' support.
 * Option to hide social buttons on output.
+* Option to change ordering of posts.
+* Set which category the posts should come form.
+* Set how many posts to show.
+* Option to hide widget, if category have currently no posts.
 * Option to put thumbnail on top.
 * Option to hide posts which have no thumbnail.
-* Option to disable widget CSS.
-* Set how many posts to show.
 * Option exclude current post.
-* Option show post author.
-* Set which category the posts should come form.
+* Option to hide the widget title and post titles.
+* Option to make the widget title link to the category page.
 * Option to show the post excerpt, set the length, allow HTML and change 'more' text.
+* Option show post author.
+* Option to show the comment count.
 * Option to show the post date.
 * Option to make the widget date link to the category page.
 * Option to format the outputted date string.
-* Option to show the comment count.
-* Option to make the widget title link to the category page.
 * Option to link to the category page below posts list.
-* Option to hide the widget title and post titles.
-* Option to hide widget, if category have currently no posts.
+* Option to disable widget CSS.
 * Multiple widgets.
 * Multi sites support.
 * Localization support.
@@ -116,8 +115,9 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 
 #### 4.7.1 - 
 * Support multiple shortcodes in content
-* Fluid images for Responsive Design
 * Add option for post offset (use two or more widgets after another)
+* Fluid images for Responsive Layouts
+* Set a thumbnail as default thumbnail
 * Remove allow_html option (We recommend: Use [manual excerpt](https://codex.wordpress.org/Excerpt#How_to_add_excerpts_to_posts) or we support this option furthermore as filter hook in the premium version)
 
 #### 4.6.2 - August 28th 2016
