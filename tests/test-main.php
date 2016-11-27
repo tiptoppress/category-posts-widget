@@ -974,8 +974,40 @@ class testShortCode extends WP_UnitTestCase {
                                ),get_post_meta($pid,self::SHORTCODE_META,true));
     }
 
+	/**
+	 *  Test shortcode output
+	 */	 
+	 function test_output() {
+        $pid = $this->factory->post->create(array('post_type'=>'post','post_title'=>'test','post_status'=>'publish','post_content'=>'['.self::SHORTCODE_NAME.']')); 
+		// setup global enviroment
+		$this->go_to('/?p='.$pid);
+		the_post();
+		categoryposts\register_virtual_widgets(); // generate virtual widgets usually done in the head of the theme
+		ob_start();
+		the_content();
+		$content = ob_get_contents();
+		ob_end_clean();
+		$this->assertEquals('<div id="shortcode-'.$pid.'">Recent Posts<ul>'.
+							'<li class=\'cat-post-item cat-post-current\'><a class="post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a> </li></ul>'.
+							'</div>',str_replace("\n",'',$content));
+		
+		// named shortcode
+        wp_update_post(array('ID'=>$pid,'post_content' => '['.self::SHORTCODE_NAME.' name="bla"]'));
+		// setup global enviroment
+		$this->go_to('/?p='.$pid);
+		the_post();
+		categoryposts\register_virtual_widgets(); // generate virtual widgets usually done in the head of the theme
+		ob_start();
+		the_content();
+		$content = ob_get_contents();
+		ob_end_clean();
+		$this->assertEquals('<div id="shortcode-'.$pid.'-bla">Recent Posts<ul>'.
+							'<li class=\'cat-post-item cat-post-current\'><a class="post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a> </li></ul>'.
+							'</div>',str_replace("\n",'',$content));
+	 }
+	 
     /**
-     *  test tthat the DB is cleaned after uninstall
+     *  test that the DB is cleaned after uninstall
      *  
      */
     function test_uninstall() {

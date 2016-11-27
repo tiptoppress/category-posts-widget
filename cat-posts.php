@@ -115,6 +115,8 @@ function register_virtual_widgets() {
     if (is_singular()) {
 		$names = shortcode_names(SHORTCODE_NAME,$post->post_content);
 		
+		$shortcodeCollection = array();
+		
 		foreach ($names as $name) {
 			$meta = shortcode_settings($name);
 			if (is_array($meta)) {
