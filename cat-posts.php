@@ -1982,10 +1982,8 @@ class virtualWidget {
 			'.cat-post-author {margin-bottom: 0;}',
 			'.cat-post-thumbnail {display: block;}',
 			'.cat-post-thumbnail img {margin: 5px 10px 5px 0;}',
-			'.cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}',
 			'.cat-post-item:before {content: ""; display: table; clear: both;}',
 			'.cat-post-item:after {content: ""; display: table;	clear: both;}',
-			'.cat-post-item:last-child {border-bottom: none;}',
 			'.cat-post-item .cat-post-css-cropping span {margin: 5px 10px 5px 0;  overflow: hidden; display:inline-block}',
 			'.cat-post-item .cat-post-css-cropping img {margin: initial;}',
 	/* White, Dark, Scale, Blur */
@@ -2012,6 +2010,16 @@ class virtualWidget {
 		
 		if (!(isset($settings['disable_css']) && $settings['disable_css'])) { // checks if css disable is not set
 			
+			/*
+				the twenty seventeen theme have a border between the LI elements of a widget, 
+				so remove our border if we detect its use to avoid conflicting styling
+			*/
+			if (!$is_shortcode && function_exists('twentyseventeen_setup')) {
+				$rules[] = '.cat-post-item {list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+			} else {
+				$rules[] = '.cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+				$rules[] = '.cat-post-item:last-child {border-bottom: none;}';
+			}
 			if (!(isset($settings['thumbTop']) && $settings['thumbTop'])) {
 				$rules[] = '.cat-post-thumbnail {float:left;}';
 			}
