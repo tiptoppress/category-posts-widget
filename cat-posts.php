@@ -753,7 +753,7 @@ class Widget extends \WP_Widget {
                 $length = 0; // indicate that invalid length is set
 
 			if (!isset($instance['excerpt_filters']) || $instance['excerpt_filters']) // pre 4.7 widgets has filters on
-				$excerpt = \get_the_excerpt();
+				$excerpt = apply_filters('the_excerpt', \get_the_excerpt() ,$this,$length);
 			else { // if filters off replicate functionality of core generating excerpt
 				$text = get_the_content('');
 				$text = strip_shortcodes( $text );
@@ -764,7 +764,7 @@ class Widget extends \WP_Widget {
 				$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
 				$excerpt = \wp_trim_words( $text, $length, $excerpt_more_text );
 			}
-            $ret .= apply_filters('cpw_excerpt',apply_filters('the_excerpt',$excerpt,$this,$length));
+			$ret .= apply_filters('cpw_excerpt',$excerpt);
         }
         
         if ( isset( $instance['comment_num'] ) && $instance['comment_num']) {
