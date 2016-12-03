@@ -58,7 +58,7 @@ function wp_admin_bar_customize_menu() {
 }
 add_action('admin_bar_menu',__NAMESPACE__.'\wp_admin_bar_customize_menu', 35);
 
-function wp_head() {
+function cpw_wp_head() {
 	global $shortcodeCollection;
 	global $widgetCollection;
 	
@@ -84,7 +84,7 @@ function wp_head() {
     }
 }
 
-add_action('wp_head',__NAMESPACE__.'\register_virtual_widgets',0);
+add_action('cpw_wp_head',__NAMESPACE__.'\register_virtual_widgets',0);
 
 /**
  *  Hold a registry of widget virtual widgets to avoid them being distructed
@@ -153,7 +153,7 @@ function register_virtual_widgets() {
 	}
 }
 
-add_action('wp_head',__NAMESPACE__.'\wp_head');
+add_action('cpw_wp_head',__NAMESPACE__.'\cpw_wp_head');
 
 /*
 	Enqueue widget related scripts for the widget admin page and customizer
