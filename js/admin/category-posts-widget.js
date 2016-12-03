@@ -7,9 +7,6 @@
  * Released under the GPLv2 license or later -  http://www.gnu.org/licenses/gpl-2.0.html
  */
 
- 
-jQuery(document).ready( function () {
-
     // namespace 
     
     var cwp_namespace = {
@@ -32,6 +29,19 @@ jQuery(document).ready( function () {
             else 
                 o[panel] = true;
             this.open_panels[id] = o;
+        },
+		
+        // Show hide excerpt filter options on excerpt filter option check box change
+        toggleExcerptFilterPanel: function(item) {
+            var value = jQuery(item).find("input").attr('checked');		
+            var panel = item.parentElement.parentElement;
+            var layout = jQuery(panel).find(".layout_select option:selected").attr('value');
+            if(value == 'checked') {
+                jQuery(panel).find('.categoryposts-data-panel-excerpt-filter').show();
+            }
+            else {
+                jQuery(panel).find('.categoryposts-data-panel-excerpt-filter').hide();
+            }	
         },
 		
 		// Close all open panels if open
@@ -81,6 +91,8 @@ jQuery(document).ready( function () {
 		},
 			
     }
+	
+jQuery(document).ready( function () {
 	
 	jQuery('.category-widget-cont h4').click(function () { // for widgets page
 		cwp_namespace.autoCloseOpenPanels(this);

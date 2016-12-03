@@ -827,15 +827,16 @@ class Widget extends \WP_Widget {
         if (isset($instance['excerpt']) && $instance['excerpt']) {
         
             // Excerpt length filter
-            if ( isset($instance["excerpt_length"]) && ((int) $instance["excerpt_length"]) > 0 ) {
-                add_filter('excerpt_length', array($this,'excerpt_length_filter'));
+            if ( isset($instance["excerpt_length"]) && ((int) $instance["excerpt_length"]) > 0 &&
+					isset($instance["excerpt_override_length"]) && $instance["excerpt_override_length"]) {
+                add_filter('excerpt_length', array($this,'excerpt_length_filter'), 9999);
             }
             
-            if( isset($instance["excerpt_more_text"]) && ltrim($instance["excerpt_more_text"]) != '' )
+            if( isset($instance["excerpt_more_text"]) && ltrim($instance["excerpt_more_text"]) != '' &&
+					isset($instance["excerpt_override_more_text"]) && $instance["excerpt_override_more_text"])
             {
-                add_filter('excerpt_more', array($this,'excerpt_more_filter'));
+                add_filter('excerpt_more', array($this,'excerpt_more_filter'), 9999);
             }
-
             if( isset( $instance['excerpt_allow_html'] ) ) {
                 remove_filter('get_the_excerpt', 'wp_trim_excerpt');
                 add_filter('the_excerpt', array($this,'allow_html_excerpt'));
@@ -1162,37 +1163,71 @@ class Widget extends \WP_Widget {
 				$instance['excerpt_filters'] = 'on';
 		}
 		$instance = wp_parse_args( ( array ) $instance, array(
-			'footer_link'          => '',
-			'hide_post_titles'     => '',
-			'excerpt'              => '',
-			'excerpt_length'       => 55,
-			'excerpt_more_text'    => '',
-			'excerpt_filters'      => '',
-			'comment_num'          => '',
-			'author'               => '',
-			'date'                 => '',
-			'date_link'            => '',
-			'date_format'          => '',
-			'disable_css'          => '',
-			'hide_if_empty'        => '',
-			'hide_social_buttons'  => '',
+			'footer_link'                     => '',
+			'hide_post_titles'                => '',
+			'excerpt'                         => '',
+			'excerpt_length'                  => 55,
+			'excerpt_more_text'               => '',
+			'excerpt_filters'                 => '',
+			'excerpt_override_length'         => '',
+			'excerpt_override_more_text'      => '',
+			'comment_num'                     => '',
+			'author'                          => '',
+			'date'                            => '',
+			'date_link'                       => '',
+			'date_format'                     => '',
+			'disable_css'                     => '',
+			'hide_if_empty'                   => '',
+			'hide_social_buttons'             => '',
 		) );
 
-		$footer_link          = $instance['footer_link'];
-		$hide_post_titles     = $instance['hide_post_titles'];
-		$excerpt              = $instance['excerpt'];
-		$excerpt_length       = $instance['excerpt_length'];
-		$excerpt_more_text    = $instance['excerpt_more_text'];
-		$excerpt_filters      = $instance['excerpt_filters'];
-		$comment_num          = $instance['comment_num'];
-		$author               = $instance['author'];
-		$date                 = $instance['date'];
-		$date_link            = $instance['date_link'];
-		$date_format          = $instance['date_format'];
-		$disable_css          = $instance['disable_css'];
-		$hide_if_empty        = $instance['hide_if_empty'];
+		$footer_link                     = $instance['footer_link'];
+		$hide_post_titles                = $instance['hide_post_titles'];
+		$excerpt                         = $instance['excerpt'];
+		$excerpt_length                  = $instance['excerpt_length'];
+		$excerpt_more_text               = $instance['excerpt_more_text'];
+		$excerpt_filters                 = $instance['excerpt_filters'];
+		$excerpt_override_length         = $instance['excerpt_override_length'];
+		$excerpt_override_more_text      = $instance['excerpt_override_more_text'];
+		$comment_num                     = $instance['comment_num'];
+		$author                          = $instance['author'];
+		$date                            = $instance['date'];
+		$date_link                       = $instance['date_link'];
+		$date_format                     = $instance['date_format'];
+		$disable_css                     = $instance['disable_css'];
+		$hide_if_empty                   = $instance['hide_if_empty'];
 
+		
+        if (!isset($style_done)) { // what an ugly hack, but can't figure out how to do it nicer on 4.3
 		?>
+        <style type="text/css">
+        .cpwp_ident {
+			color: #6A6A6A;
+			background: #F1F1F1;
+			padding: 5px 10px;
+        }
+        .cpwp_ident > .cpwp_ident {
+            border-left:5px solid #B3B3B3;
+			padding: 0 10px;
+        }
+		.cpwp_ident > p {
+			margin: 5px 0;
+		}
+		.cpwp_ident > label {
+			line-height: 2.75;
+            display: inline-block;
+		}
+        .cpwp_ident_top {
+            margin-top:-1em;
+            padding-top:1em;
+        }
+        </style>
+
+        <?php
+                $style_done = true;
+            }
+        ?>
+		
 		<div class="category-widget-cont">
             <p><a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=widget_cpw&utm_campaign=get_pro_cpw&utm_medium=form"><?php _e('Get the Pro version','category-posts'); ?></a></p>
         <?php
@@ -1215,11 +1250,25 @@ class Widget extends \WP_Widget {
 					</label>
 				</p>
 				<p>
-					<label for="<?php echo $this->get_field_id("excerpt_filters"); ?>">
+					<label for="<?php echo $this->get_field_id("excerpt_filters"); ?>" onchange="javascript:cwp_namespace.toggleExcerptFilterPanel(this)">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_filters"); ?>" name="<?php echo $this->get_field_name("excerpt_filters"); ?>"<?php checked( !empty($excerpt_filters), true ); ?> />
 						<?php _e( 'Themes and plugins may override','category-posts' ); ?>
 					</label>
 				</p>
+				<div class="cpwp_ident categoryposts-data-panel-excerpt-filter" style="display:<?php ((bool) $excerpt_filters) ? 'block' : 'none'?>">
+					<p>
+						<label for="<?php echo $this->get_field_id("excerpt_override_length"); ?>">
+							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_override_length"); ?>" name="<?php echo $this->get_field_name("excerpt_override_length"); ?>"<?php checked( !empty($excerpt_override_length), true ); ?> />
+							<?php _e( 'Native excerpt length','category-posts' ); ?>
+						</label>
+					</p>
+					<p>
+						<label for="<?php echo $this->get_field_id("excerpt_override_more_text"); ?>">
+							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_override_more_text"); ?>" name="<?php echo $this->get_field_name("excerpt_override_more_text"); ?>"<?php checked( !empty($excerpt_override_more_text), true ); ?> />
+							<?php _e( 'Native excerpt \'more\' text','category-posts' ); ?>
+						</label>
+					</p>
+				</div>
 				<p>
 					<label for="<?php echo $this->get_field_id("excerpt_length"); ?>">
 						<?php _e( 'Excerpt length (in words):','category-posts' ); ?>
@@ -1523,37 +1572,39 @@ function shortcode_names($shortcode_name,$content) {
  */
 function default_settings()  {
     return array(
-				'title' => '',
-				'title_link' => false,
-				'hide_title' => false,
-				'cat'                  => '',
-				'num'                  => get_option('posts_per_page'),
-				'offset'               => 1,
-				'sort_by'              => 'date',
-				'asc_sort_order'       => false,
-				'exclude_current_post' => false,
-				'hideNoThumb'          => false,
-				'footer_link'          => '',
-				'thumb'                => false,
-				'thumbTop'             => false,
-				'thumb_w'              => get_option('thumbnail_size_w',150),
-				'thumb_h'              => get_option('thumbnail_size_h',150),
-				'use_css_cropping'     => false,
-				'thumb_hover'          => 'none',
-				'hide_post_titles'     => false,
-				'excerpt'              => false,
-				'excerpt_length'       => 55,
-				'excerpt_more_text'    => '',
-				'comment_num'          => false,
-				'author'               => false,
-				'date'                 => false,
-				'date_link'            => false,
-				'date_format'          => '',
-				'disable_css'          => false,
-				'hide_if_empty'        => false,
-				'hide_social_buttons'  => '',
-				'no_cat_childs'        => false,
-				'excerpt_filter'	   => false,
+				'title'                           => '',
+				'title_link'                      => false,
+				'hide_title'                      => false,
+				'cat'                             => '',
+				'num'                             => get_option('posts_per_page'),
+				'offset'                          => 1,
+				'sort_by'                         => 'date',
+				'asc_sort_order'                  => false,
+				'exclude_current_post'            => false,
+				'hideNoThumb'                     => false,
+				'footer_link'                     => '',
+				'thumb'                           => false,
+				'thumbTop'                        => false,
+				'thumb_w'                         => get_option('thumbnail_size_w',150),
+				'thumb_h'                         => get_option('thumbnail_size_h',150),
+				'use_css_cropping'                => false,
+				'thumb_hover'                     => 'none',
+				'hide_post_titles'                => false,
+				'excerpt'                         => false,
+				'excerpt_length'                  => 55,
+				'excerpt_more_text'               => '',
+				'excerpt_filter'	              => false,
+				'excerpt_override_length'         => false,
+				'excerpt_override_more_text'      => false,
+				'comment_num'                     => false,
+				'author'                          => false,
+				'date'                            => false,
+				'date_link'                       => false,
+				'date_format'                     => '',
+				'disable_css'                     => false,
+				'hide_if_empty'                   => false,
+				'hide_social_buttons'             => '',
+				'no_cat_childs'                   => false,
 				);
 }
 
