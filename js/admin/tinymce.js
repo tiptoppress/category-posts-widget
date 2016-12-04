@@ -1,6 +1,6 @@
 (function($) {
 	var namespace = 'categoryPosts';
-	var textdomain = 'categoryposts';
+	var textdomain = 'category-posts';
 	
     tinymce.create("tinymce.plugins."+namespace, {
 		

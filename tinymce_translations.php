@@ -23,7 +23,7 @@ function tinymce_translation() {
     );
  
     $locale = \_WP_Editors::$mce_locale;
-    $translated = 'tinyMCE.addI18n("' . $locale . '.categoryposts", ' . json_encode( $strings ) . ");\n";
+    $translated = 'tinyMCE.addI18n("' . $locale . '.category-posts", ' . json_encode( $strings ) . ");\n";
  
     return $translated;
 }
