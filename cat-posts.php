@@ -64,13 +64,11 @@ function wp_head() {
 	
 	$rules = array();
 	foreach ($shortcodeCollection as $widget) {
-		if (function_exists ($widget->getCSSRules))
-			$widget->getCSSRules(true,$rules);
+		$widget->getCSSRules(true,$rules);
 	}
 	
 	foreach ($widgetCollection as $widget) {
-		if (function_exists ($widget->getCSSRules))
-			$widget->getCSSRules(false,$rules);
+		$widget->getCSSRules(false,$rules);
 	}
 	
     if (!empty($rules)) {
