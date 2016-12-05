@@ -64,12 +64,12 @@ function wp_head() {
 	
 	$rules = array();
 	foreach ($shortcodeCollection as $widget) {
-		if (function_exists ($widget->getCSSRules))
+		if (is_a ($widget,__NAMESPACE__.'\virtualWidget'))
 			$widget->getCSSRules(true,$rules);
 	}
 	
 	foreach ($widgetCollection as $widget) {
-		if (function_exists ($widget->getCSSRules))
+		if (is_a ($widget,__NAMESPACE__.'\virtualWidget'))
 			$widget->getCSSRules(false,$rules);
 	}
 	
