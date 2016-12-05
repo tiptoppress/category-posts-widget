@@ -495,11 +495,12 @@ class Widget extends \WP_Widget {
      * Expected to be called from a loop with globals properly set
 	 *
 	 * @param  array $instance Array which contains the various settings
+	 * @param  bool  $no_link  indicates whether the thumb should be wrapped in a link or a span
 	 * @return string The HTML for the thumb related to the post
      *
      * @since 4.6
 	 */
-	function show_thumb($instance) {
+	function show_thumb($instance,$no_link) {
         $ret = '';
         
 		if ( isset( $instance["thumb"] ) && $instance["thumb"] &&
@@ -534,9 +535,15 @@ class Widget extends \WP_Widget {
                 }
             } 
             $title_args = array('echo'=>false);
-			$ret .= '<a '.$class . ' href="'.get_the_permalink().'" title="'.the_title_attribute($title_args).'">';
+			if ($no_link)
+				$ret .= '<span '.$class . '">';
+			else
+				$ret .= '<a '.$class . ' href="'.get_the_permalink().'" title="'.the_title_attribute($title_args).'">';
             $ret .= $this->the_post_thumbnail( array($this->instance['thumb_w'],$this->instance['thumb_h']));
-			$ret .= '</a>';
+			if ($no_link)
+				$ret .= '</span>';
+			else
+				$ret .= '</a>';
 		}
 
         return $ret;
@@ -697,6 +704,8 @@ class Widget extends \WP_Widget {
     function itemHTML($instance,$current_post_id) {
         global $post;
         
+		$everything_is_link = isset( $instance['everything_is_link'] ) && $instance['everything_is_link'];
+		
         $ret = '<li ';
                     
         if ( $current_post_id == $post->ID ) { 
@@ -706,18 +715,25 @@ class Widget extends \WP_Widget {
         }
         $ret.='>'; // close the li opening tag
         
+		if ($everything_is_link) {
+			$ret .= '<a href="'.get_the_permalink().'" title="">';
+		}
         // Thumbnail position to top
         if( isset( $instance["thumbTop"] ) && $instance["thumbTop"]) {
-            $ret .= $this->show_thumb($instance); 
+            $ret .= $this->show_thumb($instance,$everything_is_link); 
         }
         
         if( !(isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'])) { 
-            $ret .= '<a class="post-title';
-            if( !isset( $instance['disable_css'] ) ) { 
-                $ret .= " cat-post-title"; 
-            }
-            $ret .= '" href="'.get_the_permalink().'" rel="bookmark">'.get_the_title();
-            $ret .= '</a> ';
+			if ($everything_is_link) {
+				$ret .= '<span class="cat-post-title">'.get_the_title().'</span>';
+			} else {
+				$ret .= '<a class="post-title';
+				if( !isset( $instance['disable_css'] ) ) { 
+					$ret .= " cat-post-title"; 
+				}
+				$ret .= '" href="'.get_the_permalink().'" rel="bookmark">'.get_the_title();
+				$ret .= '</a> ';
+			}
         }
 
         if ( isset( $instance['date']) && $instance['date']) {
@@ -731,11 +747,11 @@ class Widget extends \WP_Widget {
                 $ret .= "cat-post-date";
             } 
             $ret .= '">';
-            if ( isset ( $instance["date_link"] ) && $instance["date_link"]) { 
+            if ( isset ( $instance["date_link"] ) && $instance["date_link"] && !$everything_is_link) { 
                 $ret .= '<a href="'.\get_the_permalink().'">';
             }
             $ret .= get_the_time($date_format);
-            if ( isset ( $instance["date_link"] ) ) { 
+            if ( isset ( $instance["date_link"] ) && !$everything_is_link ) { 
                 $ret .= '</a>';
             }
             $ret .= '</p>';
@@ -743,7 +759,7 @@ class Widget extends \WP_Widget {
         
         // Thumbnail position normal
         if( !(isset( $instance["thumbTop"] ) && $instance["thumbTop"])) {
-            $ret .= $this->show_thumb($instance);
+            $ret .= $this->show_thumb($instance,$everything_is_link);
         }
 
         if ( isset( $instance['excerpt'] ) && $instance['excerpt']) {
@@ -763,7 +779,10 @@ class Widget extends \WP_Widget {
 				if( isset($instance["excerpt_more_text"]) && $instance["excerpt_more_text"] )
 					$more_text = ltrim($instance["excerpt_more_text"]);
 
-				$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
+				if ($everything_is_link)
+					$excerpt_more_text = ' <span class="cat-post-excerpt-more">'.$more_text.'</span>';
+				else
+					$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
 				$excerpt = \wp_trim_words( $text, $length, $excerpt_more_text );
 			}
 			$ret .= apply_filters('cpw_excerpt',$excerpt);
@@ -786,13 +805,17 @@ class Widget extends \WP_Widget {
             } 
             $ret .= '">';
             global $authordata;
-            $link = sprintf(
-                '<a href="%1$s" title="%2$s" rel="author">%3$s</a>',
-                esc_url( get_author_posts_url( $authordata->ID, $authordata->user_nicename ) ),
-                esc_attr( sprintf( __( 'Posts by %s' ), get_the_author() ) ),
-                get_the_author()
-            );
-            $ret .= $link; 
+			if ($everything_is_link) {
+				$ret .= get_the_author();
+			} else {
+				$link = sprintf(
+					'<a href="%1$s" title="%2$s" rel="author">%3$s</a>',
+					esc_url( get_author_posts_url( $authordata->ID, $authordata->user_nicename ) ),
+					esc_attr( sprintf( __( 'Posts by %s' ), get_the_author() ) ),
+					get_the_author()
+				);
+				$ret .= $link; 
+			}
             $ret .= '</p>';
         }
         
@@ -1165,6 +1188,7 @@ class Widget extends \WP_Widget {
 				$instance['excerpt_filters'] = 'on';
 		}
 		$instance = wp_parse_args( ( array ) $instance, array(
+			'everything_is_link'              => false,
 			'footer_link'                     => '',
 			'hide_post_titles'                => '',
 			'excerpt'                         => '',
@@ -1183,6 +1207,7 @@ class Widget extends \WP_Widget {
 			'hide_social_buttons'             => '',
 		) );
 
+		$everything_is_link				 = $instance['everything_is_link'];
 		$footer_link                     = $instance['footer_link'];
 		$hide_post_titles                = $instance['hide_post_titles'];
 		$excerpt                         = $instance['excerpt'];
@@ -1239,6 +1264,12 @@ class Widget extends \WP_Widget {
         ?>
 			<h4 data-panel="details"><?php _e('Post details','category-posts')?></h4>
 			<div>
+				<p>
+					<label for="<?php echo $this->get_field_id("everything_is_link"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("everything_is_link"); ?>" name="<?php echo $this->get_field_name("everything_is_link"); ?>"<?php checked( (bool) $everything_is_link, true ); ?> />
+						<?php _e( 'Everything is a link','category-posts' ); ?>
+					</label>
+				</p>
 				<p>
 					<label for="<?php echo $this->get_field_id("hide_post_titles"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_post_titles"); ?>" name="<?php echo $this->get_field_name("hide_post_titles"); ?>"<?php checked( (bool) $instance["hide_post_titles"], true ); ?> />
@@ -1607,6 +1638,7 @@ function default_settings()  {
 				'hide_if_empty'                   => false,
 				'hide_social_buttons'             => '',
 				'no_cat_childs'                   => false,
+				'everything_is_link'			  => false,
 				);
 }
 
@@ -2040,20 +2072,20 @@ class virtualWidget {
 			'.cat-post-item .cat-post-css-cropping span {margin: 5px 10px 5px 0;  overflow: hidden; display:inline-block}',
 			'.cat-post-item .cat-post-css-cropping img {margin: initial;}',
 	/* White, Dark, Scale, Blur */
-			'li a.cat-post-white img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
-			'li a.cat-post-dark img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
-			'li a.cat-post-scale img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
-			'li a.cat-post-blur img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
+			'.cat-post-white img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
+			'.cat-post-dark img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
+			'.cat-post-scale img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
+			'.cat-post-blur img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
 	/* White */
-			'li a.cat-post-white {background-color: white;}',
-			'li a.cat-post-white img:hover {opacity: 0.8;}',
+			'.cat-post-white {background-color: white;}',
+			'.cat-post-white img:hover {opacity: 0.8;}',
 	/* Dark */
-			'li a.cat-post-dark img:hover {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}',
+			'.cat-post-dark img:hover {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}',
 	/* Scale */
-			'li a.cat-post-scale span {overflow: hidden; float: left; margin: 5px 10px 5px 0;}',
-			'li a.cat-post-scale img {margin: initial; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
-			'li a.cat-post-scale img:hover {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}',
-			'li a.cat-post-blur img:hover {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}',
+			'.cat-post-scale span {overflow: hidden; float: left; margin: 5px 10px 5px 0;}',
+			'.cat-post-scale img {margin: initial; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
+			'.cat-post-scale img:hover {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}',
+			'.cat-post-blur img:hover {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}',
 		);
 		
 		$settings = self::$collection[$this->id];
