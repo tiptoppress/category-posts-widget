@@ -2080,7 +2080,7 @@ class virtualWidget {
 	/* Dark */
 			'.cat-post-dark img:hover {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}',
 	/* Scale */
-			'.cat-post-scale span {overflow: hidden; float: left; margin: 5px 10px 5px 0;}',
+			'.cat-post-scale span {overflow: hidden; margin: 5px 10px 5px 0;}',
 			'.cat-post-scale img {margin: initial; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
 			'.cat-post-scale img:hover {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}',
 			'.cat-post-blur img:hover {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}',
