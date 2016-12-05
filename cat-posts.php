@@ -58,17 +58,19 @@ function wp_admin_bar_customize_menu() {
 }
 add_action('admin_bar_menu',__NAMESPACE__.'\wp_admin_bar_customize_menu', 35);
 
-function cpw_wp_head() {
+function wp_head() {
 	global $shortcodeCollection;
 	global $widgetCollection;
 	
 	$rules = array();
 	foreach ($shortcodeCollection as $widget) {
-		$widget->getCSSRules(true,$rules);
+		if (function_exists ($widget->getCSSRules))
+			$widget->getCSSRules(true,$rules);
 	}
 	
 	foreach ($widgetCollection as $widget) {
-		$widget->getCSSRules(false,$rules);
+		if (function_exists ($widget->getCSSRules))
+			$widget->getCSSRules(false,$rules);
 	}
 	
     if (!empty($rules)) {
@@ -84,7 +86,7 @@ function cpw_wp_head() {
     }
 }
 
-add_action('cpw_wp_head',__NAMESPACE__.'\register_virtual_widgets',0);
+add_action('wp_head',__NAMESPACE__.'\register_virtual_widgets',0);
 
 /**
  *  Hold a registry of widget virtual widgets to avoid them being distructed
@@ -153,7 +155,7 @@ function register_virtual_widgets() {
 	}
 }
 
-add_action('cpw_wp_head',__NAMESPACE__.'\cpw_wp_head');
+add_action('wp_head',__NAMESPACE__.'\wp_head');
 
 /*
 	Enqueue widget related scripts for the widget admin page and customizer
