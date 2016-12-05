@@ -1181,12 +1181,6 @@ class Widget extends \WP_Widget {
 	 * @return void
 	 */
 	function form($instance) {
-		if (count($instance) == 0) { // new widget, use defaults
-			$instance = default_settings();
-		} else { // in pre 4.7 widget the excerpt filter is on
-			if (!isset($instance['excerpt_filters']))
-				$instance['excerpt_filters'] = 'on';
-		}
 		$instance = wp_parse_args( ( array ) $instance, array(
 			'everything_is_link'              => false,
 			'footer_link'                     => '',
@@ -2062,7 +2056,7 @@ class virtualWidget {
 	 *  @since 4.7
 	 */
 	function getCSSRules($is_shortcode,&$ret) {
-		$rules = array( // ruless that should be applied to all widgets
+		$rules = array( // rules that should be applied to all widgets
 			'.cat-post-item span.cat-post-css-cropping img {max-width: initial;	max-height: initial;}',
 			'.cat-post-title {display: inline-block; font-size: 15px;}',
 			'.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}'.
