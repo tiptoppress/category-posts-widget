@@ -120,6 +120,11 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 * Set a thumbnail as default thumbnail
 * Add option to enable excerpt filters from Themes and plugins
 * Add option to disable social buttons, banner, ... in the excerpt
+* Add dropdownbox entry for 'all' categories
+* Add option to disable subcategories
+* Use WP user profile for settings ('auto close' and if the shortcode button appears in the editor)
+* Simple API for external use
+* Support localization with translate.wordpress.org: Portuguese (Brazil) thank you [Henrique Vianna](https://profiles.wordpress.org/hvianna/) and German by [Daniel Floeter](https://profiles.wordpress.org/kometschuh/)
 * Remove allow_html option (Instead we recommend to use the [manual excerpt](https://codex.wordpress.org/Excerpt#How_to_add_excerpts_to_posts) or we support this option furthermore as filter hook in the premium version)
 
 #### 4.6.2 - August 28th 2016
