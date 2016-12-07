@@ -1181,6 +1181,12 @@ class Widget extends \WP_Widget {
 	 * @return void
 	 */
 	function form($instance) {
+		if (count($instance) == 0) { // new widget, use defaults
+ 			$instance = default_settings();
+ 		} else { // in pre 4.7 widget the excerpt filter is on
+ 			if (!isset($instance['excerpt_filters']))
+ 				$instance['excerpt_filters'] = 'on';
+ 		}
 		$instance = wp_parse_args( ( array ) $instance, array(
 			'everything_is_link'              => false,
 			'footer_link'                     => '',
