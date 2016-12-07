@@ -1183,7 +1183,7 @@ class Widget extends \WP_Widget {
 	function form($instance) {
 		if (count($instance) == 0) { // new widget, use defaults
  			$instance = default_settings();
- 		} else { // in pre 4.7 widget the excerpt filter is on
+ 		} else { // updated widgets come from =< 4.6 excerpt filter is on
  			if (!isset($instance['excerpt_filters']))
  				$instance['excerpt_filters'] = 'on';
  		}
@@ -1749,7 +1749,14 @@ function customize_register($wp_customize) {
 				
 			foreach ($meta as $k => $m) {
 				$m = wp_parse_args($m,default_settings());
-
+				
+				if (count($meta) == 0) { // new widget, use defaults
+					;
+				} else { // updated widgets come from =< 4.6 excerpt filter is on
+					if (!isset($m['excerpt_filters']))
+						$m['excerpt_filters'] = 'on';
+				}
+				
 				ob_start();
 				$widget->form($m);
 				$form = ob_get_clean();
