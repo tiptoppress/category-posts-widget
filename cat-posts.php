@@ -708,6 +708,7 @@ class Widget extends \WP_Widget {
 		
         $ret = '<li ';
                     
+		// Current post
         if ( $current_post_id == $post->ID ) { 
             $ret .= "class='cat-post-item cat-post-current'"; 
         } else {
@@ -723,6 +724,7 @@ class Widget extends \WP_Widget {
             $ret .= $this->show_thumb($instance,$everything_is_link); 
         }
         
+		// Title
         if( !(isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'])) { 
 			if ($everything_is_link) {
 				$ret .= '<span class="cat-post-title">'.get_the_title().'</span>';
@@ -736,6 +738,7 @@ class Widget extends \WP_Widget {
 			}
         }
 
+		// Date
         if ( isset( $instance['date']) && $instance['date']) {
             if ( isset( $instance['date_format'] ) && strlen( trim( $instance['date_format'] ) ) > 0 ) { 
                 $date_format = $instance['date_format']; 
@@ -762,6 +765,7 @@ class Widget extends \WP_Widget {
             $ret .= $this->show_thumb($instance,$everything_is_link);
         }
 
+		// Excerpt
         if ( isset( $instance['excerpt'] ) && $instance['excerpt']) {
             // use the_excerpt filter to get the "normal" excerpt of the post
             // then apply our filter to let users customize excerpts in their own way
@@ -788,6 +792,7 @@ class Widget extends \WP_Widget {
 			$ret .= apply_filters('cpw_excerpt',$excerpt);
         }
         
+		// Comments
         if ( isset( $instance['comment_num'] ) && $instance['comment_num']) {
             $ret .= '<p class="comment-num';
             if ( !isset( $instance['disable_css'] ) ) {
@@ -798,6 +803,7 @@ class Widget extends \WP_Widget {
             $ret .= '</p>';
         }
 
+		// Author
         if ( isset( $instance['author'] ) && $instance['author']) {
             $ret .= '<p class="post-author ';
             if( !isset( $instance['disable_css'] ) ) { 
