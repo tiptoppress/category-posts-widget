@@ -70,7 +70,7 @@ function wp_head() {
 	foreach ($widgetCollection as $widget) {
 		$widget->getCSSRules(false,$rules);
 	}
-	
+		
     if (!empty($rules)) {
     ?>
 <style type="text/css">
@@ -706,6 +706,7 @@ class Widget extends \WP_Widget {
 		
         $ret = '<li ';
                     
+		// Current post
         if ( $current_post_id == $post->ID ) { 
             $ret .= "class='cat-post-item cat-post-current'"; 
         } else {
@@ -721,6 +722,7 @@ class Widget extends \WP_Widget {
             $ret .= $this->show_thumb($instance,$everything_is_link); 
         }
         
+		// Title
         if( !(isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'])) { 
 			if ($everything_is_link) {
 				$ret .= '<span class="cat-post-title">'.get_the_title().'</span>';
@@ -734,6 +736,7 @@ class Widget extends \WP_Widget {
 			}
         }
 
+		// Date
         if ( isset( $instance['date']) && $instance['date']) {
             if ( isset( $instance['date_format'] ) && strlen( trim( $instance['date_format'] ) ) > 0 ) { 
                 $date_format = $instance['date_format']; 
@@ -760,6 +763,7 @@ class Widget extends \WP_Widget {
             $ret .= $this->show_thumb($instance,$everything_is_link);
         }
 
+		// Excerpt
         if ( isset( $instance['excerpt'] ) && $instance['excerpt']) {
             // use the_excerpt filter to get the "normal" excerpt of the post
             // then apply our filter to let users customize excerpts in their own way
@@ -786,6 +790,7 @@ class Widget extends \WP_Widget {
 			$ret .= apply_filters('cpw_excerpt',$excerpt);
         }
         
+		// Comments
         if ( isset( $instance['comment_num'] ) && $instance['comment_num']) {
             $ret .= '<p class="comment-num';
             if ( !isset( $instance['disable_css'] ) ) {
@@ -796,6 +801,7 @@ class Widget extends \WP_Widget {
             $ret .= '</p>';
         }
 
+		// Author
         if ( isset( $instance['author'] ) && $instance['author']) {
             $ret .= '<p class="post-author ';
             if( !isset( $instance['disable_css'] ) ) { 
@@ -1180,11 +1186,11 @@ class Widget extends \WP_Widget {
 	 */
 	function form($instance) {
 		if (count($instance) == 0) { // new widget, use defaults
-			$instance = default_settings();
-		} else { // in pre 4.7 widget the excerpt filter is on
-			if (!isset($instance['excerpt_filters']))
-				$instance['excerpt_filters'] = 'on';
-		}
+ 			$instance = default_settings();
+ 		} else { // updated widgets come from =< 4.6 excerpt filter is on
+ 			if (!isset($instance['excerpt_filters']))
+ 				$instance['excerpt_filters'] = 'on';
+ 		}
 		$instance = wp_parse_args( ( array ) $instance, array(
 			'everything_is_link'              => false,
 			'footer_link'                     => '',
@@ -1275,61 +1281,65 @@ class Widget extends \WP_Widget {
 					</label>
 				</p>
 				<p>
-					<label for="<?php echo $this->get_field_id("excerpt"); ?>">
+					<label for="<?php echo $this->get_field_id("excerpt"); ?>" onchange="javascript:cwp_namespace.toggleExcerptPanel(this)">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt"); ?>" name="<?php echo $this->get_field_name("excerpt"); ?>"<?php checked( (bool) $instance["excerpt"], true ); ?> />
 						<?php _e( 'Show post excerpt','category-posts' ); ?>
 					</label>
 				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("excerpt_filters"); ?>" onchange="javascript:cwp_namespace.toggleExcerptFilterPanel(this)">
-						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_filters"); ?>" name="<?php echo $this->get_field_name("excerpt_filters"); ?>"<?php checked( !empty($excerpt_filters), true ); ?> />
-						<?php _e( 'Themes and plugins may override','category-posts' ); ?>
-					</label>
-				</p>
-				<div class="cpwp_ident categoryposts-data-panel-excerpt-filter" style="display:<?php ((bool) $excerpt_filters) ? 'block' : 'none'?>">
+				<div class="cpwp_ident categoryposts-data-panel-excerpt" style="display:<?php echo ((bool) $excerpt) ? 'block' : 'none'?>">
 					<p>
-						<label for="<?php echo $this->get_field_id("excerpt_override_length"); ?>">
-							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_override_length"); ?>" name="<?php echo $this->get_field_name("excerpt_override_length"); ?>"<?php checked( !empty($excerpt_override_length), true ); ?> />
-							<?php _e( 'Native excerpt length','category-posts' ); ?>
+						<label for="<?php echo $this->get_field_id("excerpt_length"); ?>">
+							<?php _e( 'Excerpt length (in words):','category-posts' ); ?>
 						</label>
+						<input style="text-align: center; width:30%;" type="number" min="0" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" />
 					</p>
 					<p>
-						<label for="<?php echo $this->get_field_id("excerpt_override_more_text"); ?>">
-							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_override_more_text"); ?>" name="<?php echo $this->get_field_name("excerpt_override_more_text"); ?>"<?php checked( !empty($excerpt_override_more_text), true ); ?> />
-							<?php _e( 'Native excerpt \'more\' text','category-posts' ); ?>
+						<label for="<?php echo $this->get_field_id("excerpt_more_text"); ?>">
+							<?php _e( 'Excerpt \'more\' text:','category-posts' ); ?>
+						</label>
+						<input class="widefat" style="width:45%;" placeholder="<?php _e('... more','category-posts')?>" id="<?php echo $this->get_field_id("excerpt_more_text"); ?>" name="<?php echo $this->get_field_name("excerpt_more_text"); ?>" type="text" value="<?php echo esc_attr($instance["excerpt_more_text"]); ?>" />
+					</p>
+					<p>
+						<label for="<?php echo $this->get_field_id("excerpt_filters"); ?>" onchange="javascript:cwp_namespace.toggleExcerptFilterPanel(this)">
+							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_filters"); ?>" name="<?php echo $this->get_field_name("excerpt_filters"); ?>"<?php checked( !empty($excerpt_filters), true ); ?> />
+							<?php _e( 'Themes and plugins may override','category-posts' ); ?>
 						</label>
 					</p>
+					<div class="cpwp_ident categoryposts-data-panel-excerpt-filter" style="display:<?php echo ((bool) $excerpt_filters) ? 'block' : 'none'?>">
+						<p>
+							<label for="<?php echo $this->get_field_id("excerpt_override_length"); ?>">
+								<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_override_length"); ?>" name="<?php echo $this->get_field_name("excerpt_override_length"); ?>"<?php checked( !empty($excerpt_override_length), true ); ?> />
+								<?php _e( 'Native excerpt length','category-posts' ); ?>
+							</label>
+						</p>
+						<p>
+							<label for="<?php echo $this->get_field_id("excerpt_override_more_text"); ?>">
+								<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_override_more_text"); ?>" name="<?php echo $this->get_field_name("excerpt_override_more_text"); ?>"<?php checked( !empty($excerpt_override_more_text), true ); ?> />
+								<?php _e( 'Native excerpt \'more\' text','category-posts' ); ?>
+							</label>
+						</p>
+					</div>
 				</div>
 				<p>
-					<label for="<?php echo $this->get_field_id("excerpt_length"); ?>">
-						<?php _e( 'Excerpt length (in words):','category-posts' ); ?>
-					</label>
-					<input style="text-align: center; width:30%;" type="number" min="0" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" />
-				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("excerpt_more_text"); ?>">
-						<?php _e( 'Excerpt \'more\' text:','category-posts' ); ?>
-					</label>
-					<input class="widefat" style="width:50%;" placeholder="<?php _e('... more','category-posts')?>" id="<?php echo $this->get_field_id("excerpt_more_text"); ?>" name="<?php echo $this->get_field_name("excerpt_more_text"); ?>" type="text" value="<?php echo esc_attr($instance["excerpt_more_text"]); ?>" />
-				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("date"); ?>">
+					<label for="<?php echo $this->get_field_id("date"); ?>" onchange="javascript:cwp_namespace.toggleDatePanel(this)">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("date"); ?>"<?php checked( (bool) $instance["date"], true ); ?> />
 						<?php _e( 'Show post date','category-posts' ); ?>
 					</label>
 				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("date_format"); ?>">
-						<?php _e( 'Date format:','category-posts' ); ?>
-					</label>
-					<input class="text" placeholder="j M Y" id="<?php echo $this->get_field_id("date_format"); ?>" name="<?php echo $this->get_field_name("date_format"); ?>" type="text" value="<?php echo esc_attr($instance["date_format"]); ?>" size="8" />
-				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("date_link"); ?>">
-						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date_link"); ?>" name="<?php echo $this->get_field_name("date_link"); ?>"<?php checked( (bool) $instance["date_link"], true ); ?> />
-						<?php _e( 'Make widget date link','category-posts' ); ?>
-					</label>
-				</p>
+				<div class="cpwp_ident categoryposts-data-panel-date" style="display:<?php echo ((bool) $date) ? 'block' : 'none'?>">
+					<p>
+						<label for="<?php echo $this->get_field_id("date_format"); ?>">
+							<?php _e( 'Date format:','category-posts' ); ?>
+						</label>
+						<input class="text" placeholder="j M Y" id="<?php echo $this->get_field_id("date_format"); ?>" name="<?php echo $this->get_field_name("date_format"); ?>" type="text" value="<?php echo esc_attr($instance["date_format"]); ?>" size="8" />
+					</p>
+					<p>
+						<label for="<?php echo $this->get_field_id("date_link"); ?>">
+							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date_link"); ?>" name="<?php echo $this->get_field_name("date_link"); ?>"<?php checked( (bool) $instance["date_link"], true ); ?> />
+							<?php _e( 'Make widget date link','category-posts' ); ?>
+						</label>
+					</p>
+				</div>
 				<p>
 					<label for="<?php echo $this->get_field_id("comment_num"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("comment_num"); ?>" name="<?php echo $this->get_field_name("comment_num"); ?>"<?php checked( (bool) $instance["comment_num"], true ); ?> />
@@ -1743,7 +1753,14 @@ function customize_register($wp_customize) {
 				
 			foreach ($meta as $k => $m) {
 				$m = wp_parse_args($m,default_settings());
-
+				
+				if (count($meta) == 0) { // new widget, use defaults
+					;
+				} else { // updated widgets come from =< 4.6 excerpt filter is on
+					if (!isset($m['excerpt_filters']))
+						$m['excerpt_filters'] = 'on';
+				}
+				
 				ob_start();
 				$widget->form($m);
 				$form = ob_get_clean();
@@ -2056,7 +2073,7 @@ class virtualWidget {
 	 *  @since 4.7
 	 */
 	function getCSSRules($is_shortcode,&$ret) {
-		$rules = array( // ruless that should be applied to all widgets
+		$rules = array( // rules that should be applied to all widgets
 			'.cat-post-item span.cat-post-css-cropping img {max-width: initial;	max-height: initial;}',
 			'.cat-post-title {display: inline-block; font-size: 15px;}',
 			'.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}'.
@@ -2080,7 +2097,7 @@ class virtualWidget {
 	/* Dark */
 			'.cat-post-dark img:hover {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}',
 	/* Scale */
-			'.cat-post-scale span {overflow: hidden; float: left; margin: 5px 10px 5px 0;}',
+			'.cat-post-scale span {overflow: hidden; margin: 5px 10px 5px 0;}',
 			'.cat-post-scale img {margin: initial; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
 			'.cat-post-scale img:hover {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}',
 			'.cat-post-blur img:hover {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}',
