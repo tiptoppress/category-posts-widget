@@ -1358,7 +1358,6 @@ class Widget extends \WP_Widget {
 					</label>
 				</p>
 			</div>
-			<?php do_action('cpwp_after_footer_panel',$this,$instance)?>
             <p><a href="<?php echo get_edit_user_link().'#'.__NAMESPACE__ ?>"><?php _e('Widget admin behaviour settings','category-posts')?></a></p>			
             <p><a target="_blank" href="<?php echo CAT_POST_DOC_URL ?>"><?php _e('Documentation','category-posts'); ?></a></p>
             <p><?php echo sprintf( wp_kses( __( 'We are on <a href="%1$s">Facebook</a> and <a href="%2$s">Twitter</a>.', 'category-posts' ), array(  'a' => array( 'href' => array() ) ) ), esc_url( 'https://www.facebook.com/TipTopPress' ), esc_url( 'https://twitter.com/TipTopPress' ) ); ?></br></br></p>
