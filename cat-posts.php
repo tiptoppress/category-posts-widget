@@ -829,16 +829,14 @@ class Widget extends \WP_Widget {
         if (isset($instance['excerpt']) && $instance['excerpt']) {
         
             // Excerpt length filter
-            if ( isset($instance["excerpt_length"]) && ((int) $instance["excerpt_length"]) > 0 &&
-					isset($instance["excerpt_override_length"]) && $instance["excerpt_override_length"]) {
-                add_filter('excerpt_length', array($this,'excerpt_length_filter'), 9999);
+            if ( isset($instance["excerpt_length"]) && ((int) $instance["excerpt_length"]) > 0) {
+                add_filter('excerpt_length', array($this,'excerpt_length_filter'));
             }
             
-            if( isset($instance["excerpt_more_text"]) && ltrim($instance["excerpt_more_text"]) != '' &&
-					isset($instance["excerpt_override_more_text"]) && $instance["excerpt_override_more_text"])
-            {
-                add_filter('excerpt_more', array($this,'excerpt_more_filter'), 9999);
+            if( isset($instance["excerpt_more_text"]) && ltrim($instance["excerpt_more_text"]) != '') {
+                add_filter('excerpt_more', array($this,'excerpt_more_filter'));
             }
+			
             if( isset( $instance['excerpt_allow_html'] ) ) {
                 remove_filter('get_the_excerpt', 'wp_trim_excerpt');
                 add_filter('the_excerpt', array($this,'allow_html_excerpt'));
@@ -893,6 +891,8 @@ class Widget extends \WP_Widget {
 
 			if (!(isset($instance['is_shortcode']) && $instance['is_shortcode'])) // the intenal id is needed only for widgets
 				echo '<ul id="'.WIDGET_BASE_ID.'-'.$this->number.'-internal'.'" class="'.WIDGET_BASE_ID.'-internal'."\">\n";
+			else 
+				echo '<ul>';
 
             $this->setExcerpFilters($instance);         
 			while ( $cat_posts->have_posts() )
@@ -1171,8 +1171,6 @@ class Widget extends \WP_Widget {
 			'excerpt_length'                  => 55,
 			'excerpt_more_text'               => '',
 			'excerpt_filters'                 => '',
-			'excerpt_override_length'         => '',
-			'excerpt_override_more_text'      => '',
 			'comment_num'                     => '',
 			'author'                          => '',
 			'date'                            => '',
@@ -1189,8 +1187,6 @@ class Widget extends \WP_Widget {
 		$excerpt_length                  = $instance['excerpt_length'];
 		$excerpt_more_text               = $instance['excerpt_more_text'];
 		$excerpt_filters                 = $instance['excerpt_filters'];
-		$excerpt_override_length         = $instance['excerpt_override_length'];
-		$excerpt_override_more_text      = $instance['excerpt_override_more_text'];
 		$comment_num                     = $instance['comment_num'];
 		$author                          = $instance['author'];
 		$date                            = $instance['date'];
@@ -1257,20 +1253,6 @@ class Widget extends \WP_Widget {
 						<?php _e( 'Themes and plugins may override','category-posts' ); ?>
 					</label>
 				</p>
-				<div class="cpwp_ident categoryposts-data-panel-excerpt-filter" style="display:<?php ((bool) $excerpt_filters) ? 'block' : 'none'?>">
-					<p>
-						<label for="<?php echo $this->get_field_id("excerpt_override_length"); ?>">
-							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_override_length"); ?>" name="<?php echo $this->get_field_name("excerpt_override_length"); ?>"<?php checked( !empty($excerpt_override_length), true ); ?> />
-							<?php _e( 'Native excerpt length','category-posts' ); ?>
-						</label>
-					</p>
-					<p>
-						<label for="<?php echo $this->get_field_id("excerpt_override_more_text"); ?>">
-							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_override_more_text"); ?>" name="<?php echo $this->get_field_name("excerpt_override_more_text"); ?>"<?php checked( !empty($excerpt_override_more_text), true ); ?> />
-							<?php _e( 'Native excerpt \'more\' text','category-posts' ); ?>
-						</label>
-					</p>
-				</div>
 				<p>
 					<label for="<?php echo $this->get_field_id("excerpt_length"); ?>">
 						<?php _e( 'Excerpt length (in words):','category-posts' ); ?>
@@ -1595,9 +1577,7 @@ function default_settings()  {
 				'excerpt'                         => false,
 				'excerpt_length'                  => 55,
 				'excerpt_more_text'               => '',
-				'excerpt_filter'	              => false,
-				'excerpt_override_length'         => false,
-				'excerpt_override_more_text'      => false,
+				'excerpt_filters'	              => false,
 				'comment_num'                     => false,
 				'author'                          => false,
 				'date'                            => false,
