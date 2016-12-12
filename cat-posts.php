@@ -1981,7 +1981,7 @@ class virtualWidget {
 							'after_title' => ''
 						), $args);
 		$ret = ob_get_clean();
-		$ret = '<div id="'.esc_attr($this->id).'" class="'.esc_attr($this->id).'">'.$ret.'</div>';
+		$ret = '<div id="'.esc_attr($this->id).'" class="'.esc_attr($this->class).'">'.$ret.'</div>';
 		return $ret;		
 	}
 	

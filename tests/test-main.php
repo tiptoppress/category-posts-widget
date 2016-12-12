@@ -1002,7 +1002,7 @@ class testShortCode extends WP_UnitTestCase {
 		the_content();
 		$content = ob_get_contents();
 		ob_end_clean();
-		$this->assertEquals('<div id="category-posts-shortcode-'.$pid.'" class="category-posts-shortcode-'.$pid.'">Recent Posts<ul>'.
+		$this->assertEquals('<div id="category-posts-shortcode-'.$pid.'" class="category-posts-shortcode">Recent Posts<ul>'.
 							'<li class=\'cat-post-item cat-post-current\'><a class="post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a> </li></ul>'.
 							'</div>',str_replace("\n",'',$content));
 		
@@ -1016,7 +1016,7 @@ class testShortCode extends WP_UnitTestCase {
 		the_content();
 		$content = ob_get_contents();
 		ob_end_clean();
-		$this->assertEquals('<div id="category-posts-shortcode-'.$pid.'-bla" class="category-posts-shortcode-'.$pid.'-bla">Recent Posts<ul>'.
+		$this->assertEquals('<div id="category-posts-shortcode-'.$pid.'-bla" class="category-posts-shortcode">Recent Posts<ul>'.
 							'<li class=\'cat-post-item cat-post-current\'><a class="post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a> </li></ul>'.
 							'</div>',str_replace("\n",'',$content));
 	 }
