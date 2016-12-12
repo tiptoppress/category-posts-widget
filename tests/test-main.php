@@ -381,6 +381,10 @@ class testWidgetFront extends WP_UnitTestCase {
         
         $exclude_current = array('whatever',true, null,false);
 
+        $archivetests = array();
+        $archiveresults = array();
+        $posttest = array();
+        $postresults = array();
         foreach ($sort_criteria as $ksc=>$sc) 
             foreach ($sort_order as $kso => $so) 
                 foreach ($cats as $kcat => $cat) 
@@ -416,17 +420,27 @@ class testWidgetFront extends WP_UnitTestCase {
 										if ($thumb)
 											$expected['meta_query'] = $hidethumbs_results[$kt];
 											
-										// test archive type of page
-										$this->go_to('/');
-										$this->assertEquals($expected,$widget->queryArgs($instance));
+										// tests for archive page
+										$archivetests[] = $instance;
+										$archiveresults[] = $expected;
 										
-										// test single post page
+										
+										// tests for single post page
 										if ($exclude)
 											$expected['post__not_in'] = array($pid);
-										$this->go_to('/?p='.$pid);
-										$this->assertEquals($expected,$widget->queryArgs($instance));
+										$posttests[] = $instance;
+										$postresults[] = $expected;
 									}
                     
+        // test archive type of page
+        $this->go_to('/');
+        foreach ($archivetests as $k => $instance)
+            $this->assertEquals($archiveresults[$k],$widget->queryArgs($instance));
+            
+        // test single post page
+        $this->go_to('/?p='.$pid);
+        foreach ($posttests as $k => $instance)
+            $this->assertEquals($postresults[$k],$widget->queryArgs($instance));
     }
 
     /**
@@ -688,7 +702,7 @@ class testWidgetFront extends WP_UnitTestCase {
                               'after_title'=>'',
                               ),array('cat'=>$cid,'num'=>10,'excerpt_length'=>1));
         $o = removeSpaceBetweenTags(ob_get_clean());
-        $this->assertEquals('Uncategorized<ul id="category-posts--internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a></li></ul>',$o);
+        $this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a></li></ul>',$o);
         
         ob_start();
         $widget->widget(array('before_widget'=>'',
@@ -697,7 +711,7 @@ class testWidgetFront extends WP_UnitTestCase {
                               'after_title'=>'',
                               ),array('cat'=>$cid,'num'=>10,'excerpt'=>false,'excerpt_length'=>1));
         $o = removeSpaceBetweenTags(ob_get_clean());
-        $this->assertEquals('Uncategorized<ul id="category-posts--internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a></li></ul>',$o);
+        $this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a></li></ul>',$o);
 
         // test excerpt length filter
         ob_start();
@@ -707,7 +721,7 @@ class testWidgetFront extends WP_UnitTestCase {
                               'after_title'=>'',
                               ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1));
         $o = removeSpaceBetweenTags(ob_get_clean());
-        $this->assertEquals('Uncategorized<ul id="category-posts--internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more &hellip; <a href="http://example.org/?p='.$pid.'" class="more-link">Continue reading <span class="screen-reader-text">test</span></a></p></li></ul>',$o);
+        $this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more &hellip; <a href="http://example.org/?p='.$pid.'" class="more-link">Continue reading <span class="screen-reader-text">test</span></a></p></li></ul>',$o);
         
         // test excerpt more filter
         ob_start();
@@ -717,7 +731,7 @@ class testWidgetFront extends WP_UnitTestCase {
                               'after_title'=>'',
                               ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1,'excerpt_more_text'=>'blabla'));
         $o = removeSpaceBetweenTags(ob_get_clean());
-        $this->assertEquals('Uncategorized<ul id="category-posts--internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more <a class="cat-post-excerpt-more" href="http://example.org/?p='.$pid.'">blabla</a></p></li></ul>',$o);
+        $this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more <a class="cat-post-excerpt-more" href="http://example.org/?p='.$pid.'">blabla</a></p></li></ul>',$o);
         
     }
                                                         
@@ -988,7 +1002,7 @@ class testShortCode extends WP_UnitTestCase {
 		the_content();
 		$content = ob_get_contents();
 		ob_end_clean();
-		$this->assertEquals('<div id=""category-posts-shortcode-'.$pid.'"  class=""category-posts-shortcode-'.$pid.'">Recent Posts<ul>'.
+		$this->assertEquals('<div id="category-posts-shortcode-'.$pid.'" class="category-posts-shortcode-'.$pid.'">Recent Posts<ul>'.
 							'<li class=\'cat-post-item cat-post-current\'><a class="post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a> </li></ul>'.
 							'</div>',str_replace("\n",'',$content));
 		
@@ -1002,7 +1016,7 @@ class testShortCode extends WP_UnitTestCase {
 		the_content();
 		$content = ob_get_contents();
 		ob_end_clean();
-		$this->assertEquals('<div id="shortcode-'.$pid.'-bla">Recent Posts<ul>'.
+		$this->assertEquals('<div id="category-posts-shortcode-'.$pid.'-bla" class="category-posts-shortcode-'.$pid.'-bla">Recent Posts<ul>'.
 							'<li class=\'cat-post-item cat-post-current\'><a class="post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a> </li></ul>'.
 							'</div>',str_replace("\n",'',$content));
 	 }
