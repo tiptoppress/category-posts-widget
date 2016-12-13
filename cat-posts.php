@@ -59,18 +59,17 @@ function wp_admin_bar_customize_menu() {
 add_action('admin_bar_menu',__NAMESPACE__.'\wp_admin_bar_customize_menu', 35);
 
 function wp_head() {
-	global $shortcodeCollection;
-	global $widgetCollection;
+	
+	$widgetRepository = new virtualWidgetsRepository;
 	
 	$rules = array();
-	foreach ($shortcodeCollection as $widget) {
-		if (function_exists ($widget->getCSSRules))
+	
+	foreach ($widgetRepository->getShortcodes() as $widget) {
 			$widget->getCSSRules(true,$rules);
 	}
-	
-	foreach ($widgetCollection as $widget) {
-		if (function_exists ($widget->getCSSRules))
-			$widget->getCSSRules(false,$rules);
+
+	foreach ($widgetRepository->getWidgets() as $widget) {
+		$widget->getCSSRules(false,$rules);
 	}
 	
     if (!empty($rules)) {
@@ -89,18 +88,6 @@ function wp_head() {
 add_action('wp_head',__NAMESPACE__.'\register_virtual_widgets',0);
 
 /**
- *  Hold a registry of widget virtual widgets to avoid them being distructed
- */
-global $widgetCollection;
-$widgetCollection = array();
-
-/**
- *  Hold a registry of shortcode virtual widgets to avoid them being distructed
- */
-global $shortcodeCollection;
-$shortcodeCollection = array();
-
-/**
  *  Register virtual widgets for all widgets and shortcodes that are going to be displayed on the page
  *  
  *  @return void
@@ -110,14 +97,12 @@ $shortcodeCollection = array();
 function register_virtual_widgets() {
 	global $post;
 	global $wp_registered_widgets;
-	global $widgetCollection;
-	global $shortcodeCollection;
 
+	$repository = new virtualWidgetsRepository;
+	
     // check first for shortcode settings
     if (is_singular()) {
 		$names = shortcode_names(SHORTCODE_NAME,$post->post_content);
-		
-		$shortcodeCollection = array();
 		
 		foreach ($names as $name) {
 			$meta = shortcode_settings($name);
@@ -126,7 +111,7 @@ function register_virtual_widgets() {
 				if ($name != '') // if not defualt name append to the id
 					$id .= '-' . sanitize_title($name); // sanitize to be on the safe side, not sure where when and how this will be used 
 
-				$shortcodeCollection[$name] = new virtualWidget($id,WIDGET_BASE_ID.'-shortcode',$meta);
+				$repository->addShortcode($name, new virtualWidget($id,WIDGET_BASE_ID.'-shortcode',$meta));
 			}
 		}
     }
@@ -147,7 +132,7 @@ function register_virtual_widgets() {
 						$widgetclass = new $class();
 						$allsettings = $widgetclass->get_settings();
 						$settings = isset($allsettings[str_replace($widget_base.'-','',$widget)]) ? $allsettings[str_replace($widget_base.'-','',$widget)] : false;
-						$widgetCollection[$widget] = new virtualWidget($widget,$widget,$settings);
+						$repository->addWidget($widget, new virtualWidget($widget,$widget,$settings));
 					}
 				}
 			}
@@ -1507,15 +1492,17 @@ function shortcode_settings($name) {
  *  
  */
 function shortcode($attr,$content=null) {
-	global $shortcodeCollection;
+	$repository = new virtualWidgetsRepository;
+	
+	$shortcodes = $repository->getShortcodes();
 	
 	$name = '';
 	if (isset($attr['name']))
 		$name = $attr['name'];
 	
     if (is_singular()) {
-		if (isset($shortcodeCollection[$name])) {
-			return $shortcodeCollection[$name]->getHTML();
+		if (isset($shortcodes[$name])) {
+			return $shortcodes[$name]->getHTML();
         }       
     }
     
@@ -2130,6 +2117,64 @@ class virtualWidget {
 		return self::$collection;
 	}
 	
+}
+
+/**
+ *  Class that implement a simple repository for the virtual widgets representing
+ *  actuall shortcode and widgets
+ *  
+ *  @since 4.7
+ */
+class virtualWidgetsRepository {
+	private static $shortcodeCollection = array();
+	private static $widgetCollection = array();
+	
+	/**
+	 *  Add a virtual widget representing a shortcode to the repository
+	 *  
+	 *  @param string $index A name to identify the specific shortcode
+	 *  @param virtualWidget The virstual widget for it
+	 *  
+	 *  @since 4.7
+	 */
+	function addShortcode($index,$widget) {
+		self::$shortcodeCollection[$index] = $widget;
+	}
+
+	/**
+	 *  Get all the virtual widgets representing actual shortcodes
+	 *  
+	 *  @return array
+	 *  
+	 *  @since 4.7
+	 */
+	function getShortcodes() {
+		return self::$shortcodeCollection;
+	}
+
+	/**
+	 *  Add a virtual widget representing awidget to the repository
+	 *  
+	 *  @param string $index A name to identify the specific widget
+	 *  @param virtualWidget The virstual widget for it
+	 *  
+	 *  @since 4.7
+	 */
+	function addWidget($index,$widget) {
+		self::$widgetCollection[$index] = $widget;
+	}
+
+	/**
+	 *  Get all the virtual widgets representing actual widgets
+	 *  
+	 *  @return array
+	 *  
+	 *  @since 4.7
+	 */
+	function getWidgets() {
+		return self::$widgetCollection;
+	}
+
 }
 
 add_action('wp_loaded',__NAMESPACE__.'\wp_loaded');
