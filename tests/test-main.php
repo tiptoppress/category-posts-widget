@@ -454,7 +454,7 @@ class testWidgetFront extends WP_UnitTestCase {
         global $wp_version;
         
         $compare_to = $widget->the_post_thumbnail($size);
-		$compare_to = preg_replace('/ alt="[.]*"/','',$compare_to);
+		$compare_to = preg_replace('/ alt="[^"]*"/','',$compare_to);
 		
         if (version_compare($wp_version, '4.5','<')) { // size_WxH and size-{size name} were added to image at 4.5, remove if exist
         }
