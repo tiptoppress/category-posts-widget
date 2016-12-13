@@ -755,7 +755,7 @@ class Widget extends \WP_Widget {
                 $length = 0; // indicate that invalid length is set
 
 			if (!isset($instance['excerpt_filters']) || $instance['excerpt_filters']) // pre 4.7 widgets has filters on
-				$excerpt = apply_filters('the_excerpt', \get_the_excerpt() ,$this,$length);
+				$excerpt = apply_filters('the_excerpt', \get_the_excerpt() );
 			else { // if filters off replicate functionality of core generating excerpt
 				$text = get_the_content('');
 				$text = strip_shortcodes( $text );
@@ -894,7 +894,8 @@ class Widget extends \WP_Widget {
 			else 
 				echo '<ul>';
 
-            $this->setExcerpFilters($instance);         
+			if (!isset($instance['excerpt_filters']) || $instance['excerpt_filters']) // pre 4.7 widgets has filters on
+				$this->setExcerpFilters($instance);         
 			while ( $cat_posts->have_posts() )
 			{
                 $cat_posts->the_post();              
@@ -905,7 +906,8 @@ class Widget extends \WP_Widget {
             echo $this->footerHTML($instance);
 			echo $after_widget;
        
-            $this->removeExcerpFilters($instance);
+			if (!isset($instance['excerpt_filters']) || $instance['excerpt_filters']) // pre 4.7 widgets has filters on
+				$this->removeExcerpFilters($instance);
 			
 			wp_reset_postdata();
 		} 
