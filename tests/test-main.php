@@ -839,6 +839,53 @@ class testWidgetFront extends WP_UnitTestCase {
 		remove_filter('excerpt_length',array($this,'excerptLengthFilter'),9);
 
     }
+	
+    /**
+     *  test that the internal excerpt genertion works
+     *  
+     */
+    function testInternalExcerptGeneration() {
+        $className = NS.'\Widget';
+        $widget = new $className();
+
+        $cid = get_option('default_category');
+
+        $pid = $this->factory->post->create(array('post_title'=>'test','post_status'=>'publish',
+                                                    'post_content'=>'more then one word',
+                                                    'post_excerpt'=>'')); 
+               
+        $this->go_to('/?p='.$pid);
+
+		// test length default
+        ob_start();
+        $widget->widget(array('before_widget'=>'',
+                              'after_widget'=>'',
+                              'before_title'=>'',
+                              'after_title'=>'',
+                              ),array('cat'=>$cid,'num'=>10,'excerpt'=>true, 'excerpt_filters'=>''));
+        $o = removeSpaceBetweenTags(ob_get_clean());
+        $this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more then one word</p></li></ul>',$o);
+        
+		// test more text default
+        ob_start();
+        $widget->widget(array('before_widget'=>'',
+                              'after_widget'=>'',
+                              'before_title'=>'',
+                              'after_title'=>'',
+                              ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1, 'excerpt_filters'=>''));
+        $o = removeSpaceBetweenTags(ob_get_clean());
+        $this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more <a class="cat-post-excerpt-more" href="http://example.org/?p='.$pid.'" title="Continue reading test">[&hellip;]</a></p></li></ul>',$o);
+        
+        ob_start();
+        $widget->widget(array('before_widget'=>'',
+                              'after_widget'=>'',
+                              'before_title'=>'',
+                              'after_title'=>'',
+                              ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1,'excerpt_more_text'=>'blabla', 'excerpt_filters'=>''));
+        $o = removeSpaceBetweenTags(ob_get_clean());
+        $this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more <a class="cat-post-excerpt-more" href="http://example.org/?p='.$pid.'" title="Continue reading test">blabla</a></p></li></ul>',$o);
+        
+    }
 }
 
 class testWidgetAdmin extends WP_UnitTestCase {
