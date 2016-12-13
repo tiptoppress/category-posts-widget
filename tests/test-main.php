@@ -681,6 +681,20 @@ class testWidgetFront extends WP_UnitTestCase {
         $this->assertEquals($tempid,get_the_ID());
     }
     
+	/**
+	 *  Helper function to test that excerptmore filter is triggered
+	 */
+	function excerptMoreFilter($v) {
+		return '[more test]';
+	}
+	
+	/**
+	 *  Helper function to test that excerpt length filter is triggered
+	 */
+	function excerptLengthFilter($v) {
+		return 2;
+	}
+	
     /**
      *  test that the excerpt filters are removed after the loop
      *  
@@ -694,7 +708,10 @@ class testWidgetFront extends WP_UnitTestCase {
         $pid = $this->factory->post->create(array('post_title'=>'test','post_status'=>'publish',
                                                     'post_content'=>'more then one word',
                                                     'post_excerpt'=>'')); 
-                    
+       
+		add_filter('excerpt_more',array($this,'excerptMoreFilter'),9);
+		add_filter('excerpt_length',array($this,'excerptLengthFilter'),0);
+
         // test filters not applied when excerpt off                    
         $this->go_to('/?p='.$pid);
         ob_start();
@@ -723,7 +740,7 @@ class testWidgetFront extends WP_UnitTestCase {
                               'after_title'=>'',
                               ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1));
         $o = removeSpaceBetweenTags(ob_get_clean());
-        $this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more &hellip; <a href="http://example.org/?p='.$pid.'" class="more-link">Continue reading <span class="screen-reader-text">test</span></a></p></li></ul>',$o);
+		$this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more[more test]</p></li></ul>',$o);
         
         // test excerpt more filter
         ob_start();
@@ -735,6 +752,9 @@ class testWidgetFront extends WP_UnitTestCase {
         $o = removeSpaceBetweenTags(ob_get_clean());
         $this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more <a class="cat-post-excerpt-more" href="http://example.org/?p='.$pid.'">blabla</a></p></li></ul>',$o);
         
+		remove_filter('excerpt_more',array($this,'excerptMoreFilter'),9);
+		remove_filter('excerpt_length',array($this,'excerptLengthFilter'),9);
+
     }
                                                         
     /**
@@ -751,18 +771,24 @@ class testWidgetFront extends WP_UnitTestCase {
                                                     'post_content'=>'more then one word',
                                                     'post_excerpt'=>'')); 
 
+		add_filter('excerpt_more',array($this,'excerptMoreFilter'),9);
+		add_filter('excerpt_length',array($this,'excerptLengthFilter'),0);
+
         $this->go_to('/?p='.$pid);
         ob_start();
         $widget->widget(array('before_widget'=>'',
                               'after_widget'=>'',
                               'before_title'=>'',
                               'after_title'=>'',
-                              ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1));
+                              ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1,'excerpt_more_text'=>'blabla'));
         ob_end_clean();
         ob_start();
         the_excerpt();
         $excerpt=trim(ob_get_clean());
-        $this->assertEquals('<p>more then one word</p>',$excerpt);
+        $this->assertEquals('<p>more then[more test]</p>',$excerpt);
+
+		remove_filter('excerpt_more',array($this,'excerptMoreFilter'),9);
+		remove_filter('excerpt_length',array($this,'excerptLengthFilter'),9);
 
     }
 }
