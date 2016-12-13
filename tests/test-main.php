@@ -709,8 +709,8 @@ class testWidgetFront extends WP_UnitTestCase {
                                                     'post_content'=>'more then one word',
                                                     'post_excerpt'=>'')); 
        
-		add_filter('excerpt_more',array($this,'excerptMoreFilter'),9);
-		add_filter('excerpt_length',array($this,'excerptLengthFilter'),0);
+		add_filter('excerpt_more',array($this,'excerptMoreFilter'),10);
+		add_filter('excerpt_length',array($this,'excerptLengthFilter'),10);
 
         // test filters not applied when excerpt off                    
         $this->go_to('/?p='.$pid);
@@ -788,8 +788,8 @@ class testWidgetFront extends WP_UnitTestCase {
         $o = removeSpaceBetweenTags(ob_get_clean());
         $this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more <a class="cat-post-excerpt-more" href="http://example.org/?p='.$pid.'">blabla</a></p></li></ul>',$o);
         
-		remove_filter('excerpt_more',array($this,'excerptMoreFilter'),9);
-		remove_filter('excerpt_length',array($this,'excerptLengthFilter'),9);
+		remove_filter('excerpt_more',array($this,'excerptMoreFilter'),10);
+		remove_filter('excerpt_length',array($this,'excerptLengthFilter'),10);
 
     }
                                                         
@@ -807,8 +807,8 @@ class testWidgetFront extends WP_UnitTestCase {
                                                     'post_content'=>'more then one word',
                                                     'post_excerpt'=>'')); 
 
-		add_filter('excerpt_more',array($this,'excerptMoreFilter'),9);
-		add_filter('excerpt_length',array($this,'excerptLengthFilter'),0);
+		add_filter('excerpt_more',array($this,'excerptMoreFilter'),10);
+		add_filter('excerpt_length',array($this,'excerptLengthFilter'),10);
 
         $this->go_to('/?p='.$pid);
         ob_start();
@@ -835,8 +835,8 @@ class testWidgetFront extends WP_UnitTestCase {
         $excerpt=trim(ob_get_clean());
         $this->assertEquals('<p>more then[more test]</p>',$excerpt);
 
-		remove_filter('excerpt_more',array($this,'excerptMoreFilter'),9);
-		remove_filter('excerpt_length',array($this,'excerptLengthFilter'),9);
+		remove_filter('excerpt_more',array($this,'excerptMoreFilter'),10);
+		remove_filter('excerpt_length',array($this,'excerptLengthFilter'),10);
 
     }
 	
