@@ -1682,9 +1682,9 @@ function customize_register($wp_customize) {
     $posts = get_posts($args);
     
     if (count($posts) > 0) {
-        $wp_customize->add_section( __NAMESPACE__, array(
+        $wp_customize->add_panel( __NAMESPACE__, array(
             'title'           => __( 'Category Posts Shortcode', 'category-posts' ),
-            'priority'        => 200,
+            'priority'        => 300,
 			'capability' => 'edit_theme_options',
         ) );
         
@@ -1701,6 +1701,17 @@ function customize_register($wp_customize) {
 			foreach ($meta as $k => $m) {
 				$m = wp_parse_args($m,default_settings());
 
+				$section_title = $k;
+				if ($section_title == '')
+					$section_title = __('(no name)', 'category-posts');
+				
+				$wp_customize->add_section( __NAMESPACE__.'-'.$p->id.'-'.$k, array(
+					'title'           => $section_title,
+					'priority'        => 10,
+					'capability' => 'edit_theme_options',
+					'panel' => __NAMESPACE__,
+				) );
+			
 				ob_start();
 				$widget->form($m);
 				$form = ob_get_clean();
@@ -1721,7 +1732,7 @@ function customize_register($wp_customize) {
 
 				$args = array(
 						'label'   => __( 'Layout', 'twentyfourteen' ),
-						'section' => __NAMESPACE__,
+						'section' => __NAMESPACE__.'-'.$p->id.'-'.$k,
 						'form' => $form,
 						'settings' => '_virtual-'.WIDGET_BASE_ID.'['.$p->ID.']['.$k.'][title]',
 						'active_callback' => function () use ($p) { return is_singular() && (get_the_ID()==$p->ID); }
