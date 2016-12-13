@@ -1133,10 +1133,12 @@ class Widget extends \WP_Widget {
 						}
 					?>
 				</span>
-				<button type="button" class="cwp_default_thumb_select">
+			</p>
+			<p>
+				<button type="button" class="cwp_default_thumb_select button upload-button">
 					<?php _e('Select image','category-posts')?>
 				</button>
-				<button type="button" class="cwp_default_thumb_remove" <?php if (!$default_thunmbnail) echo 'style="display:none"' ?> >
+				<button type="button" class="cwp_default_thumb_remove button upload-button" <?php if (!$default_thunmbnail) echo 'style="display:none"' ?> >
 					<?php _e('No default','category-posts')?>
 				</button>
             </p>					

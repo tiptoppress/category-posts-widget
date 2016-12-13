@@ -30,6 +30,19 @@
                 o[panel] = true;
             this.open_panels[id] = o;
         },
+
+        // Show hide excerpt options on excerpt option check box change
+        toggleExcerptPanel: function(item) {
+            var value = jQuery(item).find("input").attr('checked');		
+            var panel = item.parentElement.parentElement;
+            var layout = jQuery(panel).find(".layout_select option:selected").attr('value');
+            if(value == 'checked') {
+                jQuery(panel).find('.categoryposts-data-panel-excerpt').show();
+            }
+            else {
+                jQuery(panel).find('.categoryposts-data-panel-excerpt').hide();
+            }	
+        },
 		
         // Show hide excerpt filter options on excerpt filter option check box change
         toggleExcerptFilterPanel: function(item) {
@@ -41,6 +54,19 @@
             }
             else {
                 jQuery(panel).find('.categoryposts-data-panel-excerpt-filter').hide();
+            }	
+        },
+		
+        // Show hide date options on date option check box change
+        toggleDatePanel: function(item) {
+            var value = jQuery(item).find("input").attr('checked');		
+            var panel = item.parentElement.parentElement;
+            var layout = jQuery(panel).find(".layout_select option:selected").attr('value');
+            if(value == 'checked') {
+                jQuery(panel).find('.categoryposts-data-panel-date').show();
+            }
+            else {
+                jQuery(panel).find('.categoryposts-data-panel-date').hide();
             }	
         },
 		
@@ -72,9 +98,9 @@
 					img_html += 'width="60" ';
 					img_html += 'height="60" ';
 					img_html += '/>';
-					jQuery(elem).parent().find('.default_thumb_img').html(img_html);
+					jQuery(elem).parent().prev().find('.default_thumb_img').html(img_html);
 					jQuery(elem).parent().find('.cwp_default_thumb_remove').show();
-					jQuery(elem).parent().find('.default_thumb_id').val(attachment.id).change();
+					jQuery(elem).parent().prev().find('.default_thumb_id').val(attachment.id).change();
 				}
 			});
 
@@ -83,9 +109,9 @@
 		},
 		
 		removeDefaultThumbnailSelection : function (elem) {
-			jQuery(elem).parent().find('.default_thumb_img').html(cwp_default_thumb_selection.none);
+			jQuery(elem).parent().prev().find('.default_thumb_img').html(cwp_default_thumb_selection.none);
 			jQuery(elem).hide();
-			jQuery(elem).parent().find('.default_thumb_id').val(0).change();
+			jQuery(elem).parent().prev().find('.default_thumb_id').val(0).change();
 
 			return false;
 		},
