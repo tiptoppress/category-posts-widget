@@ -71,7 +71,7 @@ function wp_head() {
 	foreach ($widgetRepository->getWidgets() as $widget) {
 		$widget->getCSSRules(false,$rules);
 	}
-	
+		
     if (!empty($rules)) {
     ?>
 <style type="text/css">
@@ -480,11 +480,12 @@ class Widget extends \WP_Widget {
      * Expected to be called from a loop with globals properly set
 	 *
 	 * @param  array $instance Array which contains the various settings
+	 * @param  bool  $no_link  indicates whether the thumb should be wrapped in a link or a span
 	 * @return string The HTML for the thumb related to the post
      *
      * @since 4.6
 	 */
-	function show_thumb($instance) {
+	function show_thumb($instance,$no_link) {
         $ret = '';
         
 		if ( isset( $instance["thumb"] ) && $instance["thumb"] &&
@@ -519,9 +520,15 @@ class Widget extends \WP_Widget {
                 }
             } 
             $title_args = array('echo'=>false);
-			$ret .= '<a '.$class . ' href="'.get_the_permalink().'" title="'.the_title_attribute($title_args).'">';
+			if ($no_link)
+				$ret .= '<span '.$class . '">';
+			else
+				$ret .= '<a '.$class . ' href="'.get_the_permalink().'" title="'.the_title_attribute($title_args).'">';
             $ret .= $this->the_post_thumbnail( array($this->instance['thumb_w'],$this->instance['thumb_h']));
-			$ret .= '</a>';
+			if ($no_link)
+				$ret .= '</span>';
+			else
+				$ret .= '</a>';
 		}
 
         return $ret;
@@ -682,8 +689,11 @@ class Widget extends \WP_Widget {
     function itemHTML($instance,$current_post_id) {
         global $post;
         
+		$everything_is_link = isset( $instance['everything_is_link'] ) && $instance['everything_is_link'];
+		
         $ret = '<li ';
                     
+		// Current post
         if ( $current_post_id == $post->ID ) { 
             $ret .= "class='cat-post-item cat-post-current'"; 
         } else {
@@ -691,20 +701,29 @@ class Widget extends \WP_Widget {
         }
         $ret.='>'; // close the li opening tag
         
+		if ($everything_is_link) {
+			$ret .= '<a href="'.get_the_permalink().'" title="">';
+		}
         // Thumbnail position to top
         if( isset( $instance["thumbTop"] ) && $instance["thumbTop"]) {
-            $ret .= $this->show_thumb($instance); 
+            $ret .= $this->show_thumb($instance,$everything_is_link); 
         }
         
+		// Title
         if( !(isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'])) { 
-            $ret .= '<a class="post-title';
-            if( !isset( $instance['disable_css'] ) ) { 
-                $ret .= " cat-post-title"; 
-            }
-            $ret .= '" href="'.get_the_permalink().'" rel="bookmark">'.get_the_title();
-            $ret .= '</a> ';
+			if ($everything_is_link) {
+				$ret .= '<span class="cat-post-title">'.get_the_title().'</span>';
+			} else {
+				$ret .= '<a class="post-title';
+				if( !isset( $instance['disable_css'] ) ) { 
+					$ret .= " cat-post-title"; 
+				}
+				$ret .= '" href="'.get_the_permalink().'" rel="bookmark">'.get_the_title();
+				$ret .= '</a> ';
+			}
         }
 
+		// Date
         if ( isset( $instance['date']) && $instance['date']) {
             if ( isset( $instance['date_format'] ) && strlen( trim( $instance['date_format'] ) ) > 0 ) { 
                 $date_format = $instance['date_format']; 
@@ -716,11 +735,11 @@ class Widget extends \WP_Widget {
                 $ret .= "cat-post-date";
             } 
             $ret .= '">';
-            if ( isset ( $instance["date_link"] ) && $instance["date_link"]) { 
+            if ( isset ( $instance["date_link"] ) && $instance["date_link"] && !$everything_is_link) { 
                 $ret .= '<a href="'.\get_the_permalink().'">';
             }
             $ret .= get_the_time($date_format);
-            if ( isset ( $instance["date_link"] ) ) { 
+            if ( isset ( $instance["date_link"] ) && !$everything_is_link ) { 
                 $ret .= '</a>';
             }
             $ret .= '</p>';
@@ -728,9 +747,10 @@ class Widget extends \WP_Widget {
         
         // Thumbnail position normal
         if( !(isset( $instance["thumbTop"] ) && $instance["thumbTop"])) {
-            $ret .= $this->show_thumb($instance);
+            $ret .= $this->show_thumb($instance,$everything_is_link);
         }
 
+		// Excerpt
         if ( isset( $instance['excerpt'] ) && $instance['excerpt']) {
             // use the_excerpt filter to get the "normal" excerpt of the post
             // then apply our filter to let users customize excerpts in their own way
@@ -748,7 +768,10 @@ class Widget extends \WP_Widget {
 				if( isset($instance["excerpt_more_text"]) && $instance["excerpt_more_text"] )
 					$more_text = ltrim($instance["excerpt_more_text"]);
 
-				$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
+				if ($everything_is_link)
+					$excerpt_more_text = ' <span class="cat-post-excerpt-more">'.$more_text.'</span>';
+				else
+					$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
 				$excerpt = \wp_trim_words( $text, $length, $excerpt_more_text );
 				// adjust html output same way as for the normal excerpt, 
 				// just force all functions depending on the_excerpt hook
@@ -757,6 +780,7 @@ class Widget extends \WP_Widget {
 			$ret .= apply_filters('cpw_excerpt',$excerpt);
         }
         
+		// Comments
         if ( isset( $instance['comment_num'] ) && $instance['comment_num']) {
             $ret .= '<p class="comment-num';
             if ( !isset( $instance['disable_css'] ) ) {
@@ -767,6 +791,7 @@ class Widget extends \WP_Widget {
             $ret .= '</p>';
         }
 
+		// Author
         if ( isset( $instance['author'] ) && $instance['author']) {
             $ret .= '<p class="post-author ';
             if( !isset( $instance['disable_css'] ) ) { 
@@ -774,13 +799,17 @@ class Widget extends \WP_Widget {
             } 
             $ret .= '">';
             global $authordata;
-            $link = sprintf(
-                '<a href="%1$s" title="%2$s" rel="author">%3$s</a>',
-                esc_url( get_author_posts_url( $authordata->ID, $authordata->user_nicename ) ),
-                esc_attr( sprintf( __( 'Posts by %s' ), get_the_author() ) ),
-                get_the_author()
-            );
-            $ret .= $link; 
+			if ($everything_is_link) {
+				$ret .= get_the_author();
+			} else {
+				$link = sprintf(
+					'<a href="%1$s" title="%2$s" rel="author">%3$s</a>',
+					esc_url( get_author_posts_url( $authordata->ID, $authordata->user_nicename ) ),
+					esc_attr( sprintf( __( 'Posts by %s' ), get_the_author() ) ),
+					get_the_author()
+				);
+				$ret .= $link; 
+			}
             $ret .= '</p>';
         }
         
@@ -824,7 +853,7 @@ class Widget extends \WP_Widget {
             if( isset($instance["excerpt_more_text"]) && ltrim($instance["excerpt_more_text"]) != '') {
                 add_filter('excerpt_more', array($this,'excerpt_more_filter'));
             }
-			
+
             if( isset( $instance['excerpt_allow_html'] ) ) {
                 remove_filter('get_the_excerpt', 'wp_trim_excerpt');
                 add_filter('the_excerpt', array($this,'allow_html_excerpt'));
@@ -1151,12 +1180,13 @@ class Widget extends \WP_Widget {
 	 */
 	function form($instance) {
 		if (count($instance) == 0) { // new widget, use defaults
-			$instance = default_settings();
-		} else { // in pre 4.7 widget the excerpt filter is on
-			if (!isset($instance['excerpt_filters']))
-				$instance['excerpt_filters'] = 'on';
-		}
+ 			$instance = default_settings();
+ 		} else { // updated widgets come from =< 4.6 excerpt filter is on
+ 			if (!isset($instance['excerpt_filters']))
+ 				$instance['excerpt_filters'] = 'on';
+ 		}
 		$instance = wp_parse_args( ( array ) $instance, array(
+			'everything_is_link'              => false,
 			'footer_link'                     => '',
 			'hide_post_titles'                => '',
 			'excerpt'                         => '',
@@ -1173,6 +1203,7 @@ class Widget extends \WP_Widget {
 			'hide_social_buttons'             => '',
 		) );
 
+		$everything_is_link				 = $instance['everything_is_link'];
 		$footer_link                     = $instance['footer_link'];
 		$hide_post_titles                = $instance['hide_post_titles'];
 		$excerpt                         = $instance['excerpt'];
@@ -1228,13 +1259,19 @@ class Widget extends \WP_Widget {
 			<h4 data-panel="details"><?php _e('Post details','category-posts')?></h4>
 			<div>
 				<p>
+					<label for="<?php echo $this->get_field_id("everything_is_link"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("everything_is_link"); ?>" name="<?php echo $this->get_field_name("everything_is_link"); ?>"<?php checked( (bool) $everything_is_link, true ); ?> />
+						<?php _e( 'Everything is a link','category-posts' ); ?>
+					</label>
+				</p>
+				<p>
 					<label for="<?php echo $this->get_field_id("hide_post_titles"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_post_titles"); ?>" name="<?php echo $this->get_field_name("hide_post_titles"); ?>"<?php checked( (bool) $instance["hide_post_titles"], true ); ?> />
 						<?php _e( 'Hide post titles','category-posts' ); ?>
 					</label>
 				</p>
 				<p>
-					<label for="<?php echo $this->get_field_id("excerpt"); ?>">
+					<label for="<?php echo $this->get_field_id("excerpt"); ?>" onchange="javascript:cwp_namespace.toggleExcerptPanel(this)">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt"); ?>" name="<?php echo $this->get_field_name("excerpt"); ?>"<?php checked( (bool) $instance["excerpt"], true ); ?> />
 						<?php _e( 'Show post excerpt','category-posts' ); ?>
 					</label>
@@ -1246,35 +1283,25 @@ class Widget extends \WP_Widget {
 					</label>
 				</p>
 				<p>
-					<label for="<?php echo $this->get_field_id("excerpt_length"); ?>">
-						<?php _e( 'Excerpt length (in words):','category-posts' ); ?>
-					</label>
-					<input style="text-align: center; width:30%;" type="number" min="0" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" />
-				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("excerpt_more_text"); ?>">
-						<?php _e( 'Excerpt \'more\' text:','category-posts' ); ?>
-					</label>
-					<input class="widefat" style="width:50%;" placeholder="<?php _e('... more','category-posts')?>" id="<?php echo $this->get_field_id("excerpt_more_text"); ?>" name="<?php echo $this->get_field_name("excerpt_more_text"); ?>" type="text" value="<?php echo esc_attr($instance["excerpt_more_text"]); ?>" />
-				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("date"); ?>">
+					<label for="<?php echo $this->get_field_id("date"); ?>" onchange="javascript:cwp_namespace.toggleDatePanel(this)">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("date"); ?>"<?php checked( (bool) $instance["date"], true ); ?> />
 						<?php _e( 'Show post date','category-posts' ); ?>
 					</label>
 				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("date_format"); ?>">
-						<?php _e( 'Date format:','category-posts' ); ?>
-					</label>
-					<input class="text" placeholder="j M Y" id="<?php echo $this->get_field_id("date_format"); ?>" name="<?php echo $this->get_field_name("date_format"); ?>" type="text" value="<?php echo esc_attr($instance["date_format"]); ?>" size="8" />
-				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("date_link"); ?>">
-						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date_link"); ?>" name="<?php echo $this->get_field_name("date_link"); ?>"<?php checked( (bool) $instance["date_link"], true ); ?> />
-						<?php _e( 'Make widget date link','category-posts' ); ?>
-					</label>
-				</p>
+				<div class="cpwp_ident categoryposts-data-panel-date" style="display:<?php echo ((bool) $date) ? 'block' : 'none'?>">
+					<p>
+						<label for="<?php echo $this->get_field_id("date_format"); ?>">
+							<?php _e( 'Date format:','category-posts' ); ?>
+						</label>
+						<input class="text" placeholder="j M Y" id="<?php echo $this->get_field_id("date_format"); ?>" name="<?php echo $this->get_field_name("date_format"); ?>" type="text" value="<?php echo esc_attr($instance["date_format"]); ?>" size="8" />
+					</p>
+					<p>
+						<label for="<?php echo $this->get_field_id("date_link"); ?>">
+							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date_link"); ?>" name="<?php echo $this->get_field_name("date_link"); ?>"<?php checked( (bool) $instance["date_link"], true ); ?> />
+							<?php _e( 'Make widget date link','category-posts' ); ?>
+						</label>
+					</p>
+				</div>
 				<p>
 					<label for="<?php echo $this->get_field_id("comment_num"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("comment_num"); ?>" name="<?php echo $this->get_field_name("comment_num"); ?>"<?php checked( (bool) $instance["comment_num"], true ); ?> />
@@ -1312,7 +1339,6 @@ class Widget extends \WP_Widget {
 					</label>
 				</p>
 			</div>
-			<?php do_action('cpwp_after_footer_panel',$this,$instance)?>
             <p><a href="<?php echo get_edit_user_link().'#'.__NAMESPACE__ ?>"><?php _e('Widget admin behaviour settings','category-posts')?></a></p>			
             <p><a target="_blank" href="<?php echo CAT_POST_DOC_URL ?>"><?php _e('Documentation','category-posts'); ?></a></p>
             <p><?php echo sprintf( wp_kses( __( 'We are on <a href="%1$s">Facebook</a> and <a href="%2$s">Twitter</a>.', 'category-posts' ), array(  'a' => array( 'href' => array() ) ) ), esc_url( 'https://www.facebook.com/TipTopPress' ), esc_url( 'https://twitter.com/TipTopPress' ) ); ?></br></br></p>
@@ -1581,6 +1607,7 @@ function default_settings()  {
 				'hide_if_empty'                   => false,
 				'hide_social_buttons'             => '',
 				'no_cat_childs'                   => false,
+				'everything_is_link'			  => false,
 				);
 }
 
@@ -1687,7 +1714,14 @@ function customize_register($wp_customize) {
 				
 			foreach ($meta as $k => $m) {
 				$m = wp_parse_args($m,default_settings());
-
+				
+				if (count($meta) == 0) { // new widget, use defaults
+					;
+				} else { // updated widgets come from =< 4.6 excerpt filter is on
+					if (!isset($m['excerpt_filters']))
+						$m['excerpt_filters'] = 'on';
+				}
+				
 				$section_title = $k;
 				if ($section_title == '')
 					$section_title = __('[shortcode]', 'category-posts');
@@ -2011,7 +2045,7 @@ class virtualWidget {
 	 *  @since 4.7
 	 */
 	function getCSSRules($is_shortcode,&$ret) {
-		$rules = array( // ruless that should be applied to all widgets
+		$rules = array( // rules that should be applied to all widgets
 			'.cat-post-item span.cat-post-css-cropping img {max-width: initial;	max-height: initial;}',
 			'.cat-post-title {display: inline-block; font-size: 15px;}',
 			'.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}'.
@@ -2025,20 +2059,20 @@ class virtualWidget {
 			'.cat-post-item .cat-post-css-cropping span {margin: 5px 10px 5px 0;  overflow: hidden; display:inline-block}',
 			'.cat-post-item .cat-post-css-cropping img {margin: initial;}',
 	/* White, Dark, Scale, Blur */
-			'li a.cat-post-white img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
-			'li a.cat-post-dark img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
-			'li a.cat-post-scale img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
-			'li a.cat-post-blur img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
+			'.cat-post-white img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
+			'.cat-post-dark img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
+			'.cat-post-scale img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
+			'.cat-post-blur img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
 	/* White */
-			'li a.cat-post-white {background-color: white;}',
-			'li a.cat-post-white img:hover {opacity: 0.8;}',
+			'.cat-post-white {background-color: white;}',
+			'.cat-post-white img:hover {opacity: 0.8;}',
 	/* Dark */
-			'li a.cat-post-dark img:hover {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}',
+			'.cat-post-dark img:hover {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}',
 	/* Scale */
-			'li a.cat-post-scale span {overflow: hidden; float: left; margin: 5px 10px 5px 0;}',
-			'li a.cat-post-scale img {margin: initial; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
-			'li a.cat-post-scale img:hover {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}',
-			'li a.cat-post-blur img:hover {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}',
+			'.cat-post-scale span {overflow: hidden; margin: 5px 10px 5px 0;}',
+			'.cat-post-scale img {margin: initial; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
+			'.cat-post-scale img:hover {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}',
+			'.cat-post-blur img:hover {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}',
 		);
 		
 		$settings = self::$collection[$this->id];

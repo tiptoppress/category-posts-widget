@@ -1,9 +1,9 @@
 === Category Posts Widget ===
-Contributors: mkrdip, mark-k, kometschuh
+Contributors: mkrdip, mark-k, kometschuh,
 Donate link: http://mkrdip.me/donate
-Tags: category, posts, widget, posts widget, recent posts, category recent posts
+Tags: category, categories, posts, widget, posts widget, recent posts, category recent posts, shortcode, sidebar, excerpt, multiple widgets
 Requires at least: 2.8
-Tested up to: 4.6
+Tested up to: 4.7
 Stable tag: 4.6.2
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -115,7 +115,17 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 * Fluid images for Responsive Layouts
 * Set a thumbnail as default thumbnail
 * Add option to enable excerpt filters from Themes and plugins
+<<<<<<< HEAD
 * Add option to enable/disable social buttons, banner, ... in the excerpt
+=======
+* Add option to disable social buttons, banner, ... in the excerpt
+* Add dropdownbox entry for 'all' categories
+* Add option to disable subcategories
+* Add insert shortcode buttons to the editor toolbar
+* Use WP user profile for settings ('auto close' and if the shortcode button appears in the editor toolbar)
+* Simple API for external use
+* Support localization with translate.wordpress.org: Portuguese (Brazil) thank you [Henrique Vianna](https://profiles.wordpress.org/hvianna/) and German by [Daniel Floeter](https://profiles.wordpress.org/kometschuh/)
+>>>>>>> 4.7
 * Remove allow_html option (Instead we recommend to use the [manual excerpt](https://codex.wordpress.org/Excerpt#How_to_add_excerpts_to_posts) or we support this option furthermore as filter hook in the premium version)
 
 = 4.6.2 - August 28th 2016 =
