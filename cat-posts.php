@@ -1690,7 +1690,7 @@ function customize_register($wp_customize) {
 
 				$section_title = $k;
 				if ($section_title == '')
-					$section_title = __('(no name)', 'category-posts');
+					$section_title = __('[shortcode]', 'category-posts');
 				
 				$wp_customize->add_section( __NAMESPACE__.'-'.$p->id.'-'.$k, array(
 					'title'           => $section_title,
