@@ -2058,21 +2058,6 @@ class virtualWidget {
 			'.cat-post-item:after {content: ""; display: table;	clear: both;}',
 			'.cat-post-item .cat-post-css-cropping span {margin: 5px 10px 5px 0;  overflow: hidden; display:inline-block}',
 			'.cat-post-item .cat-post-css-cropping img {margin: initial;}',
-	/* White, Dark, Scale, Blur */
-			'.cat-post-white img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
-			'.cat-post-dark img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
-			'.cat-post-scale img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
-			'.cat-post-blur img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
-	/* White */
-			'.cat-post-white {background-color: white;}',
-			'.cat-post-white img:hover {opacity: 0.8;}',
-	/* Dark */
-			'.cat-post-dark img:hover {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}',
-	/* Scale */
-			'.cat-post-scale span {overflow: hidden; margin: 5px 10px 5px 0;}',
-			'.cat-post-scale img {margin: initial; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
-			'.cat-post-scale img:hover {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}',
-			'.cat-post-blur img:hover {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}',
 		);
 		
 		$settings = self::$collection[$this->id];
@@ -2092,8 +2077,33 @@ class virtualWidget {
 				$rules[] = '.cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
 				$rules[] = '.cat-post-item:last-child {border-bottom: none;}';
 			}
+			
 			if (!(isset($settings['thumbTop']) && $settings['thumbTop'])) {
 				$rules[] = '.cat-post-thumbnail {float:left;}';
+			}
+			
+			if (isset($settings['thumb_hover'])) {
+				switch $settings['thumb_hover'] {
+					case 'white':
+						$rules[] = '.cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+						$rules[] = '.cat-post-white {background-color: white;}';
+						$rules[] = '.cat-post-white img:hover {opacity: 0.8;}';
+						break;
+					case 'dark':
+						$rules[] = '.cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
+						$rules[] = '.cat-post img:hover {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}';
+						break;
+					case 'scale':
+						$rules[] = '.cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+						$rules[] = '.cat-post-scale span {overflow: hidden; margin: 5px 10px 5px 0;}';
+						$rules[] = '.cat-post-scale img {margin: initial; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+						$rules[] = '.cat-post-scale img:hover {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}';
+						break;
+					case 'blur':
+						$rules[] = '.cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
+						$rules[] = '.cat-post-blur img:hover {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}';
+						break
+				}
 			}
 								
 			foreach ($rules as $rule) {
