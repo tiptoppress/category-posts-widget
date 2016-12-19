@@ -18,7 +18,7 @@ Adds a widget that shows the most recent posts from a single category.
 Category Posts Widget is a light widget designed to do one thing and do it well: display the most recent posts from a certain category.
 
 ### Term and Category based Posts Widget
-This is the premium version of this free widget here and available on <a target="_blank" href="http://tiptoppress.com/">tiptoppress.com</a> created for big Wordpress sites.
+This is the premium version of this free widget here and available on <a target="_blank" href="http://tiptoppress.com/?utm_source=github&utm_campaign=premium_widget_cpw&utm_medium=web">tiptoppress.com</a> created for big Wordpress sites.
 We've also started creating free widget extensions for the Premium Widget. The first extension is the <a href="https://github.com/tiptoppress/term-posts-excerpt-extension">Excerpt Extension</a>.
 
 ### Premium features
@@ -31,13 +31,13 @@ We've also started creating free widget extensions for the Premium Widget. The f
 * Mouse hover effects for post thumbnail
 * E-Mail support
 * All free features
-* More [examples on the demo pages](http://demo.tiptoppress.com/?utm_source=wordpress_org&utm_campaign=demo_cpw&utm_medium=web)
+* More [examples on the demo pages](http://demo.tiptoppress.com/?utm_source=github&utm_campaign=demo_cpw&utm_medium=web)
 
 = Features =
 * Shortcode (Easily change all Shortcode options in the customizer.)
 * For editing shortcode adds a Customizer link to the admin-bar ("With one click to the Customizer").
 * Option to show post thumbnail & set dimensions by width & height.
-* Option for <a target="_blank" href="http://tiptoppress.com/css-image-crop/?utm_source=wordpress_org&utm_campaign=features_crop_cpw&utm_medium=web">client-side cropped thumbnail dimensions</a> by width & height.
+* Option for <a target="_blank" href="http://tiptoppress.com/css-image-crop/?utm_source=github&utm_campaign=features_crop_cpw&utm_medium=web">client-side cropped thumbnail dimensions</a> by width & height.
 * Option to set mouse hover effects for post thumbnail.
 * Jetpack 'Social buttons on posts' support.
 * Option to hide social buttons on output.
@@ -63,10 +63,10 @@ We've also started creating free widget extensions for the Premium Widget. The f
 * Localization support.
 
 ### Documentation
-* Full documentation on [tiptoppress.com](http://tiptoppress.com/category-posts-widget/4-7/?utm_source=wordpress_org&utm_campaign=documentation_4_6_cpw&utm_medium=web)
-* Shortcode: Use [catposts] [in the content and edit options in the customizer](http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content/?utm_source=wordpress_org&utm_campaign=documentation_shortcode_cpw&utm_medium=web)
+* Full documentation on [tiptoppress.com](http://tiptoppress.com/category-posts-widget/4-7/?utm_source=github&utm_campaign=documentation_4_6_cpw&utm_medium=web)
+* Shortcode: Use [catposts] [in the content and edit options in the customizer](http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content/?utm_source=github&utm_campaign=documentation_shortcode_cpw&utm_medium=web)
 * Formatting date and time: See <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>
-* Widget <a target="_blank" href="http://tiptoppress.com/category/widget-customization-and-filter-extensions/?utm_source=wordpress_org&utm_campaign=documentation_filter_cpw&utm_medium=web">customization and filter extensions</a>
+* Widget <a target="_blank" href="http://tiptoppress.com/category/widget-customization-and-filter-extensions/?utm_source=github&utm_campaign=documentation_filter_cpw&utm_medium=web">customization and filter extensions</a>
 
 ### Contribute
 While using this plugin if you find any bug or any conflict, please submit an issue at 
@@ -112,7 +112,7 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 3. Use shortcode [catposts] in the content and edit options in the customizer.
 
 ## Changelog
-#### [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=wordpress_org&utm_campaign=changelog_cpw&utm_medium=web)
+#### [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=github&utm_campaign=changelog_cpw&utm_medium=web)
 
 #### 4.7.1 - 
 * Support multiple shortcodes in content
