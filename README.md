@@ -33,7 +33,7 @@ We've also started creating free widget extensions for the Premium Widget. The f
 * All free features
 * More [examples on the demo pages](http://demo.tiptoppress.com/?utm_source=github&utm_campaign=demo_cpw&utm_medium=web)
 
-= Features =
+### Features
 * Shortcode (Easily change all Shortcode options in the customizer.)
 * For editing shortcode adds a Customizer link to the admin-bar ("With one click to the Customizer").
 * Option to show post thumbnail & set dimensions by width & height.
