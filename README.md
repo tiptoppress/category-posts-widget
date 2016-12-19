@@ -19,7 +19,7 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 
 ### Term and Category based Posts Widget
 This is the premium version of this free widget here and available on <a target="_blank" href="http://tiptoppress.com/">tiptoppress.com</a> created for big Wordpress sites.
-We've also started creating free extensions for the Premium Widget. The first widget extension is the <a href="https://github.com/tiptoppress/term-posts-excerpt-extension">Excerpt Extension</a>.
+We've also started creating free widget extensions for the Premium Widget. The first extension is the <a href="https://github.com/tiptoppress/term-posts-excerpt-extension">Excerpt Extension</a>.
 
 ### Premium features
 * "Post List Alterations"
