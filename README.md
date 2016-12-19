@@ -18,7 +18,8 @@ Adds a widget that shows the most recent posts from a single category.
 Category Posts Widget is a light widget designed to do one thing and do it well: display the most recent posts from a certain category.
 
 ### Term and Category based Posts Widget
-It's the premium version and available on <a target="_blank" href="http://tiptoppress.com/">Tip Top Press</a> created for big Wordpress sites.
+This is the premium version of this free widget here and available on <a target="_blank" href="http://tiptoppress.com/">tiptoppress.com</a> created for big Wordpress sites.
+We've also started creating free extensions for the Premium Widget. The first widget extension is the <a href="https://github.com/tiptoppress/term-posts-excerpt-extension">Excerpt Extension</a>.
 
 ### Premium features
 * "Post List Alterations"
@@ -62,7 +63,7 @@ It's the premium version and available on <a target="_blank" href="http://tiptop
 * Localization support.
 
 ### Documentation
-* Full documentation on [Tiptoppress](http://tiptoppress.com/category-posts-widget/4-7/?utm_source=wordpress_org&utm_campaign=documentation_4_6_cpw&utm_medium=web)
+* Full documentation on [tiptoppress.com](http://tiptoppress.com/category-posts-widget/4-7/?utm_source=wordpress_org&utm_campaign=documentation_4_6_cpw&utm_medium=web)
 * Shortcode: Use [catposts] [in the content and edit options in the customizer](http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content/?utm_source=wordpress_org&utm_campaign=documentation_shortcode_cpw&utm_medium=web)
 * Formatting date and time: See <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>
 * Widget <a target="_blank" href="http://tiptoppress.com/category/widget-customization-and-filter-extensions/?utm_source=wordpress_org&utm_campaign=documentation_filter_cpw&utm_medium=web">customization and filter extensions</a>
