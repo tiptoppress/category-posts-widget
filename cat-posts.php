@@ -15,8 +15,8 @@ namespace categoryPosts;
 // Don't call the file directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
-const CAT_POST_VERSION = "4.7.beta2";
-const CAT_POST_DOC_URL = "http://tiptoppress.com/category-posts-widget/4-7?utm_source=widget_cpw&utm_campaign=documentation_4_7_cpw&utm_medium=form";
+const CAT_POST_VERSION = "4.7.1";
+const CAT_POST_DOC_URL = "http://tiptoppress.com/category-posts-widget/documentation-4-7?utm_source=widget_cpw&utm_campaign=documentation_4_7_cpw&utm_medium=form";
 
 const SHORTCODE_NAME = 'catposts';
 const SHORTCODE_META = 'categoryPosts-shorcode';
