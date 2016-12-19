@@ -119,6 +119,7 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 * Fluid images for Responsive Layouts
 * Set a thumbnail as default thumbnail
 * Add option to enable excerpt filters from Themes and plugins
+* Add option to enabel/disable social buttons, banner, ... in the excerpt
 * Add option to disable social buttons, banner, ... in the excerpt
 * Add dropdownbox entry for 'all' categories
 * Add option to disable subcategories

@@ -78,7 +78,7 @@ class testWidgetFront extends WP_UnitTestCase {
                         array());
         $out = removeSpaceBetweenTags(ob_get_contents());
         ob_end_clean();
-        $this->assertEquals('Recent Posts<ul></ul>',$out);
+        $this->assertEquals('Recent Posts<ul id="category-posts--internal" class="category-posts-internal"></ul>',$out);
     }
 
     
@@ -381,6 +381,10 @@ class testWidgetFront extends WP_UnitTestCase {
         
         $exclude_current = array('whatever',true, null,false);
 
+        $archivetests = array();
+        $archiveresults = array();
+        $posttest = array();
+        $postresults = array();
         foreach ($sort_criteria as $ksc=>$sc) 
             foreach ($sort_order as $kso => $so) 
                 foreach ($cats as $kcat => $cat) 
@@ -416,17 +420,27 @@ class testWidgetFront extends WP_UnitTestCase {
 										if ($thumb)
 											$expected['meta_query'] = $hidethumbs_results[$kt];
 											
-										// test archive type of page
-										$this->go_to('/');
-										$this->assertEquals($expected,$widget->queryArgs($instance));
+										// tests for archive page
+										$archivetests[] = $instance;
+										$archiveresults[] = $expected;
 										
-										// test single post page
+										
+										// tests for single post page
 										if ($exclude)
 											$expected['post__not_in'] = array($pid);
-										$this->go_to('/?p='.$pid);
-										$this->assertEquals($expected,$widget->queryArgs($instance));
+										$posttests[] = $instance;
+										$postresults[] = $expected;
 									}
                     
+        // test archive type of page
+        $this->go_to('/');
+        foreach ($archivetests as $k => $instance)
+            $this->assertEquals($archiveresults[$k],$widget->queryArgs($instance));
+            
+        // test single post page
+        $this->go_to('/?p='.$pid);
+        foreach ($posttests as $k => $instance)
+            $this->assertEquals($postresults[$k],$widget->queryArgs($instance));
     }
 
     /**
@@ -440,6 +454,8 @@ class testWidgetFront extends WP_UnitTestCase {
         global $wp_version;
         
         $compare_to = $widget->the_post_thumbnail($size);
+		$compare_to = preg_replace('/ alt="[^"]*"/','',$compare_to);
+		
         if (version_compare($wp_version, '4.5','<')) { // size_WxH and size-{size name} were added to image at 4.5, remove if exist
         }
         if (version_compare($wp_version, '4.4','<')) { // srcset and sizes were added in 4.4
@@ -478,43 +494,43 @@ class testWidgetFront extends WP_UnitTestCase {
         // test no thumb width and height, should get same html
         // there are slight differences with how versions handle "empty" values
         if (version_compare($wp_version, '4.5','<'))  
-            $this->postThumbnailTester('<img width="640" height="480" src="'.$dirurl.'/canola.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="canola.jpg" srcset="'.$dirurl.'/canola-300x225.jpg 300w, '.$dirurl.'/canola.jpg 640w" sizes="(max-width: 640px) 100vw, 640px" />',$widget,array());
+            $this->postThumbnailTester('<img width="640" height="480" src="'.$dirurl.'/canola.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" srcset="'.$dirurl.'/canola-300x225.jpg 300w, '.$dirurl.'/canola.jpg 640w" sizes="(max-width: 640px) 100vw, 640px" />',$widget,array());
         else
-            $this->postThumbnailTester('<img width="640" height="480" src="'.$dirurl.'/canola.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="canola.jpg" srcset="'.$dirurl.'/canola.jpg 640w, '.$dirurl.'/canola-300x225.jpg 300w" sizes="(max-width: 640px) 100vw, 640px" />',$widget,array());
+            $this->postThumbnailTester('<img width="640" height="480" src="'.$dirurl.'/canola.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" srcset="'.$dirurl.'/canola.jpg 640w, '.$dirurl.'/canola-300x225.jpg 300w" sizes="(max-width: 640px) 100vw, 640px" />',$widget,array());
         
-        $this->postThumbnailTester('<img width="10" height="10" src="'.$dirurl.'/canola-150x150.jpg" class="attachment-10x10 size-10x10 wp-post-image" alt="canola.jpg" />',$widget,array(10,''));
+        $this->postThumbnailTester('<img width="10" height="10" src="'.$dirurl.'/canola-150x150.jpg" class="attachment-10x10 size-10x10 wp-post-image" />',$widget,array(10,''));
 
-        $this->postThumbnailTester('<img width="10" height="10" src="'.$dirurl.'/canola-150x150.jpg" class="attachment-10x10 size-10x10 wp-post-image" alt="canola.jpg" />',$widget,array('',10));
+        $this->postThumbnailTester('<img width="10" height="10" src="'.$dirurl.'/canola-150x150.jpg" class="attachment-10x10 size-10x10 wp-post-image" />',$widget,array('',10));
         
         // equal to min thumb size. no manipulation needed
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150);
-        $this->postThumbnailTester('<span><img width="150" height="150" src="'.$dirurl.'/canola-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="canola.jpg" /></span>',
+        $this->postThumbnailTester('<span><img width="150" height="150" src="'.$dirurl.'/canola-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" /></span>',
 								$widget,array(150,150));
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200);
 
         if (version_compare($wp_version, '4.6','<'))  
-			$this->postThumbnailTester('<img width="200" height="150" src="'.$dirurl.'/canola-300x225.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="canola.jpg" srcset="'.$dirurl.'/canola-300x225.jpg 300w, '.$dirurl.'/canola.jpg 640w" sizes="(max-width: 200px) 100vw, 200px" />',
+			$this->postThumbnailTester('<img width="200" height="150" src="'.$dirurl.'/canola-300x225.jpg" class="attachment-200x200 size-200x200 wp-post-image" srcset="'.$dirurl.'/canola-300x225.jpg 300w, '.$dirurl.'/canola.jpg 640w" sizes="(max-width: 200px) 100vw, 200px" />',
 								$widget,array(200,200)
 							);
 		else
-			$this->postThumbnailTester('<span><img width="200" height="150" src="'.$dirurl.'/canola.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="canola.jpg" srcset="'.$dirurl.'/canola.jpg 640w, '.$dirurl.'/canola-300x225.jpg 300w" sizes="(max-width: 200px) 100vw, 200px" /></span>',
+			$this->postThumbnailTester('<span><img width="200" height="150" src="'.$dirurl.'/canola.jpg" class="attachment-200x200 size-200x200 wp-post-image" srcset="'.$dirurl.'/canola.jpg 640w, '.$dirurl.'/canola-300x225.jpg 300w" sizes="(max-width: 200px) 100vw, 200px" /></span>',
 								$widget,array(200,200)
 							);
 			
 		// Use with "use_css_cropping"
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150,'use_css_cropping' => true);
-		$this->postThumbnailTester('<span style="width:150px;height:150px;"><img style="margin-top:-0px;height:150px;clip:rect(auto,150px,auto,0px);width:auto;max-width:initial;" width=\'150\' height=\'150\' src="'.$dirurl.'/canola-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="canola.jpg" /></span>',
+		$this->postThumbnailTester('<span style="width:150px;height:150px;"><img style="margin-top:-0px;height:150px;clip:rect(auto,150px,auto,0px);width:auto;max-width:initial;" width=\'150\' height=\'150\' src="'.$dirurl.'/canola-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" /></span>',
 								$widget,array(150,150)
 							);
 
 		$widget->instance=array('thumb_h' => 200,'thumb_w' => 200,'use_css_cropping' => true);
         if (version_compare($wp_version, '4.6','<'))  
-			$this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-33.333333333333px;height:200px;clip:rect(auto,233.33333333333px,auto,33.333333333333px);width:auto;max-width:initial;" width=\'266.66666666667\' height=\'200\' src="'.$dirurl.'/canola-300x225.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="canola.jpg" srcset="'.$dirurl.'/canola-300x225.jpg 300w, '.$dirurl.'/canola.jpg 3w" sizes="(max-width: 266.66666666667px) 100vw, 266.66666666667px" /></span>',
+			$this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-33.333333333333px;height:200px;clip:rect(auto,233.33333333333px,auto,33.333333333333px);width:auto;max-width:initial;" width=\'266.66666666667\' height=\'200\' src="'.$dirurl.'/canola-300x225.jpg" class="attachment-200x200 size-200x200 wp-post-image" srcset="'.$dirurl.'/canola-300x225.jpg 300w, '.$dirurl.'/canola.jpg 3w" sizes="(max-width: 266.66666666667px) 100vw, 266.66666666667px" /></span>',
 								 $widget,array(200,200)
 							);
         else 
-			$this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-33.333333333333px;height:200px;clip:rect(auto,233.33333333333px,auto,33.333333333333px);width:auto;max-width:initial;" width=\'266.66666666667\' height=\'200\' src="'.$dirurl.'/canola.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="canola.jpg" srcset="'.$dirurl.'/canola.jpg 640w, '.$dirurl.'/canola-300x225.jpg 300w" sizes="(max-width: 266.66666666667px) 100vw, 266.66666666667px" /></span>',
+			$this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-33.333333333333px;height:200px;clip:rect(auto,233.33333333333px,auto,33.333333333333px);width:auto;max-width:initial;" width=\'266.66666666667\' height=\'200\' src="'.$dirurl.'/canola.jpg" class="attachment-200x200 size-200x200 wp-post-image" srcset="'.$dirurl.'/canola.jpg 640w, '.$dirurl.'/canola-300x225.jpg 300w" sizes="(max-width: 266.66666666667px) 100vw, 266.66666666667px" /></span>',
 								 $widget,array(200,200)
 							);
 
@@ -530,23 +546,23 @@ class testWidgetFront extends WP_UnitTestCase {
 		$widget->instance=array('use_css_cropping' => false);
 		
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150);
-		$this->postThumbnailTester('<span><img width="50" height="50" src="'.$dirurl.'/test-image.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="test-image.jpg" /></span>',
+		$this->postThumbnailTester('<span><img width="50" height="50" src="'.$dirurl.'/test-image.jpg" class="attachment-150x150 size-150x150 wp-post-image" /></span>',
 								$widget,array(150,150)
 							);
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200);
-		$this->postThumbnailTester('<span><img width="50" height="50" src="'.$dirurl.'/test-image.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="test-image.jpg" /></span>',
+		$this->postThumbnailTester('<span><img width="50" height="50" src="'.$dirurl.'/test-image.jpg" class="attachment-200x200 size-200x200 wp-post-image" /></span>',
 								$widget,array(200,200)
 							);
 
 		// Use with "use_css_cropping"
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150,'use_css_cropping' => true);
-		$this->postThumbnailTester('<span style="width:150px;height:150px;"><img style="margin-top:-0px;height:150px;clip:rect(auto,150px,auto,0px);width:auto;max-width:initial;" width=\'150\' height=\'150\' src="'.$dirurl.'/test-image.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="test-image.jpg" /></span>',
+		$this->postThumbnailTester('<span style="width:150px;height:150px;"><img style="margin-top:-0px;height:150px;clip:rect(auto,150px,auto,0px);width:auto;max-width:initial;" width=\'150\' height=\'150\' src="'.$dirurl.'/test-image.jpg" class="attachment-150x150 size-150x150 wp-post-image" /></span>',
 								$widget,array(150,150)
 							);
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200,'use_css_cropping' => true);
-		$this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-top:-0px;height:200px;clip:rect(auto,200px,auto,0px);width:auto;max-width:initial;" width=\'200\' height=\'200\' src="'.$dirurl.'/test-image.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="test-image.jpg" /></span>',
+		$this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-top:-0px;height:200px;clip:rect(auto,200px,auto,0px);width:auto;max-width:initial;" width=\'200\' height=\'200\' src="'.$dirurl.'/test-image.jpg" class="attachment-200x200 size-200x200 wp-post-image" /></span>',
 								$widget,array(200,200)
 							);
 
@@ -562,38 +578,38 @@ class testWidgetFront extends WP_UnitTestCase {
 		$widget->instance=array('use_css_cropping' => false);
 		
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150);
-		$this->postThumbnailTester('<span><img width="150" height="150" src="'.$dirurl.'/33772-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="33772.jpg" /></span>',
+		$this->postThumbnailTester('<span><img width="150" height="150" src="'.$dirurl.'/33772-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" /></span>',
 								$widget,array(150,150)
 							);
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200);
         if (version_compare($wp_version, '4.5','<'))  
-            $this->postThumbnailTester('<img width="825" height="510" src="'.$dirurl.'/33772-825x510.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="33772.jpg" />',$widget,array());
+            $this->postThumbnailTester('<img width="825" height="510" src="'.$dirurl.'/33772-825x510.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" />',$widget,array());
         else if (version_compare($wp_version, '4.6','<'))  
-            $this->postThumbnailTester('<img width="200" height="113" src="'.$dirurl.'/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="'.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 200px) 100vw, 200px" />',
+            $this->postThumbnailTester('<img width="200" height="113" src="'.$dirurl.'/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" srcset="'.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 200px) 100vw, 200px" />',
 								$widget,array(200,200)
 							);
 		else
-			$this->postThumbnailTester('<span><img width="200" height="113" src="'.$dirurl.'/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="'.$dirurl.'/33772.jpg 1920w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 200px) 100vw, 200px" /></span>',
+			$this->postThumbnailTester('<span><img width="200" height="113" src="'.$dirurl.'/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" srcset="'.$dirurl.'/33772.jpg 1920w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 200px) 100vw, 200px" /></span>',
 					$widget,array(200,200)
 				);
 
 		// Use with "use_css_cropping"
         $widget->instance=array('thumb_h' => 150,'thumb_w' => 150,'use_css_cropping' => true);
-		$this->postThumbnailTester('<span style="width:150px;height:150px;"><img style="margin-top:-0px;height:150px;clip:rect(auto,150px,auto,0px);width:auto;max-width:initial;" width=\'150\' height=\'150\' src="'.$dirurl.'/33772-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" alt="33772.jpg" /></span>',
+		$this->postThumbnailTester('<span style="width:150px;height:150px;"><img style="margin-top:-0px;height:150px;clip:rect(auto,150px,auto,0px);width:auto;max-width:initial;" width=\'150\' height=\'150\' src="'.$dirurl.'/33772-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" /></span>',
 								$widget,array(150,150)
 							);
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200,'use_css_cropping' => true);
         if (version_compare($wp_version, '4.5','<'))  
-            $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" /></span>',
+            $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" /></span>',
 								$widget,array(200,200));
         else if (version_compare($wp_version, '4.6','<'))  
-            $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="'.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
+            $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" srcset="'.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
 								$widget,array(200,200)
 							);
         else
-            $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="'.$dirurl.'/33772.jpg 1920w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
+            $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" srcset="'.$dirurl.'/33772.jpg 1920w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
 								$widget,array(200,200)
 							);
 			
@@ -605,26 +621,26 @@ class testWidgetFront extends WP_UnitTestCase {
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200,'use_css_cropping' => true, 'default_thunmbnail' => $thumbnail_id);
         if (version_compare($wp_version, '4.5','<'))  
-            $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" /></span>',
+            $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" /></span>',
 								$widget,array(200,200));
         else if (version_compare($wp_version, '4.6','<'))  
-            $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="'.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
+            $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" srcset="'.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
 								$widget,array(200,200)
 							);
         else
-            $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="'.$dirurl.'/33772.jpg 1920w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
+            $this->postThumbnailTester('<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="'.$dirurl.'/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" srcset="'.$dirurl.'/33772.jpg 1920w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
 								$widget,array(200,200)
 							);
 
         $widget->instance=array('thumb_h' => 200,'thumb_w' => 200, 'default_thunmbnail' => $thumbnail_id);
         if (version_compare($wp_version, '4.5','<'))  
-            $this->postThumbnailTester('<img width="825" height="510" src="'.$dirurl.'/33772-825x510.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="33772.jpg" />',$widget,array());
+            $this->postThumbnailTester('<img width="825" height="510" src="'.$dirurl.'/33772-825x510.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" />',$widget,array());
         else if (version_compare($wp_version, '4.6','<'))  
-            $this->postThumbnailTester('<img width="200" height="113" src="'.$dirurl.'/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="'.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 200px) 100vw, 200px" />',
+            $this->postThumbnailTester('<img width="200" height="113" src="'.$dirurl.'/33772-768x432.jpg" class="attachment-200x200 size-200x200 wp-post-image" srcset="'.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 200px) 100vw, 200px" />',
 								$widget,array(200,200)
 							);
 		else
-			$this->postThumbnailTester('<span><img width="200" height="113" src="'.$dirurl.'/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" alt="33772.jpg" srcset="'.$dirurl.'/33772.jpg 1920w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 200px) 100vw, 200px" /></span>',
+			$this->postThumbnailTester('<span><img width="200" height="113" src="'.$dirurl.'/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" srcset="'.$dirurl.'/33772.jpg 1920w, '.$dirurl.'/33772-300x169.jpg 300w, '.$dirurl.'/33772-768x432.jpg 768w, '.$dirurl.'/33772-1024x576.jpg 1024w" sizes="(max-width: 200px) 100vw, 200px" /></span>',
 					$widget,array(200,200)
 				);
     }
@@ -665,6 +681,20 @@ class testWidgetFront extends WP_UnitTestCase {
         $this->assertEquals($tempid,get_the_ID());
     }
     
+	/**
+	 *  Helper function to test that excerptmore filter is triggered
+	 */
+	function excerptMoreFilter($v) {
+		return '[more test]';
+	}
+	
+	/**
+	 *  Helper function to test that excerpt length filter is triggered
+	 */
+	function excerptLengthFilter($v) {
+		return 2;
+	}
+	
     /**
      *  test that the excerpt filters are removed after the loop
      *  
@@ -678,7 +708,10 @@ class testWidgetFront extends WP_UnitTestCase {
         $pid = $this->factory->post->create(array('post_title'=>'test','post_status'=>'publish',
                                                     'post_content'=>'more then one word',
                                                     'post_excerpt'=>'')); 
-                    
+       
+		add_filter('excerpt_more',array($this,'excerptMoreFilter'),10);
+		add_filter('excerpt_length',array($this,'excerptLengthFilter'),10);
+
         // test filters not applied when excerpt off                    
         $this->go_to('/?p='.$pid);
         ob_start();
@@ -688,7 +721,16 @@ class testWidgetFront extends WP_UnitTestCase {
                               'after_title'=>'',
                               ),array('cat'=>$cid,'num'=>10,'excerpt_length'=>1));
         $o = removeSpaceBetweenTags(ob_get_clean());
-        $this->assertEquals('Uncategorized<ul><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a></li></ul>',$o);
+        $this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a></li></ul>',$o);
+        
+        ob_start();
+        $widget->widget(array('before_widget'=>'',
+                              'after_widget'=>'',
+                              'before_title'=>'',
+                              'after_title'=>'',
+                              ),array('cat'=>$cid,'num'=>10,'excerpt_length'=>1,'excerpt_filters'=>true));
+        $o = removeSpaceBetweenTags(ob_get_clean());
+        $this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a></li></ul>',$o);
         
         ob_start();
         $widget->widget(array('before_widget'=>'',
@@ -697,7 +739,16 @@ class testWidgetFront extends WP_UnitTestCase {
                               'after_title'=>'',
                               ),array('cat'=>$cid,'num'=>10,'excerpt'=>false,'excerpt_length'=>1));
         $o = removeSpaceBetweenTags(ob_get_clean());
-        $this->assertEquals('Uncategorized<ul><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a></li></ul>',$o);
+        $this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a></li></ul>',$o);
+
+        ob_start();
+        $widget->widget(array('before_widget'=>'',
+                              'after_widget'=>'',
+                              'before_title'=>'',
+                              'after_title'=>'',
+                              ),array('cat'=>$cid,'num'=>10,'excerpt'=>false,'excerpt_length'=>1,'excerpt_filters'=>true));
+        $o = removeSpaceBetweenTags(ob_get_clean());
+        $this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a></li></ul>',$o);
 
         // test excerpt length filter
         ob_start();
@@ -707,7 +758,16 @@ class testWidgetFront extends WP_UnitTestCase {
                               'after_title'=>'',
                               ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1));
         $o = removeSpaceBetweenTags(ob_get_clean());
-        $this->assertEquals('Uncategorized<ul><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more &hellip; <a href="http://example.org/?p='.$pid.'" class="more-link">Continue reading <span class="screen-reader-text">test</span></a></p></li></ul>',$o);
+		$this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more[more test]</p></li></ul>',$o);
+        
+        ob_start();
+        $widget->widget(array('before_widget'=>'',
+                              'after_widget'=>'',
+                              'before_title'=>'',
+                              'after_title'=>'',
+                              ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1,'excerpt_filters'=>true));
+        $o = removeSpaceBetweenTags(ob_get_clean());
+		$this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more[more test]</p></li></ul>',$o);
         
         // test excerpt more filter
         ob_start();
@@ -717,8 +777,20 @@ class testWidgetFront extends WP_UnitTestCase {
                               'after_title'=>'',
                               ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1,'excerpt_more_text'=>'blabla'));
         $o = removeSpaceBetweenTags(ob_get_clean());
-        $this->assertEquals('Uncategorized<ul><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more <a class="cat-post-excerpt-more" href="http://example.org/?p='.$pid.'">blabla</a></p></li></ul>',$o);
+        $this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more <a class="cat-post-excerpt-more" href="http://example.org/?p='.$pid.'">blabla</a></p></li></ul>',$o);
         
+        ob_start();
+        $widget->widget(array('before_widget'=>'',
+                              'after_widget'=>'',
+                              'before_title'=>'',
+                              'after_title'=>'',
+                              ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1,'excerpt_more_text'=>'blabla','excerpt_filters'=>true));
+        $o = removeSpaceBetweenTags(ob_get_clean());
+        $this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more <a class="cat-post-excerpt-more" href="http://example.org/?p='.$pid.'">blabla</a></p></li></ul>',$o);
+        
+		remove_filter('excerpt_more',array($this,'excerptMoreFilter'),10);
+		remove_filter('excerpt_length',array($this,'excerptLengthFilter'),10);
+
     }
                                                         
     /**
@@ -735,19 +807,84 @@ class testWidgetFront extends WP_UnitTestCase {
                                                     'post_content'=>'more then one word',
                                                     'post_excerpt'=>'')); 
 
+		add_filter('excerpt_more',array($this,'excerptMoreFilter'),10);
+		add_filter('excerpt_length',array($this,'excerptLengthFilter'),10);
+
         $this->go_to('/?p='.$pid);
         ob_start();
         $widget->widget(array('before_widget'=>'',
                               'after_widget'=>'',
                               'before_title'=>'',
                               'after_title'=>'',
-                              ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1));
+                              ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1,'excerpt_more_text'=>'blabla'));
         ob_end_clean();
         ob_start();
         the_excerpt();
         $excerpt=trim(ob_get_clean());
-        $this->assertEquals('<p>more then one word</p>',$excerpt);
+        $this->assertEquals('<p>more then[more test]</p>',$excerpt);
 
+        ob_start();
+        $widget->widget(array('before_widget'=>'',
+                              'after_widget'=>'',
+                              'before_title'=>'',
+                              'after_title'=>'',
+                              ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1,'excerpt_more_text'=>'blabla','excerpt_filters'=>true));
+        ob_end_clean();
+        ob_start();
+        the_excerpt();
+        $excerpt=trim(ob_get_clean());
+        $this->assertEquals('<p>more then[more test]</p>',$excerpt);
+
+		remove_filter('excerpt_more',array($this,'excerptMoreFilter'),10);
+		remove_filter('excerpt_length',array($this,'excerptLengthFilter'),10);
+
+    }
+	
+    /**
+     *  test that the internal excerpt genertion works
+     *  
+     */
+    function testInternalExcerptGeneration() {
+        $className = NS.'\Widget';
+        $widget = new $className();
+
+        $cid = get_option('default_category');
+
+        $pid = $this->factory->post->create(array('post_title'=>'test','post_status'=>'publish',
+                                                    'post_content'=>'more then one word',
+                                                    'post_excerpt'=>'')); 
+               
+        $this->go_to('/?p='.$pid);
+
+		// test length default
+        ob_start();
+        $widget->widget(array('before_widget'=>'',
+                              'after_widget'=>'',
+                              'before_title'=>'',
+                              'after_title'=>'',
+                              ),array('cat'=>$cid,'num'=>10,'excerpt'=>true, 'excerpt_filters'=>''));
+        $o = removeSpaceBetweenTags(ob_get_clean());
+        $this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more then one word</p></li></ul>',$o);
+        
+		// test more text default
+        ob_start();
+        $widget->widget(array('before_widget'=>'',
+                              'after_widget'=>'',
+                              'before_title'=>'',
+                              'after_title'=>'',
+                              ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1, 'excerpt_filters'=>''));
+        $o = removeSpaceBetweenTags(ob_get_clean());
+        $this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more <a class="cat-post-excerpt-more" href="http://example.org/?p='.$pid.'" title="Continue reading test">[&hellip;]</a></p></li></ul>',$o);
+        
+        ob_start();
+        $widget->widget(array('before_widget'=>'',
+                              'after_widget'=>'',
+                              'before_title'=>'',
+                              'after_title'=>'',
+                              ),array('cat'=>$cid,'num'=>10,'excerpt'=>true,'excerpt_length'=>1,'excerpt_more_text'=>'blabla', 'excerpt_filters'=>''));
+        $o = removeSpaceBetweenTags(ob_get_clean());
+        $this->assertEquals('Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="post-title cat-post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a><p>more <a class="cat-post-excerpt-more" href="http://example.org/?p='.$pid.'" title="Continue reading test">blabla</a></p></li></ul>',$o);
+        
     }
 }
 
@@ -866,6 +1003,7 @@ class testShortCode extends WP_UnitTestCase {
 					'offset' 			   => 1,
 					'hide_social_buttons'  => '',
 					'no_cat_childs'        => false,
+					'excerpt_filters'	   => false,
 				   );
 	}
 	
@@ -987,7 +1125,7 @@ class testShortCode extends WP_UnitTestCase {
 		the_content();
 		$content = ob_get_contents();
 		ob_end_clean();
-		$this->assertEquals('<div id="shortcode-'.$pid.'">Recent Posts<ul>'.
+		$this->assertEquals('<div id="category-posts-shortcode-'.$pid.'" class="category-posts-shortcode">Recent Posts<ul>'.
 							'<li class=\'cat-post-item cat-post-current\'><a class="post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a> </li></ul>'.
 							'</div>',str_replace("\n",'',$content));
 		
@@ -1001,7 +1139,7 @@ class testShortCode extends WP_UnitTestCase {
 		the_content();
 		$content = ob_get_contents();
 		ob_end_clean();
-		$this->assertEquals('<div id="shortcode-'.$pid.'-bla">Recent Posts<ul>'.
+		$this->assertEquals('<div id="category-posts-shortcode-'.$pid.'-bla" class="category-posts-shortcode">Recent Posts<ul>'.
 							'<li class=\'cat-post-item cat-post-current\'><a class="post-title" href="http://example.org/?p='.$pid.'" rel="bookmark">test</a> </li></ul>'.
 							'</div>',str_replace("\n",'',$content));
 	 }

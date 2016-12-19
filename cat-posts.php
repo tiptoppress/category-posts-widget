@@ -59,15 +59,16 @@ function wp_admin_bar_customize_menu() {
 add_action('admin_bar_menu',__NAMESPACE__.'\wp_admin_bar_customize_menu', 35);
 
 function wp_head() {
-	global $shortcodeCollection;
-	global $widgetCollection;
+	
+	$widgetRepository = new virtualWidgetsRepository;
 	
 	$rules = array();
-	foreach ($shortcodeCollection as $widget) {
-		$widget->getCSSRules(true,$rules);
-	}
 	
-	foreach ($widgetCollection as $widget) {
+	foreach ($widgetRepository->getShortcodes() as $widget) {
+			$widget->getCSSRules(true,$rules);
+	}
+
+	foreach ($widgetRepository->getWidgets() as $widget) {
 		$widget->getCSSRules(false,$rules);
 	}
 		
@@ -87,18 +88,6 @@ function wp_head() {
 add_action('wp_head',__NAMESPACE__.'\register_virtual_widgets',0);
 
 /**
- *  Hold a registry of widget virtual widgets to avoid them being distructed
- */
-global $widgetCollection;
-$widgetCollection = array();
-
-/**
- *  Hold a registry of shortcode virtual widgets to avoid them being distructed
- */
-global $shortcodeCollection;
-$shortcodeCollection = array();
-
-/**
  *  Register virtual widgets for all widgets and shortcodes that are going to be displayed on the page
  *  
  *  @return void
@@ -108,14 +97,12 @@ $shortcodeCollection = array();
 function register_virtual_widgets() {
 	global $post;
 	global $wp_registered_widgets;
-	global $widgetCollection;
-	global $shortcodeCollection;
 
+	$repository = new virtualWidgetsRepository;
+	
     // check first for shortcode settings
     if (is_singular()) {
 		$names = shortcode_names(SHORTCODE_NAME,$post->post_content);
-		
-		$shortcodeCollection = array();
 		
 		foreach ($names as $name) {
 			$meta = shortcode_settings($name);
@@ -124,7 +111,7 @@ function register_virtual_widgets() {
 				if ($name != '') // if not defualt name append to the id
 					$id .= '-' . sanitize_title($name); // sanitize to be on the safe side, not sure where when and how this will be used 
 
-				$shortcodeCollection[$name] = new virtualWidget($id,WIDGET_BASE_ID.'-shortcode',$meta);
+				$repository->addShortcode($name, new virtualWidget($id,WIDGET_BASE_ID.'-shortcode',$meta));
 			}
 		}
     }
@@ -145,7 +132,7 @@ function register_virtual_widgets() {
 						$widgetclass = new $class();
 						$allsettings = $widgetclass->get_settings();
 						$settings = isset($allsettings[str_replace($widget_base.'-','',$widget)]) ? $allsettings[str_replace($widget_base.'-','',$widget)] : false;
-						$widgetCollection[$widget] = new virtualWidget($widget,$widget,$settings);
+						$repository->addWidget($widget, new virtualWidget($widget,$widget,$settings));
 					}
 				}
 			}
@@ -770,11 +757,11 @@ class Widget extends \WP_Widget {
             if (isset($instance['excerpt_length']) && ($instance['excerpt_length'] > 0))
                 $length = (int) $instance['excerpt_length'];
             else 
-                $length = 0; // indicate that invalid length is set
+                $length = 55; // use default
 
-			if (!isset($instance['excerpt_filters']) || $instance['excerpt_filters']) // pre 4.7 widgets has filters on
-				$excerpt = apply_filters('the_excerpt', \get_the_excerpt() ,$this,$length);
-			else { // if filters off replicate functionality of core generating excerpt
+			if (!isset($instance['excerpt_filters']) || $instance['excerpt_filters']) { // pre 4.7 widgets has filters on
+				$excerpt = apply_filters('the_excerpt', \get_the_excerpt() );
+			} else { // if filters off replicate functionality of core generating excerpt
 				$text = get_the_content('');
 				$text = strip_shortcodes( $text );
 				$more_text = '[&hellip;]';
@@ -786,6 +773,9 @@ class Widget extends \WP_Widget {
 				else
 					$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
 				$excerpt = \wp_trim_words( $text, $length, $excerpt_more_text );
+				// adjust html output same way as for the normal excerpt, 
+				// just force all functions depending on the_excerpt hook
+				$excerpt = shortcode_unautop(wpautop(convert_chars(convert_smilies(wptexturize($excerpt)))));
 			}
 			$ret .= apply_filters('cpw_excerpt',$excerpt);
         }
@@ -856,12 +846,11 @@ class Widget extends \WP_Widget {
         if (isset($instance['excerpt']) && $instance['excerpt']) {
         
             // Excerpt length filter
-            if ( isset($instance["excerpt_length"]) && ((int) $instance["excerpt_length"]) > 0 ) {
+            if ( isset($instance["excerpt_length"]) && ((int) $instance["excerpt_length"]) > 0) {
                 add_filter('excerpt_length', array($this,'excerpt_length_filter'));
             }
             
-            if( isset($instance["excerpt_more_text"]) && ltrim($instance["excerpt_more_text"]) != '' )
-            {
+            if( isset($instance["excerpt_more_text"]) && ltrim($instance["excerpt_more_text"]) != '') {
                 add_filter('excerpt_more', array($this,'excerpt_more_filter'));
             }
 
@@ -919,8 +908,11 @@ class Widget extends \WP_Widget {
 
 			if (!(isset($instance['is_shortcode']) && $instance['is_shortcode'])) // the intenal id is needed only for widgets
 				echo '<ul id="'.WIDGET_BASE_ID.'-'.$this->number.'-internal'.'" class="'.WIDGET_BASE_ID.'-internal'."\">\n";
+			else 
+				echo '<ul>';
 
-            $this->setExcerpFilters($instance);         
+			if (!isset($instance['excerpt_filters']) || $instance['excerpt_filters']) // pre 4.7 widgets has filters on
+				$this->setExcerpFilters($instance);         
 			while ( $cat_posts->have_posts() )
 			{
                 $cat_posts->the_post();              
@@ -931,7 +923,8 @@ class Widget extends \WP_Widget {
             echo $this->footerHTML($instance);
 			echo $after_widget;
        
-            $this->removeExcerpFilters($instance);
+			if (!isset($instance['excerpt_filters']) || $instance['excerpt_filters']) // pre 4.7 widgets has filters on
+				$this->removeExcerpFilters($instance);
 			
 			wp_reset_postdata();
 		} 
@@ -1154,10 +1147,12 @@ class Widget extends \WP_Widget {
 						}
 					?>
 				</span>
-				<button type="button" class="cwp_default_thumb_select">
+			</p>
+			<p>
+				<button type="button" class="cwp_default_thumb_select button upload-button">
 					<?php _e('Select image','category-posts')?>
 				</button>
-				<button type="button" class="cwp_default_thumb_remove" <?php if (!$default_thunmbnail) echo 'style="display:none"' ?> >
+				<button type="button" class="cwp_default_thumb_remove button upload-button" <?php if (!$default_thunmbnail) echo 'style="display:none"' ?> >
 					<?php _e('No default','category-posts')?>
 				</button>
             </p>					
@@ -1281,26 +1276,12 @@ class Widget extends \WP_Widget {
 						<?php _e( 'Show post excerpt','category-posts' ); ?>
 					</label>
 				</p>
-				<div class="cpwp_ident categoryposts-data-panel-excerpt" style="display:<?php echo ((bool) $excerpt) ? 'block' : 'none'?>">
-					<p>
-						<label for="<?php echo $this->get_field_id("excerpt_length"); ?>">
-							<?php _e( 'Excerpt length (in words):','category-posts' ); ?>
-						</label>
-						<input style="text-align: center; width:30%;" type="number" min="0" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" />
-					</p>
-					<p>
-						<label for="<?php echo $this->get_field_id("excerpt_more_text"); ?>">
-							<?php _e( 'Excerpt \'more\' text:','category-posts' ); ?>
-						</label>
-						<input class="widefat" style="width:45%;" placeholder="<?php _e('... more','category-posts')?>" id="<?php echo $this->get_field_id("excerpt_more_text"); ?>" name="<?php echo $this->get_field_name("excerpt_more_text"); ?>" type="text" value="<?php echo esc_attr($instance["excerpt_more_text"]); ?>" />
-					</p>
-					<p>
-						<label for="<?php echo $this->get_field_id("excerpt_filters"); ?>" onchange="javascript:cwp_namespace.toggleExcerptFilterPanel(this)">
-							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_filters"); ?>" name="<?php echo $this->get_field_name("excerpt_filters"); ?>"<?php checked( !empty($excerpt_filters), true ); ?> />
-							<?php _e( 'Themes and plugins may override','category-posts' ); ?>
-						</label>
-					</p>
-				</div>
+				<p>
+					<label for="<?php echo $this->get_field_id("excerpt_filters"); ?>" onchange="javascript:cwp_namespace.toggleExcerptFilterPanel(this)">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_filters"); ?>" name="<?php echo $this->get_field_name("excerpt_filters"); ?>"<?php checked( !empty($excerpt_filters), true ); ?> />
+						<?php _e( 'Themes and plugins may override','category-posts' ); ?>
+					</label>
+				</p>
 				<p>
 					<label for="<?php echo $this->get_field_id("date"); ?>" onchange="javascript:cwp_namespace.toggleDatePanel(this)">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("date"); ?>"<?php checked( (bool) $instance["date"], true ); ?> />
@@ -1537,15 +1518,17 @@ function shortcode_settings($name) {
  *  
  */
 function shortcode($attr,$content=null) {
-	global $shortcodeCollection;
+	$repository = new virtualWidgetsRepository;
+	
+	$shortcodes = $repository->getShortcodes();
 	
 	$name = '';
 	if (isset($attr['name']))
 		$name = $attr['name'];
 	
     if (is_singular()) {
-		if (isset($shortcodeCollection[$name])) {
-			return $shortcodeCollection[$name]->getHTML();
+		if (isset($shortcodes[$name])) {
+			return $shortcodes[$name]->getHTML();
         }       
     }
     
@@ -1713,9 +1696,9 @@ function customize_register($wp_customize) {
     $posts = get_posts($args);
     
     if (count($posts) > 0) {
-        $wp_customize->add_section( __NAMESPACE__, array(
+        $wp_customize->add_panel( __NAMESPACE__, array(
             'title'           => __( 'Category Posts Shortcode', 'category-posts' ),
-            'priority'        => 200,
+            'priority'        => 300,
 			'capability' => 'edit_theme_options',
         ) );
         
@@ -1739,6 +1722,17 @@ function customize_register($wp_customize) {
 						$m['excerpt_filters'] = 'on';
 				}
 				
+				$section_title = $k;
+				if ($section_title == '')
+					$section_title = __('[shortcode]', 'category-posts');
+				
+				$wp_customize->add_section( __NAMESPACE__.'-'.$p->id.'-'.$k, array(
+					'title'           => $section_title,
+					'priority'        => 10,
+					'capability' => 'edit_theme_options',
+					'panel' => __NAMESPACE__,
+				) );
+			
 				ob_start();
 				$widget->form($m);
 				$form = ob_get_clean();
@@ -1759,7 +1753,7 @@ function customize_register($wp_customize) {
 
 				$args = array(
 						'label'   => __( 'Layout', 'twentyfourteen' ),
-						'section' => __NAMESPACE__,
+						'section' => __NAMESPACE__.'-'.$p->id.'-'.$k,
 						'form' => $form,
 						'settings' => '_virtual-'.WIDGET_BASE_ID.'['.$p->ID.']['.$k.'][title]',
 						'active_callback' => function () use ($p) { return is_singular() && (get_the_ID()==$p->ID); }
@@ -2026,7 +2020,7 @@ class virtualWidget {
 							'after_title' => ''
 						), $args);
 		$ret = ob_get_clean();
-		$ret = '<div id="'.esc_attr($this->id).'" class="'.esc_attr($this->id).'">'.$ret.'</div>';
+		$ret = '<div id="'.esc_attr($this->id).'" class="'.esc_attr($this->class).'">'.$ret.'</div>';
 		return $ret;		
 	}
 	
@@ -2157,6 +2151,64 @@ class virtualWidget {
 		return self::$collection;
 	}
 	
+}
+
+/**
+ *  Class that implement a simple repository for the virtual widgets representing
+ *  actuall shortcode and widgets
+ *  
+ *  @since 4.7
+ */
+class virtualWidgetsRepository {
+	private static $shortcodeCollection = array();
+	private static $widgetCollection = array();
+	
+	/**
+	 *  Add a virtual widget representing a shortcode to the repository
+	 *  
+	 *  @param string $index A name to identify the specific shortcode
+	 *  @param virtualWidget The virstual widget for it
+	 *  
+	 *  @since 4.7
+	 */
+	function addShortcode($index,$widget) {
+		self::$shortcodeCollection[$index] = $widget;
+	}
+
+	/**
+	 *  Get all the virtual widgets representing actual shortcodes
+	 *  
+	 *  @return array
+	 *  
+	 *  @since 4.7
+	 */
+	function getShortcodes() {
+		return self::$shortcodeCollection;
+	}
+
+	/**
+	 *  Add a virtual widget representing awidget to the repository
+	 *  
+	 *  @param string $index A name to identify the specific widget
+	 *  @param virtualWidget The virstual widget for it
+	 *  
+	 *  @since 4.7
+	 */
+	function addWidget($index,$widget) {
+		self::$widgetCollection[$index] = $widget;
+	}
+
+	/**
+	 *  Get all the virtual widgets representing actual widgets
+	 *  
+	 *  @return array
+	 *  
+	 *  @since 4.7
+	 */
+	function getWidgets() {
+		return self::$widgetCollection;
+	}
+
 }
 
 add_action('wp_loaded',__NAMESPACE__.'\wp_loaded');

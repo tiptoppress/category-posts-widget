@@ -98,9 +98,9 @@
 					img_html += 'width="60" ';
 					img_html += 'height="60" ';
 					img_html += '/>';
-					jQuery(elem).parent().find('.default_thumb_img').html(img_html);
+					jQuery(elem).parent().prev().find('.default_thumb_img').html(img_html);
 					jQuery(elem).parent().find('.cwp_default_thumb_remove').show();
-					jQuery(elem).parent().find('.default_thumb_id').val(attachment.id).change();
+					jQuery(elem).parent().prev().find('.default_thumb_id').val(attachment.id).change();
 				}
 			});
 
@@ -109,9 +109,9 @@
 		},
 		
 		removeDefaultThumbnailSelection : function (elem) {
-			jQuery(elem).parent().find('.default_thumb_img').html(cwp_default_thumb_selection.none);
+			jQuery(elem).parent().prev().find('.default_thumb_img').html(cwp_default_thumb_selection.none);
 			jQuery(elem).hide();
-			jQuery(elem).parent().find('.default_thumb_id').val(0).change();
+			jQuery(elem).parent().prev().find('.default_thumb_id').val(0).change();
 
 			return false;
 		},
