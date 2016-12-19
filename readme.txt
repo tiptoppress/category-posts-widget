@@ -66,7 +66,7 @@ We've also started creating free widget extensions for the Premium Widget. The f
 
 = Contribute =
 While using this plugin if you find any bug or any conflict, please submit an issue at 
-[Github](https://github.com/mkrdip/category-posts-widget) (If possible with a pull request). 
+[Github](https://github.com/tiptoppress/category-posts-widget) (If possible with a pull request). 
 
 == Installation ==
 = Automatic installation =
