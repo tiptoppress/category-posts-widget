@@ -1,5 +1,5 @@
 === Category Posts Widget ===
-Contributors: mkrdip, mark-k, kometschuh,
+Contributors: mark-k, kometschuh, mkrdip
 Donate link: http://mkrdip.me/donate
 Tags: category, categories, posts, widget, posts widget, recent posts, category recent posts, shortcode, sidebar, excerpt, multiple widgets
 Requires at least: 2.8
@@ -31,16 +31,24 @@ We've also started creating free widget extensions for the Premium Widget. The f
 
 = Features =
 * Shortcode (Easily change all Shortcode options in the customizer.)
+* Support multiple shortcodes
+* Add option for post offset (use two or more widgets after another)
+* Add insert shortcode buttons to the editor toolbar
 * For editing shortcode adds a Customizer link to the admin-bar ("With one click to the Customizer").
 * Option to show post thumbnail & set dimensions by width & height.
 * Option for <a target="_blank" href="http://tiptoppress.com/css-image-crop/?utm_source=wordpress_org&utm_campaign=features_crop_cpw&utm_medium=web">client-side cropped thumbnail dimensions</a> by width & height.
+* Fluid images for Responsive Layouts
 * Option to set mouse hover effects for post thumbnail.
+* Set a thumbnail as default thumbnail
+* Add option to enable excerpt filters from Themes and plugins
 * Jetpack 'Social buttons on posts' support.
-* Option to hide social buttons on output.
+* Add option to disable social buttons, banner, ... in the excerpt
 * Option to change ordering of posts.
 * Set which category the posts should come form.
+* Add dropdownbox entry for 'all' categories
 * Set how many posts to show.
 * Option to hide widget, if category have currently no posts.
+* Add option to disable subcategories
 * Option to put thumbnail on top.
 * Option to hide posts which have no thumbnail.
 * Option exclude current post.
@@ -56,7 +64,8 @@ We've also started creating free widget extensions for the Premium Widget. The f
 * Option to disable widget CSS.
 * Multiple widgets.
 * Multi sites support.
-* Localization support.
+* Support localization with translate.wordpress.org
+* Use WP user profile for settings ('auto close' and if the shortcode button appears in the editor toolbar)
 
 = Documentation =
 * Full documentation on [tiptoppress.com](http://tiptoppress.com/category-posts-widget/4-7/?utm_source=wordpress_org&utm_campaign=documentation_4_7_cpw&utm_medium=web)
@@ -110,13 +119,12 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=wordpress_org&utm_campaign=changelog_cpw&utm_medium=web)
 
-= 4.7.1 - =
+= 4.7.1 - December 20th 2016 =
 * Support multiple shortcodes in content
 * Add option for post offset (use two or more widgets after another)
 * Fluid images for Responsive Layouts
 * Set a thumbnail as default thumbnail
 * Add option to enable excerpt filters from Themes and plugins
-* Add option to enable/disable social buttons, banner, ... in the excerpt
 * Add option to disable social buttons, banner, ... in the excerpt
 * Add dropdownbox entry for 'all' categories
 * Add option to disable subcategories
@@ -124,7 +132,7 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 * Use WP user profile for settings ('auto close' and if the shortcode button appears in the editor toolbar)
 * Simple API for external use
 * Support localization with translate.wordpress.org: Portuguese (Brazil) thank you [Henrique Vianna](https://profiles.wordpress.org/hvianna/) and German by [Daniel Floeter](https://profiles.wordpress.org/kometschuh/)
-* Remove allow_html option (Instead we recommend to use the [manual excerpt](https://codex.wordpress.org/Excerpt#How_to_add_excerpts_to_posts) or we support this option furthermore as filter hook in the premium version)
+* Remove allow_html option (Instead we recommend to use the [manual excerpt](https://codex.wordpress.org/Excerpt#How_to_add_excerpts_to_posts) or we support this option furthermore in the [Term Posts Excerpt Extension](https://github.com/tiptoppress/term-posts-excerpt-extension) for the premium version)
 
 = 4.6.2 - August 28th 2016 =
 * Fixed only five widget instances can be costumized with shortcodes.

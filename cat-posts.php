@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Category Posts Widget
-Plugin URI: http://mkrdip.me/category-posts-widget
+Plugin URI: https://wordpress.org/plugins/category-posts/
 Description: Adds a widget that shows the most recent posts from a single category.
-Author: Mrinal Kanti Roy
+Author: TipTopPress
 Version: 4.7.1
-Author URI: http://mkrdip.me
+Author URI: http://tiptoppress.com
 Text Domain: category-posts
 Domain Path: /languages
 */
