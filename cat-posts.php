@@ -1277,7 +1277,7 @@ class Widget extends \WP_Widget {
 					</label>
 				</p>
 				<p>
-					<label for="<?php echo $this->get_field_id("excerpt_filters"); ?>" onchange="javascript:cwp_namespace.toggleExcerptFilterPanel(this)">
+					<label for="<?php echo $this->get_field_id("excerpt_filters"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_filters"); ?>" name="<?php echo $this->get_field_name("excerpt_filters"); ?>"<?php checked( !empty($excerpt_filters), true ); ?> />
 						<?php _e( 'Themes and plugins may override','category-posts' ); ?>
 					</label>

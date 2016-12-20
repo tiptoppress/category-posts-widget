@@ -44,19 +44,6 @@
             }	
         },
 		
-        // Show hide excerpt filter options on excerpt filter option check box change
-        toggleExcerptFilterPanel: function(item) {
-            var value = jQuery(item).find("input").attr('checked');		
-            var panel = item.parentElement.parentElement;
-            var layout = jQuery(panel).find(".layout_select option:selected").attr('value');
-            if(value == 'checked') {
-                jQuery(panel).find('.categoryposts-data-panel-excerpt-filter').show();
-            }
-            else {
-                jQuery(panel).find('.categoryposts-data-panel-excerpt-filter').hide();
-            }	
-        },
-		
         // Show hide date options on date option check box change
         toggleDatePanel: function(item) {
             var value = jQuery(item).find("input").attr('checked');		
