@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Category Posts Widget
-Plugin URI: http://mkrdip.me/category-posts-widget
+Plugin URI: https://wordpress.org/plugins/category-posts/
 Description: Adds a widget that shows the most recent posts from a single category.
-Author: Mrinal Kanti Roy
-Version: 4.7.beta2
-Author URI: http://mkrdip.me
+Author: TipTopPress
+Version: 4.7.1
+Author URI: http://tiptoppress.com
 Text Domain: category-posts
 Domain Path: /languages
 */
@@ -15,8 +15,8 @@ namespace categoryPosts;
 // Don't call the file directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
-const CAT_POST_VERSION = "4.7.beta2";
-const CAT_POST_DOC_URL = "http://tiptoppress.com/category-posts-widget/4-7?utm_source=widget_cpw&utm_campaign=documentation_4_7_cpw&utm_medium=form";
+const CAT_POST_VERSION = "4.7.1";
+const CAT_POST_DOC_URL = "http://tiptoppress.com/category-posts-widget/documentation-4-7?utm_source=widget_cpw&utm_campaign=documentation_4_7_cpw&utm_medium=form";
 
 const SHORTCODE_NAME = 'catposts';
 const SHORTCODE_META = 'categoryPosts-shorcode';
@@ -1276,12 +1276,26 @@ class Widget extends \WP_Widget {
 						<?php _e( 'Show post excerpt','category-posts' ); ?>
 					</label>
 				</p>
-				<p>
-					<label for="<?php echo $this->get_field_id("excerpt_filters"); ?>" onchange="javascript:cwp_namespace.toggleExcerptFilterPanel(this)">
-						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_filters"); ?>" name="<?php echo $this->get_field_name("excerpt_filters"); ?>"<?php checked( !empty($excerpt_filters), true ); ?> />
-						<?php _e( 'Themes and plugins may override','category-posts' ); ?>
-					</label>
-				</p>
+				<div class="cpwp_ident categoryposts-data-panel-excerpt" style="display:<?php echo ((bool) $excerpt) ? 'block' : 'none'?>">
+					<p>
+						<label for="<?php echo $this->get_field_id("excerpt_length"); ?>">
+							<?php _e( 'Excerpt length (in words):','category-posts' ); ?>
+						</label>
+						<input style="text-align: center; width:30%;" type="number" min="0" id="<?php echo $this->get_field_id("excerpt_length"); ?>" name="<?php echo $this->get_field_name("excerpt_length"); ?>" value="<?php echo $instance["excerpt_length"]; ?>" />
+					</p>
+					<p>
+						<label for="<?php echo $this->get_field_id("excerpt_more_text"); ?>">
+							<?php _e( 'Excerpt \'more\' text:','category-posts' ); ?>
+						</label>
+						<input class="widefat" style="width:45%;" placeholder="<?php _e('... more','category-posts')?>" id="<?php echo $this->get_field_id("excerpt_more_text"); ?>" name="<?php echo $this->get_field_name("excerpt_more_text"); ?>" type="text" value="<?php echo esc_attr($instance["excerpt_more_text"]); ?>" />
+					</p>
+					<p>
+						<label for="<?php echo $this->get_field_id("excerpt_filters"); ?>">
+							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_filters"); ?>" name="<?php echo $this->get_field_name("excerpt_filters"); ?>"<?php checked( !empty($excerpt_filters), true ); ?> />
+							<?php _e( 'Themes and plugins may override','category-posts' ); ?>
+						</label>
+					</p>
+				</div>
 				<p>
 					<label for="<?php echo $this->get_field_id("date"); ?>" onchange="javascript:cwp_namespace.toggleDatePanel(this)">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("date"); ?>" name="<?php echo $this->get_field_name("date"); ?>"<?php checked( (bool) $instance["date"], true ); ?> />
