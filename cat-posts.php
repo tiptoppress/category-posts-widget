@@ -2059,7 +2059,7 @@ class virtualWidget {
 			'.cat-post-item .cat-post-css-cropping span {margin: 5px 10px 5px 0;  overflow: hidden; display:inline-block}',
 			'.cat-post-item .cat-post-css-cropping img {margin: initial;}',
 		);
-		
+
 		$settings = self::$collection[$this->id];
 		$widget_id = $this->id;
 		if (!$is_shortcode)
@@ -2083,14 +2083,14 @@ class virtualWidget {
 			}
 			
 			if (isset($settings['thumb_hover'])) {
-				switch $settings['thumb_hover'] {
+				switch ($settings['thumb_hover']) {
 					case 'white':
 						$rules[] = '.cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
 						$rules[] = '.cat-post-white {background-color: white;}';
 						$rules[] = '.cat-post-white img:hover {opacity: 0.8;}';
 						break;
 					case 'dark':
-						$rules[] = '.cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
+						$rules[] = '.cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
 						$rules[] = '.cat-post img:hover {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}';
 						break;
 					case 'scale':
@@ -2100,9 +2100,9 @@ class virtualWidget {
 						$rules[] = '.cat-post-scale img:hover {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}';
 						break;
 					case 'blur':
-						$rules[] = '.cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
+						$rules[] = '.cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
 						$rules[] = '.cat-post-blur img:hover {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}';
-						break
+						break;
 				}
 			}
 								
