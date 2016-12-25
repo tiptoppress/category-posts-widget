@@ -7,9 +7,6 @@
  * Released under the GPLv2 license or later -  http://www.gnu.org/licenses/gpl-2.0.html
  */
 
- 
-jQuery(document).ready( function () {
-
     // namespace 
     
     var cwp_namespace = {
@@ -33,21 +30,83 @@ jQuery(document).ready( function () {
                 o[panel] = true;
             this.open_panels[id] = o;
         },
+
+        // Show hide excerpt options on excerpt option check box change
+        toggleExcerptPanel: function(item) {
+            var value = jQuery(item).find("input").attr('checked');		
+            var panel = item.parentElement.parentElement;
+            var layout = jQuery(panel).find(".layout_select option:selected").attr('value');
+            if(value == 'checked') {
+                jQuery(panel).find('.categoryposts-data-panel-excerpt').show();
+            }
+            else {
+                jQuery(panel).find('.categoryposts-data-panel-excerpt').hide();
+            }	
+        },
+		
+        // Show hide date options on date option check box change
+        toggleDatePanel: function(item) {
+            var value = jQuery(item).find("input").attr('checked');		
+            var panel = item.parentElement.parentElement;
+            var layout = jQuery(panel).find(".layout_select option:selected").attr('value');
+            if(value == 'checked') {
+                jQuery(panel).find('.categoryposts-data-panel-date').show();
+            }
+            else {
+                jQuery(panel).find('.categoryposts-data-panel-date').hide();
+            }	
+        },
 		
 		// Close all open panels if open
 		autoCloseOpenPanels: function(_this) {
-			if( jQuery(_this)
-				.parent()
-				.find('.categoryposts-mysettings-panel-auto-close-panels input[type="checkbox"]')
-				.is(':checked') ) {
-					if(!jQuery(_this).hasClass('open')) {
-						var jCloseElement = jQuery(_this).parent().find('.open');
-						cpwp_namespace.clickHandler(jCloseElement);
+			if( categoryPosts.accordion  ) {
+				if(!jQuery(_this).hasClass('open')) {
+					var jCloseElement = jQuery(_this).parent().find('.open');
+					this.clickHandler(jCloseElement);
 				}
 			}
 		},
-    }
+		
+		defaultThumbnailSelection: function (elem, title, button_title) {
 
+			var frame = wp.media({
+				title : title,
+				multiple : false,
+				library : { type : 'image' },
+				button : { text : button_title },
+			});
+
+			// Handle results from media manager.
+			frame.on('close',function( ) {
+				var attachments = frame.state().get('selection').toJSON();
+				if (attachments.length == 1) {
+					var attachment = attachments[0];
+					var img_html = '<img src="' + attachment.url + '" ';
+					img_html += 'width="60" ';
+					img_html += 'height="60" ';
+					img_html += '/>';
+					jQuery(elem).parent().prev().find('.default_thumb_img').html(img_html);
+					jQuery(elem).parent().find('.cwp_default_thumb_remove').show();
+					jQuery(elem).parent().prev().find('.default_thumb_id').val(attachment.id).change();
+				}
+			});
+
+			frame.open();
+			return false;
+		},
+		
+		removeDefaultThumbnailSelection : function (elem) {
+			jQuery(elem).parent().prev().find('.default_thumb_img').html(cwp_default_thumb_selection.none);
+			jQuery(elem).hide();
+			jQuery(elem).parent().prev().find('.default_thumb_id').val(0).change();
+
+			return false;
+		},
+			
+    }
+	
+jQuery(document).ready( function () {
+	
 	jQuery('.category-widget-cont h4').click(function () { // for widgets page
 		cwp_namespace.autoCloseOpenPanels(this);
 		// toggle panel open/close
@@ -60,8 +119,15 @@ jQuery(document).ready( function () {
 			cwp_namespace.autoCloseOpenPanels(this);
 			// toggle panel open/close
             cwp_namespace.clickHandler(this);
-		})
-        // refresh panels to state before the refresh
+		});
+    	jQuery('.cwp_default_thumb_select').off('click').on('click', function () { // select default thumb
+			cwp_namespace.defaultThumbnailSelection(this, cwp_default_thumb_selection.frame_title,cwp_default_thumb_selection.button_title);
+		});
+
+		jQuery('.cwp_default_thumb_remove').off('click').on('click', function () { // remove default thumb
+			cwp_namespace.removeDefaultThumbnailSelection(this);
+		});
+    // refresh panels to state before the refresh
         var id = jQuery(element).attr('id');
         if (cwp_namespace.open_panels.hasOwnProperty(id)) {
             var o = cwp_namespace.open_panels[id];
@@ -71,4 +137,14 @@ jQuery(document).ready( function () {
             }
         }
 	});	
+
+	jQuery('.cwp_default_thumb_select').off('click').on('click', function () { // select default thumb
+		cwp_namespace.defaultThumbnailSelection(this, cwp_default_thumb_selection.frame_title,cwp_default_thumb_selection.button_title);
+	});
+
+	jQuery('.cwp_default_thumb_remove').off('click').on('click', function () { // remove default thumb
+		cwp_namespace.removeDefaultThumbnailSelection(this);
+	});
+	
 });
+

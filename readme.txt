@@ -1,10 +1,10 @@
 === Category Posts Widget ===
-Contributors: mkrdip, mark-k, kometschuh
+Contributors: mark-k, kometschuh, mkrdip
 Donate link: http://mkrdip.me/donate
-Tags: category, posts, widget, posts widget, recent posts, category recent posts
+Tags: category, categories, posts, widget, posts widget, recent posts, category recent posts, shortcode, sidebar, excerpt, multiple widgets
 Requires at least: 2.8
-Tested up to: 4.6
-Stable tag: 4.6.2
+Tested up to: 4.7
+Stable tag: 4.7.1
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,51 +14,68 @@ Adds a widget that shows the most recent posts from a single category.
 Category Posts Widget is a light widget designed to do one thing and do it well: display the most recent posts from a certain category.
 
 = Term and Category based Posts Widget =
-It's the pro version and available on <a target="_blank" href="http://tiptoppress.com/">Tip Top Press</a> created for big Wordpress sites.
+This is the premium version of this free widget here and available on <a href="http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=premium_widget_cpw&utm_medium=web">tiptoppress.com</a> created for big Wordpress sites.
+We've also started creating free widget extensions for the Premium Widget. The first extension is the <a href="https://github.com/tiptoppress/term-posts-excerpt-extension">Excerpt Extension</a>.
 
-= Pro features =
-* Custom Post Types, Terms and Custom Taxonomies
-* Multi selection
-* Vertical Scrolling News Ticker
-* More [examples on the demo page](http://demo.tiptoppress.com/)
+= Premium features =
+* "Post List Alterations"
+* Masonry (Responsive grid layouts)
+* Grid and Column full page layouts
+* Slider (Vertical and horizontal)
+* Categories, Custom Post Types, Taxonomies, Events, Products, ...
+* Full background post images
+* Mouse hover effects for post thumbnail
+* E-Mail support
+* All free features
+* More [examples on the demo pages](http://demo.tiptoppress.com/?utm_source=wordpress_org&utm_campaign=demo_cpw&utm_medium=web)
 
 = Features =
-* Shortcode (Edit in the customizer)
-* For editing shortcode adds a customizer link to the admin-bar if page/post is in edit mode
-* Option to change ordering of posts.
-* Option to show post thumbnail & set dimension by width & height.
-* Option to crop thumbnails with CSS. <a target="_blank" href="http://tiptoppress.com/css-image-crop/">What is 'CSS Image Crop'?</a>
+* Shortcode (Easily change all Shortcode options in the customizer.)
+* Support multiple shortcodes
+* Add option for post offset (use two or more widgets after another)
+* Add insert shortcode buttons to the editor toolbar
+* For editing shortcode adds a Customizer link to the admin-bar ("With one click to the Customizer").
+* Option to show post thumbnail & set dimensions by width & height.
+* Option for <a target="_blank" href="http://tiptoppress.com/css-image-crop/?utm_source=wordpress_org&utm_campaign=features_crop_cpw&utm_medium=web">client-side cropped thumbnail dimensions</a> by width & height.
+* Fluid images for Responsive Layouts
 * Option to set mouse hover effects for post thumbnail.
-* Jetpack 'Social buttons on posts' support
-* Option to hide social buttons on output
-* Option to put thumbnail on top
-* Option to hide posts which have no thumbnail.
-* Option to disable widget CSS.
-* Set how many posts to show.
-* Option exclude current post.
-* Option show post author.
+* Set a thumbnail as default thumbnail
+* Add option to enable excerpt filters from Themes and plugins
+* Jetpack 'Social buttons on posts' support.
+* Add option to disable social buttons, banner, ... in the excerpt
+* Option to change ordering of posts.
 * Set which category the posts should come form.
+* Add dropdownbox entry for 'all' categories
+* Set how many posts to show.
+* Option to hide widget, if category have currently no posts.
+* Add option to disable subcategories
+* Option to put thumbnail on top.
+* Option to hide posts which have no thumbnail.
+* Option exclude current post.
+* Option to hide the widget title and post titles.
+* Option to make the widget title link to the category page.
 * Option to show the post excerpt, set the length, allow HTML and change 'more' text.
+* Option show post author.
+* Option to show the comment count.
 * Option to show the post date.
 * Option to make the widget date link to the category page.
 * Option to format the outputted date string.
-* Option to show the comment count.
-* Option to make the widget title link to the category page.
 * Option to link to the category page below posts list.
-* Option to hide the widget title and post titles.
-* Option to hide widget, if category have currently no posts.
+* Option to disable widget CSS.
 * Multiple widgets.
 * Multi sites support.
-* Localization support.
+* Support localization with translate.wordpress.org
+* Use WP user profile for settings ('auto close' and if the shortcode button appears in the editor toolbar)
 
 = Documentation =
-* Shortcode: Use [catposts] [in the content and edit options in the customizer](http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content)
-* Formatting date and time: See <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>.
-* Full documentation on [Tiptoppress](http://tiptoppress.com/category-posts-widget/documentation/)
+* Full documentation on [tiptoppress.com](http://tiptoppress.com/category-posts-widget/documentation-4-7/?utm_source=wordpress_org&utm_campaign=documentation_4_7_cpw&utm_medium=web)
+* Shortcode: Use [catposts] [in the content and edit options in the customizer](http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content/?utm_source=wordpress_org&utm_campaign=documentation_shortcode_cpw&utm_medium=web)
+* Formatting date and time: See <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>
+* Widget <a target="_blank" href="http://tiptoppress.com/category/widget-customization-and-filter-extensions/?utm_source=wordpress_org&utm_campaign=documentation_filter_cpw&utm_medium=web">customization and filter extensions</a>
 
 = Contribute =
 While using this plugin if you find any bug or any conflict, please submit an issue at 
-[Github](https://github.com/mkrdip/category-posts-widget) (If possible with a pull request). 
+[Github](https://github.com/tiptoppress/category-posts-widget) (If possible with a pull request). 
 
 == Installation ==
 = Automatic installation =
@@ -100,7 +117,22 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 3. Use shortcode [catposts] in the content and edit options in the customizer.
 
 == Changelog ==
-[Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
+[Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=wordpress_org&utm_campaign=changelog_cpw&utm_medium=web)
+
+= 4.7.1 - December 20th 2016 =
+* Support multiple shortcodes in content
+* Add option for post offset (use two or more widgets after another)
+* Fluid images for Responsive Layouts
+* Set a thumbnail as default thumbnail
+* Add option to enable excerpt filters from Themes and plugins
+* Add option to disable social buttons, banner, ... in the excerpt
+* Add dropdownbox entry for 'all' categories
+* Add option to disable subcategories
+* Add insert shortcode buttons to the editor toolbar
+* Use WP user profile for settings ('auto close' and if the shortcode button appears in the editor toolbar)
+* Simple API for external use
+* Support localization with translate.wordpress.org: Portuguese (Brazil) thank you [Henrique Vianna](https://profiles.wordpress.org/hvianna/) and German by [Daniel Floeter](https://profiles.wordpress.org/kometschuh/)
+* Remove allow_html option (Instead we recommend to use the [manual excerpt](https://codex.wordpress.org/Excerpt#How_to_add_excerpts_to_posts) or we support this option furthermore in the [Term Posts Excerpt Extension](https://github.com/tiptoppress/term-posts-excerpt-extension) for the premium version)
 
 = 4.6.2 - August 28th 2016 =
 * Fixed only five widget instances can be costumized with shortcodes.
@@ -130,11 +162,10 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 * Add option to allow links in the excerpt
 * Add filter 'widget_title' for the title
 * Add option to hide post titles.
- 
+
 = 4.1.5 - February 4th 2016 =
 * Support for multi sites.
 * Support for localization.
-* Generate thumbs from existing images.
 * Area UI.
 * Meet new plugin author [mark-k](https://profiles.wordpress.org/mark-k/)
 
@@ -164,7 +195,7 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 * Meet new plugin author [kometschuh](https://profiles.wordpress.org/kometschuh)
 
 = 4.0 =
-* Added CSS file for post styling .
+* Added CSS file for post styling.
 * Now compatible with latest versions of WordPress.
 
 = 3.3 =
