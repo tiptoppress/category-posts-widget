@@ -490,7 +490,9 @@ class Widget extends \WP_Widget {
         
 		if ( isset( $instance["thumb"] ) && $instance["thumb"] &&
 			((isset($instance['default_thunmbnail']) && ($instance['default_thunmbnail']!= 0)) || has_post_thumbnail()) ) {
-			$use_css_cropping = (isset($this->instance['use_css_cropping'])&&$this->instance['use_css_cropping']) ? "cat-post-css-cropping" : "";
+
+			$use_css_cropping = isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping'];
+
 			if ($use_css_cropping){
 				// enque relevant scripts and parameters to perform cropping
 				// once we support only 4.5+ it can be refactored to use wp_add_inline_script
@@ -512,11 +514,12 @@ class Widget extends \WP_Widget {
 			}
 			
             $class = '';
-            if( !(isset( $this->instance['disable_css'] ) && $this->instance['disable_css'])) { 
+            if( $use_css_cropping || !(isset( $this->instance['disable_css'] ) && $this->instance['disable_css'])) { 
+				$use_css_cropping_class = $use_css_cropping ? " cat-post-css-cropping" : "";
                 if( isset($this->instance['thumb_hover'] )) {
-                    $class = "class=\"cat-post-thumbnail " . $use_css_cropping ." cat-post-" . $instance['thumb_hover'] . "\"";
+                    $class = "class=\"cat-post-thumbnail" . $use_css_cropping_class ." cat-post-" . $instance['thumb_hover'] . "\"";
                 } else {
-                    $class = "class=\"cat-post-thumbnail " . $use_css_cropping . "\"";
+                    $class = "class=\"cat-post-thumbnail" . $use_css_cropping_class . "\"";
                 }
             } 
             $title_args = array('echo'=>false);
@@ -2144,6 +2147,11 @@ class virtualWidget {
 				$ret[] = '#'.$widget_id.' p {margin:5px 0 0 0}';	/* since on bottom it will make the spacing on cover
 																	   bigger (add to the padding) use only top for now */
 			}
+		}
+		
+		if ((isset($settings['use_css_cropping']) && $settings['use_css_cropping']) || !(isset($settings['disable_css']) && $settings['disable_css'])) {
+			$ret[] = '#'.$widget_id.' .cat-post-item .cat-post-css-cropping span {margin: 5px 10px 5px 0;  overflow: hidden; display:inline-block}';
+			$ret[] = '#'.$widget_id.' .cat-post-item .cat-post-css-cropping img {margin: initial;}';
 		}
 	}
 
