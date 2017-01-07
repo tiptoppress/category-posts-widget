@@ -739,7 +739,7 @@ class Widget extends \WP_Widget {
                 $ret .= '<a href="'.\get_the_permalink().'">';
             }
             $ret .= get_the_time($date_format);
-            if ( isset ( $instance["date_link"] ) && !$everything_is_link ) { 
+            if ( isset ( $instance["date_link"] ) && $instance["date_link"] && !$everything_is_link ) { 
                 $ret .= '</a>';
             }
             $ret .= '</p>';
