@@ -702,8 +702,9 @@ class Widget extends \WP_Widget {
         $ret.='>'; // close the li opening tag
         
 		if ($everything_is_link) {
-			$ret .= '<a href="'.get_the_permalink().'" title="">';
+			$ret .= '<a class="cat-post-everything-is-link" href="'.get_the_permalink().'" title="">';
 		}
+		
         // Thumbnail position to top
         if( isset( $instance["thumbTop"] ) && $instance["thumbTop"]) {
             $ret .= $this->show_thumb($instance,$everything_is_link); 
@@ -812,6 +813,10 @@ class Widget extends \WP_Widget {
 			}
             $ret .= '</p>';
         }
+		
+		if ($everything_is_link) {
+			$ret .= '</a>';
+		}
         
         $ret .= '</li>';
         return $ret;
@@ -2078,9 +2083,9 @@ class virtualWidget {
 		$widget_id = $this->id;
 		if (!$is_shortcode)
 			$widget_id .= '-internal';
-		
+
 		if (!(isset($settings['disable_css']) && $settings['disable_css'])) { // checks if css disable is not set
-			
+
 			/*
 				the twenty seventeen theme have a border between the LI elements of a widget, 
 				so remove our border if we detect its use to avoid conflicting styling
@@ -2091,11 +2096,11 @@ class virtualWidget {
 				$rules[] = '.cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
 				$rules[] = '.cat-post-item:last-child {border-bottom: none;}';
 			}
-			
+
 			if (!(isset($settings['thumbTop']) && $settings['thumbTop'])) {
 				$rules[] = '.cat-post-thumbnail {float:left;}';
 			}
-			
+
 			if (isset($settings['thumb_hover'])) {
 				switch ($settings['thumb_hover']) {
 					case 'white':
@@ -2119,11 +2124,15 @@ class virtualWidget {
 						break;
 				}
 			}
-								
+
+			if (isset( $settings['everything_is_link'] ) && $settings['everything_is_link']) {
+				$rules[] = '.cat-post-everything-is-link {display: inline-block;}';
+			}
+
 			foreach ($rules as $rule) {
 				$ret[] = '#'.$widget_id.' '.$rule;
 			}
-			
+
 			if ($is_shortcode) {
 				// 2016 theme adds underlines to links with box whadow wtf....
 				$ret[] = '#'.$widget_id.' .cat-post-thumbnail a {box-shadow:none}'; // this for the thumb link
@@ -2131,12 +2140,12 @@ class virtualWidget {
 				$ret[] = '#'.$widget_id.' .cat-post-thumbnail a {border:0}'; // this for the thumb link
 
 				// probably all theme have too much margin on their p element when used in the shortcode
-				$ret[] = '#'.$widget_id.' p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
-	                                                 // bigger (add to the padding) use only top for now				
+				$ret[] = '#'.$widget_id.' p {margin:5px 0 0 0}';	/* since on bottom it will make the spacing on cover
+																	   bigger (add to the padding) use only top for now */
 			}
-		}    
+		}
 	}
-	
+
 	/**
 	 *  Output the widget CSS 
 	 *  
