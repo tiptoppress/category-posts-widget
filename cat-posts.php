@@ -690,6 +690,7 @@ class Widget extends \WP_Widget {
         global $post;
         
 		$everything_is_link = isset( $instance['everything_is_link'] ) && $instance['everything_is_link'];
+		$disable_css        = isset($instance['disable_css']) && $instance['disable_css'];
 		
         $ret = '<li ';
                     
@@ -716,7 +717,7 @@ class Widget extends \WP_Widget {
 				$ret .= '<span class="cat-post-title">'.get_the_title().'</span>';
 			} else {
 				$ret .= '<a class="post-title';
-				if( !isset( $instance['disable_css'] ) ) { 
+				if (!$disable_css) { 
 					$ret .= " cat-post-title"; 
 				}
 				$ret .= '" href="'.get_the_permalink().'" rel="bookmark">'.get_the_title();
@@ -731,9 +732,9 @@ class Widget extends \WP_Widget {
             } else {
                 $date_format = "j M Y"; 
             } 
-            $ret .= '<p class="post-date ';
-            if( !isset( $instance['disable_css'] ) ) { 
-                $ret .= "cat-post-date";
+            $ret .= '<p class="post-date';
+            if (!$disable_css) { 
+                $ret .= " cat-post-date";
             } 
             $ret .= '">';
             if ( isset ( $instance["date_link"] ) && $instance["date_link"] && !$everything_is_link) { 
@@ -784,7 +785,7 @@ class Widget extends \WP_Widget {
 		// Comments
         if ( isset( $instance['comment_num'] ) && $instance['comment_num']) {
             $ret .= '<p class="comment-num';
-            if ( !isset( $instance['disable_css'] ) ) {
+            if (!$disable_css) {
                 $ret .= " cat-post-comment-num"; 
             } 
             $ret .= '">';
@@ -794,9 +795,9 @@ class Widget extends \WP_Widget {
 
 		// Author
         if ( isset( $instance['author'] ) && $instance['author']) {
-            $ret .= '<p class="post-author ';
-            if( !isset( $instance['disable_css'] ) ) { 
-                $ret .= "cat-post-author"; 
+            $ret .= '<p class="post-author';
+            if (!$disable_css) { 
+                $ret .= " cat-post-author"; 
             } 
             $ret .= '">';
             global $authordata;
@@ -2066,7 +2067,7 @@ class virtualWidget {
 	function getCSSRules($is_shortcode,&$ret) {
 		$rules = array( // rules that should be applied to all widgets
 			'.cat-post-item span.cat-post-css-cropping img {max-width: initial;	max-height: initial;}',
-			'.cat-post-title {display: inline-block; font-size: 15px;}',
+			'.cat-post-title {font-size: 15px;}',
 			'.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}'.
 			'.cat-post-date {font-size: 12px;	line-height: 18px; font-style: italic; margin-bottom: 10px;}',
 			'.cat-post-comment-num {font-size: 12px; line-height: 18px;}',
