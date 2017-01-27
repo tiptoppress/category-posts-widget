@@ -103,9 +103,9 @@ Automatic installation is the easiest option as WordPress handles the file trans
 Check the option in the Thumbnails panels > "Show thumbnails above text".
 Then add this custom CSS. If you use wordpress 4.7 or higher you can add this custom CSS with the customizer ([Easily adding custom CSS using the Theme customizer](http://kometschuh.de/Easily-adding-custom-CSS-using-the-WordPress-Theme-customizer.html)):
 
-.cat-post-thumbnail {
+`.cat-post-thumbnail {
 	float: left !important;
-}
+}`
 
 = The font-size is different from that of other widgets or Theme elements? =
 Please use the option: "Disable widget CSS".
