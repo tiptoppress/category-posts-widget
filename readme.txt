@@ -13,6 +13,7 @@ Adds a widget that shows the most recent posts from a single category.
 == Description ==
 Category Posts Widget is a light widget designed to do one thing and do it well: display the most recent posts from a certain category.
 
+= Term and Category based Posts Widget =
 A premium version of this free widget here and available on <a href="http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=premium_widget_cpw&utm_medium=web">tiptoppress.com</a> created for big Wordpress sites.
 We've also started creating free widget extensions for the Premium Widget. The first extension is the <a href="https://github.com/tiptoppress/term-posts-excerpt-extension">Excerpt Extension</a>.
 
@@ -99,11 +100,11 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 == Frequently Asked Questions ==
 = Thumb and Title not able to float left =
-Check the option in the Thumbnails panels “Show thumbnails above text”.
-Then add this custom CSS. If you use wordpress 4.7 you can add this custom CSS with the customizer ([Easily adding custom CSS using the Theme customizer](http://kometschuh.de/Easily-adding-custom-CSS-using-the-Theme-customizer.html)):
+Check the option in the Thumbnails panels > "Show thumbnails above text".
+Then add this custom CSS. If you use wordpress 4.7 or higher you can add this custom CSS with the customizer ([Easily adding custom CSS using the Theme customizer](http://kometschuh.de/Easily-adding-custom-CSS-using-the-WordPress-Theme-customizer.html)):
 
 .cat-post-thumbnail {
-	float: left;
+	float: left !important;
 }
 
 = The font-size is different from that of other widgets or Theme elements? =
