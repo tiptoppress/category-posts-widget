@@ -101,11 +101,15 @@ Automatic installation is the easiest option as WordPress handles the file trans
 == Frequently Asked Questions ==
 = Thumb and Title not able to float left =
 Check the option in the Thumbnails panels > "Show thumbnails above text".
-Then add this custom CSS. If you use wordpress 4.7 or higher you can add this custom CSS with the customizer ([Easily adding custom CSS using the Theme customizer](http://kometschuh.de/Easily-adding-custom-CSS-using-the-WordPress-Theme-customizer.html)):
+Then add this custom CSS:
 
 `.cat-post-thumbnail {
 	float: left !important;
 }`
+
+If you use wordpress 4.7 or higher you can [add this custom CSS with the customizer](http://kometschuh.de/Easily-adding-custom-CSS-using-the-WordPress-Theme-customizer.html/?utm_source=wordpress_org&utm_campaign=faq_cpw&utm_medium=web)
+
+For more layout options please try our premium widget: [Term and Category based Posts Widget](http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=wordpress_org&utm_campaign=faq_cpw&utm_medium=web).
 
 = The font-size is different from that of other widgets or Theme elements? =
 Please use the option: "Disable widget CSS".
