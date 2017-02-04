@@ -399,7 +399,7 @@ class Widget extends \WP_Widget {
 	 * Excerpt more link filter
 	 */
 	function excerpt_more_filter($more) {
-		return ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '">' . esc_html($this->instance["excerpt_more_text"]) . '</a>';
+		return ' <a class="cat-post-excerpt-more more-link" href="'. get_permalink() . '">' . esc_html($this->instance["excerpt_more_text"]) . '</a>';
 	}
 
 	/**
@@ -774,9 +774,9 @@ class Widget extends \WP_Widget {
 					$more_text = ltrim($instance["excerpt_more_text"]);
 
 				if ($everything_is_link)
-					$excerpt_more_text = ' <span class="cat-post-excerpt-more">'.$more_text.'</span>';
+					$excerpt_more_text = ' <span class="cat-post-excerpt-more more-link">'.$more_text.'</span>';
 				else
-					$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
+					$excerpt_more_text = ' <a class="cat-post-excerpt-more more-link" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
 				$excerpt = \wp_trim_words( $text, $length, $excerpt_more_text );
 				// adjust html output same way as for the normal excerpt, 
 				// just force all functions depending on the_excerpt hook
