@@ -1436,7 +1436,7 @@ function change_cropped_image_dimensions() {
 					WidgetPosts : function (widget, ratio) {
 
 <?php 					/* variables */ ?>
-						this.allSpans = widget.find( '.cat-post-thumbnail > span' );
+						this.allSpans = widget.find( '.cat-post-crop' );
 						this.firstSpan = this.allSpans.first();
 						this.maxSpanWidth = this.firstSpan.width();
 						this.firstListItem = this.firstSpan.closest( 'li' );
