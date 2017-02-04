@@ -2069,7 +2069,7 @@ class virtualWidget {
 	 */
 	function getCSSRules($is_shortcode,&$ret) {
 		$rules = array( // rules that should be applied to all widgets
-			'.cat-post-item span.cat-post-css-cropping img {max-width: initial;	max-height: initial;}',
+			'.cat-post-item img {max-width: initial; max-height: initial;}',
 			'.cat-post-title {font-size: 15px;}',
 			'.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}'.
 			'.cat-post-date {font-size: 12px;	line-height: 18px; font-style: italic; margin-bottom: 10px;}',
@@ -2079,8 +2079,8 @@ class virtualWidget {
 			'.cat-post-thumbnail img {margin: 5px 10px 5px 0;}',
 			'.cat-post-item:before {content: ""; display: table; clear: both;}',
 			'.cat-post-item:after {content: ""; display: table;	clear: both;}',
-			'.cat-post-item .cat-post-css-cropping span {margin: 5px 10px 5px 0;  overflow: hidden; display:inline-block}',
-			'.cat-post-item .cat-post-css-cropping img {margin: initial;}',
+			'.cat-post-item > span {margin: 5px 10px 5px 0;  overflow: hidden; display:inline-block}',
+			'.cat-post-item img {margin: initial;}',
 		);
 
 		$settings = self::$collection[$this->id];
@@ -2118,7 +2118,7 @@ class virtualWidget {
 						break;
 					case 'scale':
 						$rules[] = '.cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-						$rules[] = '.cat-post-scale span {overflow: hidden; margin: 5px 10px 5px 0;}';
+						$rules[] = '.cat-post-scale > span {overflow: hidden; margin: 5px 10px 5px 0;}';
 						$rules[] = '.cat-post-scale img {margin: initial; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
 						$rules[] = '.cat-post-scale img:hover {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}';
 						break;
@@ -2150,8 +2150,8 @@ class virtualWidget {
 		}
 		
 		if ((isset($settings['use_css_cropping']) && $settings['use_css_cropping']) || !(isset($settings['disable_css']) && $settings['disable_css'])) {
-			$ret[] = '#'.$widget_id.' .cat-post-item .cat-post-css-cropping span {margin: 5px 10px 5px 0;  overflow: hidden; display:inline-block}';
-			$ret[] = '#'.$widget_id.' .cat-post-item .cat-post-css-cropping img {margin: initial;}';
+			$ret[] = '#'.$widget_id.' .cat-post-item > span {margin: 5px 10px 5px 0; overflow: hidden; display:inline-block}';
+			$ret[] = '#'.$widget_id.' .cat-post-item img {margin: initial;}';
 		}
 	}
 
