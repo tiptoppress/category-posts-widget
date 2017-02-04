@@ -339,7 +339,7 @@ class Widget extends \WP_Widget {
 					.'px;clip:rect(auto,'.($this->instance['thumb_w']+$image['marginVal']).'px,auto,'.$image['marginVal']
 					.'px);width:auto;max-width:initial;" ',$html);
 				// wrap span
-				$html = '<span style="width:'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px;">'
+				$html = '<span class="cat-post-crop" style="width:'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px;">'
 					.$html.'</span>';
 			} else {
 				// use_css_cropping is not used
@@ -515,7 +515,7 @@ class Widget extends \WP_Widget {
 			
             $class = '';
             if( $use_css_cropping || !(isset( $this->instance['disable_css'] ) && $this->instance['disable_css'])) { 
-				$use_css_cropping_class = $use_css_cropping ? " cat-post-css-cropping" : "";
+				$use_css_cropping_class = $use_css_cropping ? " cat-post-crop" : "";
                 if( isset($this->instance['thumb_hover'] )) {
                     $class = "class=\"cat-post-thumbnail" . $use_css_cropping_class ." cat-post-" . $instance['thumb_hover'] . "\"";
                 } else {
@@ -2079,7 +2079,7 @@ class virtualWidget {
 			'.cat-post-thumbnail img {margin: 5px 10px 5px 0;}',
 			'.cat-post-item:before {content: ""; display: table; clear: both;}',
 			'.cat-post-item:after {content: ""; display: table;	clear: both;}',
-			'.cat-post-item > span {margin: 5px 10px 5px 0;  overflow: hidden; display:inline-block}',
+			'.cat-post-crop {margin: 5px 10px 5px 0;  overflow: hidden; display:inline-block}',
 			'.cat-post-item img {margin: initial;}',
 		);
 
@@ -2118,7 +2118,7 @@ class virtualWidget {
 						break;
 					case 'scale':
 						$rules[] = '.cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-						$rules[] = '.cat-post-scale > span {overflow: hidden; margin: 5px 10px 5px 0;}';
+						$rules[] = '.cat-post-crop {overflow: hidden; margin: 5px 10px 5px 0;}';
 						$rules[] = '.cat-post-scale img {margin: initial; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
 						$rules[] = '.cat-post-scale img:hover {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}';
 						break;
@@ -2150,7 +2150,7 @@ class virtualWidget {
 		}
 		
 		if ((isset($settings['use_css_cropping']) && $settings['use_css_cropping']) || !(isset($settings['disable_css']) && $settings['disable_css'])) {
-			$ret[] = '#'.$widget_id.' .cat-post-item > span {margin: 5px 10px 5px 0; overflow: hidden; display:inline-block}';
+			$ret[] = '#'.$widget_id.' .cat-post-crop {margin: 5px 10px 5px 0; overflow: hidden; display:inline-block}';
 			$ret[] = '#'.$widget_id.' .cat-post-item img {margin: initial;}';
 		}
 	}
