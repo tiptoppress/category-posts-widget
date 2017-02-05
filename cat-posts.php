@@ -492,26 +492,6 @@ class Widget extends \WP_Widget {
 			((isset($instance['default_thunmbnail']) && ($instance['default_thunmbnail']!= 0)) || has_post_thumbnail()) ) {
 
 			$use_css_cropping = isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping'];
-
-			if ($use_css_cropping){
-				// enque relevant scripts and parameters to perform cropping
-				// once we support only 4.5+ it can be refactored to use wp_add_inline_script
-				wp_enqueue_script( 'jquery'); // just in case the theme or other plugins didn't enqueue it
-				add_action('wp_footer', __NAMESPACE__.'\change_cropped_image_dimensions', 100);  // add to the footer the cropping script
-				$number = $this->number;
-				// a temporary hack to handle difference in the number in a true widget
-				// and the number format expected at the rest of the places
-				if (is_numeric($number))
-					$number = WIDGET_BASE_ID .'-'.$number;
-				
-				// add Javascript to change change cropped image dimensions on load and window resize
-				$thumb_w = $this->instance['thumb_w'];
-				$thumb_h = $this->instance['thumb_h'];
-				add_filter('cpw_crop_widgets', function ($a) use ($number, $thumb_w, $thumb_h) { 
-					$a[$number] = $thumb_w / $thumb_h;
-					return $a;
-				});
-			}
 			
             $class = '';
             if( $use_css_cropping || !(isset( $this->instance['disable_css'] ) && $this->instance['disable_css'])) { 
@@ -936,6 +916,28 @@ class Widget extends \WP_Widget {
 				$this->removeExcerpFilters($instance);
 			
 			wp_reset_postdata();
+			
+			$use_css_cropping = isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping'];
+
+			if ($use_css_cropping){
+				// enque relevant scripts and parameters to perform cropping
+				// once we support only 4.5+ it can be refactored to use wp_add_inline_script
+				wp_enqueue_script( 'jquery'); // just in case the theme or other plugins didn't enqueue it
+				add_action('wp_footer', __NAMESPACE__.'\change_cropped_image_dimensions', 100);  // add to the footer the cropping script
+				$number = $this->number;
+				// a temporary hack to handle difference in the number in a true widget
+				// and the number format expected at the rest of the places
+				if (is_numeric($number))
+					$number = WIDGET_BASE_ID .'-'.$number;
+				
+				// add Javascript to change change cropped image dimensions on load and window resize
+				$thumb_w = $this->instance['thumb_w'];
+				$thumb_h = $this->instance['thumb_h'];
+				add_filter('cpw_crop_widgets', function ($a) use ($number, $thumb_w, $thumb_h) { 
+					$a[$number] = $thumb_w / $thumb_h;
+					return $a;
+				});
+			}
 		} 
 	} 
 
@@ -1420,7 +1422,7 @@ function change_cropped_image_dimensions() {
 				cwp_namespace.fluid_images = {
 
 <?php 				/* variables */ ?>				
-					Posts : {},
+					Widgets : {},
 					widget : null,
 					Spans : {},
 					
@@ -1483,13 +1485,13 @@ function change_cropped_image_dimensions() {
 					foreach ($widgets_ids as $number => $ratio) {
 				?>
 				cwp_namespace.fluid_images.widget = jQuery('#<?php echo $number?>');
-				cwp_namespace.fluid_images.Posts['<?php echo $number?>'] = new cwp_namespace.fluid_images.WidgetPosts(cwp_namespace.fluid_images.widget,<?php echo $ratio?>);
+				cwp_namespace.fluid_images.Widgets['<?php echo $number?>'] = new cwp_namespace.fluid_images.WidgetPosts(cwp_namespace.fluid_images.widget,<?php echo $ratio?>);
 				<?php } ?>
 				
 <?php 			/* do on page load or on resize the browser window */ echo "\r\n" ?>
 				jQuery(window).on('load resize', function() {
-					for (var post in cwp_namespace.fluid_images.Posts) {
-						cwp_namespace.fluid_images.Posts[post].changeImageSize();
+					for (var widget in cwp_namespace.fluid_images.Widgets) {
+						cwp_namespace.fluid_images.Widgets[widget].changeImageSize();
 					}
 				});				
 			});
