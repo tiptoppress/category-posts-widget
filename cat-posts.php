@@ -1729,7 +1729,6 @@ function customize_register($wp_customize) {
         
         foreach($posts as $p) {
             $widget = new Widget();
-            $widget->number = $p->ID;
             $meta = get_post_meta($p->ID,SHORTCODE_META,true);
             if (!is_array($meta))
                 continue;
@@ -1759,9 +1758,10 @@ function customize_register($wp_customize) {
 				) );
 			
 				ob_start();
+				$widget->number = $p->ID;
 				$widget->form($m);
 				$form = ob_get_clean();
-				$form = preg_replace_callback('/<(input|select)\s+.*name=("|\').*\[\d*\]\[([^\]]*)\][^>]*>/',
+				$form = preg_replace_callback('/<(input|select)\s+.*name=("|\').*\[\w*\]\[([^\]]*)\][^>]*>/',
 					function ($matches) use ($p, $wp_customize, $m, $k) {
 						$setting = '_virtual-'.WIDGET_BASE_ID.'['.$p->ID.']['.$k.']['.$matches[3].']';
 						if (!isset($m[$matches[3]]))
