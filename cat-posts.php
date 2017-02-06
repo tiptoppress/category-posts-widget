@@ -1428,7 +1428,6 @@ function change_cropped_image_dimensions() {
 <?php 				/* variables */ ?>				
 					Widgets : {},
 					widget : null,
-					Spans : {},
 					
 <?php				/* class */ ?>
 					Span : function (_self, _imageRatio) {
@@ -1442,6 +1441,7 @@ function change_cropped_image_dimensions() {
 					WidgetPosts : function (widget, ratio) {
 
 <?php 					/* variables */ ?>
+						this.Spans = {};
 						this.allSpans = widget.find( '.cat-post-crop' );
 						this.firstSpan = this.allSpans.first();
 						this.maxSpanWidth = this.firstSpan.width();
@@ -1450,7 +1450,7 @@ function change_cropped_image_dimensions() {
 
 						for( var i = 0; i < this.allSpans.length; i++ ){
 							var imageRatio = this.firstSpan.width() / jQuery(this.allSpans[i]).find( 'img' ).height();
-							cwp_namespace.fluid_images.Spans[i] = new cwp_namespace.fluid_images.Span( jQuery(this.allSpans[i]), imageRatio );
+							this.Spans[i] = new cwp_namespace.fluid_images.Span( jQuery(this.allSpans[i]), imageRatio );
 						}
 
 <?php 					/* functions */ ?>
@@ -1465,9 +1465,9 @@ function change_cropped_image_dimensions() {
 									var spanHeight = this.listItemWidth / this.ratio;
 									this.allSpans.height( spanHeight );
 									
-									for( var index in cwp_namespace.fluid_images.Spans ){									
-										var imageHeight = this.listItemWidth / cwp_namespace.fluid_images.Spans[index].imageRatio;
-										jQuery(cwp_namespace.fluid_images.Spans[index].self).find( 'img' ).css({
+									for( var index in this.Spans ){									
+										var imageHeight = this.listItemWidth / this.Spans[index].imageRatio;
+										jQuery(this.Spans[index].self).find( 'img' ).css({
 											height: imageHeight,
 											marginTop: -(imageHeight - spanHeight) / 2
 										});										
@@ -1477,20 +1477,20 @@ function change_cropped_image_dimensions() {
 					},
 				}
 
-				<?php
-					/***
-					 *  cpw_crop_widgets is an internal filter that is used
-					 *  to gather the ids of the widgets to which apply cropping
-					 *  
-					 *  For eaier prevention of duplication, the widget id number should be an index
-					 *  in the array while the ratio of width/height be the value
-					 */
-					$widgets_ids = apply_filters('cpw_crop_widgets',array());
-					foreach ($widgets_ids as $number => $ratio) {
-				?>
+<?php
+				/***
+				 *  cpw_crop_widgets is an internal filter that is used
+				 *  to gather the ids of the widgets to which apply cropping
+				 *  
+				 *  For eaier prevention of duplication, the widget id number should be an index
+				 *  in the array while the ratio of width/height be the value
+				 */
+				$widgets_ids = apply_filters('cpw_crop_widgets',array());
+				foreach ($widgets_ids as $number => $ratio) {
+?>
 				cwp_namespace.fluid_images.widget = jQuery('#<?php echo $number?>');
 				cwp_namespace.fluid_images.Widgets['<?php echo $number?>'] = new cwp_namespace.fluid_images.WidgetPosts(cwp_namespace.fluid_images.widget,<?php echo $ratio?>);
-				<?php } ?>
+<?php			} ?>
 				
 <?php 			/* do on page load or on resize the browser window */ echo "\r\n" ?>
 				jQuery(window).on('load resize', function() {
