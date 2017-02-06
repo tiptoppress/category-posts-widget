@@ -1048,7 +1048,7 @@ class Widget extends \WP_Widget {
             </p>
             <p>
                 <label for="<?php echo $this->get_field_id("offset"); ?>">
-                    <?php _e('Start offsett','category-posts'); ?>:
+                    <?php _e('Start with post','category-posts'); ?>:
                     <input style="text-align: center; width: 30%;" id="<?php echo $this->get_field_id("offset"); ?>" name="<?php echo $this->get_field_name("offset"); ?>" type="number" min="1" value="<?php echo absint($instance["offset"]); ?>" />
                 </label>
             </p>
