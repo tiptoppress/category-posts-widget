@@ -1758,7 +1758,7 @@ function customize_register($wp_customize) {
 				) );
 			
 				ob_start();
-				$widget->number = $p->ID;
+				$widget->number = $p->ID.'_'.$k;
 				$widget->form($m);
 				$form = ob_get_clean();
 				$form = preg_replace_callback('/<(input|select)\s+.*name=("|\').*\[\w*\]\[([^\]]*)\][^>]*>/',
