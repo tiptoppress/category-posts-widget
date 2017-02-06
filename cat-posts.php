@@ -491,23 +491,27 @@ class Widget extends \WP_Widget {
 		if ( isset( $instance["thumb"] ) && $instance["thumb"] &&
 			((isset($instance['default_thunmbnail']) && ($instance['default_thunmbnail']!= 0)) || has_post_thumbnail()) ) {
 
+            $class            = '';
 			$use_css_cropping = isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping'];
-			
-            $class = '';
-            if( $use_css_cropping || !(isset( $this->instance['disable_css'] ) && $this->instance['disable_css'])) { 
-				$use_css_cropping_class = $use_css_cropping ? " cat-post-crop" : "";
+			$disable_css      = !(isset($this->instance['disable_css']) && $this->instance['disable_css']);
+
+            if( $use_css_cropping || $disable_css) { 
                 if( isset($this->instance['thumb_hover'] )) {
-                    $class = "class=\"cat-post-thumbnail" . $use_css_cropping_class ." cat-post-" . $instance['thumb_hover'] . "\"";
+                    $class = "class=\"cat-post-thumbnail cat-post-" . $instance['thumb_hover'] . "\"";
                 } else {
-                    $class = "class=\"cat-post-thumbnail" . $use_css_cropping_class . "\"";
+                    $class = "class=\"cat-post-thumbnail\"";
                 }
-            } 
+            }
+			
             $title_args = array('echo'=>false);
+
 			if ($no_link)
 				$ret .= '<span '.$class . '">';
 			else
 				$ret .= '<a '.$class . ' href="'.get_the_permalink().'" title="'.the_title_attribute($title_args).'">';
+
             $ret .= $this->the_post_thumbnail( array($this->instance['thumb_w'],$this->instance['thumb_h']));
+
 			if ($no_link)
 				$ret .= '</span>';
 			else
@@ -2077,11 +2081,9 @@ class virtualWidget {
 			'.cat-post-date {font-size: 12px;	line-height: 18px; font-style: italic; margin-bottom: 10px;}',
 			'.cat-post-comment-num {font-size: 12px; line-height: 18px;}',
 			'.cat-post-author {margin-bottom: 0;}',
-			'.cat-post-thumbnail {display: block;}',
-			'.cat-post-thumbnail img {margin: 5px 10px 5px 0;}',
+			'.cat-post-thumbnail {margin: 5px 10px 5px 0; display: block;}',
 			'.cat-post-item:before {content: ""; display: table; clear: both;}',
 			'.cat-post-item:after {content: ""; display: table;	clear: both;}',
-			'.cat-post-crop {margin: 5px 10px 5px 0;  overflow: hidden; display:inline-block}',
 			'.cat-post-item img {margin: initial;}',
 		);
 
@@ -2120,7 +2122,6 @@ class virtualWidget {
 						break;
 					case 'scale':
 						$rules[] = '.cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-						$rules[] = '.cat-post-crop {overflow: hidden; margin: 5px 10px 5px 0;}';
 						$rules[] = '.cat-post-scale img {margin: initial; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
 						$rules[] = '.cat-post-scale img:hover {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}';
 						break;
@@ -2152,7 +2153,7 @@ class virtualWidget {
 		}
 		
 		if ((isset($settings['use_css_cropping']) && $settings['use_css_cropping']) || !(isset($settings['disable_css']) && $settings['disable_css'])) {
-			$ret[] = '#'.$widget_id.' .cat-post-crop {margin: 5px 10px 5px 0; overflow: hidden; display:inline-block}';
+			$ret[] = '#'.$widget_id.' .cat-post-crop {overflow: hidden; display:block}';
 			$ret[] = '#'.$widget_id.' .cat-post-item img {margin: initial;}';
 		}
 	}
