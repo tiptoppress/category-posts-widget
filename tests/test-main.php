@@ -1263,5 +1263,189 @@ class testVirtualwidget extends WP_UnitTestCase {
 		$expected[] = '#test2 .cat-post-thumbnail a {border:0}'; // this for the thumb link
 		$expected[] = '#test2 p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
 		$this->assertEquals($expected,$test);
+
+		$v = new categoryPosts\virtualWidget('test3','testclass',array(
+						'thumbTop' => true,
+					));
+					
+		// css for widget with thumb up settings
+		$test = array();
+		$v->getCSSRules(false,$test);
+		$expected = $this->defaultCss('test3-internal');
+		$expected[] = '#test3-internal .cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+		$expected[] = '#test3-internal .cat-post-item:last-child {border-bottom: none;}';
+		
+		$this->assertEquals($expected,$test);		
+		
+		// css for shortcode with thumb up settings
+		$test = array();
+		$v->getCSSRules(true,$test);
+		$expected = $this->defaultCss('test3');
+		$expected[] = '#test3 .cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+		$expected[] = '#test3 .cat-post-item:last-child {border-bottom: none;}';
+		$expected[] = '#test3 .cat-post-thumbnail a {box-shadow:none}'; // this for the thumb link
+		$expected[] = '#test3 .cat-post-thumbnail a {border:0}'; // this for the thumb link
+		$expected[] = '#test3 p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
+		
+		$this->assertEquals($expected,$test);		
+
+		$v = new categoryPosts\virtualWidget('test4','testclass',array(
+						'thumb_hover' => 'white',
+					));
+					
+		// css for widget with white hover settings
+		$test = array();
+		$v->getCSSRules(false,$test);
+		$expected = $this->defaultCss('test4-internal');
+		$expected[] = '#test4-internal .cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+		$expected[] = '#test4-internal .cat-post-item:last-child {border-bottom: none;}';
+		$expected[] = '#test4-internal .cat-post-thumbnail {float:left;}';		
+		$expected[] = '#test4-internal .cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+		$expected[] = '#test4-internal .cat-post-white {background-color: white;}';
+		$expected[] = '#test4-internal .cat-post-white img:hover {opacity: 0.8;}';
+		
+		$this->assertEquals($expected,$test);		
+		
+		// css for shortcode with white hover settings
+		$test = array();
+		$v->getCSSRules(true,$test);
+		$expected = $this->defaultCss('test4');
+		$expected[] = '#test4 .cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+		$expected[] = '#test4 .cat-post-item:last-child {border-bottom: none;}';
+		$expected[] = '#test4 .cat-post-thumbnail {float:left;}';
+		$expected[] = '#test4 .cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+		$expected[] = '#test4 .cat-post-white {background-color: white;}';
+		$expected[] = '#test4 .cat-post-white img:hover {opacity: 0.8;}';
+		$expected[] = '#test4 .cat-post-thumbnail a {box-shadow:none}'; // this for the thumb link
+		$expected[] = '#test4 .cat-post-thumbnail a {border:0}'; // this for the thumb link
+		$expected[] = '#test4 p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
+		
+		$this->assertEquals($expected,$test);		
+		
+		$v = new categoryPosts\virtualWidget('test5','testclass',array(
+						'thumb_hover' => 'dark',
+					));
+					
+		// css for widget with dark hover settings
+		$test = array();
+		$v->getCSSRules(false,$test);
+		$expected = $this->defaultCss('test5-internal');
+		$expected[] = '#test5-internal .cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+		$expected[] = '#test5-internal .cat-post-item:last-child {border-bottom: none;}';
+		$expected[] = '#test5-internal .cat-post-thumbnail {float:left;}';		
+		$expected[] = '#test5-internal .cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+		$expected[] = '#test5-internal .cat-post img:hover {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}';
+		
+		$this->assertEquals($expected,$test);		
+		
+		// css for shortcode with dark hover settings
+		$test = array();
+		$v->getCSSRules(true,$test);
+		$expected = $this->defaultCss('test5');
+		$expected[] = '#test5 .cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+		$expected[] = '#test5 .cat-post-item:last-child {border-bottom: none;}';
+		$expected[] = '#test5 .cat-post-thumbnail {float:left;}';
+		$expected[] = '#test5 .cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+		$expected[] = '#test5 .cat-post img:hover {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}';
+		$expected[] = '#test5 .cat-post-thumbnail a {box-shadow:none}'; // this for the thumb link
+		$expected[] = '#test5 .cat-post-thumbnail a {border:0}'; // this for the thumb link
+		$expected[] = '#test5 p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
+		
+		$this->assertEquals($expected,$test);		
+
+		$v = new categoryPosts\virtualWidget('test6','testclass',array(
+						'thumb_hover' => 'scale',
+					));
+					
+		// css for widget with scale hover settings
+		$test = array();
+		$v->getCSSRules(false,$test);
+		$expected = $this->defaultCss('test6-internal');
+		$expected[] = '#test6-internal .cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+		$expected[] = '#test6-internal .cat-post-item:last-child {border-bottom: none;}';
+		$expected[] = '#test6-internal .cat-post-thumbnail {float:left;}';		
+		$expected[] = '#test6-internal .cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+		$expected[] = '#test6-internal .cat-post-scale span {overflow: hidden; margin: 5px 10px 5px 0;}';
+		$expected[] = '#test6-internal .cat-post-scale img {margin: initial; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+		$expected[] = '#test6-internal .cat-post-scale img:hover {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}';
+		
+		$this->assertEquals($expected,$test);		
+		
+		// css for shortcode with blur hover settings
+		$test = array();
+		$v->getCSSRules(true,$test);
+		$expected = $this->defaultCss('test6');
+		$expected[] = '#test6 .cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+		$expected[] = '#test6 .cat-post-item:last-child {border-bottom: none;}';
+		$expected[] = '#test6 .cat-post-thumbnail {float:left;}';
+		$expected[] = '#test6 .cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+		$expected[] = '#test6 .cat-post-scale span {overflow: hidden; margin: 5px 10px 5px 0;}';
+		$expected[] = '#test6 .cat-post-scale img {margin: initial; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+		$expected[] = '#test6 .cat-post-scale img:hover {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}';
+		$expected[] = '#test6 .cat-post-thumbnail a {box-shadow:none}'; // this for the thumb link
+		$expected[] = '#test6 .cat-post-thumbnail a {border:0}'; // this for the thumb link
+		$expected[] = '#test6 p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
+		
+		$this->assertEquals($expected,$test);		
+
+		$v = new categoryPosts\virtualWidget('test7','testclass',array(
+						'thumb_hover' => 'blur',
+					));
+					
+		// css for widget with blur hover settings
+		$test = array();
+		$v->getCSSRules(false,$test);
+		$expected = $this->defaultCss('test7-internal');
+		$expected[] = '#test7-internal .cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+		$expected[] = '#test7-internal .cat-post-item:last-child {border-bottom: none;}';
+		$expected[] = '#test7-internal .cat-post-thumbnail {float:left;}';		
+		$expected[] = '#test7-internal .cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+		$expected[] = '#test7-internal .cat-post-blur img:hover {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}';
+		
+		$this->assertEquals($expected,$test);		
+		
+		// css for shortcode with blur hover settings
+		$test = array();
+		$v->getCSSRules(true,$test);
+		$expected = $this->defaultCss('test7');
+		$expected[] = '#test7 .cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+		$expected[] = '#test7 .cat-post-item:last-child {border-bottom: none;}';
+		$expected[] = '#test7 .cat-post-thumbnail {float:left;}';
+		$expected[] = '#test7 .cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+		$expected[] = '#test7 .cat-post-blur img:hover {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}';
+		$expected[] = '#test7 .cat-post-thumbnail a {box-shadow:none}'; // this for the thumb link
+		$expected[] = '#test7 .cat-post-thumbnail a {border:0}'; // this for the thumb link
+		$expected[] = '#test7 p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
+		
+		$this->assertEquals($expected,$test);		
+		
+		$v = new categoryPosts\virtualWidget('test8','testclass',array(
+					));
+			
+		function twentyseventeen_setup() {};
+		
+		// widget twenty seventeen
+		$test = array();
+		$v->getCSSRules(false,$test);
+		$expected = $this->defaultCss('test8-internal');
+		$expected[] = '#test8-internal .cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+		$expected[] = '#test8-internal .cat-post-item:last-child {border-bottom: none;}';
+		$expected[] = '#test8-internal .cat-post-thumbnail {float:left;}';		
+		
+		$this->assertEquals($expected,$test);
+				
+		// shortcode twenty seventeen
+		$test = array();
+		$v->getCSSRules(true,$test);
+		$expected = $this->defaultCss('test8');
+		$expected[] = '#test8 .cat-post-item {list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+		$expected[] = '#test8 .cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+		$expected[] = '#test8 .cat-post-item:last-child {border-bottom: none;}';
+		$expected[] = '#test8 .cat-post-thumbnail {float:left;}';
+		$expected[] = '#test8 .cat-post-thumbnail a {box-shadow:none}'; // this for the thumb link
+		$expected[] = '#test8 .cat-post-thumbnail a {border:0}'; // this for the thumb link
+		$expected[] = '#test8 p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
+		$this->assertEquals($expected,$test);
+		
 	}
 }
