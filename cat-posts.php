@@ -762,20 +762,24 @@ class Widget extends \WP_Widget {
 			if (!isset($instance['excerpt_filters']) || $instance['excerpt_filters']) { // pre 4.7 widgets has filters on
 				$excerpt = apply_filters('the_excerpt', \get_the_excerpt() );
 			} else { // if filters off replicate functionality of core generating excerpt
-				$text = get_the_content('');
-				$text = strip_shortcodes( $text );
-				$more_text = '[&hellip;]';
-				if( isset($instance["excerpt_more_text"]) && $instance["excerpt_more_text"] )
-					$more_text = ltrim($instance["excerpt_more_text"]);
+				if ($post->post_excerpt == '') {
+					$text = get_the_content('');
+					$text = strip_shortcodes( $text );
+					$more_text = '[&hellip;]';
+					if( isset($instance["excerpt_more_text"]) && $instance["excerpt_more_text"] )
+						$more_text = ltrim($instance["excerpt_more_text"]);
 
-				if ($everything_is_link)
-					$excerpt_more_text = ' <span class="cat-post-excerpt-more">'.$more_text.'</span>';
-				else
-					$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
-				$excerpt = \wp_trim_words( $text, $length, $excerpt_more_text );
-				// adjust html output same way as for the normal excerpt, 
-				// just force all functions depending on the_excerpt hook
-				$excerpt = shortcode_unautop(wpautop(convert_chars(convert_smilies(wptexturize($excerpt)))));
+					if ($everything_is_link)
+						$excerpt_more_text = ' <span class="cat-post-excerpt-more">'.$more_text.'</span>';
+					else
+						$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
+					$excerpt = \wp_trim_words( $text, $length, $excerpt_more_text );
+					// adjust html output same way as for the normal excerpt, 
+					// just force all functions depending on the_excerpt hook
+					$excerpt = shortcode_unautop(wpautop(convert_chars(convert_smilies(wptexturize($excerpt)))));
+				} else {
+					$excerpt = shortcode_unautop(wpautop(convert_chars(convert_smilies(wptexturize($post->post_excerpt)))));					
+				}
 			}
 			$ret .= apply_filters('cpw_excerpt',$excerpt);
         }
