@@ -131,6 +131,16 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 ## Changelog
 #### [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=github&utm_campaign=changelog_cpw&utm_medium=web)
 
+#### 4.7.2 - February 20th 2017
+* Fixed if option 'Everything is a link' no closing anchor tag
+* Fixed when a manual excerpt is provided, use it instead of generating an automatic one
+* Fixed if option 'Disable the built-in CSS' the thumbnail client-side cropping isn't disabled
+* Fixed if option 'Disable the built-in CSS' title class is not rendered
+* Fixed when having multi shortcodes, clicking on a checkbox label marks in any of them selects the one in the "first"
+* Fixed 'Client-side cropping' for multi shortcodes
+* Fixed specify some CSS rules
+* Fixed CSS animation
+
 #### 4.7.1 - December 20th 2016
 * Support multiple shortcodes in content
 * Add option for post offset (use two or more widgets after another)

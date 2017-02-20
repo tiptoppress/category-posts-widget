@@ -3,8 +3,8 @@ Contributors: mark-k, kometschuh, mkrdip
 Donate link: http://mkrdip.me/donate
 Tags: category, categories, posts, widget, posts widget, recent posts, category recent posts, shortcode, sidebar, excerpt, multiple widgets
 Requires at least: 2.8
-Tested up to: 4.7
-Stable tag: 4.7.1
+Tested up to: 4.7.2
+Stable tag: 4.7.2
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -130,6 +130,16 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=wordpress_org&utm_campaign=changelog_cpw&utm_medium=web)
+
+= 4.7.2 - February 20th 2017 =
+* Fixed if option 'Everything is a link' no closing anchor tag
+* Fixed when a manual excerpt is provided, use it instead of generating an automatic one
+* Fixed if option 'Disable the built-in CSS' the thumbnail client-side cropping isn't disabled
+* Fixed if option 'Disable the built-in CSS' title class is not rendered
+* Fixed when having multi shortcodes, clicking on a checkbox label marks in any of them selects the one in the "first"
+* Fixed 'Client-side cropping' for multi shortcodes
+* Fixed specify some CSS rules
+* Fixed CSS animation
 
 = 4.7.1 - December 20th 2016 =
 * Support multiple shortcodes in content
