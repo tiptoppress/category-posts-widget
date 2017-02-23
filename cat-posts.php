@@ -1016,7 +1016,7 @@ class Widget extends \WP_Widget {
 	 */
     function formFilterPanel($instance) {
 		$instance = wp_parse_args( ( array ) $instance, array(
-			'cat'                  => '',
+			'cat'                  => 0,
 			'num'                  => get_option('posts_per_page'),
 			'offset'               => 1,
 			'sort_by'              => '',
@@ -1311,7 +1311,7 @@ class Widget extends \WP_Widget {
 					<p>
 						<label for="<?php echo $this->get_field_id("excerpt_filters"); ?>">
 							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_filters"); ?>" name="<?php echo $this->get_field_name("excerpt_filters"); ?>"<?php checked( !empty($excerpt_filters), true ); ?> />
-							<?php _e( 'Themes and plugins may override','category-posts' ); ?>
+							<?php _e( 'Don\'t override Themes and plugin filters','category-posts' ); ?>
 						</label>
 					</p>
 				</div>
@@ -1612,7 +1612,7 @@ function default_settings()  {
 				'title'                           => '',
 				'title_link'                      => false,
 				'hide_title'                      => false,
-				'cat'                             => '',
+				'cat'                             => 0,
 				'num'                             => get_option('posts_per_page'),
 				'offset'                          => 1,
 				'sort_by'                         => 'date',
