@@ -2136,7 +2136,7 @@ class virtualWidget {
 			}
 
 			if (isset( $settings['everything_is_link'] ) && $settings['everything_is_link']) {
-				$rules[] = '.cat-post-everything-is-link {display: inline-block;}';
+				$rules[] = '.cat-post-everything-is-link {display: block;}';
 			}
 
 			foreach ($rules as $rule) {
