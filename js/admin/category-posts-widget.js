@@ -57,6 +57,18 @@
             }	
         },
 		
+		// Show hide foote link URL
+		toggleFooterLinkUrl: function(item) {
+            var cat = jQuery(item).find("option:selected").attr('value');
+			var panel = item.parentElement.parentElement.parentElement.parentElement;
+            if(cat == '0') {
+                jQuery(panel).find('.categoryposts-data-panel-footer-footerLink').show();
+            }
+            else {
+                jQuery(panel).find('.categoryposts-data-panel-footer-footerLink').hide();
+            }	
+        },
+		
 		// Close all open panels if open
 		autoCloseOpenPanels: function(_this) {
 			if( categoryPosts.accordion  ) {
@@ -144,6 +156,10 @@ jQuery(document).ready( function () {
 
 	jQuery('.cwp_default_thumb_remove').off('click').on('click', function () { // remove default thumb
 		cwp_namespace.removeDefaultThumbnailSelection(this);
+	});
+	
+	jQuery('.categoryposts-data-panel-filter-cat').on('change', function () { // for widgets page
+		cwp_namespace.toggleFooterLinkUrl(this);
 	});
 	
 });

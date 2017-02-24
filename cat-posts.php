@@ -640,21 +640,25 @@ class Widget extends \WP_Widget {
     function footerHTML($instance) {
         $ret = '';
         
-        if( isset ( $instance["footer_link"] ) && $instance["footer_link"]) {
+        if( isset ( $instance["footer_link_text"] ) && $instance["footer_link_text"]) {
 			$ret = "<a";
 			if( !(isset( $instance['disable_css'] ) && $instance['disable_css'])) { 
 				$ret.= " class=\"cat-post-footer-link\""; 
 			}
 			if (isset($instance["cat"]) && ($instance["cat"] != 0) && (get_category($instance["cat"]) != null) ) {
-				$ret .= " href=\"" . get_category_link($instance["cat"]) . "\">" . esc_html($instance["footer_link"]) . "</a>";
+				$ret .= " href=\"" . get_category_link($instance["cat"]) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
 			} else {
 				// link to posts page if category not found. 
 				// this maybe the blog page or home page
-				$blog_page = get_option('page_for_posts');
-				if ($blog_page)
-					$ret .= " href=\"" . get_permalink($blog_page) . "\">" . esc_html($instance["footer_link"]) . "</a>";
-				else
-					$ret .= " href=\"" . home_url() . "\">" . esc_html($instance["footer_link"]) . "</a>";
+				if( isset ( $instance["footer_link"] ) && !empty ( $instance["footer_link"] ) ) {
+					$ret .= " href=\"" . esc_url($instance["footer_link"]) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
+				} else {
+					$blog_page = get_option('page_for_posts');
+					if ($blog_page)
+						$ret .= " href=\"" . get_permalink($blog_page) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
+					else
+						$ret .= " href=\"" . home_url() . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
+				}
 			}
 		}
 		
@@ -1039,7 +1043,7 @@ class Widget extends \WP_Widget {
             <p>
                 <label>
                     <?php _e( 'Category','category-posts' ); ?>:
-                    <?php wp_dropdown_categories( array( 'show_option_all' => __('All categories','category-posts'), 'hide_empty'=> 0, 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"] ) ); ?>
+                    <?php wp_dropdown_categories( array( 'show_option_all' => __('All categories','category-posts'), 'hide_empty'=> 0, 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"], 'class' => 'categoryposts-data-panel-filter-cat' ) ); ?>
                 </label>
             </p>
             <p>
@@ -1206,6 +1210,7 @@ class Widget extends \WP_Widget {
  		}
 		$instance = wp_parse_args( ( array ) $instance, array(
 			'everything_is_link'              => false,
+			'footer_link_text'                => '',
 			'footer_link'                     => '',
 			'hide_post_titles'                => '',
 			'excerpt'                         => '',
@@ -1223,6 +1228,7 @@ class Widget extends \WP_Widget {
 		) );
 
 		$everything_is_link				 = $instance['everything_is_link'];
+		$footer_link_text                = $instance['footer_link_text'];
 		$footer_link                     = $instance['footer_link'];
 		$hide_post_titles                = $instance['hide_post_titles'];
 		$excerpt                         = $instance['excerpt'];
@@ -1236,6 +1242,8 @@ class Widget extends \WP_Widget {
 		$date_format                     = $instance['date_format'];
 		$disable_css                     = $instance['disable_css'];
 		$hide_if_empty                   = $instance['hide_if_empty'];
+		
+		$cat = $instance['cat'];
 
 		
         if (!isset($style_done)) { // what an ugly hack, but can't figure out how to do it nicer on 4.3
@@ -1366,11 +1374,17 @@ class Widget extends \WP_Widget {
 			<h4 data-panel="footer"><?php _e('Footer','category-posts')?></h4>
 			<div>
 				<p>
-					<label for="<?php echo $this->get_field_id("footer_link"); ?>">
+					<label for="<?php echo $this->get_field_id("footer_link_text"); ?>">
 						<?php _e( 'Footer link text','category-posts' ); ?>:
-						<input class="widefat" style="width:60%;" placeholder="<?php _e('... more by this topic','category-posts')?>" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
+						<input class="widefat" style="width:60%;" placeholder="<?php _e('... more by this topic','category-posts')?>" id="<?php echo $this->get_field_id("footer_link_text"); ?>" name="<?php echo $this->get_field_name("footer_link_text"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link_text"]); ?>" />
 					</label>
 				</p>
+                <p class="categoryposts-data-panel-footer-footerLink" style="display:<?php echo ((bool) $cat == 0) ? 'block' : 'none'?>">
+                    <label for="<?php echo $this->get_field_id("footer_link"); ?>">
+                        <?php _e( 'Footer link URL','category-posts' ); ?>:
+                        <input class="widefat" style="width:60%;" placeholder="<?php _e('... URL of more link','category-posts')?>" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
+                    </label>
+        		</p>
 			</div>
             <p><a href="<?php echo get_edit_user_link().'#'.__NAMESPACE__ ?>"><?php _e('Widget admin behaviour settings','category-posts')?></a></p>			
             <p><a target="_blank" href="<?php echo CAT_POST_DOC_URL ?>"><?php _e('Documentation','category-posts'); ?></a></p>
@@ -1619,6 +1633,7 @@ function default_settings()  {
 				'asc_sort_order'                  => false,
 				'exclude_current_post'            => false,
 				'hideNoThumb'                     => false,
+				'footer_link_text'                => '',
 				'footer_link'                     => '',
 				'thumb'                           => false,
 				'thumbTop'                        => false,
@@ -2136,7 +2151,7 @@ class virtualWidget {
 			}
 
 			if (isset( $settings['everything_is_link'] ) && $settings['everything_is_link']) {
-				$rules[] = '.cat-post-everything-is-link {display: block;}';
+				$rules[] = '.cat-post-everything-is-link { }';
 			}
 
 			foreach ($rules as $rule) {
@@ -2144,12 +2159,11 @@ class virtualWidget {
 			}
 
 			if ($is_shortcode) {
-				// 2016 theme adds underlines to links with box whadow wtf....
+				// Twenty Sixteen Theme adds underlines to links with box whadow wtf ...
 				$ret[] = '#'.$widget_id.' .cat-post-thumbnail a {box-shadow:none}'; // this for the thumb link
-				// 2015 adds border....
+				// Twenty Fifteen Theme adds border ...
 				$ret[] = '#'.$widget_id.' .cat-post-thumbnail a {border:0}'; // this for the thumb link
-
-				// probably all theme have too much margin on their p element when used in the shortcode
+				// probably all Themes have too much margin on their p element when used in the shortcode
 				$ret[] = '#'.$widget_id.' p {margin:5px 0 0 0}';	/* since on bottom it will make the spacing on cover
 																	   bigger (add to the padding) use only top for now */
 			}
