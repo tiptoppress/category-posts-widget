@@ -1222,6 +1222,7 @@ class Widget extends \WP_Widget {
 			'date_link'                       => '',
 			'date_format'                     => '',
 			'disable_css'                     => '',
+			'disable_font_styles'             => '',
 			'hide_if_empty'                   => '',
 			'hide_social_buttons'             => '',
 		) );
@@ -1240,6 +1241,7 @@ class Widget extends \WP_Widget {
 		$date_link                       = $instance['date_link'];
 		$date_format                     = $instance['date_format'];
 		$disable_css                     = $instance['disable_css'];
+		$disable_font_styles             = $instance['disable_font_styles'];
 		$hide_if_empty                   = $instance['hide_if_empty'];
 		
 		$cat = $instance['cat'];
@@ -1361,6 +1363,12 @@ class Widget extends \WP_Widget {
 					<label for="<?php echo $this->get_field_id("disable_css"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_css"); ?>" name="<?php echo $this->get_field_name("disable_css"); ?>"<?php checked( (bool) $instance["disable_css"], true ); ?> />
 						<?php _e( 'Disable the built-in CSS for this widget','category-posts' ); ?>
+					</label>
+				</p>
+				<p>
+					<label for="<?php echo $this->get_field_id("disable_font_styles"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_font_styles"); ?>" name="<?php echo $this->get_field_name("disable_font_styles"); ?>"<?php checked( (bool) $instance["disable_font_styles"], true ); ?> />
+						<?php _e( 'Disable only font styles for this widget','category-posts' ); ?>
 					</label>
 				</p>
 				<p>
@@ -1651,6 +1659,7 @@ function default_settings()  {
 				'date_link'                       => false,
 				'date_format'                     => '',
 				'disable_css'                     => false,
+				'disable_font_styles'             => false,
 				'hide_if_empty'                   => false,
 				'hide_social_buttons'             => '',
 				'no_cat_childs'                   => false,
@@ -2091,24 +2100,37 @@ class virtualWidget {
 	 *  
 	 *  @since 4.7
 	 */
-	function getCSSRules($is_shortcode,&$ret) {
-		$rules = array( // rules that should be applied to all widgets
-			'.cat-post-item img {max-width: initial; max-height: initial;}',
-			'.cat-post-title {font-size: 15px;}',
-			'.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}'.
-			'.cat-post-date {font-size: 12px;	line-height: 18px; font-style: italic; margin-bottom: 10px;}',
-			'.cat-post-comment-num {font-size: 12px; line-height: 18px;}',
-			'.cat-post-author {margin-bottom: 0;}',
-			'.cat-post-thumbnail {margin: 5px 10px 5px 0; display: block;}',
-			'.cat-post-item:before {content: ""; display: table; clear: both;}',
-			'.cat-post-item:after {content: ""; display: table;	clear: both;}',
-			'.cat-post-item img {margin: initial;}',
-		);
-
+	function getCSSRules($is_shortcode,&$ret) {	
 		$settings = self::$collection[$this->id];
 		$widget_id = $this->id;
 		if (!$is_shortcode)
 			$widget_id .= '-internal';
+	
+		if (!(isset($settings['disable_font_styles']) && $settings['disable_font_styles'])) { // checks if disable font styles is not set
+			$rules = array( // rules that should be applied to all widgets
+				'.cat-post-item img {max-width: initial; max-height: initial;}',
+				'.cat-post-title {font-size: 15px;}',
+				'.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}',
+				'.cat-post-date {font-size: 12px;	line-height: 18px; font-style: italic; margin-bottom: 10px;}',
+				'.cat-post-comment-num {font-size: 12px; line-height: 18px;}',
+				'.cat-post-author {margin-bottom: 0;}',
+				'.cat-post-thumbnail {margin: 5px 10px 5px 0; display: block;}',
+				'.cat-post-item:before {content: ""; display: table; clear: both;}',
+				'.cat-post-item:after {content: ""; display: table;	clear: both;}',
+				'.cat-post-item img {margin: initial;}',
+			);
+		} else {
+			$rules = array( // rules that should be applied to all widgets
+				'.cat-post-item img {max-width: initial; max-height: initial;}',
+				'.cat-post-current .cat-post-title {text-transform: uppercase;}',
+				'.cat-post-date {margin-bottom: 10px;}',
+				'.cat-post-author {margin-bottom: 0;}',
+				'.cat-post-thumbnail {margin: 5px 10px 5px 0; display: block;}',
+				'.cat-post-item:before {content: ""; display: table; clear: both;}',
+				'.cat-post-item:after {content: ""; display: table;	clear: both;}',
+				'.cat-post-item img {margin: initial;}',
+			);
+		}
 
 		if (!(isset($settings['disable_css']) && $settings['disable_css'])) { // checks if css disable is not set
 
