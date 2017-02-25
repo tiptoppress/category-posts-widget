@@ -68,6 +68,18 @@
                 jQuery(panel).find('.categoryposts-data-panel-footer-footerLink').hide();
             }	
         },
+
+		// Show hide disable font styles
+		toggleDisableFontStyles: function(item) {
+            var value = jQuery(item).find("input").attr('checked');
+			var panel = item.parentElement.parentElement;
+            if(value == 'checked') {
+                jQuery(panel).find('.categoryposts-data-panel-general-disable-font-styles').hide();
+            }
+            else {
+                jQuery(panel).find('.categoryposts-data-panel-general-disable-font-styles').show();
+            }	
+        },
 		
 		// Close all open panels if open
 		autoCloseOpenPanels: function(_this) {

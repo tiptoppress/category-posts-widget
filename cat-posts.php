@@ -622,12 +622,12 @@ class Widget extends \WP_Widget {
 			} else 
 				$ret .= $title;
 			
-            $ret .= $after_title;
-        }
-        
-        return $ret;
-    }
-    
+			$ret .= $after_title;
+		}
+
+		return $ret;
+	}
+
 	/**
 	 * Calculate the HTML of the footer based on the widget settings
 	 *
@@ -636,9 +636,9 @@ class Widget extends \WP_Widget {
      *
      * @since 4.6
 	 */
-    function footerHTML($instance) {
-        $ret = '';
-        
+	function footerHTML($instance) {
+
+		$ret = "";
 		if (isset ( $instance["footer_link"] ) && !empty ( $instance["footer_link"] )) {
 			if (empty($instance["footer_link_text"]))
 				$instance["footer_link_text"] = $instance["footer_link"];
@@ -662,11 +662,9 @@ class Widget extends \WP_Widget {
 				}
 			}
 		}
-		
-        
-        return $ret;
-    }
-    
+		return $ret;
+	}
+
 	/**
 	 * Calculate the HTML for a post item based on the widget settings and post.
      * Expected to be called in an active loop with all the globals set
@@ -1361,13 +1359,13 @@ class Widget extends \WP_Widget {
 			</div>
 			<h4 data-panel="general"><?php _e('General','category-posts')?></h4>
 			<div>
-				<p>
+				<p onchange="javascript:cwp_namespace.toggleDisableFontStyles(this)">
 					<label for="<?php echo $this->get_field_id("disable_css"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_css"); ?>" name="<?php echo $this->get_field_name("disable_css"); ?>"<?php checked( (bool) $instance["disable_css"], true ); ?> />
 						<?php _e( 'Disable the built-in CSS for this widget','category-posts' ); ?>
 					</label>
 				</p>
-				<p>
+				<p class="categoryposts-data-panel-general-disable-font-styles" style="display:<?php echo ((bool) $disable_css) ? 'none' : 'block'?>">
 					<label for="<?php echo $this->get_field_id("disable_font_styles"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_font_styles"); ?>" name="<?php echo $this->get_field_name("disable_font_styles"); ?>"<?php checked( (bool) $instance["disable_font_styles"], true ); ?> />
 						<?php _e( 'Disable only font styles for this widget','category-posts' ); ?>
