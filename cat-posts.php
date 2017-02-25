@@ -230,7 +230,6 @@ function admin_styles() {
 }	
 .category-widget-cont > div {
 	display:none;
-	overflow: hidden;
 }	
 .category-widget-cont > div.open {
 	display:block;
@@ -1139,7 +1138,7 @@ class Widget extends \WP_Widget {
             </p>
             <p>
                 <label>
-                    <?php _e('Thumbnail dimensions (in pixels)','category-posts'); ?>:<br />
+                    <?php _e('Thumbnail dimensions (in pixels)','category-posts'); ?><br />
                     <label for="<?php echo $this->get_field_id("thumb_w"); ?>">
                         <?php _e('Width:','category-posts')?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo esc_attr($instance["thumb_w"]); ?>" />
                     </label>
@@ -1154,10 +1153,22 @@ class Widget extends \WP_Widget {
                     <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("use_css_cropping"); ?>" name="<?php echo $this->get_field_name("use_css_cropping"); ?>"<?php checked( (bool) $instance["use_css_cropping"], true ); ?> />
                     <?php _e( 'CSS crop to requested size ','category-posts' ); ?>
                 </label>
-            </p>					
+            </p>
+            <p>
+                <label for="<?php echo $this->get_field_id("thumb_hover"); ?>">
+                    <?php _e( 'Animation on mouse hover:','category-posts' ); ?>
+                </label>
+                <select id="<?php echo $this->get_field_id("thumb_hover"); ?>" name="<?php echo $this->get_field_name("thumb_hover"); ?>">
+                    <option value="none" <?php selected($thumb_hover, 'none')?>><?php _e( 'None', 'category-posts' ); ?></option>
+                    <option value="dark" <?php selected($thumb_hover, 'dark')?>><?php _e( 'Darker', 'category-posts' ); ?></option>
+                    <option value="white" <?php selected($thumb_hover, 'white')?>><?php _e( 'Brighter', 'category-posts' ); ?></option>
+                    <option value="scale" <?php selected($thumb_hover, 'scale')?>><?php _e( 'Zoom in', 'category-posts' ); ?></option>
+					<option value="blur" <?php selected($thumb_hover, 'blur')?>><?php _e( 'Blur', 'category-posts' ); ?></option>
+                </select>
+            </p>
             <p>
                 <label style="display:block">
-                    <?php _e( 'Default thumbnail ','category-posts' ); ?>
+                    <?php _e( 'Default thumbnail: ','category-posts' ); ?>
                 </label>
 				<input type="hidden" class="default_thumb_id" id="<?php echo $this->get_field_id("default_thunmbnail"); ?>" name="<?php echo $this->get_field_name("default_thunmbnail"); ?>" value="<?php echo esc_attr($default_thunmbnail)?>"/>
 				<span class="default_thumb_img">
@@ -1179,18 +1190,6 @@ class Widget extends \WP_Widget {
 					<?php _e('No default','category-posts')?>
 				</button>
             </p>					
-            <p>
-                <label for="<?php echo $this->get_field_id("thumb_hover"); ?>">
-                    <?php _e( 'Animation on mouse hover:','category-posts' ); ?>
-                </label>
-                <select id="<?php echo $this->get_field_id("thumb_hover"); ?>" name="<?php echo $this->get_field_name("thumb_hover"); ?>">
-                    <option value="none" <?php selected($thumb_hover, 'none')?>><?php _e( 'None', 'category-posts' ); ?></option>
-                    <option value="dark" <?php selected($thumb_hover, 'dark')?>><?php _e( 'Darker', 'category-posts' ); ?></option>
-                    <option value="white" <?php selected($thumb_hover, 'white')?>><?php _e( 'Brighter', 'category-posts' ); ?></option>
-                    <option value="scale" <?php selected($thumb_hover, 'scale')?>><?php _e( 'Zoom in', 'category-posts' ); ?></option>
-					<option value="blur" <?php selected($thumb_hover, 'blur')?>><?php _e( 'Blur', 'category-posts' ); ?></option>
-                </select>
-            </p>
         </div>
 <?php
     }
@@ -2160,9 +2159,9 @@ class virtualWidget {
 
 			if ($is_shortcode) {
 				// Twenty Sixteen Theme adds underlines to links with box whadow wtf ...
-				$ret[] = '#'.$widget_id.' .cat-post-thumbnail a {box-shadow:none}'; // this for the thumb link
+				$ret[] = '#'.$widget_id.' .cat-post-thumbnail {box-shadow:none}'; // this for the thumb link
 				// Twenty Fifteen Theme adds border ...
-				$ret[] = '#'.$widget_id.' .cat-post-thumbnail a {border:0}'; // this for the thumb link
+				$ret[] = '#'.$widget_id.' .cat-post-thumbnail {border:0}'; // this for the thumb link
 				// probably all Themes have too much margin on their p element when used in the shortcode
 				$ret[] = '#'.$widget_id.' p {margin:5px 0 0 0}';	/* since on bottom it will make the spacing on cover
 																	   bigger (add to the padding) use only top for now */
