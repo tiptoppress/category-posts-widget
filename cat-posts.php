@@ -639,7 +639,9 @@ class Widget extends \WP_Widget {
     function footerHTML($instance) {
         $ret = '';
         
-        if( isset ( $instance["footer_link_text"] ) && $instance["footer_link_text"]) {
+		if (isset ( $instance["footer_link"] ) && !empty ( $instance["footer_link"] )) {
+			if (empty($instance["footer_link_text"]))
+				$instance["footer_link_text"] = $instance["footer_link"];
 			$ret = "<a";
 			if( !(isset( $instance['disable_css'] ) && $instance['disable_css'])) { 
 				$ret.= " class=\"cat-post-footer-link\""; 
