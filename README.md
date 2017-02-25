@@ -18,8 +18,8 @@ Adds a widget that shows the most recent posts from a single category.
 Category Posts Widget is a light widget designed to do one thing and do it well: display the most recent posts from a certain category.
 
 ### Term and Category based Posts Widget
-This is the premium version of this free widget here and available on <a target="_blank" href="http://tiptoppress.com/?utm_source=github&utm_campaign=premium_widget_cpw&utm_medium=web">tiptoppress.com</a> created for big Wordpress sites.
-We've also started creating free widget extensions for the Premium Widget. The first extension is the <a href="https://github.com/tiptoppress/term-posts-excerpt-extension">Excerpt Extension</a>.
+A premium version of this free widget here and available on <a target="_blank" href="http://tiptoppress.com/?utm_source=github&utm_campaign=premium_widget_cpw&utm_medium=web">tiptoppress.com</a> created for big Wordpress sites.
+We've also started creating free widget extensions for the Premium Widget. The first extension is the <a href="https://github.com/tiptoppress/excerpt-extension">Excerpt Extension</a>.
 
 ### Premium features
 * "Post List Alterations"
@@ -65,7 +65,7 @@ We've also started creating free widget extensions for the Premium Widget. The f
 * Option to make the widget date link to the category page.
 * Option to format the outputted date string.
 * Option to link to the category page below posts list.
-* Option to disable widget CSS.
+* Option to disable widget CSS or only the font styles.
 * Multiple widgets.
 * Multi sites support.
 * Support localization with translate.wordpress.org
@@ -103,6 +103,14 @@ Automatic installation is the easiest option as WordPress handles the file trans
 * Version 3.0 or later version uses WordPress 2.9's built in post thumbnail functionality.
 
 ## Frequently Asked Questions
+= Thumb and Title not able to float left =
+Check the option in the Thumbnails panels > "Show thumbnails above text".
+Then add this custom CSS. If you use wordpress 4.7 or higher you can add this custom CSS with the customizer ([Easily adding custom CSS using the Theme customizer](http://kometschuh.de/Easily-adding-custom-CSS-using-the-WordPress-Theme-customizer.html)):
+
+.cat-post-thumbnail {
+	float: left !important;
+}
+
 = The font-size is different from that of other widgets or Theme elements? =
 Please use the option: "Disable widget CSS".
 
@@ -122,6 +130,17 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 
 ## Changelog
 #### [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=github&utm_campaign=changelog_cpw&utm_medium=web)
+
+#### 4.7.2 - February 25th 2017
+* Add option to disable only the font styles
+* Fixed if option 'Everything is a link' no closing anchor tag
+* Fixed if option 'Everyting is a link' wrong layout
+* Fixed when a manual excerpt is provided, use it instead of generating an automatic one
+* Fixed if option 'Disable the built-in CSS' the thumbnail client-side cropping isn't disabled
+* Fixed if option 'Disable the built-in CSS' title class is not rendered
+* Fixed when having multi shortcodes, clicking on a checkbox label marks in any of them selects the one in the "first"
+* Fixed if option 'CSS crop to requested size' for multi shortcodes
+* Fixed for CSS animation
 
 #### 4.7.1 - December 20th 2016
 * Support multiple shortcodes in content

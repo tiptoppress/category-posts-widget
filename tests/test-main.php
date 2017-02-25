@@ -965,47 +965,48 @@ class testWidgetAdmin extends WP_UnitTestCase {
     }
 }
 
+function default_settings() {
+	return array (
+				'title' => '',
+				'title_link' => false,
+				'hide_title' => false,
+				'cat'                  => '',
+				'num'                  => get_option('posts_per_page'),
+				'sort_by'              => 'date',
+				'asc_sort_order'       => false,
+				'exclude_current_post' => false,
+				'hideNoThumb'          => false,
+				'footer_link'          => '',
+				'thumb'                => false,
+				'thumbTop'             => false,
+				'thumb_w'              => '150',
+				'thumb_h'              => '150',
+				'use_css_cropping'     => false,
+				'thumb_hover'          => 'none',
+				'hide_post_titles'     => false,
+				'excerpt'              => false,
+				'excerpt_length'       => 55,
+				'excerpt_more_text'    => '',
+				'comment_num'          => false,
+				'author'               => false,
+				'date'                 => false,
+				'date_link'            => false,
+				'date_format'          => '',
+				'disable_css'          => false,
+				'hide_if_empty'        => false,
+				'offset' 			   => 1,
+				'hide_social_buttons'  => '',
+				'no_cat_childs'        => false,
+				'excerpt_filters'	   => false,
+				'everything_is_link'   => false,
+			   );
+}
+
 class testShortCode extends WP_UnitTestCase {
 
     const SHORTCODE_NAME = 'catposts';
     const SHORTCODE_META = 'categoryPosts-shorcode';
     const WIDGET_BASE_ID = 'category-posts';
-
-	function default_settings() {
-		return array (
-					'title' => '',
-					'title_link' => false,
-					'hide_title' => false,
-					'cat'                  => '',
-					'num'                  => get_option('posts_per_page'),
-					'sort_by'              => 'date',
-					'asc_sort_order'       => false,
-					'exclude_current_post' => false,
-					'hideNoThumb'          => false,
-					'footer_link'          => '',
-					'thumb'                => false,
-					'thumbTop'             => false,
-					'thumb_w'              => '150',
-					'thumb_h'              => '150',
-					'use_css_cropping'     => false,
-					'thumb_hover'          => 'none',
-					'hide_post_titles'     => false,
-					'excerpt'              => false,
-					'excerpt_length'       => 55,
-					'excerpt_more_text'    => '',
-					'comment_num'          => false,
-					'author'               => false,
-					'date'                 => false,
-					'date_link'            => false,
-					'date_format'          => '',
-					'disable_css'          => false,
-					'hide_if_empty'        => false,
-					'offset' 			   => 1,
-					'hide_social_buttons'  => '',
-					'no_cat_childs'        => false,
-					'excerpt_filters'	   => false,
-				   );
-	}
 	
     /**
      *  Test the generation and removal of met values when a shortcode is 
@@ -1019,12 +1020,12 @@ class testShortCode extends WP_UnitTestCase {
 
         // initialization to defaults when inserted
         wp_update_post(array('ID'=>$pid,'post_content' => '['.self::SHORTCODE_NAME.']'));
-        $this->assertEquals(array('' => $this->default_settings()),
+        $this->assertEquals(array('' => default_settings()),
                                get_post_meta($pid,self::SHORTCODE_META,true));
                                
         // test change in other parts of the content
         wp_update_post(array('ID'=>$pid,'post_content' => '['.self::SHORTCODE_NAME.'] lovely day'));
-        $this->assertEquals(array('' => $this->default_settings()),
+        $this->assertEquals(array('' => default_settings()),
                                get_post_meta($pid,self::SHORTCODE_META,true));
                                
         // test removal
@@ -1035,12 +1036,12 @@ class testShortCode extends WP_UnitTestCase {
 		
         // initialization to defaults when inserted
         wp_update_post(array('ID'=>$pid,'post_content' => '['.self::SHORTCODE_NAME.' name="test"]'));
-        $this->assertEquals(array('test' => $this->default_settings()),
+        $this->assertEquals(array('test' => default_settings()),
                                get_post_meta($pid,self::SHORTCODE_META,true));
                                
         // test change in other parts of the content
         wp_update_post(array('ID'=>$pid,'post_content' => '['.self::SHORTCODE_NAME.' name="test"] lovely day'));
-        $this->assertEquals(array('test' => $this->default_settings()),
+        $this->assertEquals(array('test' => default_settings()),
                                get_post_meta($pid,self::SHORTCODE_META,true));
                                
         // test removal
@@ -1052,9 +1053,9 @@ class testShortCode extends WP_UnitTestCase {
         wp_update_post(array('ID'=>$pid,'post_content' => '['.self::SHORTCODE_NAME.' name="test"]'.
 		                                                  '['.self::SHORTCODE_NAME.' mistake="test2"]'.
 		                                                  '['.self::SHORTCODE_NAME.' name="test testing"]'));
-        $this->assertEquals(array('' => $this->default_settings(),
-		                          'test' => $this->default_settings(),
-								  'test testing' => $this->default_settings()
+        $this->assertEquals(array('' => default_settings(),
+		                          'test' => default_settings(),
+								  'test testing' => default_settings()
 								  ),
                                get_post_meta($pid,self::SHORTCODE_META,true));
     }
@@ -1072,19 +1073,19 @@ class testShortCode extends WP_UnitTestCase {
 
         // no update at all
         categoryPosts\customize_save_after();
-        $this->assertEquals(array('' => $this->default_settings()),
+        $this->assertEquals(array('' => default_settings()),
                                get_post_meta($pid,self::SHORTCODE_META,true));
 
         // update some other post
         update_option('_virtual-'.self::WIDGET_BASE_ID,array($pid2 => array('title' => 'bla')));
         categoryPosts\customize_save_after();
-        $this->assertEquals(array ('' => $this->default_settings()),
+        $this->assertEquals(array ('' => default_settings()),
                                get_post_meta($pid,self::SHORTCODE_META,true));
                                
         // update some property on "our" post, title
         update_option('_virtual-'.self::WIDGET_BASE_ID,array($pid => array('' => array('title' => 'bla'))));
         categoryPosts\customize_save_after();
-		$out = $this->default_settings();
+		$out = default_settings();
 		$out['title'] = 'bla';
         $this->assertEquals(array('' => $out),
                                get_post_meta($pid,self::SHORTCODE_META,true));   
@@ -1100,11 +1101,11 @@ class testShortCode extends WP_UnitTestCase {
 																		   )));
         categoryPosts\customize_save_after();
 
-		$out1 = $this->default_settings();
+		$out1 = default_settings();
 		$out1['title'] = 'bla';
-		$out2 = $this->default_settings();
+		$out2 = default_settings();
 		$out2['title'] = 'ble';
-		$out3 = $this->default_settings();
+		$out3 = default_settings();
 		$out3['title'] = 'bla2';
         $this->assertEquals(array('' => $out1,
 		                          'test' => $out2,
@@ -1166,5 +1167,101 @@ class testShortCode extends WP_UnitTestCase {
 		$this->assertEquals(false,get_post_meta($pid,'categoryPosts-shorcode',true));
 		$this->assertEquals(false,get_post_meta($pid2,'categoryPosts-shorcode',true));
 		$this->assertEquals(false,get_post_meta($pid3,'categoryPosts-shorcode',true));
+	}
+}
+
+class testVirtualwidget extends WP_UnitTestCase {
+	
+	/**
+	 *  Test the id method
+	 */
+	function testId() {
+		$v = new categoryPosts\virtualWidget('test','testclass',array());
+		$this->assertEquals($v->id(),'test');
+	}
+	
+	/**
+	 *  test that virtual widgets are added from the collectio
+	 */
+	function testConstructor() {
+		
+		// test default setting with no override
+		$v = new categoryPosts\virtualWidget('test','testclass',array());
+		$col = categoryPosts\virtualWidget::getAllSettings();
+		$this->assertEquals($col['test'],default_settings());
+		
+		// test default setting with override
+		$v = new categoryPosts\virtualWidget('test2','testclass',array('title' => 'bla'));
+		$col = categoryPosts\virtualWidget::getAllSettings();
+		$expect = default_settings();
+		$expect['title'] = 'bla';
+		$this->assertEquals($col['test2'],$expect);		
+		
+	}
+	
+	function defaultCss($id) {
+		$rules = array( // rules that should be applied to all widgets
+			'.cat-post-item span.cat-post-css-cropping img {max-width: initial;	max-height: initial;}',
+			'.cat-post-title {display: inline-block; font-size: 15px;}',
+			'.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}'.
+			'.cat-post-date {font-size: 12px;	line-height: 18px; font-style: italic; margin-bottom: 10px;}',
+			'.cat-post-comment-num {font-size: 12px; line-height: 18px;}',
+			'.cat-post-author {margin-bottom: 0;}',
+			'.cat-post-thumbnail {display: block;}',
+			'.cat-post-thumbnail img {margin: 5px 10px 5px 0;}',
+			'.cat-post-item:before {content: ""; display: table; clear: both;}',
+			'.cat-post-item:after {content: ""; display: table;	clear: both;}',
+			'.cat-post-item .cat-post-css-cropping span {margin: 5px 10px 5px 0;  overflow: hidden; display:inline-block}',
+			'.cat-post-item .cat-post-css-cropping img {margin: initial;}',
+		);
+		
+		foreach ($rules as $rule) {
+			$ret[] = '#'.$id.' '.$rule;
+		}
+		
+		return $ret;
+		
+	}
+	
+	function testGetCSSRules() {
+		$v = new categoryPosts\virtualWidget('test','testclass',array(
+						'disable_css' => true,
+					));
+					
+		// no css for widget
+		$test = array();
+		$v->getCSSRules(false,$test);
+		$this->assertEquals(array(),$test);
+				
+		// no css for shortcode
+		$test = array();
+		$v->getCSSRules(false,$test);
+		$this->assertEquals(array(),$test);
+		
+		$v = new categoryPosts\virtualWidget('test2','testclass',array(
+					));
+					
+		
+		// css for widget default settings
+		$test = array();
+		$v->getCSSRules(false,$test);
+		$expected = $this->defaultCss('test2-internal');
+		$expected[] = '#test2-internal .cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+		$expected[] = '#test2-internal .cat-post-item:last-child {border-bottom: none;}';
+		$expected[] = '#test2-internal .cat-post-thumbnail {float:left;}';		
+		
+		$this->assertEquals($expected,$test);
+				
+		// css for shortcode default settings
+		$test = array();
+		$v->getCSSRules(true,$test);
+		$expected = $this->defaultCss('test2');
+		$expected[] = '#test2 .cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+		$expected[] = '#test2 .cat-post-item:last-child {border-bottom: none;}';
+		$expected[] = '#test2 .cat-post-thumbnail {float:left;}';
+		$expected[] = '#test2 .cat-post-thumbnail a {box-shadow:none}'; // this for the thumb link
+		$expected[] = '#test2 .cat-post-thumbnail a {border:0}'; // this for the thumb link
+		$expected[] = '#test2 p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
+		$this->assertEquals($expected,$test);
 	}
 }

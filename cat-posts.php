@@ -4,7 +4,7 @@ Plugin Name: Category Posts Widget
 Plugin URI: https://wordpress.org/plugins/category-posts/
 Description: Adds a widget that shows the most recent posts from a single category.
 Author: TipTopPress
-Version: 4.7.1
+Version: 4.7.2
 Author URI: http://tiptoppress.com
 Text Domain: category-posts
 Domain Path: /languages
@@ -15,7 +15,7 @@ namespace categoryPosts;
 // Don't call the file directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
-const CAT_POST_VERSION = "4.7.1";
+const CAT_POST_VERSION = "4.7.2";
 const CAT_POST_DOC_URL = "http://tiptoppress.com/category-posts-widget/documentation-4-7?utm_source=widget_cpw&utm_campaign=documentation_4_7_cpw&utm_medium=form";
 
 const SHORTCODE_NAME = 'catposts';
@@ -230,7 +230,6 @@ function admin_styles() {
 }	
 .category-widget-cont > div {
 	display:none;
-	overflow: hidden;
 }	
 .category-widget-cont > div.open {
 	display:block;
@@ -339,7 +338,7 @@ class Widget extends \WP_Widget {
 					.'px;clip:rect(auto,'.($this->instance['thumb_w']+$image['marginVal']).'px,auto,'.$image['marginVal']
 					.'px);width:auto;max-width:initial;" ',$html);
 				// wrap span
-				$html = '<span style="width:'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px;">'
+				$html = '<span class="cat-post-crop" style="width:'.$this->instance['thumb_w'].'px;height:'.$this->instance['thumb_h'].'px;">'
 					.$html.'</span>';
 			} else {
 				// use_css_cropping is not used
@@ -399,7 +398,7 @@ class Widget extends \WP_Widget {
 	 * Excerpt more link filter
 	 */
 	function excerpt_more_filter($more) {
-		return ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '">' . esc_html($this->instance["excerpt_more_text"]) . '</a>';
+		return ' <a class="cat-post-excerpt-more more-link" href="'. get_permalink() . '">' . esc_html($this->instance["excerpt_more_text"]) . '</a>';
 	}
 
 	/**
@@ -490,41 +489,28 @@ class Widget extends \WP_Widget {
         
 		if ( isset( $instance["thumb"] ) && $instance["thumb"] &&
 			((isset($instance['default_thunmbnail']) && ($instance['default_thunmbnail']!= 0)) || has_post_thumbnail()) ) {
-			$use_css_cropping = (isset($this->instance['use_css_cropping'])&&$this->instance['use_css_cropping']) ? "cat-post-css-cropping" : "";
-			if ($use_css_cropping){
-				// enque relevant scripts and parameters to perform cropping
-				// once we support only 4.5+ it can be refactored to use wp_add_inline_script
-				wp_enqueue_script( 'jquery'); // just in case the theme or other plugins didn't enqueue it
-				add_action('wp_footer', __NAMESPACE__.'\change_cropped_image_dimensions', 100);  // add to the footer the cropping script
-				$number = $this->number;
-				// a temporary hack to handle difference in the number in a true widget
-				// and the number format expected at the rest of the places
-				if (is_numeric($number))
-					$number = WIDGET_BASE_ID .'-'.$number;
-				
-				// add Javascript to change change cropped image dimensions on load and window resize
-				$thumb_w = $this->instance['thumb_w'];
-				$thumb_h = $this->instance['thumb_h'];
-				add_filter('cpw_crop_widgets', function ($a) use ($number, $thumb_w, $thumb_h) { 
-					$a[$number] = $thumb_w / $thumb_h;
-					return $a;
-				});
-			}
-			
-            $class = '';
-            if( !(isset( $this->instance['disable_css'] ) && $this->instance['disable_css'])) { 
+
+            $class            = '';
+			$use_css_cropping = isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping'];
+			$disable_css      = !(isset($this->instance['disable_css']) && $this->instance['disable_css']);
+
+            if( $use_css_cropping || $disable_css) { 
                 if( isset($this->instance['thumb_hover'] )) {
-                    $class = "class=\"cat-post-thumbnail " . $use_css_cropping ." cat-post-" . $instance['thumb_hover'] . "\"";
+                    $class = "class=\"cat-post-thumbnail cat-post-" . $instance['thumb_hover'] . "\"";
                 } else {
-                    $class = "class=\"cat-post-thumbnail " . $use_css_cropping . "\"";
+                    $class = "class=\"cat-post-thumbnail\"";
                 }
-            } 
+            }
+			
             $title_args = array('echo'=>false);
+
 			if ($no_link)
 				$ret .= '<span '.$class . '">';
 			else
 				$ret .= '<a '.$class . ' href="'.get_the_permalink().'" title="'.the_title_attribute($title_args).'">';
+
             $ret .= $this->the_post_thumbnail( array($this->instance['thumb_w'],$this->instance['thumb_h']));
+
 			if ($no_link)
 				$ret .= '</span>';
 			else
@@ -636,12 +622,12 @@ class Widget extends \WP_Widget {
 			} else 
 				$ret .= $title;
 			
-            $ret .= $after_title;
-        }
-        
-        return $ret;
-    }
-    
+			$ret .= $after_title;
+		}
+
+		return $ret;
+	}
+
 	/**
 	 * Calculate the HTML of the footer based on the widget settings
 	 *
@@ -650,31 +636,35 @@ class Widget extends \WP_Widget {
      *
      * @since 4.6
 	 */
-    function footerHTML($instance) {
-        $ret = '';
-        
-        if( isset ( $instance["footer_link"] ) && $instance["footer_link"]) {
+	function footerHTML($instance) {
+
+		$ret = "";
+		if (isset ( $instance["footer_link"] ) && !empty ( $instance["footer_link"] )) {
+			if (empty($instance["footer_link_text"]))
+				$instance["footer_link_text"] = $instance["footer_link"];
 			$ret = "<a";
 			if( !(isset( $instance['disable_css'] ) && $instance['disable_css'])) { 
 				$ret.= " class=\"cat-post-footer-link\""; 
 			}
 			if (isset($instance["cat"]) && ($instance["cat"] != 0) && (get_category($instance["cat"]) != null) ) {
-				$ret .= " href=\"" . get_category_link($instance["cat"]) . "\">" . esc_html($instance["footer_link"]) . "</a>";
+				$ret .= " href=\"" . get_category_link($instance["cat"]) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
 			} else {
 				// link to posts page if category not found. 
 				// this maybe the blog page or home page
-				$blog_page = get_option('page_for_posts');
-				if ($blog_page)
-					$ret .= " href=\"" . get_permalink($blog_page) . "\">" . esc_html($instance["footer_link"]) . "</a>";
-				else
-					$ret .= " href=\"" . home_url() . "\">" . esc_html($instance["footer_link"]) . "</a>";
+				if( isset ( $instance["footer_link"] ) && !empty ( $instance["footer_link"] ) ) {
+					$ret .= " href=\"" . esc_url($instance["footer_link"]) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
+				} else {
+					$blog_page = get_option('page_for_posts');
+					if ($blog_page)
+						$ret .= " href=\"" . get_permalink($blog_page) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
+					else
+						$ret .= " href=\"" . home_url() . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
+				}
 			}
 		}
-		
-        
-        return $ret;
-    }
-    
+		return $ret;
+	}
+
 	/**
 	 * Calculate the HTML for a post item based on the widget settings and post.
      * Expected to be called in an active loop with all the globals set
@@ -690,6 +680,7 @@ class Widget extends \WP_Widget {
         global $post;
         
 		$everything_is_link = isset( $instance['everything_is_link'] ) && $instance['everything_is_link'];
+		$disable_css        = isset($instance['disable_css']) && $instance['disable_css'];
 		
         $ret = '<li ';
                     
@@ -702,8 +693,9 @@ class Widget extends \WP_Widget {
         $ret.='>'; // close the li opening tag
         
 		if ($everything_is_link) {
-			$ret .= '<a href="'.get_the_permalink().'" title="">';
+			$ret .= '<a class="cat-post-everything-is-link" href="'.get_the_permalink().'" title="">';
 		}
+		
         // Thumbnail position to top
         if( isset( $instance["thumbTop"] ) && $instance["thumbTop"]) {
             $ret .= $this->show_thumb($instance,$everything_is_link); 
@@ -715,7 +707,7 @@ class Widget extends \WP_Widget {
 				$ret .= '<span class="cat-post-title">'.get_the_title().'</span>';
 			} else {
 				$ret .= '<a class="post-title';
-				if( !isset( $instance['disable_css'] ) ) { 
+				if (!$disable_css) { 
 					$ret .= " cat-post-title"; 
 				}
 				$ret .= '" href="'.get_the_permalink().'" rel="bookmark">'.get_the_title();
@@ -730,16 +722,16 @@ class Widget extends \WP_Widget {
             } else {
                 $date_format = "j M Y"; 
             } 
-            $ret .= '<p class="post-date ';
-            if( !isset( $instance['disable_css'] ) ) { 
-                $ret .= "cat-post-date";
+            $ret .= '<p class="post-date';
+            if (!$disable_css) { 
+                $ret .= " cat-post-date";
             } 
             $ret .= '">';
             if ( isset ( $instance["date_link"] ) && $instance["date_link"] && !$everything_is_link) { 
                 $ret .= '<a href="'.\get_the_permalink().'">';
             }
             $ret .= get_the_time($date_format);
-            if ( isset ( $instance["date_link"] ) && !$everything_is_link ) { 
+            if ( isset ( $instance["date_link"] ) && $instance["date_link"] && !$everything_is_link ) { 
                 $ret .= '</a>';
             }
             $ret .= '</p>';
@@ -762,20 +754,24 @@ class Widget extends \WP_Widget {
 			if (!isset($instance['excerpt_filters']) || $instance['excerpt_filters']) { // pre 4.7 widgets has filters on
 				$excerpt = apply_filters('the_excerpt', \get_the_excerpt() );
 			} else { // if filters off replicate functionality of core generating excerpt
-				$text = get_the_content('');
-				$text = strip_shortcodes( $text );
-				$more_text = '[&hellip;]';
-				if( isset($instance["excerpt_more_text"]) && $instance["excerpt_more_text"] )
-					$more_text = ltrim($instance["excerpt_more_text"]);
+				if ($post->post_excerpt == '') {
+					$text = get_the_content('');
+					$text = strip_shortcodes( $text );
+					$more_text = '[&hellip;]';
+					if( isset($instance["excerpt_more_text"]) && $instance["excerpt_more_text"] )
+						$more_text = ltrim($instance["excerpt_more_text"]);
 
-				if ($everything_is_link)
-					$excerpt_more_text = ' <span class="cat-post-excerpt-more">'.$more_text.'</span>';
-				else
-					$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
-				$excerpt = \wp_trim_words( $text, $length, $excerpt_more_text );
-				// adjust html output same way as for the normal excerpt, 
-				// just force all functions depending on the_excerpt hook
-				$excerpt = shortcode_unautop(wpautop(convert_chars(convert_smilies(wptexturize($excerpt)))));
+					if ($everything_is_link)
+						$excerpt_more_text = ' <span class="cat-post-excerpt-more">'.$more_text.'</span>';
+					else
+						$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
+					$excerpt = \wp_trim_words( $text, $length, $excerpt_more_text );
+					// adjust html output same way as for the normal excerpt, 
+					// just force all functions depending on the_excerpt hook
+					$excerpt = shortcode_unautop(wpautop(convert_chars(convert_smilies(wptexturize($excerpt)))));
+				} else {
+					$excerpt = shortcode_unautop(wpautop(convert_chars(convert_smilies(wptexturize($post->post_excerpt)))));					
+				}
 			}
 			$ret .= apply_filters('cpw_excerpt',$excerpt);
         }
@@ -783,7 +779,7 @@ class Widget extends \WP_Widget {
 		// Comments
         if ( isset( $instance['comment_num'] ) && $instance['comment_num']) {
             $ret .= '<p class="comment-num';
-            if ( !isset( $instance['disable_css'] ) ) {
+            if (!$disable_css) {
                 $ret .= " cat-post-comment-num"; 
             } 
             $ret .= '">';
@@ -793,9 +789,9 @@ class Widget extends \WP_Widget {
 
 		// Author
         if ( isset( $instance['author'] ) && $instance['author']) {
-            $ret .= '<p class="post-author ';
-            if( !isset( $instance['disable_css'] ) ) { 
-                $ret .= "cat-post-author"; 
+            $ret .= '<p class="post-author';
+            if (!$disable_css) { 
+                $ret .= " cat-post-author"; 
             } 
             $ret .= '">';
             global $authordata;
@@ -812,6 +808,10 @@ class Widget extends \WP_Widget {
 			}
             $ret .= '</p>';
         }
+		
+		if ($everything_is_link) {
+			$ret .= '</a>';
+		}
         
         $ret .= '</li>';
         return $ret;
@@ -927,6 +927,28 @@ class Widget extends \WP_Widget {
 				$this->removeExcerpFilters($instance);
 			
 			wp_reset_postdata();
+			
+			$use_css_cropping = isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping'];
+
+			if ($use_css_cropping){
+				// enque relevant scripts and parameters to perform cropping
+				// once we support only 4.5+ it can be refactored to use wp_add_inline_script
+				wp_enqueue_script( 'jquery'); // just in case the theme or other plugins didn't enqueue it
+				add_action('wp_footer', __NAMESPACE__.'\change_cropped_image_dimensions', 100);  // add to the footer the cropping script
+				$number = $this->number;
+				// a temporary hack to handle difference in the number in a true widget
+				// and the number format expected at the rest of the places
+				if (is_numeric($number))
+					$number = WIDGET_BASE_ID .'-'.$number;
+				
+				// add Javascript to change change cropped image dimensions on load and window resize
+				$thumb_w = $this->instance['thumb_w'];
+				$thumb_h = $this->instance['thumb_h'];
+				add_filter('cpw_crop_widgets', function ($a) use ($number, $thumb_w, $thumb_h) { 
+					$a[$number] = $thumb_w / $thumb_h;
+					return $a;
+				});
+			}
 		} 
 	} 
 
@@ -997,7 +1019,7 @@ class Widget extends \WP_Widget {
 	 */
     function formFilterPanel($instance) {
 		$instance = wp_parse_args( ( array ) $instance, array(
-			'cat'                  => '',
+			'cat'                  => 0,
 			'num'                  => get_option('posts_per_page'),
 			'offset'               => 1,
 			'sort_by'              => '',
@@ -1020,7 +1042,7 @@ class Widget extends \WP_Widget {
             <p>
                 <label>
                     <?php _e( 'Category','category-posts' ); ?>:
-                    <?php wp_dropdown_categories( array( 'show_option_all' => __('All categories','category-posts'), 'hide_empty'=> 0, 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"] ) ); ?>
+                    <?php wp_dropdown_categories( array( 'show_option_all' => __('All categories','category-posts'), 'hide_empty'=> 0, 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"], 'class' => 'categoryposts-data-panel-filter-cat' ) ); ?>
                 </label>
             </p>
             <p>
@@ -1037,7 +1059,7 @@ class Widget extends \WP_Widget {
             </p>
             <p>
                 <label for="<?php echo $this->get_field_id("offset"); ?>">
-                    <?php _e('Start offsett','category-posts'); ?>:
+                    <?php _e('Start with post','category-posts'); ?>:
                     <input style="text-align: center; width: 30%;" id="<?php echo $this->get_field_id("offset"); ?>" name="<?php echo $this->get_field_name("offset"); ?>" type="number" min="1" value="<?php echo absint($instance["offset"]); ?>" />
                 </label>
             </p>
@@ -1116,7 +1138,7 @@ class Widget extends \WP_Widget {
             </p>
             <p>
                 <label>
-                    <?php _e('Thumbnail dimensions (in pixels)','category-posts'); ?>:<br />
+                    <?php _e('Thumbnail dimensions (in pixels)','category-posts'); ?><br />
                     <label for="<?php echo $this->get_field_id("thumb_w"); ?>">
                         <?php _e('Width:','category-posts')?> <input class="widefat" style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo esc_attr($instance["thumb_w"]); ?>" />
                     </label>
@@ -1131,10 +1153,22 @@ class Widget extends \WP_Widget {
                     <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("use_css_cropping"); ?>" name="<?php echo $this->get_field_name("use_css_cropping"); ?>"<?php checked( (bool) $instance["use_css_cropping"], true ); ?> />
                     <?php _e( 'CSS crop to requested size ','category-posts' ); ?>
                 </label>
-            </p>					
+            </p>
+            <p>
+                <label for="<?php echo $this->get_field_id("thumb_hover"); ?>">
+                    <?php _e( 'Animation on mouse hover:','category-posts' ); ?>
+                </label>
+                <select id="<?php echo $this->get_field_id("thumb_hover"); ?>" name="<?php echo $this->get_field_name("thumb_hover"); ?>">
+                    <option value="none" <?php selected($thumb_hover, 'none')?>><?php _e( 'None', 'category-posts' ); ?></option>
+                    <option value="dark" <?php selected($thumb_hover, 'dark')?>><?php _e( 'Darker', 'category-posts' ); ?></option>
+                    <option value="white" <?php selected($thumb_hover, 'white')?>><?php _e( 'Brighter', 'category-posts' ); ?></option>
+                    <option value="scale" <?php selected($thumb_hover, 'scale')?>><?php _e( 'Zoom in', 'category-posts' ); ?></option>
+					<option value="blur" <?php selected($thumb_hover, 'blur')?>><?php _e( 'Blur', 'category-posts' ); ?></option>
+                </select>
+            </p>
             <p>
                 <label style="display:block">
-                    <?php _e( 'Default thumbnail ','category-posts' ); ?>
+                    <?php _e( 'Default thumbnail: ','category-posts' ); ?>
                 </label>
 				<input type="hidden" class="default_thumb_id" id="<?php echo $this->get_field_id("default_thunmbnail"); ?>" name="<?php echo $this->get_field_name("default_thunmbnail"); ?>" value="<?php echo esc_attr($default_thunmbnail)?>"/>
 				<span class="default_thumb_img">
@@ -1156,18 +1190,6 @@ class Widget extends \WP_Widget {
 					<?php _e('No default','category-posts')?>
 				</button>
             </p>					
-            <p>
-                <label for="<?php echo $this->get_field_id("thumb_hover"); ?>">
-                    <?php _e( 'Animation on mouse hover:','category-posts' ); ?>
-                </label>
-                <select id="<?php echo $this->get_field_id("thumb_hover"); ?>" name="<?php echo $this->get_field_name("thumb_hover"); ?>">
-                    <option value="none" <?php selected($thumb_hover, 'none')?>><?php _e( 'None', 'category-posts' ); ?></option>
-                    <option value="dark" <?php selected($thumb_hover, 'dark')?>><?php _e( 'Darker', 'category-posts' ); ?></option>
-                    <option value="white" <?php selected($thumb_hover, 'white')?>><?php _e( 'Brighter', 'category-posts' ); ?></option>
-                    <option value="scale" <?php selected($thumb_hover, 'scale')?>><?php _e( 'Zoom in', 'category-posts' ); ?></option>
-					<option value="blur" <?php selected($thumb_hover, 'blur')?>><?php _e( 'Blur', 'category-posts' ); ?></option>
-                </select>
-            </p>
         </div>
 <?php
     }
@@ -1187,6 +1209,7 @@ class Widget extends \WP_Widget {
  		}
 		$instance = wp_parse_args( ( array ) $instance, array(
 			'everything_is_link'              => false,
+			'footer_link_text'                => '',
 			'footer_link'                     => '',
 			'hide_post_titles'                => '',
 			'excerpt'                         => '',
@@ -1199,11 +1222,13 @@ class Widget extends \WP_Widget {
 			'date_link'                       => '',
 			'date_format'                     => '',
 			'disable_css'                     => '',
+			'disable_font_styles'             => '',
 			'hide_if_empty'                   => '',
 			'hide_social_buttons'             => '',
 		) );
 
 		$everything_is_link				 = $instance['everything_is_link'];
+		$footer_link_text                = $instance['footer_link_text'];
 		$footer_link                     = $instance['footer_link'];
 		$hide_post_titles                = $instance['hide_post_titles'];
 		$excerpt                         = $instance['excerpt'];
@@ -1216,7 +1241,10 @@ class Widget extends \WP_Widget {
 		$date_link                       = $instance['date_link'];
 		$date_format                     = $instance['date_format'];
 		$disable_css                     = $instance['disable_css'];
+		$disable_font_styles             = $instance['disable_font_styles'];
 		$hide_if_empty                   = $instance['hide_if_empty'];
+		
+		$cat = $instance['cat'];
 
 		
         if (!isset($style_done)) { // what an ugly hack, but can't figure out how to do it nicer on 4.3
@@ -1292,7 +1320,7 @@ class Widget extends \WP_Widget {
 					<p>
 						<label for="<?php echo $this->get_field_id("excerpt_filters"); ?>">
 							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("excerpt_filters"); ?>" name="<?php echo $this->get_field_name("excerpt_filters"); ?>"<?php checked( !empty($excerpt_filters), true ); ?> />
-							<?php _e( 'Themes and plugins may override','category-posts' ); ?>
+							<?php _e( 'Don\'t override Themes and plugin filters','category-posts' ); ?>
 						</label>
 					</p>
 				</div>
@@ -1331,10 +1359,16 @@ class Widget extends \WP_Widget {
 			</div>
 			<h4 data-panel="general"><?php _e('General','category-posts')?></h4>
 			<div>
-				<p>
+				<p onchange="javascript:cwp_namespace.toggleDisableFontStyles(this)">
 					<label for="<?php echo $this->get_field_id("disable_css"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_css"); ?>" name="<?php echo $this->get_field_name("disable_css"); ?>"<?php checked( (bool) $instance["disable_css"], true ); ?> />
 						<?php _e( 'Disable the built-in CSS for this widget','category-posts' ); ?>
+					</label>
+				</p>
+				<p class="categoryposts-data-panel-general-disable-font-styles" style="display:<?php echo ((bool) $disable_css) ? 'none' : 'block'?>">
+					<label for="<?php echo $this->get_field_id("disable_font_styles"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_font_styles"); ?>" name="<?php echo $this->get_field_name("disable_font_styles"); ?>"<?php checked( (bool) $instance["disable_font_styles"], true ); ?> />
+						<?php _e( 'Disable only font styles for this widget','category-posts' ); ?>
 					</label>
 				</p>
 				<p>
@@ -1347,11 +1381,17 @@ class Widget extends \WP_Widget {
 			<h4 data-panel="footer"><?php _e('Footer','category-posts')?></h4>
 			<div>
 				<p>
-					<label for="<?php echo $this->get_field_id("footer_link"); ?>">
+					<label for="<?php echo $this->get_field_id("footer_link_text"); ?>">
 						<?php _e( 'Footer link text','category-posts' ); ?>:
-						<input class="widefat" style="width:60%;" placeholder="<?php _e('... more by this topic','category-posts')?>" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
+						<input class="widefat" style="width:60%;" placeholder="<?php _e('... more by this topic','category-posts')?>" id="<?php echo $this->get_field_id("footer_link_text"); ?>" name="<?php echo $this->get_field_name("footer_link_text"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link_text"]); ?>" />
 					</label>
 				</p>
+                <p class="categoryposts-data-panel-footer-footerLink" style="display:<?php echo ((bool) $cat == 0) ? 'block' : 'none'?>">
+                    <label for="<?php echo $this->get_field_id("footer_link"); ?>">
+                        <?php _e( 'Footer link URL','category-posts' ); ?>:
+                        <input class="widefat" style="width:60%;" placeholder="<?php _e('... URL of more link','category-posts')?>" id="<?php echo $this->get_field_id("footer_link"); ?>" name="<?php echo $this->get_field_name("footer_link"); ?>" type="text" value="<?php echo esc_attr($instance["footer_link"]); ?>" />
+                    </label>
+        		</p>
 			</div>
             <p><a href="<?php echo get_edit_user_link().'#'.__NAMESPACE__ ?>"><?php _e('Widget admin behaviour settings','category-posts')?></a></p>			
             <p><a target="_blank" href="<?php echo CAT_POST_DOC_URL ?>"><?php _e('Documentation','category-posts'); ?></a></p>
@@ -1411,9 +1451,8 @@ function change_cropped_image_dimensions() {
 				cwp_namespace.fluid_images = {
 
 <?php 				/* variables */ ?>				
-					Posts : {},
+					Widgets : {},
 					widget : null,
-					Spans : {},
 					
 <?php				/* class */ ?>
 					Span : function (_self, _imageRatio) {
@@ -1427,7 +1466,8 @@ function change_cropped_image_dimensions() {
 					WidgetPosts : function (widget, ratio) {
 
 <?php 					/* variables */ ?>
-						this.allSpans = widget.find( '.cat-post-thumbnail > span' );
+						this.Spans = {};
+						this.allSpans = widget.find( '.cat-post-crop' );
 						this.firstSpan = this.allSpans.first();
 						this.maxSpanWidth = this.firstSpan.width();
 						this.firstListItem = this.firstSpan.closest( 'li' );
@@ -1435,7 +1475,7 @@ function change_cropped_image_dimensions() {
 
 						for( var i = 0; i < this.allSpans.length; i++ ){
 							var imageRatio = this.firstSpan.width() / jQuery(this.allSpans[i]).find( 'img' ).height();
-							cwp_namespace.fluid_images.Spans[i] = new cwp_namespace.fluid_images.Span( jQuery(this.allSpans[i]), imageRatio );
+							this.Spans[i] = new cwp_namespace.fluid_images.Span( jQuery(this.allSpans[i]), imageRatio );
 						}
 
 <?php 					/* functions */ ?>
@@ -1450,9 +1490,9 @@ function change_cropped_image_dimensions() {
 									var spanHeight = this.listItemWidth / this.ratio;
 									this.allSpans.height( spanHeight );
 									
-									for( var index in cwp_namespace.fluid_images.Spans ){									
-										var imageHeight = this.listItemWidth / cwp_namespace.fluid_images.Spans[index].imageRatio;
-										jQuery(cwp_namespace.fluid_images.Spans[index].self).find( 'img' ).css({
+									for( var index in this.Spans ){									
+										var imageHeight = this.listItemWidth / this.Spans[index].imageRatio;
+										jQuery(this.Spans[index].self).find( 'img' ).css({
 											height: imageHeight,
 											marginTop: -(imageHeight - spanHeight) / 2
 										});										
@@ -1462,25 +1502,25 @@ function change_cropped_image_dimensions() {
 					},
 				}
 
-				<?php
-					/***
-					 *  cpw_crop_widgets is an internal filter that is used
-					 *  to gather the ids of the widgets to which apply cropping
-					 *  
-					 *  For eaier prevention of duplication, the widget id number should be an index
-					 *  in the array while the ratio of width/height be the value
-					 */
-					$widgets_ids = apply_filters('cpw_crop_widgets',array());
-					foreach ($widgets_ids as $number => $ratio) {
-				?>
+<?php
+				/***
+				 *  cpw_crop_widgets is an internal filter that is used
+				 *  to gather the ids of the widgets to which apply cropping
+				 *  
+				 *  For eaier prevention of duplication, the widget id number should be an index
+				 *  in the array while the ratio of width/height be the value
+				 */
+				$widgets_ids = apply_filters('cpw_crop_widgets',array());
+				foreach ($widgets_ids as $number => $ratio) {
+?>
 				cwp_namespace.fluid_images.widget = jQuery('#<?php echo $number?>');
-				cwp_namespace.fluid_images.Posts['<?php echo $number?>'] = new cwp_namespace.fluid_images.WidgetPosts(cwp_namespace.fluid_images.widget,<?php echo $ratio?>);
-				<?php } ?>
+				cwp_namespace.fluid_images.Widgets['<?php echo $number?>'] = new cwp_namespace.fluid_images.WidgetPosts(cwp_namespace.fluid_images.widget,<?php echo $ratio?>);
+<?php			} ?>
 				
 <?php 			/* do on page load or on resize the browser window */ echo "\r\n" ?>
 				jQuery(window).on('load resize', function() {
-					for (var post in cwp_namespace.fluid_images.Posts) {
-						cwp_namespace.fluid_images.Posts[post].changeImageSize();
+					for (var widget in cwp_namespace.fluid_images.Widgets) {
+						cwp_namespace.fluid_images.Widgets[widget].changeImageSize();
 					}
 				});				
 			});
@@ -1593,13 +1633,14 @@ function default_settings()  {
 				'title'                           => '',
 				'title_link'                      => false,
 				'hide_title'                      => false,
-				'cat'                             => '',
+				'cat'                             => 0,
 				'num'                             => get_option('posts_per_page'),
 				'offset'                          => 1,
 				'sort_by'                         => 'date',
 				'asc_sort_order'                  => false,
 				'exclude_current_post'            => false,
 				'hideNoThumb'                     => false,
+				'footer_link_text'                => '',
 				'footer_link'                     => '',
 				'thumb'                           => false,
 				'thumbTop'                        => false,
@@ -1618,6 +1659,7 @@ function default_settings()  {
 				'date_link'                       => false,
 				'date_format'                     => '',
 				'disable_css'                     => false,
+				'disable_font_styles'             => false,
 				'hide_if_empty'                   => false,
 				'hide_social_buttons'             => '',
 				'no_cat_childs'                   => false,
@@ -1718,7 +1760,6 @@ function customize_register($wp_customize) {
         
         foreach($posts as $p) {
             $widget = new Widget();
-            $widget->number = $p->ID;
             $meta = get_post_meta($p->ID,SHORTCODE_META,true);
             if (!is_array($meta))
                 continue;
@@ -1748,9 +1789,10 @@ function customize_register($wp_customize) {
 				) );
 			
 				ob_start();
+				$widget->number = $p->ID.'_'.$k;
 				$widget->form($m);
 				$form = ob_get_clean();
-				$form = preg_replace_callback('/<(input|select)\s+.*name=("|\').*\[\d*\]\[([^\]]*)\][^>]*>/',
+				$form = preg_replace_callback('/<(input|select)\s+.*name=("|\').*\[\w*\]\[([^\]]*)\][^>]*>/',
 					function ($matches) use ($p, $wp_customize, $m, $k) {
 						$setting = '_virtual-'.WIDGET_BASE_ID.'['.$p->ID.']['.$k.']['.$matches[3].']';
 						if (!isset($m[$matches[3]]))
@@ -2058,44 +2100,40 @@ class virtualWidget {
 	 *  
 	 *  @since 4.7
 	 */
-	function getCSSRules($is_shortcode,&$ret) {
-		$rules = array( // rules that should be applied to all widgets
-			'.cat-post-item span.cat-post-css-cropping img {max-width: initial;	max-height: initial;}',
-			'.cat-post-title {display: inline-block; font-size: 15px;}',
-			'.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}'.
-			'.cat-post-date {font-size: 12px;	line-height: 18px; font-style: italic; margin-bottom: 10px;}',
-			'.cat-post-comment-num {font-size: 12px; line-height: 18px;}',
-			'.cat-post-author {margin-bottom: 0;}',
-			'.cat-post-thumbnail {display: block;}',
-			'.cat-post-thumbnail img {margin: 5px 10px 5px 0;}',
-			'.cat-post-item:before {content: ""; display: table; clear: both;}',
-			'.cat-post-item:after {content: ""; display: table;	clear: both;}',
-			'.cat-post-item .cat-post-css-cropping span {margin: 5px 10px 5px 0;  overflow: hidden; display:inline-block}',
-			'.cat-post-item .cat-post-css-cropping img {margin: initial;}',
-	/* White, Dark, Scale, Blur */
-			'.cat-post-white img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
-			'.cat-post-dark img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
-			'.cat-post-scale img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
-			'.cat-post-blur img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
-	/* White */
-			'.cat-post-white {background-color: white;}',
-			'.cat-post-white img:hover {opacity: 0.8;}',
-	/* Dark */
-			'.cat-post-dark img:hover {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}',
-	/* Scale */
-			'.cat-post-scale span {overflow: hidden; margin: 5px 10px 5px 0;}',
-			'.cat-post-scale img {margin: initial; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}',
-			'.cat-post-scale img:hover {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}',
-			'.cat-post-blur img:hover {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}',
-		);
-		
+	function getCSSRules($is_shortcode,&$ret) {	
 		$settings = self::$collection[$this->id];
 		$widget_id = $this->id;
 		if (!$is_shortcode)
 			$widget_id .= '-internal';
-		
+	
+		if (!(isset($settings['disable_font_styles']) && $settings['disable_font_styles'])) { // checks if disable font styles is not set
+			$rules = array( // rules that should be applied to all widgets
+				'.cat-post-item img {max-width: initial; max-height: initial;}',
+				'.cat-post-title {font-size: 15px;}',
+				'.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}',
+				'.cat-post-date {font-size: 12px;	line-height: 18px; font-style: italic; margin-bottom: 10px;}',
+				'.cat-post-comment-num {font-size: 12px; line-height: 18px;}',
+				'.cat-post-author {margin-bottom: 0;}',
+				'.cat-post-thumbnail {margin: 5px 10px 5px 0; display: block;}',
+				'.cat-post-item:before {content: ""; display: table; clear: both;}',
+				'.cat-post-item:after {content: ""; display: table;	clear: both;}',
+				'.cat-post-item img {margin: initial;}',
+			);
+		} else {
+			$rules = array( // rules that should be applied to all widgets
+				'.cat-post-item img {max-width: initial; max-height: initial;}',
+				'.cat-post-current .cat-post-title {text-transform: uppercase;}',
+				'.cat-post-date {margin-bottom: 10px;}',
+				'.cat-post-author {margin-bottom: 0;}',
+				'.cat-post-thumbnail {margin: 5px 10px 5px 0; display: block;}',
+				'.cat-post-item:before {content: ""; display: table; clear: both;}',
+				'.cat-post-item:after {content: ""; display: table;	clear: both;}',
+				'.cat-post-item img {margin: initial;}',
+			);
+		}
+
 		if (!(isset($settings['disable_css']) && $settings['disable_css'])) { // checks if css disable is not set
-			
+
 			/*
 				the twenty seventeen theme have a border between the LI elements of a widget, 
 				so remove our border if we detect its use to avoid conflicting styling
@@ -2106,27 +2144,58 @@ class virtualWidget {
 				$rules[] = '.cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
 				$rules[] = '.cat-post-item:last-child {border-bottom: none;}';
 			}
+
 			if (!(isset($settings['thumbTop']) && $settings['thumbTop'])) {
 				$rules[] = '.cat-post-thumbnail {float:left;}';
 			}
-								
+
+			if (isset($settings['thumb_hover'])) {
+				switch ($settings['thumb_hover']) {
+					case 'white':
+						$rules[] = '.cat-post-white img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+						$rules[] = '.cat-post-white {background-color: white;}';
+						$rules[] = '.cat-post-white img:hover {opacity: 0.8;}';
+						break;
+					case 'dark':
+						$rules[] = '.cat-post-dark img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+						$rules[] = '.cat-post-dark img:hover {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}';
+						break;
+					case 'scale':
+						$rules[] = '.cat-post-scale img {margin: initial; padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+						$rules[] = '.cat-post-scale img:hover {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}';
+						break;
+					case 'blur':
+						$rules[] = '.cat-post-blur img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+						$rules[] = '.cat-post-blur img:hover {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}';
+						break;
+				}
+			}
+
+			if (isset( $settings['everything_is_link'] ) && $settings['everything_is_link']) {
+				$rules[] = '.cat-post-everything-is-link { }';
+			}
+
 			foreach ($rules as $rule) {
 				$ret[] = '#'.$widget_id.' '.$rule;
 			}
-			
-			if ($is_shortcode) {
-				// 2016 theme adds underlines to links with box whadow wtf....
-				$ret[] = '#'.$widget_id.' .cat-post-thumbnail a {box-shadow:none}'; // this for the thumb link
-				// 2015 adds border....
-				$ret[] = '#'.$widget_id.' .cat-post-thumbnail a {border:0}'; // this for the thumb link
 
-				// probably all theme have too much margin on their p element when used in the shortcode
-				$ret[] = '#'.$widget_id.' p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
-	                                                 // bigger (add to the padding) use only top for now				
+			if ($is_shortcode) {
+				// Twenty Sixteen Theme adds underlines to links with box whadow wtf ...
+				$ret[] = '#'.$widget_id.' .cat-post-thumbnail {box-shadow:none}'; // this for the thumb link
+				// Twenty Fifteen Theme adds border ...
+				$ret[] = '#'.$widget_id.' .cat-post-thumbnail {border:0}'; // this for the thumb link
+				// probably all Themes have too much margin on their p element when used in the shortcode
+				$ret[] = '#'.$widget_id.' p {margin:5px 0 0 0}';	/* since on bottom it will make the spacing on cover
+																	   bigger (add to the padding) use only top for now */
 			}
-		}    
+		}
+		
+		if ((isset($settings['use_css_cropping']) && $settings['use_css_cropping']) || !(isset($settings['disable_css']) && $settings['disable_css'])) {
+			$ret[] = '#'.$widget_id.' .cat-post-crop {overflow: hidden; display:block}';
+			$ret[] = '#'.$widget_id.' .cat-post-item img {margin: initial;}';
+		}
 	}
-	
+
 	/**
 	 *  Output the widget CSS 
 	 *  
