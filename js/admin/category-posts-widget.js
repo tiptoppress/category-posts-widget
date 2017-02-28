@@ -63,9 +63,13 @@
 			var panel = item.parentElement.parentElement.parentElement.parentElement;
             if(cat == '0') {
                 jQuery(panel).find('.categoryposts-data-panel-footer-footerLink').show();
+				jQuery(panel).find('.categoryposts-data-panel-title-titleLink').hide();
+				jQuery(panel).find('.categoryposts-data-panel-title-titleURL').show();
             }
             else {
                 jQuery(panel).find('.categoryposts-data-panel-footer-footerLink').hide();
+				jQuery(panel).find('.categoryposts-data-panel-title-titleLink').show();
+				jQuery(panel).find('.categoryposts-data-panel-title-titleURL').hide();
             }	
         },
 

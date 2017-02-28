@@ -607,19 +607,11 @@ class Widget extends \WP_Widget {
 			else
 				$title = apply_filters( 'widget_title', $instance["title"] );
 			
-            if( isset ( $instance["title_link"]) && $instance["title_link"]) {
-				if (isset($instance["cat"]) && (get_category($instance["cat"]) != null))  {
-					$ret .= '<a href="' . get_category_link($instance["cat"]) . '">' . $title . '</a>';
-				} else {
-					// link to posts page if category not found. 
-					// this maybe the blog page or home page
-					$blog_page = get_option('page_for_posts');
-					if ($blog_page)
-						$ret .= '<a href="' . get_permalink($blog_page) . '">' . $title . '</a>';
-					else
-						$ret .= '<a href="' . home_url() . '">' . $title . '</a>';
-				}
-			} else 
+            if (isset($instance["title_link"]) && $instance["title_link"] && $instance["cat"] != 0)
+				$ret .= '<a href="' . get_category_link($instance["cat"]) . '">' . $title . '</a>';
+			else if (isset ( $instance["title_link_url"]) && $instance["title_link_url"] && $instance["cat"] == 0)
+				$ret .= '<a href="' . $instance["title_link_url"] . '">' . $title . '</a>';
+			else 
 				$ret .= $title;
 			
 			$ret .= $after_title;
@@ -978,12 +970,16 @@ class Widget extends \WP_Widget {
     function formTitlePanel($instance) {
 		$instance = wp_parse_args( ( array ) $instance, array(
 			'title'                => '',
-			'title_link'           => '',
-			'hide_title'           => ''
+			'title_link'           => false,
+			'title_link_url'       => '',
+			'hide_title'           => false
         ));
 		$title                = $instance['title'];
+		$title_link           = $instance['title_link'];
+		$title_link_url       = $instance['title_link_url'];
 		$hide_title           = $instance['hide_title'];
-		$title_link           = $instance['title_link'];        
+		
+		$cat = $instance['cat'];
 ?>    
         <h4 data-panel="title"><?php _e('Title','category-posts')?></h4>
         <div>
@@ -993,11 +989,17 @@ class Widget extends \WP_Widget {
                     <input class="widefat" style="width:80%;" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo esc_attr($instance["title"]); ?>" />
                 </label>
             </p>
-            <p>
+            <p class="categoryposts-data-panel-title-titleLink" style="display:<?php echo ((bool) $cat == 0) ? 'none' : 'block'?>">
                 <label for="<?php echo $this->get_field_id("title_link"); ?>">
                     <input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("title_link"); ?>" name="<?php echo $this->get_field_name("title_link"); ?>"<?php checked( (bool) $instance["title_link"], true ); ?> />
                     <?php _e( 'Make widget title link','category-posts' ); ?>
                 </label>
+            </p>
+            <p class="categoryposts-data-panel-title-titleURL" style="display:<?php echo ((bool) $cat == 0) ? 'block' : 'none'?>">
+                <label for="<?php echo $this->get_field_id("title_link_url"); ?>">
+                    <?php _e( 'Title link URL','category-posts' ); ?>
+                </label>
+                <input type="text" id="<?php echo $this->get_field_id("title_link_url"); ?>" name="<?php echo $this->get_field_name("title_link_url"); ?>" value="<?php echo esc_attr($title_link_url); ?>" placeholder="<?php _e('URL or empty for no link','category-posts');?>"/>
             </p>
             <p>
                 <label for="<?php echo $this->get_field_id("hide_title"); ?>">
@@ -1632,6 +1634,7 @@ function default_settings()  {
     return array(
 				'title'                           => '',
 				'title_link'                      => false,
+				'title_link_url'                  => '',
 				'hide_title'                      => false,
 				'cat'                             => 0,
 				'num'                             => get_option('posts_per_page'),
