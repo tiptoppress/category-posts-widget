@@ -986,7 +986,7 @@ class Widget extends \WP_Widget {
             <p>
                 <label for="<?php echo $this->get_field_id("title"); ?>">
                     <?php _e( 'Title','category-posts' ); ?>:
-                    <input class="widefat" style="width:80%;" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo esc_attr($instance["title"]); ?>" />
+                    <input class="widefat" style="width:80%;" placeholder="<?php _e('Recent Posts','category-posts')?>" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo esc_attr($instance["title"]); ?>" />
                 </label>
             </p>
             <p class="categoryposts-data-panel-title-titleLink" style="display:<?php echo ((bool) $cat == 0) ? 'none' : 'block'?>">
@@ -998,8 +998,8 @@ class Widget extends \WP_Widget {
             <p class="categoryposts-data-panel-title-titleURL" style="display:<?php echo ((bool) $cat == 0) ? 'block' : 'none'?>">
                 <label for="<?php echo $this->get_field_id("title_link_url"); ?>">
                     <?php _e( 'Title link URL','category-posts' ); ?>
+					<input type="text" placeholder="<?php _e('URL or empty for no link','category-posts');?>" id="<?php echo $this->get_field_id("title_link_url"); ?>" name="<?php echo $this->get_field_name("title_link_url"); ?>" value="<?php echo esc_attr($title_link_url); ?>"/>
                 </label>
-                <input type="text" id="<?php echo $this->get_field_id("title_link_url"); ?>" name="<?php echo $this->get_field_name("title_link_url"); ?>" value="<?php echo esc_attr($title_link_url); ?>" placeholder="<?php _e('URL or empty for no link','category-posts');?>"/>
             </p>
             <p>
                 <label for="<?php echo $this->get_field_id("hide_title"); ?>">
