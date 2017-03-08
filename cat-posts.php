@@ -2106,20 +2106,8 @@ class virtualWidget {
 		if (!$is_shortcode)
 			$widget_id .= '-internal';
 	
-		if (!(isset($settings['disable_font_styles']) && $settings['disable_font_styles'])) { // checks if disable font styles is not set
-			$rules = array( // rules that should be applied to all widgets
-				'.cat-post-item img {max-width: initial; max-height: initial;}',
-				'.cat-post-title {font-size: 15px;}',
-				'.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}',
-				'.cat-post-date {font-size: 12px;	line-height: 18px; font-style: italic; margin-bottom: 10px;}',
-				'.cat-post-comment-num {font-size: 12px; line-height: 18px;}',
-				'.cat-post-author {margin-bottom: 0;}',
-				'.cat-post-thumbnail {margin: 5px 10px 5px 0; display: block;}',
-				'.cat-post-item:before {content: ""; display: table; clear: both;}',
-				'.cat-post-item:after {content: ""; display: table;	clear: both;}',
-				'.cat-post-item img {margin: initial;}',
-			);
-		} else {
+		if (!(isset($settings['disable_css']) && $settings['disable_css'])) { // checks if css disable is not set
+		
 			$rules = array( // rules that should be applied to all widgets
 				'.cat-post-item img {max-width: initial; max-height: initial;}',
 				'.cat-post-current .cat-post-title {text-transform: uppercase;}',
@@ -2130,9 +2118,15 @@ class virtualWidget {
 				'.cat-post-item:after {content: ""; display: table;	clear: both;}',
 				'.cat-post-item img {margin: initial;}',
 			);
-		}
+			
+			if (!(isset($settings['disable_font_styles']) && $settings['disable_font_styles'])) { // checks if disable font styles is not set
+				// add general rules which apply to font styling
+				$rules[] = '.cat-post-title {font-size: 15px;}';
+				$rules[] = '.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}';
+				$rules[] = '.cat-post-date {font-size: 12px;	line-height: 18px; font-style: italic; margin-bottom: 10px;}';
+				$rules[] = '.cat-post-comment-num {font-size: 12px; line-height: 18px;}';
+			} 
 
-		if (!(isset($settings['disable_css']) && $settings['disable_css'])) { // checks if css disable is not set
 
 			/*
 				the twenty seventeen theme have a border between the LI elements of a widget, 
