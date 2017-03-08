@@ -2115,7 +2115,6 @@ class virtualWidget {
 				'.cat-post-author {margin-bottom: 0;}',
 				'.cat-post-thumbnail {margin: 5px 10px 5px 0; display: block;}',
 				'.cat-post-item:before {content: ""; display: table; clear: both;}',
-				'.cat-post-item:after {content: ""; display: table;	clear: both;}',
 				'.cat-post-item img {margin: initial;}',
 			);
 			
@@ -2126,7 +2125,6 @@ class virtualWidget {
 				$rules[] = '.cat-post-date {font-size: 12px;	line-height: 18px; font-style: italic; margin-bottom: 10px;}';
 				$rules[] = '.cat-post-comment-num {font-size: 12px; line-height: 18px;}';
 			} 
-
 
 			/*
 				the twenty seventeen theme have a border between the LI elements of a widget, 
@@ -2165,8 +2163,13 @@ class virtualWidget {
 				}
 			}
 
+            // everything link related styling
+		    // if we are dealing with "everything is a link" option, we need to add the clear:both to the a element, not the div
 			if (isset( $settings['everything_is_link'] ) && $settings['everything_is_link']) {
 				$rules[] = '.cat-post-everything-is-link { }';
+				$rules[] = '.cat-post-item a:after {content: ""; display: table;	clear: both;}';
+			} else {
+				$rules[] = '.cat-post-item:after {content: ""; display: table;	clear: both;}';
 			}
 
 			foreach ($rules as $rule) {
