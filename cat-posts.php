@@ -2124,7 +2124,9 @@ class virtualWidget {
 				$rules[] = '.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}';
 				$rules[] = '.cat-post-date {font-size: 12px;	line-height: 18px; font-style: italic; margin-bottom: 10px;}';
 				$rules[] = '.cat-post-comment-num {font-size: 12px; line-height: 18px;}';
-			} 
+			} else {
+				$rules[] = '.cat-post-date {margin-bottom: 10px;}';				
+			}
 
 			/*
 				the twenty seventeen theme have a border between the LI elements of a widget, 
