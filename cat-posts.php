@@ -490,12 +490,13 @@ class Widget extends \WP_Widget {
 		if ( isset( $instance["thumb"] ) && $instance["thumb"] &&
 			((isset($instance['default_thunmbnail']) && ($instance['default_thunmbnail']!= 0)) || has_post_thumbnail()) ) {
 
-            $class            = '';
-			$use_css_cropping = isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping'];
-			$disable_css      = !(isset($this->instance['disable_css']) && $this->instance['disable_css']);
+            $class              = '';
+			$use_css_cropping   = isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping'];
+			$disable_css        = !(isset($this->instance['disable_css']) && $this->instance['disable_css']);
+			$everything_is_link = isset($instance['everything_is_link']) && $instance['everything_is_link'];
 
             if( $use_css_cropping || $disable_css) { 
-                if( isset($this->instance['thumb_hover'] )) {
+                if(isset($this->instance['thumb_hover']) && !$everything_is_link) {
                     $class = "class=\"cat-post-thumbnail cat-post-" . $instance['thumb_hover'] . "\"";
                 } else {
                     $class = "class=\"cat-post-thumbnail\"";
@@ -694,7 +695,7 @@ class Widget extends \WP_Widget {
     function itemHTML($instance,$current_post_id) {
         global $post;
         
-		$everything_is_link = isset( $instance['everything_is_link'] ) && $instance['everything_is_link'];
+		$everything_is_link = isset($instance['everything_is_link']) && $instance['everything_is_link'];
 		$disable_css        = isset($instance['disable_css']) && $instance['disable_css'];
 		
         $ret = '<li ';
@@ -708,7 +709,7 @@ class Widget extends \WP_Widget {
         $ret.='>'; // close the li opening tag
         
 		if ($everything_is_link) {
-			$ret .= '<a class="cat-post-everything-is-link"' . $this->searchEngineAttribute($this->instance) . 'href="'.get_the_permalink().'" title="">';
+			$ret .= '<a class="cat-post-everything-is-link cat-post-' . $instance['thumb_hover'] . '"' . $this->searchEngineAttribute($this->instance) . 'href="'.get_the_permalink().'" title="">';
 		}
 		
         // Thumbnail position to top
@@ -2192,21 +2193,21 @@ class virtualWidget {
 			if (isset($settings['thumb_hover'])) {
 				switch ($settings['thumb_hover']) {
 					case 'white':
-						$rules[] = '.cat-post-white img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
 						$rules[] = '.cat-post-white {background-color: white;}';
-						$rules[] = '.cat-post-white img:hover {opacity: 0.8;}';
+						$rules[] = '.cat-post-white img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+						$rules[] = '.cat-post-white:hover img {opacity: 0.8;}';
 						break;
 					case 'dark':
 						$rules[] = '.cat-post-dark img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-						$rules[] = '.cat-post-dark img:hover {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}';
+						$rules[] = '.cat-post-dark:hover img {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}';
 						break;
 					case 'scale':
 						$rules[] = '.cat-post-scale img {margin: initial; padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-						$rules[] = '.cat-post-scale img:hover {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}';
+						$rules[] = '.cat-post-scale:hover img {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}';
 						break;
 					case 'blur':
 						$rules[] = '.cat-post-blur img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-						$rules[] = '.cat-post-blur img:hover {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}';
+						$rules[] = '.cat-post-blur:hover img {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}';
 						break;
 				}
 			}
@@ -2231,7 +2232,10 @@ class virtualWidget {
 		}
 		
 		if ((isset($settings['use_css_cropping']) && $settings['use_css_cropping']) || !(isset($settings['disable_css']) && $settings['disable_css'])) {
-			$ret[] = '#'.$widget_id.' .cat-post-crop {overflow: hidden; display:block}';
+			if (isset($settings['use_css_cropping']) && $settings['use_css_cropping'])
+				$ret[] = '#'.$widget_id.' .cat-post-crop {overflow: hidden; display:block}';
+			else
+				$ret[] = '#'.$widget_id.' .cat-post-thumbnail span {overflow: hidden; display:block}';
 			$ret[] = '#'.$widget_id.' .cat-post-item img {margin: initial;}';
 		}
 	}
