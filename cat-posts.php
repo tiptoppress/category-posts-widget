@@ -15,9 +15,9 @@ namespace categoryPosts;
 // Don't call the file directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
-const CAT_POST_VERSION = "4.7.2";
-const CAT_POST_DOC_URL = "http://tiptoppress.com/category-posts-widget/documentation-4-7?utm_source=widget_cpw&utm_campaign=documentation_4_7_cpw&utm_medium=form";
-
+const VERSION        = "4.7.2";
+const DOC_URL        = "http://tiptoppress.com/category-posts-widget/documentation-4-7?utm_source=widget_cpw&utm_campaign=documentation_4_7_cpw&utm_medium=form";
+const PRO_URL        = "http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=widget_cpw&utm_campaign=get_pro_cpw&utm_medium=action_link";
 const SHORTCODE_NAME = 'catposts';
 const SHORTCODE_META = 'categoryPosts-shorcode';
 const WIDGET_BASE_ID = 'category-posts';
@@ -150,7 +150,7 @@ function admin_scripts($hook) {
 	if ($hook == 'widgets.php') { // enqueue only for widget admin and customizer
 		
 		// control open and close the widget section
-        wp_register_script( 'category-posts-widget-admin-js', plugins_url('js/admin/category-posts-widget.js',__FILE__),array('jquery'),CAT_POST_VERSION,true );
+        wp_register_script( 'category-posts-widget-admin-js', plugins_url('js/admin/category-posts-widget.js',__FILE__),array('jquery'),VERSION,true );
         wp_enqueue_script( 'category-posts-widget-admin-js' );	
 		
 		$user_data = array('accordion' => false);
@@ -1432,7 +1432,7 @@ class Widget extends \WP_Widget {
         		</p>
 			</div>
             <p><a href="<?php echo get_edit_user_link().'#'.__NAMESPACE__ ?>"><?php _e('Widget admin behaviour settings','category-posts')?></a></p>			
-            <p><a target="_blank" href="<?php echo CAT_POST_DOC_URL ?>"><?php _e('Documentation','category-posts'); ?></a></p>
+            <p><a target="_blank" href="<?php echo DOC_URL ?>"><?php _e('Documentation','category-posts'); ?></a></p>
             <p><?php echo sprintf( wp_kses( __( 'We are on <a href="%1$s">Facebook</a> and <a href="%2$s">Twitter</a>.', 'category-posts' ), array(  'a' => array( 'href' => array() ) ) ), esc_url( 'https://www.facebook.com/TipTopPress' ), esc_url( 'https://twitter.com/TipTopPress' ) ); ?></br></br></p>
 		</div>
 		<?php
@@ -1452,7 +1452,7 @@ add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), __NAMESPACE__.'\
 
 function add_action_links ( $links ) {
     $pro_link = array(
-        '<a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=widget_cpw&utm_campaign=get_pro_cpw&utm_medium=action_link">'.__('Get the Pro version','category-posts').'</a>',
+        '<a target="_blank" href="'.PRO_URL.'">'.__('Get the Pro version','category-posts').'</a>',
     );
 	
 	$links = array_merge($pro_link, $links);
@@ -1941,7 +1941,7 @@ function mce_external_plugins($plugin_array)
 		if (is_array($meta) && isset($meta['editor']))
 			;
 		else
-			$plugin_array[__NAMESPACE__] =  plugins_url('js/admin/tinymce.js?ver='.CAT_POST_VERSION,__FILE__);
+			$plugin_array[__NAMESPACE__] =  plugins_url('js/admin/tinymce.js?ver='.VERSION,__FILE__);
 	}
 	
     return $plugin_array;
