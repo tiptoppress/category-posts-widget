@@ -800,7 +800,19 @@ class Widget extends \WP_Widget {
                 $ret .= " cat-post-comment-num"; 
             } 
             $ret .= '">';
-            $ret .= '('.\get_comments_number().')';
+			
+			if ($everything_is_link) {
+				$ret .= '('.\get_comments_number().')';
+			} else {
+				$link = sprintf(
+					'<a ' . $this->searchEngineAttribute($this->instance) . 'href="%1$s" title="%2$s">(%3$d)</a>',
+					esc_url( get_comments_link($post->ID) ),
+					esc_attr( sprintf( __( '(%d) comments to this post' ), get_comments_number() ) ),
+					get_comments_number()
+				);
+				$ret .= $link;
+			}
+			
             $ret .= '</p>';
         }
 
@@ -821,7 +833,7 @@ class Widget extends \WP_Widget {
 					esc_attr( sprintf( __( 'Posts by %s' ), get_the_author() ) ),
 					get_the_author()
 				);
-				$ret .= $link; 
+				$ret .= $link;
 			}
             $ret .= '</p>';
         }
