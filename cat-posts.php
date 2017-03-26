@@ -2190,7 +2190,10 @@ class virtualWidget {
 		}
 		
 		if ((isset($settings['use_css_cropping']) && $settings['use_css_cropping']) || !(isset($settings['disable_css']) && $settings['disable_css'])) {
-			$ret[] = '#'.$widget_id.' .cat-post-crop {overflow: hidden; display:block}';
+			if (isset($settings['use_css_cropping']) && $settings['use_css_cropping'])
+				$ret[] = '#'.$widget_id.' .cat-post-crop {overflow: hidden; display:block}';
+			else
+				$ret[] = '#'.$widget_id.' .cat-post-thumbnail span {overflow: hidden; display:block}';
 			$ret[] = '#'.$widget_id.' .cat-post-item img {margin: initial;}';
 		}
 	}
