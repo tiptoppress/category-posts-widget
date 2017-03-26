@@ -816,7 +816,7 @@ class Widget extends \WP_Widget {
 				$ret .= get_the_author();
 			} else {
 				$link = sprintf(
-					'<a' . $this->searchEngineAttribute($this->instance) . 'href="%1$s" title="%2$s" rel="author">%3$s</a>',
+					'<a ' . $this->searchEngineAttribute($this->instance) . 'href="%1$s" title="%2$s" rel="author">%3$s</a>',
 					esc_url( get_author_posts_url( $authordata->ID, $authordata->user_nicename ) ),
 					esc_attr( sprintf( __( 'Posts by %s' ), get_the_author() ) ),
 					get_the_author()
