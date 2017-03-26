@@ -2027,14 +2027,14 @@ function show_user_profile( $user ) {
 		<tr>
 			<th><label for="<?php echo __NAMESPACE__?>[panels]"><?php _e('Open panels behavior','category-posts')?></label></th>
 			<td>
-				<input type="checkbox" name="<?php echo __NAMESPACE__?>[panels]" id="<?php echo __NAMESPACE__?>[panels]" <?php checked($accordion); ?>">
+				<input type="checkbox" name="<?php echo __NAMESPACE__?>[panels]" id="<?php echo __NAMESPACE__?>[panels]" <?php checked($accordion); ?>>
 				<label for=<?php echo __NAMESPACE__?>[panels]><?php _e('Close the curremtly open panel when opening a new one','category-posts')?></label>
 			</td>
 		</tr>
 		<tr>
 			<th><label for="<?php echo __NAMESPACE__?>[editor]"><?php _e('Visual editor button','category-posts')?></label></th>
 			<td>
-				<input type="checkbox" name="<?php echo __NAMESPACE__?>[editor]" id="<?php echo __NAMESPACE__?>[editor]" <?php checked($editor); ?>">
+				<input type="checkbox" name="<?php echo __NAMESPACE__?>[editor]" id="<?php echo __NAMESPACE__?>[editor]" <?php checked($editor); ?>>
 				<label for="<?php echo __NAMESPACE__?>[editor]"><?php _e('Hide the "insert shortcode" button from the editor','category-posts')?></label>
 			</td>
 		</tr>
@@ -2147,20 +2147,8 @@ class virtualWidget {
 		if (!$is_shortcode)
 			$widget_id .= '-internal';
 	
-		if (!(isset($settings['disable_font_styles']) && $settings['disable_font_styles'])) { // checks if disable font styles is not set
-			$rules = array( // rules that should be applied to all widgets
-				'.cat-post-item img {max-width: initial; max-height: initial;}',
-				'.cat-post-title {font-size: 15px;}',
-				'.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}',
-				'.cat-post-date {font-size: 12px;	line-height: 18px; font-style: italic; margin-bottom: 10px;}',
-				'.cat-post-comment-num {font-size: 12px; line-height: 18px;}',
-				'.cat-post-author {margin-bottom: 0;}',
-				'.cat-post-thumbnail {margin: 5px 10px 5px 0; display: block;}',
-				'.cat-post-item:before {content: ""; display: table; clear: both;}',
-				'.cat-post-item:after {content: ""; display: table;	clear: both;}',
-				'.cat-post-item img {margin: initial;}',
-			);
-		} else {
+		if (!(isset($settings['disable_css']) && $settings['disable_css'])) { // checks if css disable is not set
+		
 			$rules = array( // rules that should be applied to all widgets
 				'.cat-post-item img {max-width: initial; max-height: initial;}',
 				'.cat-post-current .cat-post-title {text-transform: uppercase;}',
@@ -2168,12 +2156,18 @@ class virtualWidget {
 				'.cat-post-author {margin-bottom: 0;}',
 				'.cat-post-thumbnail {margin: 5px 10px 5px 0; display: block;}',
 				'.cat-post-item:before {content: ""; display: table; clear: both;}',
-				'.cat-post-item:after {content: ""; display: table;	clear: both;}',
 				'.cat-post-item img {margin: initial;}',
 			);
-		}
-
-		if (!(isset($settings['disable_css']) && $settings['disable_css'])) { // checks if css disable is not set
+			
+			if (!(isset($settings['disable_font_styles']) && $settings['disable_font_styles'])) { // checks if disable font styles is not set
+				// add general rules which apply to font styling
+				$rules[] = '.cat-post-title {font-size: 15px;}';
+				$rules[] = '.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}';
+				$rules[] = '.cat-post-date {font-size: 12px;	line-height: 18px; font-style: italic; margin-bottom: 10px;}';
+				$rules[] = '.cat-post-comment-num {font-size: 12px; line-height: 18px;}';
+			} else {
+				$rules[] = '.cat-post-date {margin-bottom: 10px;}';				
+			}
 
 			/*
 				the twenty seventeen theme have a border between the LI elements of a widget, 
@@ -2212,8 +2206,13 @@ class virtualWidget {
 				}
 			}
 
+            // everything link related styling
+		    // if we are dealing with "everything is a link" option, we need to add the clear:both to the a element, not the div
 			if (isset( $settings['everything_is_link'] ) && $settings['everything_is_link']) {
 				$rules[] = '.cat-post-everything-is-link { }';
+				$rules[] = '.cat-post-item a:after {content: ""; display: table;	clear: both;}';
+			} else {
+				$rules[] = '.cat-post-item:after {content: ""; display: table;	clear: both;}';
 			}
 
 			foreach ($rules as $rule) {
