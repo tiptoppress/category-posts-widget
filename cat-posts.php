@@ -492,11 +492,12 @@ class Widget extends \WP_Widget {
 
             $class              = '';
 			$use_css_cropping   = isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping'];
-			$disable_css        = !(isset($this->instance['disable_css']) && $this->instance['disable_css']);
+			$disable_css        = isset($instance['disable_css']) && $instance['disable_css']; // 'disable_css' is deleted in 4.8 and higher
+			$disable_all_styles = isset($instance['disable_all_styles']) && $instance['disable_all_styles'] || $disable_css;			
 			$everything_is_link = isset($instance['everything_is_link']) && $instance['everything_is_link'];
 
-            if( $use_css_cropping || $disable_css) { 
-                if(isset($this->instance['thumb_hover']) && !$everything_is_link) {
+            if ( $use_css_cropping ) {
+                if(isset($this->instance['thumb_hover']) && !$everything_is_link && !$disable_css) {
                     $class = "class=\"cat-post-thumbnail cat-post-" . $instance['thumb_hover'] . "\"";
                 } else {
                     $class = "class=\"cat-post-thumbnail\"";
@@ -655,11 +656,14 @@ class Widget extends \WP_Widget {
 	function footerHTML($instance) {
 
 		$ret = "";
+		$disable_css        = isset($instance['disable_css']) && $instance['disable_css']; // 'disable_css' is deleted in 4.8 and higher
+		$disable_all_styles = isset($instance['disable_all_styles']) && $instance['disable_all_styles'] || $disable_css;
+		
 		if (isset ( $instance["footer_link"] ) && !empty ( $instance["footer_link"] )) {
 			if (empty($instance["footer_link_text"]))
 				$instance["footer_link_text"] = $instance["footer_link"];
 			$ret = "<a";
-			if( !(isset( $instance['disable_css'] ) && $instance['disable_css'])) { 
+			if( !$disable_all_styles ) { 
 				$ret.= " class=\"cat-post-footer-link\""; 
 			}
 			if (isset($instance["cat"]) && ($instance["cat"] != 0) && (get_category($instance["cat"]) != null) ) {
@@ -696,7 +700,8 @@ class Widget extends \WP_Widget {
         global $post;
         
 		$everything_is_link = isset($instance['everything_is_link']) && $instance['everything_is_link'];
-		$disable_css        = isset($instance['disable_css']) && $instance['disable_css'];
+		$disable_css        = isset($instance['disable_css']) && $instance['disable_css']; // 'disable_css' is deleted in 4.8 and higher
+		$disable_all_styles = isset($instance['disable_all_styles']) && $instance['disable_all_styles'] || $disable_css;
 		
         $ret = '<li ';
                     
@@ -723,7 +728,7 @@ class Widget extends \WP_Widget {
 				$ret .= '<span class="cat-post-title">'.get_the_title().'</span>';
 			} else {
 				$ret .= '<a class="post-title';
-				if (!$disable_css) { 
+				if (!$disable_all_styles) { 
 					$ret .= " cat-post-title"; 
 				}
 				$searchEngineAttribute = $instance['search_engine_attribute']!='none'?$this->searchEngineAttribute($this->instance):" rel=\"bookmark\" ";
@@ -740,7 +745,7 @@ class Widget extends \WP_Widget {
                 $date_format = "j M Y"; 
             } 
             $ret .= '<p class="post-date';
-            if (!$disable_css) { 
+            if (!$disable_all_styles) { 
                 $ret .= " cat-post-date";
             } 
             $ret .= '">';
@@ -796,7 +801,7 @@ class Widget extends \WP_Widget {
 		// Comments
         if ( isset( $instance['comment_num'] ) && $instance['comment_num']) {
             $ret .= '<p class="comment-num';
-            if (!$disable_css) {
+            if (!$disable_all_styles) {
                 $ret .= " cat-post-comment-num"; 
             } 
             $ret .= '">';
@@ -819,7 +824,7 @@ class Widget extends \WP_Widget {
 		// Author
         if ( isset( $instance['author'] ) && $instance['author']) {
             $ret .= '<p class="post-author';
-            if (!$disable_css) { 
+            if (!$disable_all_styles) { 
                 $ret .= " cat-post-author"; 
             } 
             $ret .= '">';
@@ -1246,6 +1251,11 @@ class Widget extends \WP_Widget {
  			if (!isset($instance['excerpt_filters']))
  				$instance['excerpt_filters'] = 'on';
  		}
+		if (isset($instance['disable_css']) && $instance['disable_css'] ) { // backward compatibility to =< 4.7
+			$instance['disable_all_styles'] = $instance['disable_css']; // 'disable_css' is deleted in 4.8 and higher
+			unset($instance['disable_css']);
+		}
+		
 		$instance = wp_parse_args( ( array ) $instance, array(
 			'everything_is_link'              => false,
 			'footer_link_text'                => '',
@@ -1261,6 +1271,7 @@ class Widget extends \WP_Widget {
 			'date_link'                       => '',
 			'date_format'                     => '',
 			'disable_css'                     => '',
+			'disable_all_styles'              => '',
 			'disable_font_styles'             => '',
 			'hide_if_empty'                   => '',
 			'search_engine_attribute'         => 'none',
@@ -1281,6 +1292,7 @@ class Widget extends \WP_Widget {
 		$date_link                       = $instance['date_link'];
 		$date_format                     = $instance['date_format'];
 		$disable_css                     = $instance['disable_css'];
+		$disable_all_styles              = $instance['disable_all_styles'];
 		$disable_font_styles             = $instance['disable_font_styles'];
 		$hide_if_empty                   = $instance['hide_if_empty'];
 		$search_engine_attribute         = $instance['search_engine_attribute'];
@@ -1400,22 +1412,24 @@ class Widget extends \WP_Widget {
 			</div>
 			<h4 data-panel="general"><?php _e('General','category-posts')?></h4>
 			<div>
-				<p onchange="javascript:cwp_namespace.toggleDisableFontStyles(this)">
-					<label for="<?php echo $this->get_field_id("disable_css"); ?>">
-						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_css"); ?>" name="<?php echo $this->get_field_name("disable_css"); ?>"<?php checked( (bool) $instance["disable_css"], true ); ?> />
-						<?php _e( 'Disable the built-in CSS for this widget','category-posts' ); ?>
-					</label>
-				</p>
-				<p class="categoryposts-data-panel-general-disable-font-styles" style="display:<?php echo ((bool) $disable_css) ? 'none' : 'block'?>">
-					<label for="<?php echo $this->get_field_id("disable_font_styles"); ?>">
-						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_font_styles"); ?>" name="<?php echo $this->get_field_name("disable_font_styles"); ?>"<?php checked( (bool) $instance["disable_font_styles"], true ); ?> />
-						<?php _e( 'Disable only font styles for this widget','category-posts' ); ?>
-					</label>
-				</p>
+				<div class="cpwp_ident">
+					<p onchange="javascript:cwp_namespace.toggleDisableFontStyles(this)">
+						<label for="<?php echo $this->get_field_id("disable_all_styles"); ?>">
+							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_all_styles"); ?>" name="<?php echo $this->get_field_name("disable_all_styles"); ?>"<?php checked( (bool) $instance["disable_all_styles"], true ); ?> />
+							<?php _e( 'Disable the built-in CSS','category-posts' ); ?>
+						</label>
+					</p>
+					<p class="categoryposts-data-panel-general-disable-font-styles" style="display:<?php echo ((bool) $disable_all_styles) ? 'none' : 'block'?>">
+						<label for="<?php echo $this->get_field_id("disable_font_styles"); ?>">
+							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_font_styles"); ?>" name="<?php echo $this->get_field_name("disable_font_styles"); ?>"<?php checked( (bool) $instance["disable_font_styles"], true ); ?> />
+							<?php _e( 'Disable only font styles','category-posts' ); ?>
+						</label>
+					</p>
+				</div>
 				<p>
 					<label for="<?php echo $this->get_field_id("hide_if_empty"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_if_empty"); ?>" name="<?php echo $this->get_field_name("hide_if_empty"); ?>"<?php checked( (bool) $instance["hide_if_empty"], true ); ?> />
-						<?php _e( 'Hide widget if there are no matching posts','category-posts' ); ?>
+						<?php _e( 'Hide if there are no matching posts','category-posts' ); ?>
 					</label>
 				</p>				
 				<p>
@@ -1711,6 +1725,7 @@ function default_settings()  {
 				'date_link'                       => false,
 				'date_format'                     => '',
 				'disable_css'                     => false,
+				'disable_all_styles'              => false,
 				'disable_font_styles'             => false,
 				'hide_if_empty'                   => false,
 				'search_engine_attribute'         => 'none',
@@ -2156,10 +2171,13 @@ class virtualWidget {
 	function getCSSRules($is_shortcode,&$ret) {	
 		$settings = self::$collection[$this->id];
 		$widget_id = $this->id;
-		if (!$is_shortcode)
+		if (!$is_shortcode) {
 			$widget_id .= '-internal';
-	
-		if (!(isset($settings['disable_css']) && $settings['disable_css'])) { // checks if css disable is not set
+		}			
+		$disable_css        = isset($settings['disable_css']) && $settings['disable_css']; // 'disable_css' is deleted in 4.8 and higher
+		$disable_all_styles = isset($settings['disable_all_styles']) && $settings['disable_all_styles'] || $disable_css;
+
+		if (!$disable_all_styles) { // checks if css disable is not set
 		
 			$rules = array( // rules that should be applied to all widgets
 				'.cat-post-item img {max-width: initial; max-height: initial;}',
@@ -2196,28 +2214,6 @@ class virtualWidget {
 				$rules[] = '.cat-post-thumbnail {float:left;}';
 			}
 
-			if (isset($settings['thumb_hover'])) {
-				switch ($settings['thumb_hover']) {
-					case 'white':
-						$rules[] = '.cat-post-white {background-color: white;}';
-						$rules[] = '.cat-post-white img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-						$rules[] = '.cat-post-white:hover img {opacity: 0.8;}';
-						break;
-					case 'dark':
-						$rules[] = '.cat-post-dark img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-						$rules[] = '.cat-post-dark:hover img {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}';
-						break;
-					case 'scale':
-						$rules[] = '.cat-post-scale img {margin: initial; padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-						$rules[] = '.cat-post-scale:hover img {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}';
-						break;
-					case 'blur':
-						$rules[] = '.cat-post-blur img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-						$rules[] = '.cat-post-blur:hover img {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}';
-						break;
-				}
-			}
-
             // everything link related styling
 		    // if we are dealing with "everything is a link" option, we need to add the clear:both to the a element, not the div
 			if (isset( $settings['everything_is_link'] ) && $settings['everything_is_link']) {
@@ -2242,12 +2238,36 @@ class virtualWidget {
 			}
 		}
 		
-		if ((isset($settings['use_css_cropping']) && $settings['use_css_cropping']) || !(isset($settings['disable_css']) && $settings['disable_css'])) {
+		if ((isset($settings['use_css_cropping']) && $settings['use_css_cropping']) || !$disable_all_styles ) {
 			if (isset($settings['use_css_cropping']) && $settings['use_css_cropping'])
 				$ret[] = '#'.$widget_id.' .cat-post-crop {overflow: hidden; display:block}';
 			else
 				$ret[] = '#'.$widget_id.' .cat-post-thumbnail span {overflow: hidden; display:block}';
 			$ret[] = '#'.$widget_id.' .cat-post-item img {margin: initial;}';
+		}
+
+		if (!$disable_css ) { // backward compatibility to =< 4.7
+			if (isset($settings['thumb_hover'])) {
+				switch ($settings['thumb_hover']) {
+					case 'white':
+						$ret[] = '#'.$widget_id.' .cat-post-white {background-color: white;}';
+						$ret[] = '#'.$widget_id.' .cat-post-white img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+						$ret[] = '#'.$widget_id.' .cat-post-white:hover img {opacity: 0.8;}';
+						break;
+					case 'dark':
+						$ret[] = '#'.$widget_id.' .cat-post-dark img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+						$ret[] = '#'.$widget_id.' .cat-post-dark:hover img {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}';
+						break;
+					case 'scale':
+						$ret[] = '#'.$widget_id.' .cat-post-scale img {margin: initial; padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+						$ret[] = '#'.$widget_id.' .cat-post-scale:hover img {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}';
+						break;
+					case 'blur':
+						$ret[] = '#'.$widget_id.' .cat-post-blur img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+						$ret[] = '#'.$widget_id.' .cat-post-blur:hover img {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}';
+						break;
+				}
+			}		
 		}
 	}
 
