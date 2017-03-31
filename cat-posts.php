@@ -721,7 +721,7 @@ class Widget extends \WP_Widget {
         if( isset( $instance["thumbTop"] ) && $instance["thumbTop"]) {
             $ret .= $this->show_thumb($instance,$everything_is_link); 
         }
-        
+
 		// Title
         if( !(isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'])) { 
 			if ($everything_is_link) {
@@ -758,7 +758,7 @@ class Widget extends \WP_Widget {
             }
             $ret .= '</p>';
         }
-        
+
         // Thumbnail position normal
         if( !(isset( $instance["thumbTop"] ) && $instance["thumbTop"])) {
             $ret .= $this->show_thumb($instance,$everything_is_link);
@@ -797,7 +797,7 @@ class Widget extends \WP_Widget {
 			}
 			$ret .= apply_filters('cpw_excerpt',$excerpt);
         }
-        
+
 		// Comments
         if ( isset( $instance['comment_num'] ) && $instance['comment_num']) {
             $ret .= '<p class="comment-num';
@@ -822,7 +822,7 @@ class Widget extends \WP_Widget {
         }
 
 		// Author
-        if ( isset( $instance['author'] ) && $instance['author']) {
+        if (isset( $instance['author'] ) && $instance['author']) {
             $ret .= '<p class="post-author';
             if (!$disable_all_styles) { 
                 $ret .= " cat-post-author"; 
@@ -843,6 +843,32 @@ class Widget extends \WP_Widget {
             $ret .= '</p>';
         }
 		
+		// Categories
+		if (isset( $instance['assigned_categories'] ) && $instance['assigned_categories']) {
+            $ret .= '<p';
+            if (!$disable_all_styles) { 
+                $ret .= ' class="cat-post-category"'; 
+            } 
+            $ret .= '>';			
+			$catIDs = wp_get_post_categories($post->ID, array('number'=>0));
+			foreach ($catIDs as $catID)
+				$ret .= " <a " . $this->searchEngineAttribute($this->instance) . " href='" . get_category_link($catID) . "'>" . get_cat_name($catID) . "</a> ";
+			$ret .= "</p>";
+		}
+
+		// Tags
+		if (isset( $instance['assigned_tags'] ) && $instance['assigned_tags']) {	
+            $ret .= '<p';
+            if (!$disable_all_styles) { 
+                $ret .= ' class="cat-post-tag"'; 
+            } 
+            $ret .= '>';
+			$tagIDs = wp_get_post_tags($post->ID, array('number'=>0));
+			foreach ($tagIDs as $tagID)
+				$ret .= " <a " . $this->searchEngineAttribute($this->instance) . " href='" . get_tag_link($tagID->term_id) . "'>" . $tagID->name . "</a> ";
+			$ret .= "</p>";
+		}
+
 		if ($everything_is_link) {
 			$ret .= '</a>';
 		}
@@ -1270,6 +1296,8 @@ class Widget extends \WP_Widget {
 			'date'                            => '',
 			'date_link'                       => '',
 			'date_format'                     => '',
+			'assigned_categories'             => '',
+			'assigned_tags'                   => '',
 			'disable_css'                     => '',
 			'disable_all_styles'              => '',
 			'disable_font_styles'             => '',
@@ -1291,6 +1319,8 @@ class Widget extends \WP_Widget {
 		$date                            = $instance['date'];
 		$date_link                       = $instance['date_link'];
 		$date_format                     = $instance['date_format'];
+		$assigned_categories             = $instance['assigned_categories'];
+		$assigned_tags                   = $instance['assigned_tags'];
 		$disable_css                     = $instance['disable_css'];
 		$disable_all_styles              = $instance['disable_all_styles'];
 		$disable_font_styles             = $instance['disable_font_styles'];
@@ -1407,6 +1437,18 @@ class Widget extends \WP_Widget {
 					<label for="<?php echo $this->get_field_id("author"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("author"); ?>" name="<?php echo $this->get_field_name("author"); ?>"<?php checked( (bool) $instance["author"], true ); ?> />
 						<?php _e( 'Show post author','category-posts' ); ?>
+					</label>
+				</p>
+				<p>
+					<label for="<?php echo $this->get_field_id("assigned_categories"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("assigned_categories"); ?>" name="<?php echo $this->get_field_name("assigned_categories"); ?>"<?php checked( (bool) $instance["assigned_categories"], true ); ?> />
+						<?php _e( 'Show assigned post categories','category-posts' ); ?>
+					</label>
+				</p>
+				<p>
+					<label for="<?php echo $this->get_field_id("assigned_tags"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("assigned_tags"); ?>" name="<?php echo $this->get_field_name("assigned_tags"); ?>"<?php checked( (bool) $instance["assigned_tags"], true ); ?> />
+						<?php _e( 'Show assigned Tags','category-posts' ); ?>
 					</label>
 				</p>
 			</div>
@@ -1724,6 +1766,8 @@ function default_settings()  {
 				'date'                            => false,
 				'date_link'                       => false,
 				'date_format'                     => '',
+				'assigned_categories'             => false,
+				'assigned_tags'                   => false,
 				'disable_css'                     => false,
 				'disable_all_styles'              => false,
 				'disable_font_styles'             => false,
@@ -2195,6 +2239,8 @@ class virtualWidget {
 				$rules[] = '.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}';
 				$rules[] = '.cat-post-date {font-size: 12px;	line-height: 18px; font-style: italic; margin-bottom: 10px;}';
 				$rules[] = '.cat-post-comment-num {font-size: 12px; line-height: 18px;}';
+				$rules[] = '.cat-post-category a {text-transform: uppercase;}';
+				$rules[] = '.cat-post-tag a {background: #EEEEEE; padding: 2px 5px;}';
 			} else {
 				$rules[] = '.cat-post-date {margin-bottom: 10px;}';				
 			}
@@ -2230,8 +2276,12 @@ class virtualWidget {
 			if ($is_shortcode) {
 				// Twenty Sixteen Theme adds underlines to links with box whadow wtf ...
 				$ret[] = '#'.$widget_id.' .cat-post-thumbnail {box-shadow:none}'; // this for the thumb link
+				if (!(isset($settings['disable_font_styles']) && $settings['disable_font_styles'])) // checks if disable font styles is not set
+					$ret[] = '#'.$widget_id.' .cat-post-tag a {box-shadow:none}';     // this for the tag link
 				// Twenty Fifteen Theme adds border ...
 				$ret[] = '#'.$widget_id.' .cat-post-thumbnail {border:0}'; // this for the thumb link
+				if (!(isset($settings['disable_font_styles']) && $settings['disable_font_styles'])) // checks if disable font styles is not set
+					$ret[] = '#'.$widget_id.' .cat-post-tag a {border:0}';     // this for the tag link
 				// probably all Themes have too much margin on their p element when used in the shortcode
 				$ret[] = '#'.$widget_id.' p {margin:5px 0 0 0}';	/* since on bottom it will make the spacing on cover
 																	   bigger (add to the padding) use only top for now */
