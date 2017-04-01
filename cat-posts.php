@@ -496,13 +496,11 @@ class Widget extends \WP_Widget {
 			$disable_all_styles = isset($instance['disable_all_styles']) && $instance['disable_all_styles'] || $disable_css;			
 			$everything_is_link = isset($instance['everything_is_link']) && $instance['everything_is_link'];
 
-            if ( $use_css_cropping ) {
-                if(isset($this->instance['thumb_hover']) && !$everything_is_link && !$disable_css) {
-                    $class = "class=\"cat-post-thumbnail cat-post-" . $instance['thumb_hover'] . "\"";
-                } else {
-                    $class = "class=\"cat-post-thumbnail\"";
-                }
-            }
+			if(isset($this->instance['thumb_hover']) && !$everything_is_link && !$disable_css) {
+				$class = "class=\"cat-post-thumbnail cat-post-" . $instance['thumb_hover'] . "\"";
+			} else {
+				$class = "class=\"cat-post-thumbnail\"";
+			}
 			
             $title_args = array('echo'=>false);
 
