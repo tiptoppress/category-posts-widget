@@ -716,7 +716,7 @@ class Widget extends \WP_Widget {
 		}
 		
         // Thumbnail position to top
-        if( isset( $instance["thumbTop"] ) && $instance["thumbTop"]) {
+        if (isset($instance["thumbTop"]) && $instance["thumbTop"]) {
             $ret .= $this->show_thumb($instance,$everything_is_link); 
         }
 
@@ -734,6 +734,25 @@ class Widget extends \WP_Widget {
 				$ret .= '</a> ';
 			}
         }
+		
+		// Categories position to top
+		if (isset($instance["assigned_cat_top"]) && $instance["assigned_cat_top"]) {
+			if (isset( $instance['assigned_categories'] ) && $instance['assigned_categories']) {
+				$ret .= '<p';
+				if (!$disable_all_styles) { 
+					$ret .= ' class="cat-post-category"'; 
+				} 
+				$ret .= '>';
+				$catIDs = wp_get_post_categories($post->ID, array('number'=>0));
+				foreach ($catIDs as $catID) {
+					if ($everything_is_link)
+						$ret .= " <span>" . get_cat_name($catID) . " </span>";
+					else			
+						$ret .= " <a " . $this->searchEngineAttribute($this->instance) . " href='" . get_category_link($catID) . "'>" . get_cat_name($catID) . "</a> ";
+				}
+				$ret .= "</p>";
+			}
+		}
 
 		// Date
         if ( isset( $instance['date']) && $instance['date']) {
@@ -841,21 +860,23 @@ class Widget extends \WP_Widget {
             $ret .= '</p>';
         }
 		
-		// Categories
-		if (isset( $instance['assigned_categories'] ) && $instance['assigned_categories']) {
-            $ret .= '<p';
-            if (!$disable_all_styles) { 
-                $ret .= ' class="cat-post-category"'; 
-            } 
-            $ret .= '>';
-			$catIDs = wp_get_post_categories($post->ID, array('number'=>0));
-			foreach ($catIDs as $catID) {
-				if ($everything_is_link)
-					$ret .= " <span>" . get_cat_name($catID) . " </span>";
-				else			
-					$ret .= " <a " . $this->searchEngineAttribute($this->instance) . " href='" . get_category_link($catID) . "'>" . get_cat_name($catID) . "</a> ";
+		// Categories position normal
+		if( !(isset( $instance["assigned_cat_top"] ) && $instance["assigned_cat_top"])) {
+			if (isset( $instance['assigned_categories'] ) && $instance['assigned_categories']) {
+				$ret .= '<p';
+				if (!$disable_all_styles) { 
+					$ret .= ' class="cat-post-category"'; 
+				} 
+				$ret .= '>';
+				$catIDs = wp_get_post_categories($post->ID, array('number'=>0));
+				foreach ($catIDs as $catID) {
+					if ($everything_is_link)
+						$ret .= " <span>" . get_cat_name($catID) . " </span>";
+					else			
+						$ret .= " <a " . $this->searchEngineAttribute($this->instance) . " href='" . get_category_link($catID) . "'>" . get_cat_name($catID) . "</a> ";
+				}
+				$ret .= "</p>";
 			}
-			$ret .= "</p>";
 		}
 
 		// Tags
@@ -1303,6 +1324,7 @@ class Widget extends \WP_Widget {
 			'date_link'                       => '',
 			'date_format'                     => '',
 			'assigned_categories'             => '',
+			'assigned_cat_top'                => '',
 			'assigned_tags'                   => '',
 			'disable_css'                     => '',
 			'disable_all_styles'              => '',
@@ -1326,6 +1348,7 @@ class Widget extends \WP_Widget {
 		$date_link                       = $instance['date_link'];
 		$date_format                     = $instance['date_format'];
 		$assigned_categories             = $instance['assigned_categories'];
+		$assigned_cat_top                = $instance['assigned_cat_top'];
 		$assigned_tags                   = $instance['assigned_tags'];
 		$disable_css                     = $instance['disable_css'];
 		$disable_all_styles              = $instance['disable_all_styles'];
@@ -1445,12 +1468,20 @@ class Widget extends \WP_Widget {
 						<?php _e( 'Show post author','category-posts' ); ?>
 					</label>
 				</p>
-				<p>
+				<p onchange="javascript:cwp_namespace.toggleAssignedCategoriesTop(this)">
 					<label for="<?php echo $this->get_field_id("assigned_categories"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("assigned_categories"); ?>" name="<?php echo $this->get_field_name("assigned_categories"); ?>"<?php checked( (bool) $instance["assigned_categories"], true ); ?> />
 						<?php _e( 'Show assigned post categories','category-posts' ); ?>
 					</label>
 				</p>
+				<div class="cpwp_ident categoryposts-details-panel-assigned-cat-top" style="display:<?php echo ((bool) $assigned_categories) ? 'block' : 'none'?>">
+					<p>
+						<label for="<?php echo $this->get_field_id("assigned_cat_top"); ?>">
+							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("assigned_cat_top"); ?>" name="<?php echo $this->get_field_name("assigned_cat_top"); ?>"<?php checked( (bool) $instance["assigned_cat_top"], true ); ?> />
+							<?php _e( 'Show above the excerpt','category-posts' ); ?>
+						</label>
+					</p>				
+				</div>
 				<p>
 					<label for="<?php echo $this->get_field_id("assigned_tags"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("assigned_tags"); ?>" name="<?php echo $this->get_field_name("assigned_tags"); ?>"<?php checked( (bool) $instance["assigned_tags"], true ); ?> />
@@ -1773,6 +1804,7 @@ function default_settings()  {
 				'date_link'                       => false,
 				'date_format'                     => '',
 				'assigned_categories'             => false,
+				'assigned_cat_top'                => false,
 				'assigned_tags'                   => false,
 				'disable_css'                     => false,
 				'disable_all_styles'              => false,
@@ -2232,7 +2264,6 @@ class virtualWidget {
 			$rules = array( // rules that should be applied to all widgets
 				'.cat-post-item img {max-width: initial; max-height: initial;}',
 				'.cat-post-current .cat-post-title {text-transform: uppercase;}',
-				'.cat-post-date {margin-bottom: 10px;}',
 				'.cat-post-author {margin-bottom: 0;}',
 				'.cat-post-thumbnail {margin: 5px 10px 5px 0; display: block;}',
 				'.cat-post-item:before {content: ""; display: table; clear: both;}',
@@ -2243,12 +2274,10 @@ class virtualWidget {
 				// add general rules which apply to font styling
 				$rules[] = '.cat-post-title {font-size: 15px;}';
 				$rules[] = '.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}';
-				$rules[] = '.cat-post-date {font-size: 12px;	line-height: 18px; font-style: italic; margin-bottom: 10px;}';
-				$rules[] = '.cat-post-comment-num {font-size: 12px; line-height: 18px;}';
-				$rules[] = '.cat-post-category a {text-transform: uppercase;}';
-				$rules[] = '.cat-post-tag a, .cat-post-tag span {background: #EEEEEE; padding: 2px 5px;}';
-			} else {
-				$rules[] = '.cat-post-date {margin-bottom: 10px;}';				
+				$rules[] = '.cat-post-date {font-size: 14px; line-height: 18px; font-style: italic; margin-bottom: 5px;}';
+				$rules[] = '.cat-post-comment-num {font-size: 14px; line-height: 18px;}';
+				$rules[] = '.cat-post-category a {font-size: 14px; line-height: 18px; text-transform: uppercase;}';
+				$rules[] = '.cat-post-tag a, .cat-post-tag span {font-size: 12px; line-height: 18px; background: #EEEEEE; padding: 5px 10px;}';
 			}
 
 			/*

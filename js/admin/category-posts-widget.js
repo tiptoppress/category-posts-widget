@@ -85,6 +85,18 @@
             }	
         },
 		
+		// Show hide disable font styles
+		toggleAssignedCategoriesTop: function(item) {
+            var value = jQuery(item).find("input").attr('checked');
+			var panel = item.parentElement.parentElement;
+            if(value == 'checked') {
+                jQuery(panel).find('.categoryposts-details-panel-assigned-cat-top').show();
+            }
+            else {
+                jQuery(panel).find('.categoryposts-details-panel-assigned-cat-top').hide();
+            }	
+        },
+		
 		// Close all open panels if open
 		autoCloseOpenPanels: function(_this) {
 			if( categoryPosts.accordion  ) {
