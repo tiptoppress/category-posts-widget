@@ -849,10 +849,14 @@ class Widget extends \WP_Widget {
             if (!$disable_all_styles) { 
                 $ret .= ' class="cat-post-category"'; 
             } 
-            $ret .= '>';			
+            $ret .= '>';
 			$catIDs = wp_get_post_categories($post->ID, array('number'=>0));
-			foreach ($catIDs as $catID)
-				$ret .= " <a " . $this->searchEngineAttribute($this->instance) . " href='" . get_category_link($catID) . "'>" . get_cat_name($catID) . "</a> ";
+			foreach ($catIDs as $catID) {
+				if ($everything_is_link)
+					$ret .= " <span>" . get_cat_name($catID) . " </span>";
+				else			
+					$ret .= " <a " . $this->searchEngineAttribute($this->instance) . " href='" . get_category_link($catID) . "'>" . get_cat_name($catID) . "</a> ";
+			}
 			$ret .= "</p>";
 		}
 
@@ -864,8 +868,12 @@ class Widget extends \WP_Widget {
             } 
             $ret .= '>';
 			$tagIDs = wp_get_post_tags($post->ID, array('number'=>0));
-			foreach ($tagIDs as $tagID)
-				$ret .= " <a " . $this->searchEngineAttribute($this->instance) . " href='" . get_tag_link($tagID->term_id) . "'>" . $tagID->name . "</a> ";
+			foreach ($tagIDs as $tagID) {
+				if ($everything_is_link)
+					$ret .= " <span>" . $tagID->name . "</span> ";
+				else
+					$ret .= " <a " . $this->searchEngineAttribute($this->instance) . " href='" . get_tag_link($tagID->term_id) . "'>" . $tagID->name . "</a> ";
+			}
 			$ret .= "</p>";
 		}
 
@@ -2240,7 +2248,7 @@ class virtualWidget {
 				$rules[] = '.cat-post-date {font-size: 12px;	line-height: 18px; font-style: italic; margin-bottom: 10px;}';
 				$rules[] = '.cat-post-comment-num {font-size: 12px; line-height: 18px;}';
 				$rules[] = '.cat-post-category a {text-transform: uppercase;}';
-				$rules[] = '.cat-post-tag a {background: #EEEEEE; padding: 2px 5px;}';
+				$rules[] = '.cat-post-tag a, .cat-post-tag span {background: #EEEEEE; padding: 2px 5px;}';
 			} else {
 				$rules[] = '.cat-post-date {margin-bottom: 10px;}';				
 			}
@@ -2276,12 +2284,16 @@ class virtualWidget {
 			if ($is_shortcode) {
 				// Twenty Sixteen Theme adds underlines to links with box whadow wtf ...
 				$ret[] = '#'.$widget_id.' .cat-post-thumbnail {box-shadow:none}'; // this for the thumb link
-				if (!(isset($settings['disable_font_styles']) && $settings['disable_font_styles'])) // checks if disable font styles is not set
+				if (!(isset($settings['disable_font_styles']) && $settings['disable_font_styles'])) { // checks if disable font styles is not set
 					$ret[] = '#'.$widget_id.' .cat-post-tag a {box-shadow:none}';     // this for the tag link
+					$ret[] = '#'.$widget_id.' .cat-post-tag span {box-shadow:none}';     // this for the tag link
+				}
 				// Twenty Fifteen Theme adds border ...
 				$ret[] = '#'.$widget_id.' .cat-post-thumbnail {border:0}'; // this for the thumb link
-				if (!(isset($settings['disable_font_styles']) && $settings['disable_font_styles'])) // checks if disable font styles is not set
+				if (!(isset($settings['disable_font_styles']) && $settings['disable_font_styles'])) { // checks if disable font styles is not set
 					$ret[] = '#'.$widget_id.' .cat-post-tag a {border:0}';     // this for the tag link
+					$ret[] = '#'.$widget_id.' .cat-post-tag span {border:0}';     // this for the tag link
+				}
 				// probably all Themes have too much margin on their p element when used in the shortcode
 				$ret[] = '#'.$widget_id.' p {margin:5px 0 0 0}';	/* since on bottom it will make the spacing on cover
 																	   bigger (add to the padding) use only top for now */
