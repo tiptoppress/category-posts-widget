@@ -398,7 +398,8 @@ class Widget extends \WP_Widget {
 	 * Excerpt more link filter
 	 */
 	function excerpt_more_filter($more) {
-		return '<a class="cat-post-excerpt-more more-link"' . $this->searchEngineAttribute($this->instance) . 'href="'. get_permalink() . '">' . esc_html($this->instance["excerpt_more_text"]) . '</a>';
+		$ret = '<a class="cat-post-excerpt-more more-link" href="'. get_permalink() . '">' . esc_html($this->instance["excerpt_more_text"]) . '</a>';		
+		return apply_filters('cpw_search_engine_attribute',$ret);
 	}
 
 	/**
@@ -507,7 +508,7 @@ class Widget extends \WP_Widget {
 			if ($no_link)
 				$ret .= '<span '.$class . '">';
 			else
-				$ret .= '<a ' . $class . $this->searchEngineAttribute($this->instance) . 'href="'.get_the_permalink().'" title="'.the_title_attribute($title_args).'">';
+				$ret .= apply_filters('cpw_search_engine_attribute','<a ' . $class . 'href="'.get_the_permalink().'" title="'.the_title_attribute($title_args).'">');
 
             $ret .= $this->the_post_thumbnail( array($this->instance['thumb_w'],$this->instance['thumb_h']));
 
@@ -518,29 +519,6 @@ class Widget extends \WP_Widget {
 		}
 
         return $ret;
-	}
-
-	/**
-	 * Add rel attribute to all widget links and make other website links more important
-	 *
-	 * @param  array $instance Array which contains the various settings
-	 * @return string with the anchor attribute
-     *
-     * @since 4.8
-	 */
-    function searchEngineAttribute($instance) {
-		$ret = "";
-		if (isset($instance['search_engine_attribute']) && $instance['search_engine_attribute'] != 'none') {
-			switch ($instance['search_engine_attribute']) {
-				case 'canonical':
-					$ret .= " rel=\"canonical\" ";
-					breake;
-				case 'nofollow':
-					$ret .= " rel=\"nofollow\" ";
-					breake;
-			}
-		}
-		return $ret;
 	}
 	
 	/**
@@ -631,9 +609,9 @@ class Widget extends \WP_Widget {
 				$title = apply_filters( 'widget_title', $instance["title"] );
 			
             if (isset($instance["title_link"]) && $instance["title_link"] && $instance["cat"] != 0)
-				$ret .= '<a' . $this->searchEngineAttribute($this->instance) . 'href="' . get_category_link($instance["cat"]) . '">' . $title . '</a>';
+				$ret .= apply_filters('cpw_search_engine_attribute','<a href="' . get_category_link($instance["cat"]) . '">' . $title . '</a>');
 			else if (isset ( $instance["title_link_url"]) && $instance["title_link_url"] && $instance["cat"] == 0)
-				$ret .= '<a' . $this->searchEngineAttribute($this->instance) . 'href="' . $instance["title_link_url"] . '">' . $title . '</a>';
+				$ret .= apply_filters('cpw_search_engine_attribute','<a href="' . $instance["title_link_url"] . '">' . $title . '</a>');
 			else 
 				$ret .= $title;
 			
@@ -665,21 +643,23 @@ class Widget extends \WP_Widget {
 				$ret.= " class=\"cat-post-footer-link\""; 
 			}
 			if (isset($instance["cat"]) && ($instance["cat"] != 0) && (get_category($instance["cat"]) != null) ) {
-				$ret .= $this->searchEngineAttribute($this->instance) . "href=\"" . get_category_link($instance["cat"]) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
+				$ret .= "href=\"" . get_category_link($instance["cat"]) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
 			} else {
 				// link to posts page if category not found. 
 				// this maybe the blog page or home page
 				if( isset ( $instance["footer_link"] ) && !empty ( $instance["footer_link"] ) ) {
-					$ret .= $this->searchEngineAttribute($this->instance) . "href=\"" . esc_url($instance["footer_link"]) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
+					$ret .= "href=\"" . esc_url($instance["footer_link"]) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
 				} else {
 					$blog_page = get_option('page_for_posts');
 					if ($blog_page)
-						$ret .= $this->searchEngineAttribute($this->instance) . "href=\"" . get_permalink($blog_page) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
+						$ret .= "href=\"" . get_permalink($blog_page) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
 					else
-						$ret .= $this->searchEngineAttribute($this->instance) . "href=\"" . home_url() . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
+						$ret .= "href=\"" . home_url() . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
 				}
 			}
-		}
+		}		
+		$ret = apply_filters('cpw_search_engine_attribute',$ret);
+		
 		return $ret;
 	}
 
@@ -712,7 +692,7 @@ class Widget extends \WP_Widget {
         $ret.='>'; // close the li opening tag
         
 		if ($everything_is_link) {
-			$ret .= '<a class="cat-post-everything-is-link cat-post-' . $instance['thumb_hover'] . '"' . $this->searchEngineAttribute($this->instance) . 'href="'.get_the_permalink().'" title="">';
+			$ret .= apply_filters('cpw_search_engine_attribute','<a class="cat-post-everything-is-link cat-post-' . $instance['thumb_hover'] . '" href="'.get_the_permalink().'" title="">');
 		}
 		
         // Thumbnail position to top
@@ -725,13 +705,14 @@ class Widget extends \WP_Widget {
 			if ($everything_is_link) {
 				$ret .= '<span class="cat-post-title">'.get_the_title().'</span>';
 			} else {
-				$ret .= '<a class="post-title';
-				if (!$disable_all_styles) { 
-					$ret .= " cat-post-title"; 
-				}
-				$searchEngineAttribute = $instance['search_engine_attribute']!='none'?$this->searchEngineAttribute($this->instance):" rel=\"bookmark\" ";
-				$ret .= '" href="'.get_the_permalink().'"'.$searchEngineAttribute.'>'.get_the_title();
-				$ret .= '</a> ';
+				$title = '<a class="post-title';
+				if (!$disable_all_styles)
+					$title .= " cat-post-title"; 
+
+				$title .= '" href="'.get_the_permalink().'" rel="bookmark">'.get_the_title();
+				$title .= '</a> ';
+				
+				$ret .= apply_filters('cpw_search_engine_attribute',$title);				
 			}
         }
 		
@@ -746,9 +727,9 @@ class Widget extends \WP_Widget {
 				$catIDs = wp_get_post_categories($post->ID, array('number'=>0));
 				foreach ($catIDs as $catID) {
 					if ($everything_is_link)
-						$ret .= " <span>" . get_cat_name($catID) . " </span>";
+						$ret .= '<span>' . get_cat_name($catID) . '</span>';
 					else			
-						$ret .= " <a " . $this->searchEngineAttribute($this->instance) . " href='" . get_category_link($catID) . "'>" . get_cat_name($catID) . "</a> ";
+						$ret .= apply_filters('cpw_search_engine_attribute','<a href="' . get_category_link($catID) . '">' . get_cat_name($catID) . '</a>');
 				}
 				$ret .= "</p>";
 			}
@@ -767,7 +748,7 @@ class Widget extends \WP_Widget {
             } 
             $ret .= '">';
             if ( isset ( $instance["date_link"] ) && $instance["date_link"] && !$everything_is_link) { 
-                $ret .= '<a' . $this->searchEngineAttribute($this->instance) . 'href="'.\get_the_permalink().'">';
+                $ret .= apply_filters('cpw_search_engine_attribute','<a href="'.\get_the_permalink().'">');
             }
             $ret .= get_the_time($date_format);
             if ( isset ( $instance["date_link"] ) && $instance["date_link"] && !$everything_is_link ) { 
@@ -801,9 +782,9 @@ class Widget extends \WP_Widget {
 						$more_text = ltrim($instance["excerpt_more_text"]);
 
 					if ($everything_is_link)
-						$excerpt_more_text = ' <span class="cat-post-excerpt-more">'.$more_text.'</span>';
+						$excerpt_more_text = '<span class="cat-post-excerpt-more">'.$more_text.'</span>';
 					else
-						$excerpt_more_text = ' <a class="cat-post-excerpt-more"' . $this->searchEngineAttribute($this->instance) . 'href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
+						$excerpt_more_text = apply_filters('cpw_search_engine_attribute','<a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>');
 					$excerpt = \wp_trim_words( $text, $length, $excerpt_more_text );
 					// adjust html output same way as for the normal excerpt, 
 					// just force all functions depending on the_excerpt hook
@@ -903,6 +884,32 @@ class Widget extends \WP_Widget {
         $ret .= '</li>';
         return $ret;
     }
+	
+	/**
+	 * Filter to add rel attribute to all widget links and make other website links more important
+	 *
+	 * @param  array $instance Array which contains the various settings
+	 * @return string with the anchor attribute
+     *
+     * @since 4.8
+	 */
+    function search_engine_attribute_filter($html) {
+
+		// remove old rel, if exist	
+		if (preg_match('/(.*)rel=".*"(.*)/',$html))
+			$html = preg_replace('/rel=".*"/', "", $html);
+			
+		// add attribute
+		switch ($this->instance['search_engine_attribute']) {
+			case 'canonical':
+				$html = str_replace('<a ','<a rel="canonical" ',$html);
+				break;
+			case 'nofollow':
+				$html = str_replace('<a ','<a rel="nofollow" ',$html);
+				break;
+		}
+		return $html;
+	}
     
 	/**
 	 * Filter to set the number of words in an excerpt
@@ -998,8 +1005,13 @@ class Widget extends \WP_Widget {
 			else 
 				echo '<ul>';
 
+			// set widget filters
 			if (!isset($instance['excerpt_filters']) || $instance['excerpt_filters']) // pre 4.7 widgets has filters on
-				$this->setExcerpFilters($instance);         
+				$this->setExcerpFilters($instance); 
+				
+			if (isset($instance['search_engine_attribute']) && $instance['search_engine_attribute'] != 'none')
+				add_filter('cpw_search_engine_attribute', array($this,'search_engine_attribute_filter'));
+
 			while ( $cat_posts->have_posts() )
 			{
                 $cat_posts->the_post();              
@@ -1010,9 +1022,13 @@ class Widget extends \WP_Widget {
             echo $this->footerHTML($instance);
 			echo $after_widget;
        
+			// remove widget filters
 			if (!isset($instance['excerpt_filters']) || $instance['excerpt_filters']) // pre 4.7 widgets has filters on
 				$this->removeExcerpFilters($instance);
-			
+
+			if (isset($instance['search_engine_attribute']) && $instance['search_engine_attribute'] != 'none')
+				remove_filter('cpw_search_engine_attribute', array($this,'search_engine_attribute_filter'));
+				
 			wp_reset_postdata();
 			
 			$use_css_cropping = isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping'];
