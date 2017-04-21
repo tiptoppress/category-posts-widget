@@ -1347,6 +1347,8 @@ class Widget extends \WP_Widget {
 			'disable_font_styles'             => '',
 			'hide_if_empty'                   => '',
 			'search_engine_attribute'         => 'none',
+			'show_post_format'				  => 'none',
+			'disable_post_format_styles'      => false,
 			'hide_social_buttons'             => '',
 		) );
 
@@ -1371,6 +1373,8 @@ class Widget extends \WP_Widget {
 		$disable_font_styles             = $instance['disable_font_styles'];
 		$hide_if_empty                   = $instance['hide_if_empty'];
 		$search_engine_attribute         = $instance['search_engine_attribute'];
+		$show_post_format				 = $instance['show_post_format'];
+		$disable_post_format_styles      = $instance['disable_post_format_styles'];
 		
 		$cat = $instance['cat'];
 
@@ -1521,6 +1525,25 @@ class Widget extends \WP_Widget {
 						</label>
 					</p>
 				</div>
+				<p>
+					<label for="<?php echo $this->get_field_id("show_post_format"); ?>">
+						<?php _e( 'Indicate post format', 'category-posts' ); ?>
+					</label>
+					<select id="<?php echo $this->get_field_id("show_post_format"); ?>" name="<?php echo $this->get_field_name("show_post_format"); ?>" onchange="javascript:cwp_namespace.toggleDisablePostFormatStyles(this)">
+						<option value="none" <?php selected($show_post_format, 'none')?>><?php _e( 'No', 'category-posts' ); ?></option>
+						<option value="topleft" <?php selected($show_post_format, 'topleft')?>><?php _e( 'Top left', 'category-posts' ); ?></option>
+						<option value="bottomleft" <?php selected($show_post_format, 'bottomleft')?>><?php _e( 'Bottom left', 'category-posts' ); ?></option>
+						<option value="ceter" <?php selected($show_post_format, 'center')?>><?php _e( 'Center', 'category-posts' ); ?></option>
+						<option value="topright" <?php selected($show_post_format, 'topright')?>><?php _e( 'Top right', 'category-posts' ); ?></option>
+						<option value="bottomright" <?php selected($show_post_format, 'bottomright')?>><?php _e( 'Bottom right', 'category-posts' ); ?></option>
+					</select>
+				</p>				
+				<p class="categoryposts-data-panel-general-disable-format-styles" style="display:<?php echo ($show_post_format == 'none') ? 'none' : 'block'?>">
+					<label for="<?php echo $this->get_field_id("disable_post_format_styles"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_post_format_styles"); ?>" name="<?php echo $this->get_field_name("disable_post_format_styles"); ?>"<?php checked( (bool) $instance["disable_post_format_styles"], true ); ?> />
+						<?php _e( 'Disable post format styles','category-posts' ); ?>
+					</label>
+				</p>
 				<p>
 					<label for="<?php echo $this->get_field_id("hide_if_empty"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_if_empty"); ?>" name="<?php echo $this->get_field_name("hide_if_empty"); ?>"<?php checked( (bool) $instance["hide_if_empty"], true ); ?> />
@@ -1826,6 +1849,8 @@ function default_settings()  {
 				'disable_all_styles'              => false,
 				'disable_font_styles'             => false,
 				'hide_if_empty'                   => false,
+				'show_post_format'                => 'none',
+				'disable_post_format_styles'      => false,
 				'search_engine_attribute'         => 'none',
 				'hide_social_buttons'             => '',
 				'no_cat_childs'                   => false,

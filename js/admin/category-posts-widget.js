@@ -85,6 +85,18 @@
             }	
         },
 		
+		// Show hide disable post format styles
+		toggleDisablePostFormatStyles: function(item) {
+            var value = jQuery(item).val();
+			var panel = item.parentElement.parentElement;
+            if(value == 'none') {
+                jQuery(panel).find('.categoryposts-data-panel-general-disable-format-styles').hide();
+            }
+            else {
+                jQuery(panel).find('.categoryposts-data-panel-general-disable-format-styles').show();
+            }	
+        },
+		
 		// Show hide disable font styles
 		toggleAssignedCategoriesTop: function(item) {
             var value = jQuery(item).find("input").attr('checked');
