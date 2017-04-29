@@ -683,7 +683,6 @@ class Widget extends \WP_Widget {
         
 		$everything_is_link = isset($instance['everything_is_link']) && $instance['everything_is_link'];
 		$disable_css        = isset($instance['disable_css']) && $instance['disable_css']; // 'disable_css' is deleted in 4.8 and higher
-		$disable_all_styles = isset($instance['disable_all_styles']) && $instance['disable_all_styles'] || $disable_css;
 		
         $ret = '<li ';
                     
@@ -722,7 +721,7 @@ class Widget extends \WP_Widget {
 		if (isset($instance["assigned_cat_top"]) && $instance["assigned_cat_top"]) {
 			if (isset( $instance['assigned_categories'] ) && $instance['assigned_categories']) {
 				$ret .= '<p';
-				if (!$disable_all_styles) { 
+				if (!$disable_css) { 
 					$ret .= ' class="cat-post-category"'; 
 				} 
 				$ret .= '>';
@@ -745,7 +744,7 @@ class Widget extends \WP_Widget {
                 $date_format = "j M Y"; 
             } 
             $ret .= '<p class="post-date';
-            if (!$disable_all_styles) { 
+            if (!$disable_css) { 
                 $ret .= " cat-post-date";
             } 
             $ret .= '">';
@@ -801,7 +800,7 @@ class Widget extends \WP_Widget {
 		// Comments
         if ( isset( $instance['comment_num'] ) && $instance['comment_num']) {
             $ret .= '<p class="comment-num';
-            if (!$disable_all_styles) {
+            if (!$disable_css) {
                 $ret .= " cat-post-comment-num"; 
             } 
             $ret .= '">';
@@ -824,7 +823,7 @@ class Widget extends \WP_Widget {
 		// Author
         if (isset( $instance['author'] ) && $instance['author']) {
             $ret .= '<p class="post-author';
-            if (!$disable_all_styles) { 
+            if (!$disable_css) { 
                 $ret .= " cat-post-author"; 
             } 
             $ret .= '">';
@@ -847,7 +846,7 @@ class Widget extends \WP_Widget {
 		if( !(isset( $instance["assigned_cat_top"] ) && $instance["assigned_cat_top"])) {
 			if (isset( $instance['assigned_categories'] ) && $instance['assigned_categories']) {
 				$ret .= '<p';
-				if (!$disable_all_styles) { 
+				if (!$disable_css) { 
 					$ret .= ' class="cat-post-category"'; 
 				} 
 				$ret .= '>';
@@ -865,7 +864,7 @@ class Widget extends \WP_Widget {
 		// Tags
 		if (isset( $instance['assigned_tags'] ) && $instance['assigned_tags']) {	
             $ret .= '<p';
-            if (!$disable_all_styles) { 
+            if (!$disable_css) { 
                 $ret .= ' class="cat-post-tag"'; 
             } 
             $ret .= '>';
@@ -1531,7 +1530,7 @@ class Widget extends \WP_Widget {
 				<div class="cpwp_ident">
 					<p onchange="javascript:cwp_namespace.toggleDisableFontStyles(this)">
 						<label for="<?php echo $this->get_field_id("disable_css"); ?>">
-							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_css"); ?>" name="<?php echo $this->get_field_name("disable_all_styles"); ?>"<?php checked( (bool) $instance["disable_all_styles"], true ); ?> />
+							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_css"); ?>" name="<?php echo $this->get_field_name("disable_css"); ?>"<?php checked( (bool) $instance["disable_css"], true ); ?> />
 							<?php _e( 'Disable the built-in CSS','category-posts' ); ?>
 						</label>
 					</p>
