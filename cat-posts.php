@@ -18,6 +18,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 const VERSION        = "4.8.beta1";
 const DOC_URL        = "http://tiptoppress.com/category-posts-widget/documentation-4-8?utm_source=widget_cpw&utm_campaign=documentation_4_8_cpw&utm_medium=form";
 const PRO_URL        = "http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=widget_cpw&utm_campaign=get_pro_cpw&utm_medium=action_link";
+const SUPPORT_URL    = "https://wordpress.org/support/plugin/category-posts";
 const SHORTCODE_NAME = 'catposts';
 const SHORTCODE_META = 'categoryPosts-shorcode';
 const WIDGET_BASE_ID = 'category-posts';
@@ -1578,6 +1579,7 @@ class Widget extends \WP_Widget {
 			</div>
             <p><a href="<?php echo get_edit_user_link().'#'.__NAMESPACE__ ?>"><?php _e('Widget admin behaviour settings','category-posts')?></a></p>			
             <p><a target="_blank" href="<?php echo DOC_URL ?>"><?php _e('Documentation','category-posts'); ?></a></p>
+            <p><a target="_blank" href="<?php echo SUPPORT_URL ?>"><?php _e('Support','category-posts'); ?></a></p>
             <p><?php echo sprintf( wp_kses( __( 'We are on <a href="%1$s">Facebook</a> and <a href="%2$s">Twitter</a>.', 'category-posts' ), array(  'a' => array( 'href' => array() ) ) ), esc_url( 'https://www.facebook.com/TipTopPress' ), esc_url( 'https://twitter.com/TipTopPress' ) ); ?></br></br></p>
 		</div>
 		<?php
