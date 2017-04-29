@@ -812,7 +812,7 @@ class Widget extends \WP_Widget {
 				$ret .= '('.\get_comments_number().')';
 			} else {
 				$link = sprintf(
-					'<a ' . $this->searchEngineAttribute($this->instance) . 'href="%1$s" title="%2$s">(%3$d)</a>',
+					'<a href="%1$s" title="%2$s">(%3$d)</a>',
 					esc_url( get_comments_link($post->ID) ),
 					esc_attr( sprintf( __( '(%d) comments to this post' ), get_comments_number() ) ),
 					get_comments_number()
@@ -858,7 +858,7 @@ class Widget extends \WP_Widget {
 					if ($everything_is_link)
 						$ret .= " <span>" . get_cat_name($catID) . " </span>";
 					else			
-						$ret .= " <a " . $this->searchEngineAttribute($this->instance) . " href='" . get_category_link($catID) . "'>" . get_cat_name($catID) . "</a> ";
+						$ret .= " <a href='" . get_category_link($catID) . "'>" . get_cat_name($catID) . "</a> ";
 				}
 				$ret .= "</p>";
 			}
@@ -876,7 +876,7 @@ class Widget extends \WP_Widget {
 				if ($everything_is_link)
 					$ret .= " <span>" . $tagID->name . "</span> ";
 				else
-					$ret .= " <a " . $this->searchEngineAttribute($this->instance) . " href='" . get_tag_link($tagID->term_id) . "'>" . $tagID->name . "</a> ";
+					$ret .= " <a href='" . get_tag_link($tagID->term_id) . "'>" . $tagID->name . "</a> ";
 			}
 			$ret .= "</p>";
 		}
