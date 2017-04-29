@@ -64,8 +64,12 @@ We've also started creating free widget extensions for the Premium Widget. The f
 * Option to make the widget date link to the category page.
 * Option to format the outputted date string.
 * Option to link to the category page below posts list.
+<<<<<<< HEAD
 * Option to add the SEO friendly attribute rel= with 'nofollow' or 'canonical' to all links.
 * Option to disable the widget CSS or more granular control of default styling with not apply the font styles.
+=======
+* Option to disable widget CSS or only the font styles.
+>>>>>>> parent of c3c31b4... Add the attribute rel= with 'nofollow' or 'canonical' to all links. close #131
 * Multiple widgets.
 * Multi sites support.
 * Support localization with translate.wordpress.org
@@ -134,9 +138,6 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=wordpress_org&utm_campaign=changelog_cpw&utm_medium=web)
-
-= 4.8.1 - =
-* Add option to add the SEO friendly attribute rel= with 'nofollow' or 'canonical' to all links
 
 = 4.7.2 - February 25th 2017 =
 * Add option to disable only the font styles

@@ -399,8 +399,7 @@ class Widget extends \WP_Widget {
 	 * Excerpt more link filter
 	 */
 	function excerpt_more_filter($more) {
-		$ret = '<a class="cat-post-excerpt-more more-link" href="'. get_permalink() . '">' . esc_html($this->instance["excerpt_more_text"]) . '</a>';		
-		return apply_filters('cpw_search_engine_attribute',$ret);
+		return ' <a class="cat-post-excerpt-more more-link" href="'. get_permalink() . '">' . esc_html($this->instance["excerpt_more_text"]) . '</a>';
 	}
 
 	/**
@@ -510,7 +509,7 @@ class Widget extends \WP_Widget {
 			if ($no_link)
 				$ret .= '<span '.$class . '">';
 			else
-				$ret .= apply_filters('cpw_search_engine_attribute','<a ' . $class . 'href="'.get_the_permalink().'" title="'.the_title_attribute($title_args).'">');
+				$ret .= '<a '.$class . ' href="'.get_the_permalink().'" title="'.the_title_attribute($title_args).'">';
 
             $ret .= $this->the_post_thumbnail( array($this->instance['thumb_w'],$this->instance['thumb_h']));
 
@@ -616,9 +615,9 @@ class Widget extends \WP_Widget {
 				$title = apply_filters( 'widget_title', $instance["title"] );
 			
             if (isset($instance["title_link"]) && $instance["title_link"] && $instance["cat"] != 0)
-				$ret .= apply_filters('cpw_search_engine_attribute','<a href="' . get_category_link($instance["cat"]) . '">' . $title . '</a>');
+				$ret .= '<a href="' . get_category_link($instance["cat"]) . '">' . $title . '</a>';
 			else if (isset ( $instance["title_link_url"]) && $instance["title_link_url"] && $instance["cat"] == 0)
-				$ret .= apply_filters('cpw_search_engine_attribute','<a href="' . $instance["title_link_url"] . '">' . $title . '</a>');
+				$ret .= '<a href="' . $instance["title_link_url"] . '">' . $title . '</a>';
 			else 
 				$ret .= $title;
 			
@@ -650,18 +649,18 @@ class Widget extends \WP_Widget {
 				$ret.= " class=\"cat-post-footer-link\""; 
 			}
 			if (isset($instance["cat"]) && ($instance["cat"] != 0) && (get_category($instance["cat"]) != null) ) {
-				$ret .= "href=\"" . get_category_link($instance["cat"]) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
+				$ret .= " href=\"" . get_category_link($instance["cat"]) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
 			} else {
 				// link to posts page if category not found. 
 				// this maybe the blog page or home page
 				if( isset ( $instance["footer_link"] ) && !empty ( $instance["footer_link"] ) ) {
-					$ret .= "href=\"" . esc_url($instance["footer_link"]) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
+					$ret .= " href=\"" . esc_url($instance["footer_link"]) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
 				} else {
 					$blog_page = get_option('page_for_posts');
 					if ($blog_page)
-						$ret .= "href=\"" . get_permalink($blog_page) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
+						$ret .= " href=\"" . get_permalink($blog_page) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
 					else
-						$ret .= "href=\"" . home_url() . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
+						$ret .= " href=\"" . home_url() . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
 				}
 			}
 		}		
@@ -699,7 +698,7 @@ class Widget extends \WP_Widget {
         $ret.='>'; // close the li opening tag
         
 		if ($everything_is_link) {
-			$ret .= apply_filters('cpw_search_engine_attribute','<a class="cat-post-everything-is-link cat-post-' . $instance['thumb_hover'] . '" href="'.get_the_permalink().'" title="">');
+			$ret .= '<a class="cat-post-everything-is-link" href="'.get_the_permalink().'" title="">';
 		}
 		
         // Thumbnail position to top
@@ -712,14 +711,12 @@ class Widget extends \WP_Widget {
 			if ($everything_is_link) {
 				$ret .= '<span class="cat-post-title">'.get_the_title().'</span>';
 			} else {
-				$title = '<a class="post-title';
-				if (!$disable_all_styles)
-					$title .= " cat-post-title"; 
-
-				$title .= '" href="'.get_the_permalink().'" rel="bookmark">'.get_the_title();
-				$title .= '</a> ';
-				
-				$ret .= apply_filters('cpw_search_engine_attribute',$title);				
+				$ret .= '<a class="post-title';
+				if (!$disable_css) { 
+					$ret .= " cat-post-title"; 
+				}
+				$ret .= '" href="'.get_the_permalink().'" rel="bookmark">'.get_the_title();
+				$ret .= '</a> ';
 			}
         }
 		
@@ -755,7 +752,7 @@ class Widget extends \WP_Widget {
             } 
             $ret .= '">';
             if ( isset ( $instance["date_link"] ) && $instance["date_link"] && !$everything_is_link) { 
-                $ret .= apply_filters('cpw_search_engine_attribute','<a href="'.\get_the_permalink().'">');
+                $ret .= '<a href="'.\get_the_permalink().'">';
             }
             $ret .= get_the_time($date_format);
             if ( isset ( $instance["date_link"] ) && $instance["date_link"] && !$everything_is_link ) { 
@@ -791,7 +788,7 @@ class Widget extends \WP_Widget {
 					if ($everything_is_link)
 						$excerpt_more_text = '<span class="cat-post-excerpt-more">'.$more_text.'</span>';
 					else
-						$excerpt_more_text = apply_filters('cpw_search_engine_attribute','<a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>');
+						$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
 					$excerpt = \wp_trim_words( $text, $length, $excerpt_more_text );
 					// adjust html output same way as for the normal excerpt, 
 					// just force all functions depending on the_excerpt hook
@@ -838,7 +835,7 @@ class Widget extends \WP_Widget {
 				$ret .= get_the_author();
 			} else {
 				$link = sprintf(
-					'<a ' . $this->searchEngineAttribute($this->instance) . 'href="%1$s" title="%2$s" rel="author">%3$s</a>',
+					'<a href="%1$s" title="%2$s" rel="author">%3$s</a>',
 					esc_url( get_author_posts_url( $authordata->ID, $authordata->user_nicename ) ),
 					esc_attr( sprintf( __( 'Posts by %s' ), get_the_author() ) ),
 					get_the_author()
@@ -1282,14 +1279,14 @@ class Widget extends \WP_Widget {
             <p>
                 <label for="<?php echo $this->get_field_id("thumb_hover"); ?>">
                     <?php _e( 'Animation on mouse hover:','category-posts' ); ?>
-					<select id="<?php echo $this->get_field_id("thumb_hover"); ?>" name="<?php echo $this->get_field_name("thumb_hover"); ?>">
-						<option value="none" <?php selected($thumb_hover, 'none')?>><?php _e( 'None', 'category-posts' ); ?></option>
-						<option value="dark" <?php selected($thumb_hover, 'dark')?>><?php _e( 'Darker', 'category-posts' ); ?></option>
-						<option value="white" <?php selected($thumb_hover, 'white')?>><?php _e( 'Brighter', 'category-posts' ); ?></option>
-						<option value="scale" <?php selected($thumb_hover, 'scale')?>><?php _e( 'Zoom in', 'category-posts' ); ?></option>
-						<option value="blur" <?php selected($thumb_hover, 'blur')?>><?php _e( 'Blur', 'category-posts' ); ?></option>
-					</select>
-				</label>
+                </label>
+                <select id="<?php echo $this->get_field_id("thumb_hover"); ?>" name="<?php echo $this->get_field_name("thumb_hover"); ?>">
+                    <option value="none" <?php selected($thumb_hover, 'none')?>><?php _e( 'None', 'category-posts' ); ?></option>
+                    <option value="dark" <?php selected($thumb_hover, 'dark')?>><?php _e( 'Darker', 'category-posts' ); ?></option>
+                    <option value="white" <?php selected($thumb_hover, 'white')?>><?php _e( 'Brighter', 'category-posts' ); ?></option>
+                    <option value="scale" <?php selected($thumb_hover, 'scale')?>><?php _e( 'Zoom in', 'category-posts' ); ?></option>
+					<option value="blur" <?php selected($thumb_hover, 'blur')?>><?php _e( 'Blur', 'category-posts' ); ?></option>
+                </select>
             </p>
             <p>
                 <label style="display:block">
@@ -1377,7 +1374,6 @@ class Widget extends \WP_Widget {
 			'disable_all_styles'              => '',
 			'disable_font_styles'             => '',
 			'hide_if_empty'                   => '',
-			'search_engine_attribute'         => 'none',
 			'hide_social_buttons'             => '',
 		) );
 
@@ -1401,7 +1397,6 @@ class Widget extends \WP_Widget {
 		$disable_all_styles              = $instance['disable_all_styles'];
 		$disable_font_styles             = $instance['disable_font_styles'];
 		$hide_if_empty                   = $instance['hide_if_empty'];
-		$search_engine_attribute         = $instance['search_engine_attribute'];
 		
 		$cat = $instance['cat'];
 
@@ -1556,16 +1551,6 @@ class Widget extends \WP_Widget {
 					<label for="<?php echo $this->get_field_id("hide_if_empty"); ?>">
 						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("hide_if_empty"); ?>" name="<?php echo $this->get_field_name("hide_if_empty"); ?>"<?php checked( (bool) $instance["hide_if_empty"], true ); ?> />
 						<?php _e( 'Hide if there are no matching posts','category-posts' ); ?>
-					</label>
-				</p>				
-				<p>
-					<label for="<?php echo $this->get_field_id("search_engine_attribute"); ?>">
-						<?php _e( 'SEO friendly URLs:','category-posts' ); ?>
-						<select id="<?php echo $this->get_field_id("search_engine_attribute"); ?>" name="<?php echo $this->get_field_name("search_engine_attribute"); ?>">
-							<option value="none" <?php selected($search_engine_attribute, 'none')?>><?php _e( 'None', 'category-posts' ); ?></option>
-							<option value="canonical" <?php selected($search_engine_attribute, 'canonical')?>><?php _e( 'canonical', 'category-posts' ); ?></option>
-							<option value="nofollow" <?php selected($search_engine_attribute, 'nofollow')?>><?php _e( 'nofollow', 'category-posts' ); ?></option>
-						</select>
 					</label>
 				</p>
 			</div>
@@ -1860,7 +1845,6 @@ function default_settings()  {
 				'hide_if_empty'                   => false,
 				'show_post_format'                => 'none',
 				'disable_post_format_styles'      => false,
-				'search_engine_attribute'         => 'none',
 				'hide_social_buttons'             => '',
 				'no_cat_childs'                   => false,
 				'everything_is_link'			  => false,
