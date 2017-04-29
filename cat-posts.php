@@ -494,7 +494,6 @@ class Widget extends \WP_Widget {
             $class              = '';
 			$use_css_cropping   = isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping'];
 			$disable_css        = isset($instance['disable_css']) && $instance['disable_css']; // 'disable_css' is deleted in 4.8 and higher
-			$disable_all_styles = isset($instance['disable_all_styles']) && $instance['disable_all_styles'] || $disable_css;			
 			$everything_is_link = isset($instance['everything_is_link']) && $instance['everything_is_link'];
 			$show_post_format   = isset($instance['show_post_format']) && ($instance['show_post_format'] != 'none');
 			
@@ -639,13 +638,12 @@ class Widget extends \WP_Widget {
 
 		$ret = "";
 		$disable_css        = isset($instance['disable_css']) && $instance['disable_css']; // 'disable_css' is deleted in 4.8 and higher
-		$disable_all_styles = isset($instance['disable_all_styles']) && $instance['disable_all_styles'] || $disable_css;
 		
 		if (isset ( $instance["footer_link"] ) && !empty ( $instance["footer_link"] )) {
 			if (empty($instance["footer_link_text"]))
 				$instance["footer_link_text"] = $instance["footer_link"];
 			$ret = "<a";
-			if( !$disable_all_styles ) { 
+			if( !$disable_css ) { 
 				$ret.= " class=\"cat-post-footer-link\""; 
 			}
 			if (isset($instance["cat"]) && ($instance["cat"] != 0) && (get_category($instance["cat"]) != null) ) {
@@ -1349,7 +1347,6 @@ class Widget extends \WP_Widget {
  				$instance['excerpt_filters'] = 'on';
  		}
 		if (isset($instance['disable_css']) && $instance['disable_css'] ) { // backward compatibility to =< 4.7
-			$instance['disable_all_styles'] = $instance['disable_css']; // 'disable_css' is deleted in 4.8 and higher
 			unset($instance['disable_css']);
 		}
 		
@@ -1371,7 +1368,6 @@ class Widget extends \WP_Widget {
 			'assigned_cat_top'                => '',
 			'assigned_tags'                   => '',
 			'disable_css'                     => '',
-			'disable_all_styles'              => '',
 			'disable_font_styles'             => '',
 			'hide_if_empty'                   => '',
 			'hide_social_buttons'             => '',
@@ -1394,7 +1390,6 @@ class Widget extends \WP_Widget {
 		$assigned_cat_top                = $instance['assigned_cat_top'];
 		$assigned_tags                   = $instance['assigned_tags'];
 		$disable_css                     = $instance['disable_css'];
-		$disable_all_styles              = $instance['disable_all_styles'];
 		$disable_font_styles             = $instance['disable_font_styles'];
 		$hide_if_empty                   = $instance['hide_if_empty'];
 		
@@ -1535,12 +1530,12 @@ class Widget extends \WP_Widget {
 			<div>
 				<div class="cpwp_ident">
 					<p onchange="javascript:cwp_namespace.toggleDisableFontStyles(this)">
-						<label for="<?php echo $this->get_field_id("disable_all_styles"); ?>">
-							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_all_styles"); ?>" name="<?php echo $this->get_field_name("disable_all_styles"); ?>"<?php checked( (bool) $instance["disable_all_styles"], true ); ?> />
+						<label for="<?php echo $this->get_field_id("disable_css"); ?>">
+							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_css"); ?>" name="<?php echo $this->get_field_name("disable_all_styles"); ?>"<?php checked( (bool) $instance["disable_all_styles"], true ); ?> />
 							<?php _e( 'Disable the built-in CSS','category-posts' ); ?>
 						</label>
 					</p>
-					<p class="categoryposts-data-panel-general-disable-font-styles" style="display:<?php echo ((bool) $disable_all_styles) ? 'none' : 'block'?>">
+					<p class="categoryposts-data-panel-general-disable-font-styles" style="display:<?php echo ((bool) $disable_css) ? 'none' : 'block'?>">
 						<label for="<?php echo $this->get_field_id("disable_font_styles"); ?>">
 							<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_font_styles"); ?>" name="<?php echo $this->get_field_name("disable_font_styles"); ?>"<?php checked( (bool) $instance["disable_font_styles"], true ); ?> />
 							<?php _e( 'Disable only font styles','category-posts' ); ?>
@@ -1840,7 +1835,6 @@ function default_settings()  {
 				'assigned_cat_top'                => false,
 				'assigned_tags'                   => false,
 				'disable_css'                     => false,
-				'disable_all_styles'              => false,
 				'disable_font_styles'             => false,
 				'hide_if_empty'                   => false,
 				'show_post_format'                => 'none',
@@ -2291,9 +2285,8 @@ class virtualWidget {
 			$widget_id .= '-internal';
 		}			
 		$disable_css        = isset($settings['disable_css']) && $settings['disable_css']; // 'disable_css' is deleted in 4.8 and higher
-		$disable_all_styles = isset($settings['disable_all_styles']) && $settings['disable_all_styles'] || $disable_css;
 
-		if (!$disable_all_styles) { // checks if css disable is not set
+		if (!$disable_css) { // checks if css disable is not set
 		
 			$rules = array( // rules that should be applied to all widgets
 				'.cat-post-item img {max-width: initial; max-height: initial;}',
@@ -2361,7 +2354,7 @@ class virtualWidget {
 			}
 		}
 		
-		if ((isset($settings['use_css_cropping']) && $settings['use_css_cropping']) || !$disable_all_styles ) {
+		if ((isset($settings['use_css_cropping']) && $settings['use_css_cropping']) || !$disable_css ) {
 			if (isset($settings['use_css_cropping']) && $settings['use_css_cropping'])
 				$ret[] = '#'.$widget_id.' .cat-post-crop {overflow: hidden; display:block}';
 			else
