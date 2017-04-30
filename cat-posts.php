@@ -2283,7 +2283,7 @@ class virtualWidget {
 		if (!$is_shortcode) {
 			$widget_id .= '-internal';
 		}			
-		$disable_css        = isset($settings['disable_css']) && $settings['disable_css']; // 'disable_css' is deleted in 4.8 and higher
+		$disable_css        = isset($settings['disable_css']) && $settings['disable_css']; 
 
 		if (!$disable_css) { // checks if css disable is not set
 		
@@ -2330,6 +2330,53 @@ class virtualWidget {
 				$rules[] = '.cat-post-item:after {content: ""; display: table;	clear: both;}';
 			}
 
+			// add post format css if needed 
+			if (isset( $settings["thumb"] ) && $settings["thumb"]) {
+				if (!isset( $settings["show_post_format"] ) || ($settings["show_post_format"] != 'none')) {
+					if (!isset( $settings["disable_post_format_styles"] ) || !$settings["disable_post_format_styles"]) {
+						static $fonts_added = false;	
+						
+						if (!$fonts_added) {
+							$fonturl = esc_url( plugins_url( 'icons/font', __FILE__ ) );
+							$ret[] = "@font-face {\n".
+									 "font-family: 'cat_post';\n".
+									 "src: url('$fonturl/cat_post.eot?29337961');\n".
+									 "src: url('$fonturl/cat_post.eot?29337961#iefix') format('embedded-opentype'),\n".
+									 "	   url('$fonturl/cat_post.woff2?29337961') format('woff2'),\n".
+									 "	   url('$fonturl/cat_post.woff?29337961') format('woff'),\n".
+									 "	   url('$fonturl/cat_post.ttf?29337961') format('truetype');\n".
+									 " font-weight: normal;\n".
+									 " font-style: normal;\n".
+									 "}\n";
+						}
+						$fonts_added = true;
+						
+						$placement ='';
+						switch ($settings["show_post_format"]) {
+							case 'topleft': $placement = 'top:10%; left:10%;';
+								break;
+							case 'bottomleft': $placement = 'bottom:10%; left:10%;';
+								break;
+							case 'ceter': $placement = 'top:calc(50% - 15px); left:calc(50% - 15px);';
+								break;
+							case 'topright': $placement = 'top:10%; right:10%;';
+								break;
+							case 'bottomright': $placement = 'bottom:10%; right:10%;';
+								break;
+						}
+						$rules[] = '.cat-post-thumbnail {position:relative}';
+						$rules[] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; '.
+									'font-size:20px; line-height:20px; padding:5px; border-radius:10px; background-color:rgba(0,0,0,.8); '.
+									$placement.'}';
+						$rules[] = ".cat-post-format-image:before { content: '\\e800'; }";
+						$rules[] = ".cat-post-format-video:before { content: '\\e801'; }";
+						$rules[] = ".cat-post-format-chat:before { content: '\\e802'; }";
+						$rules[] = ".cat-post-format-audio:before { content: '\\e803'; }";
+						$rules[] = ".cat-post-format-gallery:before { content: '\\e805'; }";
+					}
+				}
+			}
+
 			foreach ($rules as $rule) {
 				$ret[] = '#'.$widget_id.' '.$rule;
 			}
@@ -2350,7 +2397,7 @@ class virtualWidget {
 				// probably all Themes have too much margin on their p element when used in the shortcode
 				$ret[] = '#'.$widget_id.' p {margin:5px 0 0 0}';	/* since on bottom it will make the spacing on cover
 																	   bigger (add to the padding) use only top for now */
-			}
+			}			
 		}
 		
 		if ((isset($settings['use_css_cropping']) && $settings['use_css_cropping']) || !$disable_css ) {
