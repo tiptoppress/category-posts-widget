@@ -822,11 +822,7 @@ class Widget extends \WP_Widget {
 
 		// Author
         if (isset( $instance['author'] ) && $instance['author']) {
-            $ret .= '<p class="post-author';
-            if (!$disable_css) { 
-                $ret .= " cat-post-author"; 
-            } 
-            $ret .= '">';
+            $ret .= '<p class="cat-post-author">'; 
             global $authordata;
 			if ($everything_is_link) {
 				$ret .= get_the_author();
