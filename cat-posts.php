@@ -704,11 +704,8 @@ class Widget extends \WP_Widget {
 			if ($everything_is_link) {
 				$ret .= '<span class="cat-post-title">'.get_the_title().'</span>';
 			} else {
-				$ret .= '<a class="post-title';
-				if (!$disable_css) { 
-					$ret .= " cat-post-title"; 
-				}
-				$ret .= '" href="'.get_the_permalink().'" rel="bookmark">'.get_the_title();
+				$ret .= '<a class="cat-post-title"'; 
+				$ret .= ' href="'.get_the_permalink().'" rel="bookmark">'.get_the_title();
 				$ret .= '</a> ';
 			}
         }
