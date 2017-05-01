@@ -1,5 +1,5 @@
-Font license info
 
+Font license info
 
 ## Font Awesome
 
@@ -28,3 +28,4 @@ Font license info
    Homepage:  http://www.entypo.com
 
 
+http://fontello.com/, you just import the config.json that is in the /icons folder and you can add or remove icons
