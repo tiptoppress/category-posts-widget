@@ -1228,7 +1228,6 @@ class Widget extends \WP_Widget {
 			'thumb_hover'          => '',
 			'default_thunmbnail'   => 0,
 			'show_post_format'     => 'none',
-			'disable_post_format_styles' => false,
         ));
 		$thumb                = $instance['thumb'];
 		$thumbTop             = $instance['thumbTop'];
@@ -1238,7 +1237,6 @@ class Widget extends \WP_Widget {
 		$thumb_hover          = $instance['thumb_hover'];
 		$default_thunmbnail   = $instance['default_thunmbnail'];
 		$show_post_format     = $instance['show_post_format'];
-		$disable_post_format_styles     = $instance['disable_post_format_styles'];
 		
 ?>        
         <h4 data-panel="thumbnail"><?php _e('Thumbnails','category-posts')?></h4>
@@ -1315,19 +1313,14 @@ class Widget extends \WP_Widget {
 				</label>
 				<select id="<?php echo $this->get_field_id("show_post_format"); ?>" name="<?php echo $this->get_field_name("show_post_format"); ?>" onchange="javascript:cwp_namespace.toggleDisablePostFormatStyles(this)">
 					<option value="none" <?php selected($show_post_format, 'none')?>><?php _e( 'No', 'category-posts' ); ?></option>
-					<option value="topleft" <?php selected($show_post_format, 'topleft')?>><?php _e( 'Top left', 'category-posts' ); ?></option>
-					<option value="bottomleft" <?php selected($show_post_format, 'bottomleft')?>><?php _e( 'Bottom left', 'category-posts' ); ?></option>
-					<option value="ceter" <?php selected($show_post_format, 'center')?>><?php _e( 'Center', 'category-posts' ); ?></option>
-					<option value="topright" <?php selected($show_post_format, 'topright')?>><?php _e( 'Top right', 'category-posts' ); ?></option>
-					<option value="bottomright" <?php selected($show_post_format, 'bottomright')?>><?php _e( 'Bottom right', 'category-posts' ); ?></option>
+					<option value="nocss" <?php selected($show_post_format, 'nocss')?>><?php _e( 'HTML without styling', 'category-posts' ); ?></option>
+					<option value="topleft" <?php selected($show_post_format, 'topleft')?>><?php _e( 'Style at Top left', 'category-posts' ); ?></option>
+					<option value="bottomleft" <?php selected($show_post_format, 'bottomleft')?>><?php _e( 'Style at Bottom left', 'category-posts' ); ?></option>
+					<option value="ceter" <?php selected($show_post_format, 'center')?>><?php _e( 'Style at Center', 'category-posts' ); ?></option>
+					<option value="topright" <?php selected($show_post_format, 'topright')?>><?php _e( 'Style at Top right', 'category-posts' ); ?></option>
+					<option value="bottomright" <?php selected($show_post_format, 'bottomright')?>><?php _e( 'Style at Bottom right', 'category-posts' ); ?></option>
 				</select>
 			</p>				
-			<p class="categoryposts-data-panel-general-disable-format-styles" style="display:<?php echo ($show_post_format == 'none') ? 'none' : 'block'?>">
-				<label for="<?php echo $this->get_field_id("disable_post_format_styles"); ?>">
-					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_post_format_styles"); ?>" name="<?php echo $this->get_field_name("disable_post_format_styles"); ?>"<?php checked( (bool) $instance["disable_post_format_styles"], true ); ?> />
-					<?php _e( 'Disable post format styles','category-posts' ); ?>
-				</label>
-			</p>
        </div>
 <?php
     }
@@ -1837,7 +1830,6 @@ function default_settings()  {
 				'disable_font_styles'             => false,
 				'hide_if_empty'                   => false,
 				'show_post_format'                => 'none',
-				'disable_post_format_styles'      => false,
 				'hide_social_buttons'             => '',
 				'no_cat_childs'                   => false,
 				'everything_is_link'			  => false,
@@ -2332,48 +2324,46 @@ class virtualWidget {
 
 			// add post format css if needed 
 			if (isset( $settings["thumb"] ) && $settings["thumb"]) {
-				if (!isset( $settings["show_post_format"] ) || ($settings["show_post_format"] != 'none')) {
-					if (!isset( $settings["disable_post_format_styles"] ) || !$settings["disable_post_format_styles"]) {
-						static $fonts_added = false;	
-						
-						if (!$fonts_added) {
-							$fonturl = esc_url( plugins_url( 'icons/font', __FILE__ ) );
-							$ret[] = "@font-face {\n".
-									 "font-family: 'cat_post';\n".
-									 "src: url('$fonturl/cat_post.eot?29337961');\n".
-									 "src: url('$fonturl/cat_post.eot?29337961#iefix') format('embedded-opentype'),\n".
-									 "	   url('$fonturl/cat_post.woff2?29337961') format('woff2'),\n".
-									 "	   url('$fonturl/cat_post.woff?29337961') format('woff'),\n".
-									 "	   url('$fonturl/cat_post.ttf?29337961') format('truetype');\n".
-									 " font-weight: normal;\n".
-									 " font-style: normal;\n".
-									 "}\n";
-						}
-						$fonts_added = true;
-						
-						$placement ='';
-						switch ($settings["show_post_format"]) {
-							case 'topleft': $placement = 'top:10%; left:10%;';
-								break;
-							case 'bottomleft': $placement = 'bottom:10%; left:10%;';
-								break;
-							case 'ceter': $placement = 'top:calc(50% - 15px); left:calc(50% - 15px);';
-								break;
-							case 'topright': $placement = 'top:10%; right:10%;';
-								break;
-							case 'bottomright': $placement = 'bottom:10%; right:10%;';
-								break;
-						}
-						$rules[] = '.cat-post-thumbnail {position:relative}';
-						$rules[] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; '.
-									'font-size:20px; line-height:20px; padding:5px; border-radius:10px; background-color:rgba(0,0,0,.8); '.
-									$placement.'}';
-						$rules[] = ".cat-post-format-image:before { content: '\\e800'; }";
-						$rules[] = ".cat-post-format-video:before { content: '\\e801'; }";
-						$rules[] = ".cat-post-format-chat:before { content: '\\e802'; }";
-						$rules[] = ".cat-post-format-audio:before { content: '\\e803'; }";
-						$rules[] = ".cat-post-format-gallery:before { content: '\\e805'; }";
+				if (!isset( $settings["show_post_format"] ) || (($settings["show_post_format"] != 'none') && ($settings["show_post_format"] != 'nocss'))) {
+					static $fonts_added = false;	
+					
+					if (!$fonts_added) {
+						$fonturl = esc_url( plugins_url( 'icons/font', __FILE__ ) );
+						$ret[] = "@font-face {\n".
+								 "font-family: 'cat_post';\n".
+								 "src: url('$fonturl/cat_post.eot?29337961');\n".
+								 "src: url('$fonturl/cat_post.eot?29337961#iefix') format('embedded-opentype'),\n".
+								 "	   url('$fonturl/cat_post.woff2?29337961') format('woff2'),\n".
+								 "	   url('$fonturl/cat_post.woff?29337961') format('woff'),\n".
+								 "	   url('$fonturl/cat_post.ttf?29337961') format('truetype');\n".
+								 " font-weight: normal;\n".
+								 " font-style: normal;\n".
+								 "}\n";
 					}
+					$fonts_added = true;
+					
+					$placement ='';
+					switch ($settings["show_post_format"]) {
+						case 'topleft': $placement = 'top:10%; left:10%;';
+							break;
+						case 'bottomleft': $placement = 'bottom:10%; left:10%;';
+							break;
+						case 'ceter': $placement = 'top:calc(50% - 15px); left:calc(50% - 15px);';
+							break;
+						case 'topright': $placement = 'top:10%; right:10%;';
+							break;
+						case 'bottomright': $placement = 'bottom:10%; right:10%;';
+							break;
+					}
+					$rules[] = '.cat-post-thumbnail {position:relative}';
+					$rules[] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); '.
+								'font-size:20px; line-height:20px; padding:5px; border-radius:10px; background-color:rgba(0,0,0,.8); '.
+								$placement.'}';
+					$rules[] = ".cat-post-format-image:before { content: '\\e800'; }";
+					$rules[] = ".cat-post-format-video:before { content: '\\e801'; }";
+					$rules[] = ".cat-post-format-chat:before { content: '\\e802'; }";
+					$rules[] = ".cat-post-format-audio:before { content: '\\e803'; }";
+					$rules[] = ".cat-post-format-gallery:before { content: '\\e805'; }";
 				}
 			}
 
