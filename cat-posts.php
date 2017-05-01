@@ -2280,12 +2280,10 @@ class virtualWidget {
 		if (!$disable_css) { // checks if css disable is not set
 		
 			$rules = array( // rules that should be applied to all widgets
-				'.cat-post-item img {max-width: initial; max-height: initial;}',
-				'.cat-post-current .cat-post-title {text-transform: uppercase;}',
+				'.cat-post-item img {max-width: initial; max-height: initial; margin: initial;}',
 				'.cat-post-author {margin-bottom: 0;}',
 				'.cat-post-thumbnail {margin: 5px 10px 5px 0; display: block;}',
-				'.cat-post-item:before {content: ""; display: table; clear: both;}',
-				'.cat-post-item img {margin: initial;}',
+				'.cat-post-item:before {content: ""; clear: both;}',
 			);
 			
 			if (!(isset($settings['disable_font_styles']) && $settings['disable_font_styles'])) { // checks if disable font styles is not set
