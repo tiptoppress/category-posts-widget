@@ -678,7 +678,6 @@ class Widget extends \WP_Widget {
         global $post;
         
 		$everything_is_link = isset($instance['everything_is_link']) && $instance['everything_is_link'];
-		$disable_css        = isset($instance['disable_css']) && $instance['disable_css']; // 'disable_css' is deleted in 4.8 and higher
 		
         $ret = '<li ';
                     
@@ -713,11 +712,7 @@ class Widget extends \WP_Widget {
 		// Categories position to top
 		if (isset($instance["assigned_cat_top"]) && $instance["assigned_cat_top"]) {
 			if (isset( $instance['assigned_categories'] ) && $instance['assigned_categories']) {
-				$ret .= '<p';
-				if (!$disable_css) { 
-					$ret .= ' class="cat-post-category"'; 
-				} 
-				$ret .= '>';
+				$ret .= '<p class="cat-post-category">';
 				$catIDs = wp_get_post_categories($post->ID, array('number'=>0));
 				foreach ($catIDs as $catID) {
 					if ($everything_is_link)
@@ -736,11 +731,7 @@ class Widget extends \WP_Widget {
             } else {
                 $date_format = "j M Y"; 
             } 
-            $ret .= '<p class="post-date';
-            if (!$disable_css) { 
-                $ret .= " cat-post-date";
-            } 
-            $ret .= '">';
+            $ret .= '<p class="cat-post-date">';
             if ( isset ( $instance["date_link"] ) && $instance["date_link"] && !$everything_is_link) { 
                 $ret .= '<a href="'.\get_the_permalink().'">';
             }
@@ -792,11 +783,7 @@ class Widget extends \WP_Widget {
 
 		// Comments
         if ( isset( $instance['comment_num'] ) && $instance['comment_num']) {
-            $ret .= '<p class="comment-num';
-            if (!$disable_css) {
-                $ret .= " cat-post-comment-num"; 
-            } 
-            $ret .= '">';
+            $ret .= '<p class="cat-post-comment-num">';
 			
 			if ($everything_is_link) {
 				$ret .= '('.\get_comments_number().')';
@@ -834,11 +821,7 @@ class Widget extends \WP_Widget {
 		// Categories position normal
 		if( !(isset( $instance["assigned_cat_top"] ) && $instance["assigned_cat_top"])) {
 			if (isset( $instance['assigned_categories'] ) && $instance['assigned_categories']) {
-				$ret .= '<p';
-				if (!$disable_css) { 
-					$ret .= ' class="cat-post-category"'; 
-				} 
-				$ret .= '>';
+				$ret .= '<p class="cat-post-category">';
 				$catIDs = wp_get_post_categories($post->ID, array('number'=>0));
 				foreach ($catIDs as $catID) {
 					if ($everything_is_link)
@@ -852,11 +835,7 @@ class Widget extends \WP_Widget {
 
 		// Tags
 		if (isset( $instance['assigned_tags'] ) && $instance['assigned_tags']) {	
-            $ret .= '<p';
-            if (!$disable_css) { 
-                $ret .= ' class="cat-post-tag"'; 
-            } 
-            $ret .= '>';
+            $ret .= '<p class="cat-post-tag">';
 			$tagIDs = wp_get_post_tags($post->ID, array('number'=>0));
 			foreach ($tagIDs as $tagID) {
 				if ($everything_is_link)
