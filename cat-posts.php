@@ -1283,12 +1283,12 @@ class Widget extends \WP_Widget {
 					<?php _e( 'Indicate post format', 'category-posts' ); ?>
 				</label>
 				<select id="<?php echo $this->get_field_id("show_post_format"); ?>" name="<?php echo $this->get_field_name("show_post_format"); ?>" onchange="javascript:cwp_namespace.toggleDisablePostFormatStyles(this)">
-					<option value="none" <?php selected($show_post_format, 'none')?>><?php _e( 'No', 'category-posts' ); ?></option>
-					<option value="topleft" <?php selected($show_post_format, 'topleft')?>><?php _e( 'Style at Top left', 'category-posts' ); ?></option>
-					<option value="bottomleft" <?php selected($show_post_format, 'bottomleft')?>><?php _e( 'Style at Bottom left', 'category-posts' ); ?></option>
-					<option value="ceter" <?php selected($show_post_format, 'center')?>><?php _e( 'Style at Center', 'category-posts' ); ?></option>
-					<option value="topright" <?php selected($show_post_format, 'topright')?>><?php _e( 'Style at Top right', 'category-posts' ); ?></option>
-					<option value="bottomright" <?php selected($show_post_format, 'bottomright')?>><?php _e( 'Style at Bottom right', 'category-posts' ); ?></option>
+					<option value="none" <?php selected($show_post_format, 'none')?>><?php _e( 'None', 'category-posts' ); ?></option>
+					<option value="topleft" <?php selected($show_post_format, 'topleft')?>><?php _e( 'Top left', 'category-posts' ); ?></option>
+					<option value="bottomleft" <?php selected($show_post_format, 'bottomleft')?>><?php _e( 'Bottom left', 'category-posts' ); ?></option>
+					<option value="ceter" <?php selected($show_post_format, 'center')?>><?php _e( 'Center', 'category-posts' ); ?></option>
+					<option value="topright" <?php selected($show_post_format, 'topright')?>><?php _e( 'Top right', 'category-posts' ); ?></option>
+					<option value="bottomright" <?php selected($show_post_format, 'bottomright')?>><?php _e( 'Bottom right', 'category-posts' ); ?></option>
 					<option value="nocss" <?php selected($show_post_format, 'nocss')?>><?php _e( 'HTML without styling', 'category-posts' ); ?></option>
 				</select>
 			</p>
