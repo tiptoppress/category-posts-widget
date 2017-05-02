@@ -1188,23 +1188,25 @@ class Widget extends \WP_Widget {
 	 */
     function formThumbnailPanel($instance) {
 		$instance = wp_parse_args( ( array ) $instance, array(
-			'thumb'                => '',
-			'thumbTop'             => '',
-			'thumb_w'              => get_option('thumbnail_size_w',150),
-			'thumb_h'              => get_option('thumbnail_size_h',150),
-			'use_css_cropping'     => '',
-			'thumb_hover'          => '',
-			'default_thunmbnail'   => 0,
-			'show_post_format'     => 'none',
+			'thumb'                       => '',
+			'thumbTop'                    => '',
+			'thumb_w'                     => get_option('thumbnail_size_w',150),
+			'thumb_h'                     => get_option('thumbnail_size_h',150),
+			'use_css_cropping'            => '',
+			'thumb_hover'                 => '',
+			'default_thunmbnail'          => 0,
+			'show_post_format'            => 'none',
+			'disable_post_format_styles'  => false,
         ));
-		$thumb                = $instance['thumb'];
-		$thumbTop             = $instance['thumbTop'];
-		$thumb_w              = $instance['thumb_w'];
-		$thumb_h              = $instance['thumb_h'];
-		$use_css_cropping     = $instance['use_css_cropping'];
-		$thumb_hover          = $instance['thumb_hover'];
-		$default_thunmbnail   = $instance['default_thunmbnail'];
-		$show_post_format     = $instance['show_post_format'];
+		$thumb                       = $instance['thumb'];
+		$thumbTop                    = $instance['thumbTop'];
+		$thumb_w                     = $instance['thumb_w'];
+		$thumb_h                     = $instance['thumb_h'];
+		$use_css_cropping            = $instance['use_css_cropping'];
+		$thumb_hover                 = $instance['thumb_hover'];
+		$default_thunmbnail          = $instance['default_thunmbnail'];
+		$show_post_format            = $instance['show_post_format'];
+		$disable_post_format_styles  = $instance['disable_post_format_styles'];
 		
 ?>        
         <h4 data-panel="thumbnail"><?php _e('Thumbnails','category-posts')?></h4>
@@ -1275,20 +1277,28 @@ class Widget extends \WP_Widget {
 					<?php _e('No default','category-posts')?>
 				</button>
             </p>					
+			<div class="cpwp_ident">
 			<p>
 				<label for="<?php echo $this->get_field_id("show_post_format"); ?>">
 					<?php _e( 'Indicate post format', 'category-posts' ); ?>
 				</label>
 				<select id="<?php echo $this->get_field_id("show_post_format"); ?>" name="<?php echo $this->get_field_name("show_post_format"); ?>" onchange="javascript:cwp_namespace.toggleDisablePostFormatStyles(this)">
 					<option value="none" <?php selected($show_post_format, 'none')?>><?php _e( 'No', 'category-posts' ); ?></option>
-					<option value="nocss" <?php selected($show_post_format, 'nocss')?>><?php _e( 'HTML without styling', 'category-posts' ); ?></option>
 					<option value="topleft" <?php selected($show_post_format, 'topleft')?>><?php _e( 'Style at Top left', 'category-posts' ); ?></option>
 					<option value="bottomleft" <?php selected($show_post_format, 'bottomleft')?>><?php _e( 'Style at Bottom left', 'category-posts' ); ?></option>
 					<option value="ceter" <?php selected($show_post_format, 'center')?>><?php _e( 'Style at Center', 'category-posts' ); ?></option>
 					<option value="topright" <?php selected($show_post_format, 'topright')?>><?php _e( 'Style at Top right', 'category-posts' ); ?></option>
 					<option value="bottomright" <?php selected($show_post_format, 'bottomright')?>><?php _e( 'Style at Bottom right', 'category-posts' ); ?></option>
+					<option value="nocss" <?php selected($show_post_format, 'nocss')?>><?php _e( 'HTML without styling', 'category-posts' ); ?></option>
 				</select>
-			</p>				
+			</p>
+			<p class="cpwp_ident categoryposts-data-panel-general-disable-format-styles" style="display:<?php echo ($show_post_format == 'none') ? 'none' : 'block'?>">
+				<label for="<?php echo $this->get_field_id("disable_post_format_styles"); ?>">
+					<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_post_format_styles"); ?>" name="<?php echo $this->get_field_name("disable_post_format_styles"); ?>"<?php checked( (bool) $instance["disable_post_format_styles"], true ); ?> />
+					<?php _e( 'No styling CSS','category-posts' ); ?>
+				</label>
+			</p>
+			</div>
        </div>
 <?php
     }
@@ -1798,6 +1808,7 @@ function default_settings()  {
 				'disable_font_styles'             => false,
 				'hide_if_empty'                   => false,
 				'show_post_format'                => 'none',
+				'disable_post_format_styles'      => false,
 				'hide_social_buttons'             => '',
 				'no_cat_childs'                   => false,
 				'everything_is_link'			  => false,
@@ -2322,9 +2333,13 @@ class virtualWidget {
 							break;
 					}
 					$rules[] = '.cat-post-thumbnail {position:relative}';
-					$rules[] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); '.
-								'font-size:20px; line-height:20px; padding:5px; border-radius:10px; background-color:rgba(0,0,0,.8); '.
-								$placement.'}';
+					if (!isset( $settings["disable_post_format_styles"] ) || !$settings["disable_post_format_styles"]) {
+						$rules[] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; font-size:28px; '.$placement.'}';
+					} else {
+						$rules[] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); '.
+									'font-size:20px; line-height:20px; padding:5px; border-radius:10px; background-color:rgba(0,0,0,.8); '.
+									$placement.'}';
+					}
 					$rules[] = ".cat-post-format-image:before { content: '\\e800'; }";
 					$rules[] = ".cat-post-format-video:before { content: '\\e801'; }";
 					$rules[] = ".cat-post-format-chat:before { content: '\\e802'; }";
