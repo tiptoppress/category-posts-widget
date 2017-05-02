@@ -2333,7 +2333,7 @@ class virtualWidget {
 							break;
 					}
 					$rules[] = '.cat-post-thumbnail {position:relative}';
-					if (!isset( $settings["disable_post_format_styles"] ) || !$settings["disable_post_format_styles"]) {
+					if (isset( $settings["disable_post_format_styles"] ) || $settings["disable_post_format_styles"]) {
 						$rules[] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; font-size:28px; '.$placement.'}';
 					} else {
 						$rules[] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); '.
