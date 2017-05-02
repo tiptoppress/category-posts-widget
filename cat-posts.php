@@ -2096,7 +2096,7 @@ function mce_external_languages($locales) {
 		if (is_array($meta) && isset($meta['editor']))
 			;
 		else
-			$locales['category-posts'] = plugin_dir_path ( __FILE__ ) . 'tinymce_translations.php';
+			$locales['cat-posts'] = plugin_dir_path ( __FILE__ ) . 'tinymce_translations.php';
     return $locales;
 }
  
