@@ -726,16 +726,34 @@ class Widget extends \WP_Widget {
 
 		// Date
         if ( isset( $instance['date']) && $instance['date']) {
-            if ( isset( $instance['date_format'] ) && strlen( trim( $instance['date_format'] ) ) > 0 ) { 
-                $date_format = $instance['date_format']; 
-            } else {
-                $date_format = "j M Y"; 
-            } 
+			if (!isset($instance['preset_date_format']))
+				$preset_date_format = 'other';
+			else
+				$preset_date_format = $instance['preset_date_format'];
+			switch ($preset_date_format) {
+				case 'sitedateandtime' : $date = get_the_time(get_option('date_format').' '.get_option('time_format'));
+					break;
+				case 'sitedate' : $date = get_the_time(get_option('date_format'));
+					break;
+				case 'sincepublished' : $date = human_time_diff( get_the_time('U'), current_time( 'timestamp' ) );
+					break;
+				default :
+					if ( isset( $instance['date_format'] ) && strlen( trim( $instance['date_format'] ) ) > 0 ) { 
+						$date_format = $instance['date_format']; 
+					} else {
+						$date_format = "j M Y"; 
+					} 
+					$date = get_the_time($date_format);
+					break;
+			}
             $ret .= '<p class="cat-post-date">';
             if ( isset ( $instance["date_link"] ) && $instance["date_link"] && !$everything_is_link) { 
                 $ret .= '<a href="'.\get_the_permalink().'">';
             }
-            $ret .= get_the_time($date_format);
+			if (isset($instance['date_template']))
+				$ret .= str_replace('%date%',$date,$instance['date_template']);
+			else
+				$ret .= $date;
             if ( isset ( $instance["date_link"] ) && $instance["date_link"] && !$everything_is_link ) { 
                 $ret .= '</a>';
             }
@@ -1331,6 +1349,8 @@ class Widget extends \WP_Widget {
 			'disable_font_styles'             => '',
 			'hide_if_empty'                   => '',
 			'hide_social_buttons'             => '',
+			'preset_date_format'              => 'other',
+			'date_template'              	  => '%date%',
 		) );
 
 		$everything_is_link				 = $instance['everything_is_link'];
@@ -1352,6 +1372,8 @@ class Widget extends \WP_Widget {
 		$disable_css                     = $instance['disable_css'];
 		$disable_font_styles             = $instance['disable_font_styles'];
 		$hide_if_empty                   = $instance['hide_if_empty'];
+		$preset_date_format              = $instance['preset_date_format'];
+		$date_template              	 = $instance['date_template'];
 		
 		$cat = $instance['cat'];
 
@@ -1441,10 +1463,27 @@ class Widget extends \WP_Widget {
 				</p>
 				<div class="cpwp_ident categoryposts-data-panel-date" style="display:<?php echo ((bool) $date) ? 'block' : 'none'?>">
 					<p>
-						<label for="<?php echo $this->get_field_id("date_format"); ?>">
-							<?php _e( 'Date format:','category-posts' ); ?>
+						<label for="<?php echo $this->get_field_id("preset_date_format"); ?>">
+							<?php _e( 'Date format','category-posts' ); ?>
 						</label>
-						<input class="text" placeholder="j M Y" id="<?php echo $this->get_field_id("date_format"); ?>" name="<?php echo $this->get_field_name("date_format"); ?>" type="text" value="<?php echo esc_attr($instance["date_format"]); ?>" size="8" />
+						<select class="categoryposts-data-panel-date-preset-format" id="<?php echo $this->get_field_id("preset_date_format"); ?>" name="<?php echo $this->get_field_name("preset_date_format"); ?>">
+							<option value="sitedateandtime" <?php selected( $preset_date_format, "sitedateandtime" ); ?>><?php _e( 'Site date and time','category-posts' ); ?></option>
+							<option value="sitedate" <?php selected( $preset_date_format, "sitedate" ); ?>><?php _e( 'Site date','category-posts' ); ?></option>
+							<option value="sincepublished" <?php selected( $preset_date_format, "sincepublished" ); ?>><?php _e( 'Time since published','category-posts' ); ?></option>
+							<option value="other" <?php selected( $preset_date_format, "other" ); ?>><?php _e( 'PHP style format','category-posts' ); ?></option>
+						</select>
+					</p>	
+					<p class="categoryposts-data-panel-date-other-format" <?php if ($preset_date_format!='other') echo 'style="display:none"'?>>
+						<label for="<?php echo $this->get_field_id("date_format"); ?>">
+							<?php _e( 'PHP Style Date format','category-posts' ); ?>
+						</label>
+						<input class="text" id="<?php echo $this->get_field_id("date_format"); ?>" name="<?php echo $this->get_field_name("date_format"); ?>" type="text" value="<?php echo esc_attr($instance["date_format"]); ?>" placeholder="j M Y" />
+					</p>
+					<p>
+						<label for="<?php echo $this->get_field_id("date_template"); ?>">
+							<?php _e( 'Date display template','category-posts' ); ?>
+						</label>
+						<input class="text" id="<?php echo $this->get_field_id("date_template"); ?>" name="<?php echo $this->get_field_name("date_template"); ?>" type="text" value="<?php echo esc_attr($instance["date_template"]); ?>" />
 					</p>
 					<p>
 						<label for="<?php echo $this->get_field_id("date_link"); ?>">
@@ -1801,6 +1840,8 @@ function default_settings()  {
 				'hide_social_buttons'             => '',
 				'no_cat_childs'                   => false,
 				'everything_is_link'			  => false,
+				'preset_date_format'              => 'sitedateandtime',
+				'date_template'                   => '%date%',
 				);
 }
 

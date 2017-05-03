@@ -85,6 +85,18 @@
             }	
         },
 			
+		// Show hide other date format
+		toggleDateFormat: function(item) {
+            var value = jQuery(item).val();
+			var panel = item.parentElement.parentElement;
+            if( value != 'other') {
+                jQuery(panel).find('.categoryposts-data-panel-date-other-format').hide();
+            }
+            else {
+                jQuery(panel).find('.categoryposts-data-panel-date-other-format').show();
+            }	
+        },
+			
 		// Show hide disable font styles
 		toggleAssignedCategoriesTop: function(item) {
             var value = jQuery(item).find("input").attr('checked');
@@ -188,6 +200,10 @@ jQuery(document).ready( function () {
 	
 	jQuery('.categoryposts-data-panel-filter-cat').on('change', function () { // for widgets page
 		cwp_namespace.toggleFooterLinkUrl(this);
+	});
+	
+	jQuery('.categoryposts-data-panel-date-preset-format').on('change', function () { // change date format
+		cwp_namespace.toggleDateFormat(this);
 	});
 	
 });
