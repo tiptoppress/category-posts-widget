@@ -62,14 +62,14 @@
             var cat = jQuery(item).find("option:selected").attr('value');
 			var panel = item.parentElement.parentElement.parentElement.parentElement;
             if(cat == '0') {
-                jQuery(panel).find('.categoryposts-data-panel-footer-footerLink').show();
-				jQuery(panel).find('.categoryposts-data-panel-title-titleLink').hide();
-				jQuery(panel).find('.categoryposts-data-panel-title-titleURL').show();
+                jQuery(panel).find('.categoryPosts-footer_link').show();
+				jQuery(panel).find('.categoryPosts-title_link').hide();
+				jQuery(panel).find('.categoryPosts-title_link_url').show();
             }
             else {
-                jQuery(panel).find('.categoryposts-data-panel-footer-footerLink').hide();
-				jQuery(panel).find('.categoryposts-data-panel-title-titleLink').show();
-				jQuery(panel).find('.categoryposts-data-panel-title-titleURL').hide();
+                jQuery(panel).find('.categoryPosts-footer_link').hide();
+				jQuery(panel).find('.categoryPosts-title_link').show();
+				jQuery(panel).find('.categoryPosts-title_link_url').hide();
             }	
         },
 
@@ -171,6 +171,8 @@
 	
 jQuery(document).ready( function () {
 	
+	var class_namespace = 'categoryPosts';
+
 	jQuery('.category-widget-cont h4').click(function () { // for widgets page
 		cwp_namespace.autoCloseOpenPanels(this);
 		// toggle panel open/close
@@ -179,6 +181,7 @@ jQuery(document).ready( function () {
 
 	// needed to reassign click handlers after widget refresh
 	jQuery(document).on('widget-added widget-updated', function(root,element){ // for customize and after save on widgets page
+		
 		jQuery('.category-widget-cont h4').off('click').on('click', function () {
 			cwp_namespace.autoCloseOpenPanels(this);
 			// toggle panel open/close
@@ -208,6 +211,18 @@ jQuery(document).ready( function () {
 
 	jQuery('.cwp_default_thumb_remove').off('click').on('click', function () { // remove default thumb
 		cwp_namespace.removeDefaultThumbnailSelection(this);
+	});
+	
+	jQuery('.'+class_namespace+'-excerpt').off('click').on('click', function () { 
+		cwp_namespace.toggleExcerptPanel(this);
+	});
+	
+	jQuery('.'+class_namespace+'-date').off('click').on('click', function () { 
+		cwp_namespace.toggleDatePanel(this);
+	});
+	
+	jQuery('.'+class_namespace+'-assigned_categories').off('click').on('click', function () {
+		cwp_namespace.toggleAssignedCategoriesTop(this);
 	});
 	
 	jQuery('.categoryposts-data-panel-filter-cat').on('change', function () { // for widgets page
