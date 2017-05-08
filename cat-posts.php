@@ -658,7 +658,6 @@ class Widget extends \WP_Widget {
 				}
 			}
 		}		
-		$ret = apply_filters('cpw_search_engine_attribute',$ret);
 		
 		return $ret;
 	}
@@ -718,7 +717,7 @@ class Widget extends \WP_Widget {
 					if ($everything_is_link)
 						$ret .= '<span>' . get_cat_name($catID) . '</span>';
 					else			
-						$ret .= apply_filters('cpw_search_engine_attribute','<a href="' . get_category_link($catID) . '">' . get_cat_name($catID) . '</a>');
+						$ret .= '<a href="' . get_category_link($catID) . '">' . get_cat_name($catID) . '</a>';
 				}
 				$ret .= "</p>";
 			}
@@ -871,33 +870,7 @@ class Widget extends \WP_Widget {
         $ret .= '</li>';
         return $ret;
     }
-	
-	/**
-	 * Filter to add rel attribute to all widget links and make other website links more important
-	 *
-	 * @param  array $instance Array which contains the various settings
-	 * @return string with the anchor attribute
-     *
-     * @since 4.8
-	 */
-    function search_engine_attribute_filter($html) {
-
-		// remove old rel, if exist	
-		if (preg_match('/(.*)rel=".*"(.*)/',$html))
-			$html = preg_replace('/rel=".*"/', "", $html);
-			
-		// add attribute
-		switch ($this->instance['search_engine_attribute']) {
-			case 'canonical':
-				$html = str_replace('<a ','<a rel="canonical" ',$html);
-				break;
-			case 'nofollow':
-				$html = str_replace('<a ','<a rel="nofollow" ',$html);
-				break;
-		}
-		return $html;
-	}
-    
+	    
 	/**
 	 * Filter to set the number of words in an excerpt
 	 *
@@ -996,9 +969,6 @@ class Widget extends \WP_Widget {
 			if (!isset($instance['excerpt_filters']) || $instance['excerpt_filters']) // pre 4.7 widgets has filters on
 				$this->setExcerpFilters($instance); 
 				
-			if (isset($instance['search_engine_attribute']) && $instance['search_engine_attribute'] != 'none')
-				add_filter('cpw_search_engine_attribute', array($this,'search_engine_attribute_filter'));
-
 			while ( $cat_posts->have_posts() )
 			{
                 $cat_posts->the_post();              
@@ -1012,10 +982,7 @@ class Widget extends \WP_Widget {
 			// remove widget filters
 			if (!isset($instance['excerpt_filters']) || $instance['excerpt_filters']) // pre 4.7 widgets has filters on
 				$this->removeExcerpFilters($instance);
-
-			if (isset($instance['search_engine_attribute']) && $instance['search_engine_attribute'] != 'none')
-				remove_filter('cpw_search_engine_attribute', array($this,'search_engine_attribute_filter'));
-				
+			
 			wp_reset_postdata();
 			
 			$use_css_cropping = isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping'];
