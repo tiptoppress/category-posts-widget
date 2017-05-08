@@ -1034,13 +1034,18 @@ class Widget extends \WP_Widget {
 	 */
     function formTitlePanel($instance) {
 		$cat = $instance['cat'];
+		$hide_title = false;
+		if (isset($instance['hide_title']) && $instance['hide_title'])
+			$hide_title = true;
 ?>    
         <h4 data-panel="title"><?php _e('Title','category-posts')?></h4>
         <div>
-			<?php echo $this->get_text_input_block_html($instance, 'title',  __( 'Title','category-posts' ), '', __('Recent Posts','category-posts'), true);?>
-			<?php echo $this->get_checkbox_block_html($instance, 'title_link', __( 'Make widget title link','category-posts' ), false, $cat != 0);?>
-			<?php echo $this->get_text_input_block_html($instance, 'title_link_url', __( 'Title link URL','category-posts' ), '', __('URL or empty for no link','category-posts'), $cat == 0);?>
 			<?php echo $this->get_checkbox_block_html($instance, 'hide_title', __( 'Hide title','category-posts' ), false, true);?>
+			<div class="cpwp_ident categoryposts-data-panel-title-settings" <?php if ($hide_title) echo 'style="display:none"';?>>
+				<?php echo $this->get_text_input_block_html($instance, 'title',  __( 'Title','category-posts' ), '', __('Recent Posts','category-posts'), true);?>
+				<?php echo $this->get_checkbox_block_html($instance, 'title_link', __( 'Make widget title link','category-posts' ), false, $cat != 0);?>
+				<?php echo $this->get_text_input_block_html($instance, 'title_link_url', __( 'Title link URL','category-posts' ), '', __('URL or empty for no link','category-posts'), $cat == 0);?>
+			</div>
         </div>			
 <?php            
     }

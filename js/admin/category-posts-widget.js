@@ -109,7 +109,6 @@
              }	
          },
 
-		// Show hide disable font styles
 		toggleAssignedCategoriesTop: function(item) {
             var value = jQuery(item).find("input").attr('checked');
 			var panel = item.parentElement.parentElement;
@@ -121,6 +120,17 @@
             }	
         },
 		
+		toggleHideTitle: function(item) {
+            var value = jQuery(item).find("input").attr('checked');
+			var panel = item.parentElement.parentElement;
+            if (value != 'checked') {
+                jQuery(panel).find('.categoryposts-data-panel-title-settings').show();
+            }
+            else {
+                jQuery(panel).find('.categoryposts-data-panel-title-settings').hide();
+            }	
+        },
+
 		// Close all open panels if open
 		autoCloseOpenPanels: function(_this) {
 			if( categoryPosts.accordion  ) {
@@ -223,6 +233,10 @@ jQuery(document).ready( function () {
 	
 	jQuery('.'+class_namespace+'-assigned_categories').off('click').on('click', function () {
 		cwp_namespace.toggleAssignedCategoriesTop(this);
+	});
+	
+	jQuery('.'+class_namespace+'-hide_title').off('click').on('click', function () {
+		cwp_namespace.toggleHideTitle(this);
 	});
 	
 	jQuery('.categoryposts-data-panel-filter-cat').on('change', function () { // for widgets page
