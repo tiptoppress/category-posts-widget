@@ -1287,7 +1287,7 @@ class Widget extends \WP_Widget {
 		
 		$ret = '<label for="'.$this->get_field_id($key)."\">\n".
 					$label.
-					'<input placeholder="'.$placeholder.'" id="'. $this->get_field_id($key).'" name="'. $this->get_field_name($key).'" type="text" value="'. esc_attr($value).'" autocomplete="off"/>'."\n".
+					'<input placeholder="'.esc_attr($placeholder).'" id="'. $this->get_field_id($key).'" name="'. $this->get_field_name($key).'" type="text" value="'. esc_attr($value).'" autocomplete="off"/>'."\n".
 				"</label>\n";
 
 				
