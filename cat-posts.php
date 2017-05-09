@@ -493,7 +493,7 @@ class Widget extends \WP_Widget {
 
             $class              = '';
 			$use_css_cropping   = isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping'];
-			$disable_css        = isset($instance['disable_css']) && $instance['disable_css']; // 'disable_css' is deleted in 4.8 and higher
+			$disable_css        = isset($instance['disable_css']) && $instance['disable_css']; 
 			$everything_is_link = isset($instance['everything_is_link']) && $instance['everything_is_link'];
 			$show_post_format   = isset($instance['show_post_format']) && ($instance['show_post_format'] != 'none');
 			
@@ -1336,9 +1336,6 @@ class Widget extends \WP_Widget {
  			if (!isset($instance['excerpt_filters']))
  				$instance['excerpt_filters'] = 'on';
  		}
-		if (isset($instance['disable_css']) && $instance['disable_css'] ) { // backward compatibility to =< 4.7
-			unset($instance['disable_css']);
-		}
 		
 		$instance = wp_parse_args( ( array ) $instance, array(
 			'hide_post_titles'                => '',
