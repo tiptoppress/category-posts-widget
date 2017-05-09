@@ -1101,12 +1101,10 @@ class Widget extends \WP_Widget {
 			'thumb_w'                     => get_option('thumbnail_size_w',150),
 			'thumb_h'                     => get_option('thumbnail_size_h',150),
 			'default_thunmbnail'          => 0,
-			'disable_post_format_styles'  => false,
         ));
 		$thumb_w                     = $instance['thumb_w'];
 		$thumb_h                     = $instance['thumb_h'];
 		$default_thunmbnail          = $instance['default_thunmbnail'];
-		$disable_post_format_styles  = $instance['disable_post_format_styles'];
 		
 ?>        
         <h4 data-panel="thumbnail"><?php _e('Thumbnails','category-posts')?></h4>
@@ -1157,23 +1155,15 @@ class Widget extends \WP_Widget {
 					<?php _e('No default','category-posts')?>
 				</button>
             </p>					
-			<div class="cpwp_ident">
-				<?php echo $this->get_select_block_html($instance, 'show_post_format', __( 'Indicate post format','category-posts' ), array(
-																	'none' => __('None','category-posts'),
-																	'topleft' => __('Top left','category-posts'),
-																	'bottomleft' => __('Bottom left','category-posts'),
-																	'ceter' => __('Center','category-posts'),
-																	'topright' => __('Top right','category-posts'),
-																	'bottomright' => __('Bottom right','category-posts'),
-																	'nocss' => __('HTML without styling','category-posts'),
-																	), 'none', true);?>			
-				<p class="cpwp_ident categoryposts-data-panel-general-disable-format-styles" style="display:<?php echo ($show_post_format == 'none') ? 'none' : 'block'?>">
-					<label for="<?php echo $this->get_field_id("disable_post_format_styles"); ?>">
-						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_post_format_styles"); ?>" name="<?php echo $this->get_field_name("disable_post_format_styles"); ?>"<?php checked( (bool) $instance["disable_post_format_styles"], true ); ?> />
-						<?php _e( 'No styling CSS','category-posts' ); ?>
-					</label>
-				</p>
-			</div>
+			<?php echo $this->get_select_block_html($instance, 'show_post_format', __( 'Indicate post format','category-posts' ), array(
+																'none' => __('None','category-posts'),
+																'topleft' => __('Top left','category-posts'),
+																'bottomleft' => __('Bottom left','category-posts'),
+																'ceter' => __('Center','category-posts'),
+																'topright' => __('Top right','category-posts'),
+																'bottomright' => __('Bottom right','category-posts'),
+																'nocss' => __('HTML without styling','category-posts'),
+																), 'none', true);?>			
        </div>
 <?php
     }
@@ -1739,7 +1729,6 @@ function default_settings()  {
 				'disable_font_styles'             => false,
 				'hide_if_empty'                   => false,
 				'show_post_format'                => 'none',
-				'disable_post_format_styles'      => false,
 				'hide_social_buttons'             => '',
 				'no_cat_childs'                   => false,
 				'everything_is_link'			  => false,
@@ -2266,13 +2255,9 @@ class virtualWidget {
 							break;
 					}
 					$rules[] = '.cat-post-thumbnail {position:relative}';
-					if (isset( $settings["disable_post_format_styles"] ) && $settings["disable_post_format_styles"]) {
-						$rules[] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; font-size:28px; '.$placement.'}';
-					} else {
-						$rules[] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); '.
-									'font-size:20px; line-height:20px; padding:5px; border-radius:10px; background-color:rgba(0,0,0,.8); '.
-									$placement.'}';
-					}
+					$rules[] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); '.
+								'font-size:20px; line-height:20px; padding:5px; border-radius:10px; background-color:rgba(0,0,0,.8); '.
+								$placement.'}';
 					$rules[] = ".cat-post-format-image:before { content: '\\e800'; }";
 					$rules[] = ".cat-post-format-video:before { content: '\\e801'; }";
 					$rules[] = ".cat-post-format-chat:before { content: '\\e802'; }";

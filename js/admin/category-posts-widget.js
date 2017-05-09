@@ -97,18 +97,6 @@
             }	
         },
 			
- 		// Show hide disable post format styles
- 		toggleDisablePostFormatStyles: function(item) {
-             var value = jQuery(item).val();
- 			var panel = item.parentElement.parentElement;
-             if(value == 'nocss') {
-                 jQuery(panel).find('.categoryposts-data-panel-general-disable-format-styles').hide();
-             }
-             else {
-                 jQuery(panel).find('.categoryposts-data-panel-general-disable-format-styles').show();
-             }	
-         },
-
 		toggleAssignedCategoriesTop: function(item) {
             var value = jQuery(item).find("input").attr('checked');
 			var panel = item.parentElement.parentElement;
