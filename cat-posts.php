@@ -1139,6 +1139,7 @@ class Widget extends \WP_Widget {
 																'ceter' => __('Center','category-posts'),
 																'topright' => __('Top right','category-posts'),
 																'bottomright' => __('Bottom right','category-posts'),
+																'nocss' => __('HTML without styling','category-posts'),
 																), 'none', true);?>
             <p>
                 <label style="display:block">
@@ -2220,9 +2221,8 @@ class virtualWidget {
 
 			// add post format css if needed 
 			if (isset( $settings["thumb"] ) && $settings["thumb"]) {
-				if (!isset($settings["show_post_format"]) || $settings["show_post_format"] != 'none') {
-					static $fonts_added = false;	
-					
+				if (!isset( $settings["show_post_format"] ) || (($settings["show_post_format"] != 'none') && ($settings["show_post_format"] != 'nocss'))) {
+					static $fonts_added = false;		
 					if (!$fonts_added) {
 						$fonturl = esc_url( plugins_url( 'icons/font', __FILE__ ) );
 						$ret[] = "@font-face {\n".
