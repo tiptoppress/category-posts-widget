@@ -493,7 +493,7 @@ class Widget extends \WP_Widget {
 
             $class              = '';
 			$use_css_cropping   = isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping'];
-			$disable_css        = isset($instance['disable_css']) && $instance['disable_css']; 
+			$disable_css        = isset($instance['disable_css']) && $instance['disable_css'];
 			$everything_is_link = isset($instance['everything_is_link']) && $instance['everything_is_link'];
 			$show_post_format   = isset($instance['show_post_format']) && ($instance['show_post_format'] != 'none');
 			
@@ -512,7 +512,7 @@ class Widget extends \WP_Widget {
 
             $ret .= $this->the_post_thumbnail( array($this->instance['thumb_w'],$this->instance['thumb_h']));
 
-			if ($show_post_format) {
+			if ($show_post_format || $instance['thumb_hover']) {
 				$format = get_post_format() ? : 'standard';
 				$ret .= '<span class="cat-post-format cat-post-format-'.$format.'"></span>';
 			}
@@ -1101,10 +1101,12 @@ class Widget extends \WP_Widget {
 			'thumb_w'                     => get_option('thumbnail_size_w',150),
 			'thumb_h'                     => get_option('thumbnail_size_h',150),
 			'default_thunmbnail'          => 0,
+			'disable_post_format_styles'  => false,
         ));
 		$thumb_w                     = $instance['thumb_w'];
 		$thumb_h                     = $instance['thumb_h'];
 		$default_thunmbnail          = $instance['default_thunmbnail'];
+		$disable_post_format_styles  = $instance['disable_post_format_styles'];
 		
 ?>        
         <h4 data-panel="thumbnail"><?php _e('Thumbnails','category-posts')?></h4>
@@ -1130,7 +1132,25 @@ class Widget extends \WP_Widget {
 																'white' => __('Brighter','category-posts'),
 																'scale' => __('Zoom in','category-posts'),
 																'blur' => __('Blur','category-posts'),
+																'icon' => __('Icon','category-posts'),
 																), 'none',true);?>			
+			<div class="cpwp_ident">
+				<?php echo $this->get_select_block_html($instance, 'show_post_format', __( 'Indicate post format','category-posts' ), array(
+																	'none' => __('None','category-posts'),
+																	'topleft' => __('Top left','category-posts'),
+																	'bottomleft' => __('Bottom left','category-posts'),
+																	'ceter' => __('Center','category-posts'),
+																	'topright' => __('Top right','category-posts'),
+																	'bottomright' => __('Bottom right','category-posts'),
+																	'nocss' => __('HTML without styling','category-posts'),
+																	), 'none', true);?>			
+				<p class="cpwp_ident categoryposts-data-panel-general-disable-format-styles" style="display:<?php echo ($show_post_format == 'none') ? 'none' : 'block'?>">
+					<label for="<?php echo $this->get_field_id("disable_post_format_styles"); ?>">
+						<input type="checkbox" class="checkbox" id="<?php echo $this->get_field_id("disable_post_format_styles"); ?>" name="<?php echo $this->get_field_name("disable_post_format_styles"); ?>"<?php checked( (bool) $instance["disable_post_format_styles"], true ); ?> />
+						<?php _e( 'No styling CSS','category-posts' ); ?>
+					</label>
+				</p>
+			</div>
             <p>
                 <label style="display:block">
                     <?php _e( 'Default thumbnail: ','category-posts' ); ?>
@@ -1155,15 +1175,6 @@ class Widget extends \WP_Widget {
 					<?php _e('No default','category-posts')?>
 				</button>
             </p>					
-			<?php echo $this->get_select_block_html($instance, 'show_post_format', __( 'Indicate post format','category-posts' ), array(
-																'none' => __('None','category-posts'),
-																'topleft' => __('Top left','category-posts'),
-																'bottomleft' => __('Bottom left','category-posts'),
-																'ceter' => __('Center','category-posts'),
-																'topright' => __('Top right','category-posts'),
-																'bottomright' => __('Bottom right','category-posts'),
-																'nocss' => __('HTML without styling','category-posts'),
-																), 'none', true);?>			
        </div>
 <?php
     }
@@ -1726,6 +1737,7 @@ function default_settings()  {
 				'disable_font_styles'             => false,
 				'hide_if_empty'                   => false,
 				'show_post_format'                => 'none',
+				'disable_post_format_styles'      => false,
 				'hide_social_buttons'             => '',
 				'no_cat_childs'                   => false,
 				'everything_is_link'			  => false,
@@ -2227,11 +2239,11 @@ class virtualWidget {
 						$fonturl = esc_url( plugins_url( 'icons/font', __FILE__ ) );
 						$ret[] = "@font-face {\n".
 								 "font-family: 'cat_post';\n".
-								 "src: url('$fonturl/cat_post.eot?29337961');\n".
-								 "src: url('$fonturl/cat_post.eot?29337961#iefix') format('embedded-opentype'),\n".
-								 "	   url('$fonturl/cat_post.woff2?29337961') format('woff2'),\n".
-								 "	   url('$fonturl/cat_post.woff?29337961') format('woff'),\n".
-								 "	   url('$fonturl/cat_post.ttf?29337961') format('truetype');\n".
+								 "src: url('$fonturl/cat_post.eot?4618166');\n".
+								 "src: url('$fonturl/cat_post.eot?4618166#iefix') format('embedded-opentype'),\n".
+								 "	   url('$fonturl/cat_post.woff2?4618166') format('woff2'),\n".
+								 "	   url('$fonturl/cat_post.woff?4618166') format('woff'),\n".
+								 "	   url('$fonturl/cat_post.ttf?4618166') format('truetype');\n".
 								 " font-weight: normal;\n".
 								 " font-style: normal;\n".
 								 "}\n";
@@ -2244,7 +2256,7 @@ class virtualWidget {
 							break;
 						case 'bottomleft': $placement = 'bottom:10%; left:10%;';
 							break;
-						case 'ceter': $placement = 'top:calc(50% - 15px); left:calc(50% - 15px);';
+						case 'ceter': $placement = 'top:calc(50% - 25px); left:calc(50% - 25px);';
 							break;
 						case 'topright': $placement = 'top:10%; right:10%;';
 							break;
@@ -2252,9 +2264,13 @@ class virtualWidget {
 							break;
 					}
 					$rules[] = '.cat-post-thumbnail {position:relative}';
-					$rules[] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); '.
-								'font-size:20px; line-height:20px; padding:5px; border-radius:10px; background-color:rgba(0,0,0,.8); '.
-								$placement.'}';
+					if (isset( $settings["disable_post_format_styles"] ) && $settings["disable_post_format_styles"]) {
+						$rules[] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; font-size:28px; '.$placement.'}';
+					} else {
+						$rules[] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); '.
+									'font-size:14px; line-height:14px; padding:15px; border-radius:4px; background-color:rgba(0,0,0,.6); '.
+									$placement.'}';
+					}
 					$rules[] = ".cat-post-format-image:before { content: '\\e800'; }";
 					$rules[] = ".cat-post-format-video:before { content: '\\e801'; }";
 					$rules[] = ".cat-post-format-chat:before { content: '\\e802'; }";
@@ -2313,6 +2329,31 @@ class virtualWidget {
 					case 'blur':
 						$ret[] = '#'.$widget_id.' .cat-post-blur img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
 						$ret[] = '#'.$widget_id.' .cat-post-blur:hover img {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}';
+						break;
+					case 'icon':
+						$fonturl = esc_url( plugins_url( 'icons/font', __FILE__ ) );
+						$ret[] = "@font-face {\n".
+								 "font-family: 'cat_post';\n".
+								 "src: url('$fonturl/cat_post.eot?4618166');\n".
+								 "src: url('$fonturl/cat_post.eot?4618166#iefix') format('embedded-opentype'),\n".
+								 "	   url('$fonturl/cat_post.woff2?4618166') format('woff2'),\n".
+								 "	   url('$fonturl/cat_post.woff?4618166') format('woff'),\n".
+								 "	   url('$fonturl/cat_post.ttf?4618166') format('truetype');\n".
+								 " font-weight: normal;\n".
+								 " font-style: normal;\n".
+								 "}\n";
+
+						$ret[] = '#'.$widget_id.' .cat-post-icon .cat-post-format-standard {opacity:0; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+						$ret[] = '#'.$widget_id.' .cat-post-icon:hover .cat-post-format-standard {opacity:1;}';
+
+						if ($settings["show_post_format"] == 'none') {
+							$ret[] = '#'.$widget_id.' .cat-post-thumbnail {position:relative}';
+							$ret[] = '#'.$widget_id.' .cat-post-icon .cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); '.
+										'font-size:14px; line-height:14px; padding:15px; border-radius:4px; background-color:rgba(0,0,0,.6); '. 
+										'top:calc(50% - 25px); left:calc(50% - 25px);}';
+						}
+
+						$ret[] = '#'.$widget_id." .cat-post-format-standard:before { content: '\\e806'; }";
 						break;
 				}
 			}		
