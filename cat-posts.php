@@ -1118,11 +1118,11 @@ class Widget extends \WP_Widget {
 					<label>
 						<?php _e('Thumbnail dimensions (in pixels)','category-posts'); ?><br />
 						<label for="<?php echo $this->get_field_id("thumb_w"); ?>">
-							<?php _e('Width:','category-posts')?> <input type="number" min="1" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo esc_attr($instance["thumb_w"]); ?>" />
+							<?php _e('Width:','category-posts')?> <input style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo esc_attr($instance["thumb_w"]); ?>" />
 						</label>
 						
 						<label for="<?php echo $this->get_field_id("thumb_h"); ?>">
-							<?php _e('Height:','category-posts')?> <input type="number" min="1" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo esc_attr($instance["thumb_h"]); ?>" />
+							<?php _e('Height:','category-posts')?> <input style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo esc_attr($instance["thumb_h"]); ?>" />
 						</label>
 					</label>
 				</p>
@@ -1378,7 +1378,7 @@ class Widget extends \WP_Widget {
         .cpwp_ident {
 			color: #6A6A6A;
 			background: #F1F1F1;
-			padding: 5px 10px;
+			padding: 5px;
         }
         .cpwp_ident > .cpwp_ident {
             border-left:5px solid #B3B3B3;
@@ -2185,7 +2185,7 @@ class virtualWidget {
 			$rules = array( // rules that should be applied to all widgets
 				'.cat-post-item img {max-width: initial; max-height: initial; margin: initial;}',
 				'.cat-post-author {margin-bottom: 0;}',
-				'.cat-post-thumbnail {margin: 5px 10px 5px 0; display: block;}',
+				'.cat-post-thumbnail {margin: 5px 10px 5px 0; display: table;}',
 				'.cat-post-item:before {content: ""; clear: both;}',
 			);
 			
