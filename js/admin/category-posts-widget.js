@@ -119,6 +119,17 @@
             }	
         },
 
+		toggleThumb: function(item) {
+            var value = jQuery(item).find("input").attr('checked');
+			var panel = item.parentElement.parentElement;
+            if (value == 'checked') {
+                jQuery(panel).find('.categoryposts-data-panel-thumb-settings').show();
+            }
+            else {
+                jQuery(panel).find('.categoryposts-data-panel-thumb-settings').hide();
+            }	
+        },
+
 		// Close all open panels if open
 		autoCloseOpenPanels: function(_this) {
 			if( categoryPosts.accordion  ) {
@@ -225,6 +236,10 @@ jQuery(document).ready( function () {
 	
 	jQuery('.'+class_namespace+'-hide_title').off('click').on('click', function () {
 		cwp_namespace.toggleHideTitle(this);
+	});
+	
+	jQuery('.'+class_namespace+'-thumb').off('click').on('click', function () {
+		cwp_namespace.toggleThumb(this);
 	});
 	
 	jQuery('.categoryposts-data-panel-filter-cat').on('change', function () { // for widgets page

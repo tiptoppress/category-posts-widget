@@ -1098,10 +1098,12 @@ class Widget extends \WP_Widget {
 	 */
     function formThumbnailPanel($instance) {
 		$instance = wp_parse_args( ( array ) $instance, array(
+			'thumb'						  => false,
 			'thumb_w'                     => get_option('thumbnail_size_w',150),
 			'thumb_h'                     => get_option('thumbnail_size_h',150),
 			'default_thunmbnail'          => 0,
         ));
+		$thumb                       = !empty($instance['thumb']);
 		$thumb_w                     = $instance['thumb_w'];
 		$thumb_h                     = $instance['thumb_h'];
 		$default_thunmbnail          = $instance['default_thunmbnail'];
@@ -1110,61 +1112,63 @@ class Widget extends \WP_Widget {
         <h4 data-panel="thumbnail"><?php _e('Thumbnails','category-posts')?></h4>
         <div>
  			<?php echo $this->get_checkbox_block_html($instance, 'thumb', __( 'Show post thumbnail','category-posts' ), false, true);?>
- 			<?php echo $this->get_checkbox_block_html($instance, 'thumbTop', __( 'Show thumbnails above text','category-posts' ), false, true);?>
-            <p>
-                <label>
-                    <?php _e('Thumbnail dimensions (in pixels)','category-posts'); ?><br />
-                    <label for="<?php echo $this->get_field_id("thumb_w"); ?>">
-                        <?php _e('Width:','category-posts')?> <input type="number" min="1" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo esc_attr($instance["thumb_w"]); ?>" />
-                    </label>
-                    
-                    <label for="<?php echo $this->get_field_id("thumb_h"); ?>">
-                        <?php _e('Height:','category-posts')?> <input type="number" min="1" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo esc_attr($instance["thumb_h"]); ?>" />
-                    </label>
-                </label>
-            </p>
- 			<?php echo $this->get_checkbox_block_html($instance, 'use_css_cropping', __( 'CSS crop to requested size','category-posts' ), false, true);?>
-			<?php echo $this->get_select_block_html($instance, 'thumb_hover', __( 'Animation on mouse hover:','category-posts' ), array(
-																'none' => __('None','category-posts'),
-																'dark' => __('Darker','category-posts'),
-																'white' => __('Brighter','category-posts'),
-																'scale' => __('Zoom in','category-posts'),
-																'blur' => __('Blur','category-posts'),
-																'icon' => __('Icon','category-posts'),
-																), 'none',true);?>			
-			<?php echo $this->get_select_block_html($instance, 'show_post_format', __( 'Indicate post format','category-posts' ), array(
-																'none' => __('None','category-posts'),
-																'topleft' => __('Top left','category-posts'),
-																'bottomleft' => __('Bottom left','category-posts'),
-																'ceter' => __('Center','category-posts'),
-																'topright' => __('Top right','category-posts'),
-																'bottomright' => __('Bottom right','category-posts'),
-																'nocss' => __('HTML without styling','category-posts'),
-																), 'none', true);?>
-            <p>
-                <label style="display:block">
-                    <?php _e( 'Default thumbnail: ','category-posts' ); ?>
-                </label>
-				<input type="hidden" class="default_thumb_id" id="<?php echo $this->get_field_id("default_thunmbnail"); ?>" name="<?php echo $this->get_field_name("default_thunmbnail"); ?>" value="<?php echo esc_attr($default_thunmbnail)?>"/>
-				<span class="default_thumb_img">
-					<?php
-						if (!$default_thunmbnail) 
-							_e('None','category-posts');
-						else {
-							$img = wp_get_attachment_image_src($default_thunmbnail);
-							echo '<img width="60" height="60" src="'.$img[0].'" />';
-						}
-					?>
-				</span>
-			</p>
-			<p>
-				<button type="button" class="cwp_default_thumb_select button upload-button">
-					<?php _e('Select image','category-posts')?>
-				</button>
-				<button type="button" class="cwp_default_thumb_remove button upload-button" <?php if (!$default_thunmbnail) echo 'style="display:none"' ?> >
-					<?php _e('No default','category-posts')?>
-				</button>
-            </p>					
+			<div class="cpwp_ident categoryposts-data-panel-thumb-settings"  <?php if (!$thumb) echo 'style="display:none"';?>>
+				<?php echo $this->get_checkbox_block_html($instance, 'thumbTop', __( 'Show thumbnails above text','category-posts' ), false, true);?>
+				<p>
+					<label>
+						<?php _e('Thumbnail dimensions (in pixels)','category-posts'); ?><br />
+						<label for="<?php echo $this->get_field_id("thumb_w"); ?>">
+							<?php _e('Width:','category-posts')?> <input type="number" min="1" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo esc_attr($instance["thumb_w"]); ?>" />
+						</label>
+						
+						<label for="<?php echo $this->get_field_id("thumb_h"); ?>">
+							<?php _e('Height:','category-posts')?> <input type="number" min="1" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo esc_attr($instance["thumb_h"]); ?>" />
+						</label>
+					</label>
+				</p>
+				<?php echo $this->get_checkbox_block_html($instance, 'use_css_cropping', __( 'CSS crop to requested size','category-posts' ), false, true);?>
+				<?php echo $this->get_select_block_html($instance, 'thumb_hover', __( 'Animation on mouse hover:','category-posts' ), array(
+																	'none' => __('None','category-posts'),
+																	'dark' => __('Darker','category-posts'),
+																	'white' => __('Brighter','category-posts'),
+																	'scale' => __('Zoom in','category-posts'),
+																	'blur' => __('Blur','category-posts'),
+																	'icon' => __('Icon','category-posts'),
+																	), 'none',true);?>			
+				<?php echo $this->get_select_block_html($instance, 'show_post_format', __( 'Indicate post format','category-posts' ), array(
+																	'none' => __('None','category-posts'),
+																	'topleft' => __('Top left','category-posts'),
+																	'bottomleft' => __('Bottom left','category-posts'),
+																	'ceter' => __('Center','category-posts'),
+																	'topright' => __('Top right','category-posts'),
+																	'bottomright' => __('Bottom right','category-posts'),
+																	'nocss' => __('HTML without styling','category-posts'),
+																	), 'none', true);?>
+				<p>
+					<label style="display:block">
+						<?php _e( 'Default thumbnail: ','category-posts' ); ?>
+					</label>
+					<input type="hidden" class="default_thumb_id" id="<?php echo $this->get_field_id("default_thunmbnail"); ?>" name="<?php echo $this->get_field_name("default_thunmbnail"); ?>" value="<?php echo esc_attr($default_thunmbnail)?>"/>
+					<span class="default_thumb_img">
+						<?php
+							if (!$default_thunmbnail) 
+								_e('None','category-posts');
+							else {
+								$img = wp_get_attachment_image_src($default_thunmbnail);
+								echo '<img width="60" height="60" src="'.$img[0].'" />';
+							}
+						?>
+					</span>
+				</p>
+				<p>
+					<button type="button" class="cwp_default_thumb_select button upload-button">
+						<?php _e('Select image','category-posts')?>
+					</button>
+					<button type="button" class="cwp_default_thumb_remove button upload-button" <?php if (!$default_thunmbnail) echo 'style="display:none"' ?> >
+						<?php _e('No default','category-posts')?>
+					</button>
+				</p>
+			</div>
        </div>
 <?php
     }
