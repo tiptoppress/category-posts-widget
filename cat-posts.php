@@ -2332,8 +2332,8 @@ class virtualWidget {
 								 " font-style: normal;\n".
 								 "}\n";
 
-						$ret[] = '#'.$widget_id.' .cat-post-icon .cat-post-format-standard {opacity:0; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-						$ret[] = '#'.$widget_id.' .cat-post-icon:hover .cat-post-format-standard {opacity:1;}';
+						$ret[] = '#'.$widget_id.' .cat-post-format-standard {opacity:0; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+						$ret[] = '#'.$widget_id.' .cat-post-thumbnail:hover .cat-post-format-standard {opacity:1;}';
 
 						if (isset($settings["show_post_format"]) && $settings["show_post_format"] == 'none') {
 							$ret[] = '#'.$widget_id.' .cat-post-thumbnail {position:relative}';
