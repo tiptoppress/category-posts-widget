@@ -1139,7 +1139,6 @@ class Widget extends \WP_Widget {
 																'ceter' => __('Center','category-posts'),
 																'topright' => __('Top right','category-posts'),
 																'bottomright' => __('Bottom right','category-posts'),
-																'nocss' => __('HTML without styling','category-posts'),
 																), 'none', true);?>
             <p>
                 <label style="display:block">
@@ -2221,7 +2220,7 @@ class virtualWidget {
 
 			// add post format css if needed 
 			if (isset( $settings["thumb"] ) && $settings["thumb"]) {
-				if (!isset( $settings["show_post_format"] ) || (($settings["show_post_format"] != 'none') && ($settings["show_post_format"] != 'nocss'))) {
+				if (!isset($settings["show_post_format"]) || $settings["show_post_format"] != 'none') {
 					static $fonts_added = false;	
 					
 					if (!$fonts_added) {
@@ -2332,7 +2331,7 @@ class virtualWidget {
 						$ret[] = '#'.$widget_id.' .cat-post-icon .cat-post-format-standard {opacity:0; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
 						$ret[] = '#'.$widget_id.' .cat-post-icon:hover .cat-post-format-standard {opacity:1;}';
 
-						if ($settings["show_post_format"] == 'none') {
+						if (isset($settings["show_post_format"]) && $settings["show_post_format"] == 'none') {
 							$ret[] = '#'.$widget_id.' .cat-post-thumbnail {position:relative}';
 							$ret[] = '#'.$widget_id.' .cat-post-icon .cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); '.
 										'font-size:14px; line-height:14px; padding:15px; border-radius:4px; background-color:rgba(0,0,0,.6); '. 
