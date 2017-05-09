@@ -2256,7 +2256,7 @@ class virtualWidget {
 					$rules[] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); '.
 								'font-size:14px; line-height:14px; padding:15px; border-radius:4px; background-color:rgba(0,0,0,.6); '.
 								$placement.'}';
-					}
+
 					$rules[] = ".cat-post-format-image:before { content: '\\e800'; }";
 					$rules[] = ".cat-post-format-video:before { content: '\\e801'; }";
 					$rules[] = ".cat-post-format-chat:before { content: '\\e802'; }";
