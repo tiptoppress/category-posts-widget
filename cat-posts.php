@@ -487,7 +487,7 @@ class Widget extends \WP_Widget {
 	 */
 	function show_thumb($instance,$no_link) {
         $ret = '';
-        
+
 		if ( isset( $instance["thumb"] ) && $instance["thumb"] &&
 			((isset($instance['default_thunmbnail']) && ($instance['default_thunmbnail']!= 0)) || has_post_thumbnail()) ) {
 
@@ -1102,11 +1102,13 @@ class Widget extends \WP_Widget {
 			'thumb_w'                     => get_option('thumbnail_size_w',150),
 			'thumb_h'                     => get_option('thumbnail_size_h',150),
 			'default_thunmbnail'          => 0,
+			'use_css_cropping'            => true,
         ));
 		$thumb                       = !empty($instance['thumb']);
 		$thumb_w                     = $instance['thumb_w'];
 		$thumb_h                     = $instance['thumb_h'];
 		$default_thunmbnail          = $instance['default_thunmbnail'];
+		$use_css_cropping            = $instance['use_css_cropping'];
 		
 ?>        
         <h4 data-panel="thumbnail"><?php _e('Thumbnails','category-posts')?></h4>
@@ -1126,7 +1128,7 @@ class Widget extends \WP_Widget {
 						</label>
 					</label>
 				</p>
-				<?php echo $this->get_checkbox_block_html($instance, 'use_css_cropping', __( 'CSS crop to requested size','category-posts' ), false, true);?>
+				<?php echo $this->get_checkbox_block_html($instance, 'use_css_cropping', __( 'CSS crop to requested size','category-posts' ), false, false);?>
 				<?php echo $this->get_select_block_html($instance, 'thumb_hover', __( 'Animation on mouse hover:','category-posts' ), array(
 																	'none' => __('None','category-posts'),
 																	'dark' => __('Darker','category-posts'),
@@ -1712,7 +1714,7 @@ function default_settings()  {
 				'thumbTop'                        => false,
 				'thumb_w'                         => get_option('thumbnail_size_w',150),
 				'thumb_h'                         => get_option('thumbnail_size_h',150),
-				'use_css_cropping'                => false,
+				'use_css_cropping'                => true,
 				'thumb_hover'                     => 'none',
 				'hide_post_titles'                => false,
 				'excerpt'                         => false,
@@ -2290,7 +2292,7 @@ class virtualWidget {
 																	   bigger (add to the padding) use only top for now */
 			}			
 		}
-		
+
 		if ((isset($settings['use_css_cropping']) && $settings['use_css_cropping']) || !$disable_css ) {
 			if (isset($settings['use_css_cropping']) && $settings['use_css_cropping'])
 				$ret[] = '#'.$widget_id.' .cat-post-crop {overflow: hidden; display:block}';
