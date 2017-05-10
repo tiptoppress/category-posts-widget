@@ -2344,7 +2344,7 @@ class virtualWidget {
 										'top:calc(50% - 25px); left:calc(50% - 25px);}';
 						}
 
-						$ret[] = '#'.$widget_id." .cat-post-format-standard:before { content: '\\e806'; }";
+						$ret[] = '#'.$widget_id." .cat-post-format-standard:before {padding:15px 16px; content: '\\e806'; }";
 						break;
 				}
 			}		
