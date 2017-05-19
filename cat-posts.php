@@ -1044,7 +1044,7 @@ class Widget extends \WP_Widget {
 			<div class="cpwp_ident categoryposts-data-panel-title-settings" <?php if ($hide_title) echo 'style="display:none"';?>>
 				<?php echo $this->get_text_input_block_html($instance, 'title',  __( 'Title','category-posts' ), '', __('Recent Posts','category-posts'), true);?>
 				<?php echo $this->get_checkbox_block_html($instance, 'title_link', __( 'Make widget title link','category-posts' ), false, $cat != 0);?>
-				<?php echo $this->get_text_input_block_html($instance, 'title_link_url', __( 'Title link URL','category-posts' ), '', __('URL or empty for no link','category-posts'), $cat == 0);?>
+				<?php echo $this->get_text_input_block_html($instance, 'title_link_url', __( 'Title link URL','category-posts' ), '', '', $cat == 0);?>
 			</div>
         </div>			
 <?php            
@@ -1423,7 +1423,7 @@ class Widget extends \WP_Widget {
 				<?php echo $this->get_checkbox_block_html($instance, 'excerpt', __( 'Show post excerpt','category-posts' ), false, true);?>
 				<div class="cpwp_ident categoryposts-data-panel-excerpt" style="display:<?php echo ((bool) $excerpt) ? 'block' : 'none'?>">
 					<?php echo $this->get_number_input_block_html($instance, 'excerpt_length', __( 'Excerpt length (in words):','category-posts' ), get_option('posts_per_page'), 1,55, true);?>
-					<?php echo $this->get_text_input_block_html($instance, 'excerpt_more_text',  __( 'Excerpt \'more\' text:','category-posts' ), '', __('... more','category-posts'), true);?>
+					<?php echo $this->get_text_input_block_html($instance, 'excerpt_more_text',  __( 'Excerpt \'more\' text:','category-posts' ), '', __('[...]','category-posts'), true);?>
 					<?php echo $this->get_checkbox_block_html($instance, 'excerpt_filters', __( 'Don\'t override Themes and plugin filters','category-posts' ), false, true);?>
 				</div>
 				<?php echo $this->get_checkbox_block_html($instance, 'date', __( 'Show post date','category-posts' ), false, true);?>
@@ -1456,8 +1456,8 @@ class Widget extends \WP_Widget {
 			</div>
 			<h4 data-panel="footer"><?php _e('Footer','category-posts')?></h4>
 			<div>
-				<?php echo $this->get_text_input_block_html($instance, 'footer_link_text',  __( 'Footer link text','category-posts' ), '', __( '... more by this topic','category-posts' ), true);?>
-				<?php echo $this->get_text_input_block_html($instance, 'footer_link',  __( 'Footer link URL','category-posts' ), '', __( '... URL of more link','category-posts' ), $cat == 0);?>
+				<?php echo $this->get_text_input_block_html($instance, 'footer_link_text',  __( 'Footer link text','category-posts' ), '', '', true);?>
+				<?php echo $this->get_text_input_block_html($instance, 'footer_link',  __( 'Footer link URL','category-posts' ), '', '', $cat == 0);?>
 			</div>
             <p><a href="<?php echo get_edit_user_link().'#'.__NAMESPACE__ ?>"><?php _e('Widget admin behaviour settings','category-posts')?></a></p>			
             <p><a target="_blank" href="<?php echo DOC_URL ?>"><?php _e('Documentation','category-posts'); ?></a></p>
@@ -1697,7 +1697,7 @@ function shortcode_names($shortcode_name,$content) {
  */
 function default_settings()  {
     return array(
-				'title'                           => '',
+				'title'                           => __('Recent Posts','category-posts'),
 				'title_link'                      => false,
 				'title_link_url'                  => '',
 				'hide_title'                      => false,
@@ -1719,7 +1719,7 @@ function default_settings()  {
 				'hide_post_titles'                => false,
 				'excerpt'                         => false,
 				'excerpt_length'                  => 55,
-				'excerpt_more_text'               => '',
+				'excerpt_more_text'               => __('[...]','category-posts'),
 				'excerpt_filters'	              => false,
 				'comment_num'                     => false,
 				'author'                          => false,
