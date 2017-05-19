@@ -1424,7 +1424,7 @@ class Widget extends \WP_Widget {
 				<?php echo $this->get_checkbox_block_html($instance, 'excerpt', __( 'Show post excerpt','category-posts' ), false, true);?>
 				<div class="cpwp_ident categoryposts-data-panel-excerpt" style="display:<?php echo ((bool) $excerpt) ? 'block' : 'none'?>">
 					<?php echo $this->get_number_input_block_html($instance, 'excerpt_length', __( 'Excerpt length (in words):','category-posts' ), get_option('posts_per_page'), 1,55, true);?>
-					<?php echo $this->get_text_input_block_html($instance, 'excerpt_more_text',  __( 'Excerpt \'more\' text:','category-posts' ), '', __('[...]','category-posts'), true);?>
+					<?php echo $this->get_text_input_block_html($instance, 'excerpt_more_text',  __( 'Excerpt \'more\' text:','category-posts' ), '', __('...','category-posts'), true);?>
 					<?php echo $this->get_checkbox_block_html($instance, 'excerpt_filters', __( 'Don\'t override Themes and plugin filters','category-posts' ), false, true);?>
 				</div>
 				<?php echo $this->get_checkbox_block_html($instance, 'date', __( 'Show post date','category-posts' ), false, true);?>
