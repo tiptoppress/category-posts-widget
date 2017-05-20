@@ -212,43 +212,48 @@ jQuery(document).ready( function () {
 					.next().stop().show();
             }
         }
+		
+		setChangeHandlers();
 	});	
 
-	jQuery('.cwp_default_thumb_select').off('click').on('click', function () { // select default thumb
-		cwp_namespace.defaultThumbnailSelection(this, cwp_default_thumb_selection.frame_title,cwp_default_thumb_selection.button_title);
-	});
+	function setChangeHandlers() {
+		jQuery('.cwp_default_thumb_select').off('click').on('click', function () { // select default thumb
+			cwp_namespace.defaultThumbnailSelection(this, cwp_default_thumb_selection.frame_title,cwp_default_thumb_selection.button_title);
+		});
 
-	jQuery('.cwp_default_thumb_remove').off('click').on('click', function () { // remove default thumb
-		cwp_namespace.removeDefaultThumbnailSelection(this);
-	});
+		jQuery('.cwp_default_thumb_remove').off('click').on('click', function () { // remove default thumb
+			cwp_namespace.removeDefaultThumbnailSelection(this);
+		});
+		
+		jQuery('.'+class_namespace+'-excerpt').off('click').on('click', function () { 
+			cwp_namespace.toggleExcerptPanel(this);
+		});
+		
+		jQuery('.'+class_namespace+'-date').off('click').on('click', function () { 
+			cwp_namespace.toggleDatePanel(this);
+		});
+		
+		jQuery('.'+class_namespace+'-assigned_categories').off('click').on('click', function () {
+			cwp_namespace.toggleAssignedCategoriesTop(this);
+		});
+		
+		jQuery('.'+class_namespace+'-hide_title').off('click').on('click', function () {
+			cwp_namespace.toggleHideTitle(this);
+		});
+		
+		jQuery('.'+class_namespace+'-thumb').off('click').on('click', function () {
+			cwp_namespace.toggleThumb(this);
+		});
+		
+		jQuery('.categoryposts-data-panel-filter-cat').on('change', function () { // for widgets page
+			cwp_namespace.toggleFooterLinkUrl(this);
+		});
+		
+		jQuery('.categoryposts-data-panel-date-preset-format').on('change', function () { // change date format
+			cwp_namespace.toggleDateFormat(this);
+		});
+	}
 	
-	jQuery('.'+class_namespace+'-excerpt').off('click').on('click', function () { 
-		cwp_namespace.toggleExcerptPanel(this);
-	});
-	
-	jQuery('.'+class_namespace+'-date').off('click').on('click', function () { 
-		cwp_namespace.toggleDatePanel(this);
-	});
-	
-	jQuery('.'+class_namespace+'-assigned_categories').off('click').on('click', function () {
-		cwp_namespace.toggleAssignedCategoriesTop(this);
-	});
-	
-	jQuery('.'+class_namespace+'-hide_title').off('click').on('click', function () {
-		cwp_namespace.toggleHideTitle(this);
-	});
-	
-	jQuery('.'+class_namespace+'-thumb').off('click').on('click', function () {
-		cwp_namespace.toggleThumb(this);
-	});
-	
-	jQuery('.categoryposts-data-panel-filter-cat').on('change', function () { // for widgets page
-		cwp_namespace.toggleFooterLinkUrl(this);
-	});
-	
-	jQuery('.categoryposts-data-panel-date-preset-format').on('change', function () { // change date format
-		cwp_namespace.toggleDateFormat(this);
-	});
-	
+	setChangeHandlers();
 });
 
