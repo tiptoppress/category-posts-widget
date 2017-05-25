@@ -651,32 +651,40 @@ class Widget extends \WP_Widget {
 	function footerHTML($instance) {
 
 		$ret = "";
-		if (isset ( $instance["footer_link"] ) && !empty ( $instance["footer_link"] )) {
-			if (empty($instance["footer_link_text"]))
-				$instance["footer_link_text"] = $instance["footer_link"];
-			$ret = "<a";
-			if( !(isset( $instance['disable_css'] ) && $instance['disable_css'])) { 
-				$ret.= " class=\"cat-post-footer-link\""; 
-			}
-			if (isset($instance["cat"]) && ($instance["cat"] != 0) && (get_category($instance["cat"]) != null) ) {
-				$ret .= " href=\"" . get_category_link($instance["cat"]) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
-			} else {
-				// link to posts page if category not found. 
-				// this maybe the blog page or home page
-				if( isset ( $instance["footer_link"] ) && !empty ( $instance["footer_link"] ) ) {
-					$ret .= " href=\"" . esc_url($instance["footer_link"]) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
-				} else {
-					$blog_page = get_option('page_for_posts');
-					if ($blog_page)
-						$ret .= " href=\"" . get_permalink($blog_page) . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
-					else
-						$ret .= " href=\"" . home_url() . "\">" . esc_html($instance["footer_link_text"]) . "</a>";
-				}
+		$url = '';
+		$text = '';
+		
+		if (isset ( $instance["footer_link"] ))
+			$url = $instance["footer_link"];
+		
+		if (isset ( $instance["footer_link_text"] ))
+			$text = $instance["footer_link_text"];
+
+		// if url is set, but no text, just use the url as text
+		if (empty($text) && !empty($url))
+			$text = $url;
+		
+		// if no url is set but just text, assume the url should be to the relevant archive page
+		// category archive for categories filter and home page or blog page when "all categories"
+		// is used
+		if (!empty($text) && empty($url)) {
+			if (isset($instance["cat"]) && ($instance["cat"] != 0) && (get_category($instance["cat"]) != null) )
+				$url = get_category_link($instance["cat"]);
+			else {
+				$blog_page = get_option('page_for_posts');
+				if ($blog_page)
+					$url = get_permalink($blog_page);
+				else
+					$url = home_url();
 			}
 		}
+		
+		if (!empty($url))
+			$ret .= '<a class="cat-post-footer-link" href="' . esc_url($url) . '">' . esc_html($text) . '</a>';
+		
 		return $ret;
 	}
-
+	
 	/**
 	 * Calculate the HTML for a post item based on the widget settings and post.
      * Expected to be called in an active loop with all the globals set
