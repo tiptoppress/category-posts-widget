@@ -58,16 +58,14 @@
         },
 		
 		// Show hide foote link URL
-		toggleFooterLinkUrl: function(item) {
+		toggleCatSelection: function(item) {
             var cat = jQuery(item).find("option:selected").attr('value');
 			var panel = item.parentElement.parentElement.parentElement.parentElement;
             if(cat == '0') {
-                jQuery(panel).find('.categoryPosts-footer_link').show();
 				jQuery(panel).find('.categoryPosts-title_link').hide();
 				jQuery(panel).find('.categoryPosts-title_link_url').show();
             }
             else {
-                jQuery(panel).find('.categoryPosts-footer_link').hide();
 				jQuery(panel).find('.categoryPosts-title_link').show();
 				jQuery(panel).find('.categoryPosts-title_link_url').hide();
             }	
@@ -245,8 +243,8 @@ jQuery(document).ready( function () {
 			cwp_namespace.toggleThumb(this);
 		});
 		
-		jQuery('.categoryposts-data-panel-filter-cat').on('change', function () { // for widgets page
-			cwp_namespace.toggleFooterLinkUrl(this);
+		jQuery('.categoryposts-data-panel-filter-cat').on('change', function () { // change category filter
+			cwp_namespace.toggleCatSelection(this);
 		});
 		
 		jQuery('.categoryposts-data-panel-date-preset-format').on('change', function () { // change date format

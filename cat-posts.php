@@ -1467,7 +1467,7 @@ class Widget extends \WP_Widget {
 			<h4 data-panel="footer"><?php _e('Footer','category-posts')?></h4>
 			<div>
 				<?php echo $this->get_text_input_block_html($instance, 'footer_link_text',  __( 'Footer link text','category-posts' ), '', '', true);?>
-				<?php echo $this->get_text_input_block_html($instance, 'footer_link',  __( 'Footer link URL','category-posts' ), '', '', $cat == 0);?>
+				<?php echo $this->get_text_input_block_html($instance, 'footer_link',  __( 'Footer link URL','category-posts' ), '', '', true);?>
 			</div>
             <p><a href="<?php echo get_edit_user_link().'#'.__NAMESPACE__ ?>"><?php _e('Widget admin behaviour settings','category-posts')?></a></p>			
             <p><a target="_blank" href="<?php echo DOC_URL ?>"><?php _e('Documentation','category-posts'); ?></a></p>
