@@ -672,6 +672,29 @@ class Widget extends \WP_Widget {
 	}
 	
 	/**
+	 *  Convert pre 4.8 settings into template
+	 *  
+	 *  @since 4.8
+	 */
+	function convert_settings_to_template($instance) {
+		if( !(isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'])) { 
+			$template .= '%title%';
+		}
+		if ( isset( $instance['date']) && $instance['date']) {
+			$template .= '\n\n%date%\n\n';
+		}
+		if ( isset( $instance['excerpt'] ) && $instance['excerpt']) {
+			$template .= '%excerpt%';
+		}
+		if ( isset( $instance['comment_num'] ) && $instance['comment_num']) {
+			$template .= '\n\n%commentnum%\n\n';
+		}
+		if ( isset( $instance['author'] ) && $instance['author']) {
+			$template .= '\n\n%author%\n\n';
+		}	
+	}
+	
+	/**
 	 * Calculate the HTML for a post item based on the widget settings and post.
      * Expected to be called in an active loop with all the globals set
 	 *
@@ -687,6 +710,12 @@ class Widget extends \WP_Widget {
         
 		$everything_is_link = isset($instance['everything_is_link']) && $instance['everything_is_link'];
 		
+		$template = '';
+		if (isset($instance['template']))
+			$template = $instance['template'];
+		else {
+			$template = $this->convert_settings_to_template($instance);
+		}
         $ret = '<li ';
                     
 		// Current post
@@ -1244,6 +1273,35 @@ class Widget extends \WP_Widget {
 	}
 	
 	/**
+	 * generate a form P element containing a textarea input
+	 *
+	 * @since 4.8
+	 * @param array		$instance	The instance
+	 ^ @param string	$key		The key in the instance array
+	 * @param string	$label		The label to display and associate with the input
+	 * @param int		$default	The value to use if the key is not set in the instance
+	 * @param string	$placeholder	The placeholder to use in the input
+	 * @param bool		$visible	Indicates if the element should be visible when rendered
+	 *
+	 * @return string HTML a P element contaning the input, its label, class based on the key 
+	 *					and style set to display:none if visibility is off.
+	 */
+	private function get_textarea_html($instance, $key, $label, $default, $placeholder, $visible) {
+		
+		$value = $default;
+		
+		if (isset($instance[$key]))
+			$value = $instance[$key];
+		
+		$ret = '<label for="'.$this->get_field_id($key).'">'.esc_html($label)."</label>\n".
+					'<textarea placeholder="'.esc_attr($placeholder).'" id="'. $this->get_field_id($key).'" name="'. $this->get_field_name($key).'" type="text" autocomplete="off">'.esc_textarea($value).'</textarea>'."\n".
+				"\n";
+
+				
+		return $this->get_wrap_block_html($ret, $key, $visible);
+	}
+
+	/**
 	 * generate a form P element containing a text input
 	 *
 	 * @since 4.8
@@ -1265,7 +1323,7 @@ class Widget extends \WP_Widget {
 			$value = $instance[$key];
 		
 		$ret = '<label for="'.$this->get_field_id($key)."\">\n".
-					$label.
+					esc_html($label).
 					'<input placeholder="'.esc_attr($placeholder).'" id="'. $this->get_field_id($key).'" name="'. $this->get_field_name($key).'" type="text" value="'. esc_attr($value).'" autocomplete="off"/>'."\n".
 				"</label>\n";
 
@@ -1302,7 +1360,7 @@ class Widget extends \WP_Widget {
 			$minmax .= ' max="'.$max.'"';
 		
 		$ret = '<label for="'.$this->get_field_id($key)."\">\n".
-					$label.
+					esc_html($label).
 					'<input placeholder="'.$placeholder.'" id="'. $this->get_field_id($key).'" name="'. $this->get_field_name($key).'" type="number"'.$minmax.' value="'. esc_attr($value).'" autocomplete="off" />'."\n".
 				"</label>\n";
 				
@@ -1334,7 +1392,7 @@ class Widget extends \WP_Widget {
 
 		$ret = '<label for="'.$this->get_field_id($key)."\">\n".
 					'<input id="'. $this->get_field_id($key).'" name="'. $this->get_field_name($key).'" type="checkbox" '. checked($value,true,false).' autocomplete="off"/>'."\n".
-					$label.
+					esc_html($label).
 				"</label>\n";
 				
 		return $this->get_wrap_block_html($ret, $key, $visible);
@@ -1455,6 +1513,13 @@ class Widget extends \WP_Widget {
 					<?php echo $this->get_checkbox_block_html($instance, 'assigned_cat_top', __( 'Show above the excerpt','category-posts' ), false, true);?>
 				</div>
 				<?php echo $this->get_checkbox_block_html($instance, 'assigned_tags', __( 'Show assigned Tags','category-posts' ), false, true);?>
+				<?php 
+					$template = '';
+					if (!isset($instance['template'])) {
+						$template = $this->convert_settings_to_template($instance);
+					}
+					echo $this->get_textarea_html($instance, 'template', __( 'Template','category-posts' ), '', $template, true);
+				?>
 			</div>
 			<h4 data-panel="general"><?php _e('General','category-posts')?></h4>
 			<div>
@@ -1748,6 +1813,7 @@ function default_settings()  {
 				'everything_is_link'			  => false,
 				'preset_date_format'              => 'sitedateandtime',
 				'date_template'                   => '%date%',
+				'template'                   	  => '%title%',
 				);
 }
 
