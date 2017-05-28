@@ -693,6 +693,217 @@ class Widget extends \WP_Widget {
 			$template .= '\n\n%author%\n\n';
 		}	
 	}
+
+	/**
+	 * Current post item date string based on the format requested in the settings
+	 *  
+	 * @param  array $instance Array which contains the various settings
+	 * @param  bool $everything_is_link Indicates whether the return string should avoid links
+	 *
+	 * @since 4.8
+	 */
+    function itemDate($instance, $everything_is_link) {
+		$ret = '';
+		
+		if (!isset($instance['preset_date_format']))
+			$preset_date_format = 'other';
+		else
+			$preset_date_format = $instance['preset_date_format'];
+		switch ($preset_date_format) {
+			case 'sitedateandtime' : $date = get_the_time(get_option('date_format').' '.get_option('time_format'));
+				break;
+			case 'sitedate' : $date = get_the_time(get_option('date_format'));
+				break;
+			case 'sincepublished' : $date = human_time_diff( get_the_time('U'), current_time( 'timestamp' ) );
+				break;
+			default :
+				if ( isset( $instance['date_format'] ) && strlen( trim( $instance['date_format'] ) ) > 0 ) { 
+					$date_format = $instance['date_format']; 
+				} else {
+					$date_format = "j M Y"; 
+				} 
+				$date = get_the_time($date_format);
+				break;
+		}
+		$ret .= '<p class="cat-post-date">';
+		if ( isset ( $instance["date_link"] ) && $instance["date_link"] && !$everything_is_link) { 
+			$ret .= '<a href="'.\get_the_permalink().'">';
+		}
+		if (isset($instance['date_template']))
+			$ret .= str_replace('%date%',$date,$instance['date_template']);
+		else
+			$ret .= $date;
+		if ( isset ( $instance["date_link"] ) && $instance["date_link"] && !$everything_is_link ) { 
+			$ret .= '</a>';
+		}
+		$ret .= '</p>';
+		return $ret;
+	}
+	
+	/**
+	 * Current post item categories string
+	 *  
+	 * @param  array $instance Array which contains the various settings
+	 * @param  bool $everything_is_link Indicates whether the return string should avoid links
+	 *
+	 * @since 4.8
+	 */
+    function itemCategories($instance, $everything_is_link) {
+		
+		$ret = '<span class="cat-post-tax-category">';
+		$catIDs = wp_get_post_categories($post->ID, array('number'=>0));
+		foreach ($catIDs as $catID) {
+			if ($everything_is_link)
+				$ret .= " " . get_cat_name($catID) . "";
+			else			
+				$ret .= " <a href='" . get_category_link($catID) . "'>" . get_cat_name($catID) . "</a>";
+		}
+		$ret .= "</span>";
+		return $ret;
+	}
+	
+	/**
+	 * Current post item tags string
+	 *  
+	 * @param  array $instance Array which contains the various settings
+	 * @param  bool $everything_is_link Indicates whether the return string should avoid links
+	 *
+	 * @since 4.8
+	 */
+    function itemTags($instance, $everything_is_link) {
+		
+		$ret .= '<span class="cat-post-tax-post_tag">';
+		$tagIDs = wp_get_post_tags(get_the_ID(), array('number'=>0));
+		foreach ($tagIDs as $tagID) {
+			if ($everything_is_link)
+				$ret .= " " . $tagID->name;
+			else
+				$ret .= " <a href='" . get_tag_link($tagID->term_id) . "'>" . $tagID->name . "</a>";
+		}
+		$ret .= "</span>";
+		return $ret;
+	}
+	
+	/**
+	 * Current post item comment number string
+	 *  
+	 * @param  array $instance Array which contains the various settings
+	 * @param  bool $everything_is_link Indicates whether the return string should avoid links
+	 *
+	 * @since 4.8
+	 */
+    function itemCommentNum($instance, $everything_is_link) {
+		
+		$ret = '<span class="cat-post-comment-num">';
+		
+		if ($everything_is_link) {
+			$ret .= '('.\get_comments_number().')';
+		} else {
+			$link = sprintf(
+				'<a href="%1$s" title="%2$s">(%3$d)</a>',
+				esc_url( get_comments_link($post->ID) ),
+				esc_attr( sprintf( __( '(%d) comments to this post' ), get_comments_number() ) ),
+				get_comments_number()
+			);
+			$ret .= $link;
+		}
+		
+		$ret .= '</span>';
+		return $ret;
+	}
+	
+	/**
+	 * Current post item author string
+	 *  
+	 * @param  array $instance Array which contains the various settings
+	 * @param  bool $everything_is_link Indicates whether the return string should avoid links
+	 *
+	 * @since 4.8
+	 */
+    function itemAuthor($instance, $everything_is_link) {
+		
+		$ret .= '<span class="cat-post-author">'; 
+		global $authordata;
+		if ($everything_is_link) {
+			$ret .= get_the_author();
+		} else {
+			$link = sprintf(
+				'<a href="%1$s" title="%2$s" rel="author">%3$s</a>',
+				esc_url( get_author_posts_url( $authordata->ID, $authordata->user_nicename ) ),
+				esc_attr( sprintf( __( 'Posts by %s' ), get_the_author() ) ),
+				get_the_author()
+			);
+			$ret .= $link;
+		}
+		$ret .= '</span>';
+		return $ret;
+	}
+	
+	/**
+	 * Current post item excerpt string
+	 *  
+	 * @param  array $instance Array which contains the various settings
+	 * @param  bool $everything_is_link Indicates whether the return string should avoid links
+	 *
+	 * @since 4.8
+	 */
+    function itemExcerpt($instance, $everything_is_link) {
+		
+		// use the_excerpt filter to get the "normal" excerpt of the post
+		// then apply our filter to let users customize excerpts in their own way
+		if (isset($instance['excerpt_length']) && ($instance['excerpt_length'] > 0))
+			$length = (int) $instance['excerpt_length'];
+		else 
+			$length = 55; // use default
+
+		if (!isset($instance['excerpt_filters']) || $instance['excerpt_filters']) { // pre 4.7 widgets has filters on
+			$excerpt = apply_filters('the_excerpt', \get_the_excerpt() );
+		} else { // if filters off replicate functionality of core generating excerpt
+			$more_text = '[&hellip;]';
+			if( isset($instance["excerpt_more_text"]) && $instance["excerpt_more_text"] )
+				$more_text = ltrim($instance["excerpt_more_text"]);
+
+			if ($everything_is_link)
+				$excerpt_more_text = ' <span class="cat-post-excerpt-more">'.$more_text.'</span>';
+			else
+				$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
+			if ($post->post_excerpt == '') {
+				$text = get_the_content('');
+				$text = strip_shortcodes( $text );
+				$excerpt = \wp_trim_words( $text, $length, $excerpt_more_text );
+				// adjust html output same way as for the normal excerpt, 
+				// just force all functions depending on the_excerpt hook
+				$excerpt = shortcode_unautop(wpautop(convert_chars(convert_smilies(wptexturize($excerpt)))));
+			} else {
+				$excerpt = $post->post_excerpt.$excerpt_more_text;
+				$excerpt = shortcode_unautop(wpautop(convert_chars(convert_smilies(wptexturize($excerpt)))));					
+			}
+		}
+		$ret = apply_filters('cpw_excerpt',$excerpt, $this);
+		return $ret;
+	}
+	
+	/**
+	 * Current post item title string
+	 *  
+	 * @param  array $instance Array which contains the various settings
+	 * @param  bool $everything_is_link Indicates whether the return string should avoid links
+	 *
+	 * @since 4.8
+	 */
+    function itemTitle($instance, $everything_is_link) {
+		
+		$ret = '';
+		
+		if ($everything_is_link) {
+			$ret .= '<span class="cat-post-title">'.get_the_title().'</span>';
+		} else {
+			$ret .= '<a class="cat-post-title"'; 
+			$ret .= ' href="'.get_the_permalink().'" rel="bookmark">'.get_the_title();
+			$ret .= '</a>';
+		}
+		return $ret;
+	}
 	
 	/**
 	 * Calculate the HTML for a post item based on the widget settings and post.
@@ -736,172 +947,33 @@ class Widget extends \WP_Widget {
         }
 
 		// Title
-        if( !(isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'])) { 
-			if ($everything_is_link) {
-				$ret .= '<span class="cat-post-title">'.get_the_title().'</span>';
-			} else {
-				$ret .= '<a class="cat-post-title"'; 
-				$ret .= ' href="'.get_the_permalink().'" rel="bookmark">'.get_the_title();
-				$ret .= '</a> ';
-			}
-        }
 		
-		// Categories position to top
-		if (isset($instance["assigned_cat_top"]) && $instance["assigned_cat_top"]) {
-			if (isset( $instance['assigned_categories'] ) && $instance['assigned_categories']) {
-				$ret .= '<p class="cat-post-category">';
-				$catIDs = wp_get_post_categories($post->ID, array('number'=>0));
-				foreach ($catIDs as $catID) {
-					if ($everything_is_link)
-						$ret .= '<span>' . get_cat_name($catID) . '</span>';
-					else			
-						$ret .= '<a href="' . get_category_link($catID) . '">' . get_cat_name($catID) . '</a>';
-				}
-				$ret .= "</p>";
+		$widget = $this;
+		$ret .= preg_replace_callback($this->get_template_regex(), function ($matches) use ($widget, $instance,$everything_is_link) {
+			switch ($matches[0]) {
+				case '%title%' : return $widget->itemTitle($instance,$everything_is_link);
+					break;
+				case '%author%' : return $widget->itemAuthor($instance,$everything_is_link);
+					break;
+				case '%commentnum%' : return $widget->itemCommentNum($instance,$everything_is_link);
+					break;
+				case '%date%' : return $widget->itemDate($instance,$everything_is_link);
+					break;
+				case '%post_tag%' : return $widget->itemTags($instance,$everything_is_link);
+					break;
+				case '%category%' : return $widget->itemCategory($instance,$everything_is_link);
+					break;
+				case '%excerpt%' : return $widget->itemExcerpt($instance,$everything_is_link);
+					break;
+				return $matches[0];
 			}
-		}
-
-		// Date
-        if ( isset( $instance['date']) && $instance['date']) {
-			if (!isset($instance['preset_date_format']))
-				$preset_date_format = 'other';
-			else
-				$preset_date_format = $instance['preset_date_format'];
-			switch ($preset_date_format) {
-				case 'sitedateandtime' : $date = get_the_time(get_option('date_format').' '.get_option('time_format'));
-					break;
-				case 'sitedate' : $date = get_the_time(get_option('date_format'));
-					break;
-				case 'sincepublished' : $date = human_time_diff( get_the_time('U'), current_time( 'timestamp' ) );
-					break;
-				default :
-					if ( isset( $instance['date_format'] ) && strlen( trim( $instance['date_format'] ) ) > 0 ) { 
-						$date_format = $instance['date_format']; 
-					} else {
-						$date_format = "j M Y"; 
-					} 
-					$date = get_the_time($date_format);
-					break;
-			}
-            $ret .= '<p class="cat-post-date">';
-            if ( isset ( $instance["date_link"] ) && $instance["date_link"] && !$everything_is_link) { 
-                $ret .= '<a href="'.\get_the_permalink().'">';
-            }
-			if (isset($instance['date_template']))
-				$ret .= str_replace('%date%',$date,$instance['date_template']);
-			else
-				$ret .= $date;
-            if ( isset ( $instance["date_link"] ) && $instance["date_link"] && !$everything_is_link ) { 
-                $ret .= '</a>';
-            }
-            $ret .= '</p>';
-        }
-
+		},$template);
+		
         // Thumbnail position normal
         if( !(isset( $instance["thumbTop"] ) && $instance["thumbTop"])) {
             $ret .= $this->show_thumb($instance,$everything_is_link);
         }
-
-		// Excerpt
-        if ( isset( $instance['excerpt'] ) && $instance['excerpt']) {
-            // use the_excerpt filter to get the "normal" excerpt of the post
-            // then apply our filter to let users customize excerpts in their own way
-            if (isset($instance['excerpt_length']) && ($instance['excerpt_length'] > 0))
-                $length = (int) $instance['excerpt_length'];
-            else 
-                $length = 55; // use default
-
-			if (!isset($instance['excerpt_filters']) || $instance['excerpt_filters']) { // pre 4.7 widgets has filters on
-				$excerpt = apply_filters('the_excerpt', \get_the_excerpt() );
-			} else { // if filters off replicate functionality of core generating excerpt
-				$more_text = '[&hellip;]';
-				if( isset($instance["excerpt_more_text"]) && $instance["excerpt_more_text"] )
-					$more_text = ltrim($instance["excerpt_more_text"]);
-
-				if ($everything_is_link)
-					$excerpt_more_text = ' <span class="cat-post-excerpt-more">'.$more_text.'</span>';
-				else
-					$excerpt_more_text = ' <a class="cat-post-excerpt-more" href="'. get_permalink() . '" title="'.sprintf(__('Continue reading %s'),get_the_title()).'">' . $more_text . '</a>';
-				if ($post->post_excerpt == '') {
-					$text = get_the_content('');
-					$text = strip_shortcodes( $text );
-					$excerpt = \wp_trim_words( $text, $length, $excerpt_more_text );
-					// adjust html output same way as for the normal excerpt, 
-					// just force all functions depending on the_excerpt hook
-					$excerpt = shortcode_unautop(wpautop(convert_chars(convert_smilies(wptexturize($excerpt)))));
-				} else {
-					$excerpt = $post->post_excerpt.$excerpt_more_text;
-					$excerpt = shortcode_unautop(wpautop(convert_chars(convert_smilies(wptexturize($excerpt)))));					
-				}
-			}
-			$ret .= apply_filters('cpw_excerpt',$excerpt, $this);
-        }
-
-		// Comments
-        if ( isset( $instance['comment_num'] ) && $instance['comment_num']) {
-            $ret .= '<p class="cat-post-comment-num">';
-			
-			if ($everything_is_link) {
-				$ret .= '('.\get_comments_number().')';
-			} else {
-				$link = sprintf(
-					'<a href="%1$s" title="%2$s">(%3$d)</a>',
-					esc_url( get_comments_link($post->ID) ),
-					esc_attr( sprintf( __( '(%d) comments to this post' ), get_comments_number() ) ),
-					get_comments_number()
-				);
-				$ret .= $link;
-			}
-			
-            $ret .= '</p>';
-        }
-
-		// Author
-        if (isset( $instance['author'] ) && $instance['author']) {
-            $ret .= '<p class="cat-post-author">'; 
-            global $authordata;
-			if ($everything_is_link) {
-				$ret .= get_the_author();
-			} else {
-				$link = sprintf(
-					'<a href="%1$s" title="%2$s" rel="author">%3$s</a>',
-					esc_url( get_author_posts_url( $authordata->ID, $authordata->user_nicename ) ),
-					esc_attr( sprintf( __( 'Posts by %s' ), get_the_author() ) ),
-					get_the_author()
-				);
-				$ret .= $link;
-			}
-            $ret .= '</p>';
-        }
 		
-		// Categories position normal
-		if( !(isset( $instance["assigned_cat_top"] ) && $instance["assigned_cat_top"])) {
-			if (isset( $instance['assigned_categories'] ) && $instance['assigned_categories']) {
-				$ret .= '<p class="cat-post-category">';
-				$catIDs = wp_get_post_categories($post->ID, array('number'=>0));
-				foreach ($catIDs as $catID) {
-					if ($everything_is_link)
-						$ret .= " <span>" . get_cat_name($catID) . " </span>";
-					else			
-						$ret .= " <a href='" . get_category_link($catID) . "'>" . get_cat_name($catID) . "</a> ";
-				}
-				$ret .= "</p>";
-			}
-		}
-
-		// Tags
-		if (isset( $instance['assigned_tags'] ) && $instance['assigned_tags']) {	
-            $ret .= '<p class="cat-post-tag">';
-			$tagIDs = wp_get_post_tags($post->ID, array('number'=>0));
-			foreach ($tagIDs as $tagID) {
-				if ($everything_is_link)
-					$ret .= " <span>" . $tagID->name . "</span> ";
-				else
-					$ret .= " <a href='" . get_tag_link($tagID->term_id) . "'>" . $tagID->name . "</a> ";
-			}
-			$ret .= "</p>";
-		}
-
 		if ($everything_is_link) {
 			$ret .= '</a>';
 		}
@@ -1213,7 +1285,23 @@ class Widget extends \WP_Widget {
        </div>
 <?php
     }
-    
+
+	/**
+	 *  Get a regex to parse the template in order to find the tags used in it
+	 */
+	 function get_template_regex() {
+		 $tags = array('author', 'title', 'date', 'excerpt', 'commentnum', 'post_tag','category');
+		 
+		 $regexp = '';
+		 foreach ($tags as $t) {
+			 if (!empty($regexp))
+				 $regexp .= '|';
+			$regexp .= '%'.$t.'%';
+		 }
+		 $regexp = '@('.$regexp.')@i';
+		 return $regexp;
+	 }
+	 
 	/**
 	 * generate the wrapper P around a form input element
 	 *
@@ -1470,6 +1558,15 @@ class Widget extends \WP_Widget {
 			width:5em;
 			text-align:center;
 		}
+		
+		.categoryposts-template-help th {
+			text-align:start;
+			font-weight:bold;
+		}
+		
+		.categoryposts-template-help td {
+			padding:2px;
+		}
         </style>
 
         <?php
@@ -1487,39 +1584,82 @@ class Widget extends \WP_Widget {
 			<h4 data-panel="details"><?php _e('Post details','category-posts')?></h4>
 			<div>
 				<?php echo $this->get_checkbox_block_html($instance, 'everything_is_link', __( 'Everything is a link','category-posts' ), false, true);?>
-				<?php echo $this->get_checkbox_block_html($instance, 'hide_post_titles', __( 'Hide post titles','category-posts' ), false, true);?>
-				<?php echo $this->get_checkbox_block_html($instance, 'excerpt', __( 'Show post excerpt','category-posts' ), false, true);?>
-				<div class="cpwp_ident categoryposts-data-panel-excerpt" style="display:<?php echo ((bool) $excerpt) ? 'block' : 'none'?>">
-					<?php echo $this->get_number_input_block_html($instance, 'excerpt_length', __( 'Excerpt length (in words):','category-posts' ), get_option('posts_per_page'), 1,55, true);?>
-					<?php echo $this->get_text_input_block_html($instance, 'excerpt_more_text',  __( 'Excerpt \'more\' text:','category-posts' ), '', __('...','category-posts'), true);?>
-					<?php echo $this->get_checkbox_block_html($instance, 'excerpt_filters', __( 'Don\'t override Themes and plugin filters','category-posts' ), false, true);?>
-				</div>
-				<?php echo $this->get_checkbox_block_html($instance, 'date', __( 'Show post date','category-posts' ), false, true);?>
-				<div class="cpwp_ident categoryposts-data-panel-date" style="display:<?php echo ((bool) $date) ? 'block' : 'none'?>">
-					<?php echo $this->get_select_block_html($instance, 'preset_date_format', __( 'Date format','category-posts' ), array(
-																		'sitedateandtime' => __('Site date and time','category-posts'),
-																		'sitedate' => __('Site date','category-posts'),
-																		'sincepublished' => __('Time since published','category-posts'),
-																		'other' => __('PHP style format','category-posts'),
-																		), 'sitedateandtime', true);?>			
-					<?php echo $this->get_text_input_block_html($instance, 'date_format',  __( 'PHP Style Date format','category-posts' ), '', 'j M Y', $preset_date_format=='other');?>
-					<?php echo $this->get_text_input_block_html($instance, 'date_template',  __( 'Date display template','category-posts' ), '%date%', '', true);?>
-					<?php echo $this->get_checkbox_block_html($instance, 'date_link', __( 'Make widget date linkr','category-posts' ), false, true);?>
-				</div>
-				<?php echo $this->get_checkbox_block_html($instance, 'comment_num', __( 'Show number of comments','category-posts' ), false, true);?>
-				<?php echo $this->get_checkbox_block_html($instance, 'author', __( 'Show post author','category-posts' ), false, true);?>
-				<?php echo $this->get_checkbox_block_html($instance, 'assigned_categories', __( 'Show assigned post categories','category-posts' ), false, true);?>
-				<div class="cpwp_ident categoryposts-details-panel-assigned-cat-top" style="display:<?php echo ((bool) $assigned_categories) ? 'block' : 'none'?>">
-					<?php echo $this->get_checkbox_block_html($instance, 'assigned_cat_top', __( 'Show above the excerpt','category-posts' ), false, true);?>
-				</div>
-				<?php echo $this->get_checkbox_block_html($instance, 'assigned_tags', __( 'Show assigned Tags','category-posts' ), false, true);?>
 				<?php 
 					$template = '';
 					if (!isset($instance['template'])) {
 						$template = $this->convert_settings_to_template($instance);
-					}
+					} else
+						$template = $instance['template'];
 					echo $this->get_textarea_html($instance, 'template', __( 'Template','category-posts' ), '', $template, true);
+					preg_match_all($this->get_template_regex(), $template, $matches);
+					$tags = array();
+					if (!empty($matches[0]))
+						$tags = array_flip($matches[0]);
 				?>
+				<div class="cat-post-template-help">
+					<p><?php esc_html_e('The following text will be replaced with the relevant information','category-posts')?><kjhgrfvgtui9p-
+					/p>					<table>
+						<tr>
+							<th><?php esc_html_e('New line','category-posts')?></th>
+							<td><?php esc_html_e('Space','category-posts')?></td>
+						</tr>
+						<tr>
+							<th><?php esc_html_e('Empty line','category-posts')?></th>
+							<td><?php esc_html_e('Next line is a paragraph','category-posts')?></td>
+						</tr>
+						<tr>
+							<th>%title%</th>
+							<td><?php esc_html_e('Post title','category-posts')?></td>
+						</tr>
+						<tr>
+							<th>%date%</th>
+							<td><?php esc_html_e('Post publish date','category-posts')?></td>
+						</tr>
+						<tr>
+							<th>%excerpt%</th>
+							<td><?php esc_html_e('Post excerpt','category-posts')?></td>
+						</tr>
+						<tr>
+							<th>%author%</th>
+							<td><?php esc_html_e('Post author','category-posts')?></td>
+						</tr>
+						<tr>
+							<th>%commentnum%</th>
+							<td><?php esc_html_e('The number of comments to the post','category-posts')?></td>
+						</tr>
+						<tr>
+							<th>%post_tag%</th>
+							<td><?php esc_html_e('Post tags','category-posts')?></td>
+						</tr>
+						<tr>
+							<th>%category%</th>
+							<td><?php esc_html_e('Post categories','category-posts')?></td>
+						</tr>
+					</table>
+				</div>				
+				<div class="categoryposts-toogle-template-help"><?php _e('Open quick template help','category-posts')?></div>	
+				
+				<div class="categoryposts-data-panel-excerpt" style="display:<?php echo (isset($tags['%excerpt%'])) ? 'block' : 'none'?>">
+					<p><?php echo __( 'Excerpt settings','category-posts' );?></p>
+					<div class="cpwp_ident">
+					<?php echo $this->get_number_input_block_html($instance, 'excerpt_length', __( 'Excerpt length (in words):','category-posts' ), get_option('posts_per_page'), 1,55, true);?>
+					<?php echo $this->get_text_input_block_html($instance, 'excerpt_more_text',  __( 'Excerpt \'more\' text:','category-posts' ), '', __('...','category-posts'), true);?>
+					<?php echo $this->get_checkbox_block_html($instance, 'excerpt_filters', __( 'Don\'t override Themes and plugin filters','category-posts' ), false, true);?>
+					</div>
+				</div>
+				<div class="categoryposts-data-panel-date" style="display:<?php echo (isset($tags['%date%'])) ? 'block' : 'none'?>">
+					<p><?php echo __( 'Date format settings','category-posts' );?></p>
+					<div class="cpwp_ident">
+						<?php echo $this->get_select_block_html($instance, 'preset_date_format', __( 'Date format','category-posts' ), array(
+																			'sitedateandtime' => __('Site date and time','category-posts'),
+																			'sitedate' => __('Site date','category-posts'),
+																			'sincepublished' => __('Time since published','category-posts'),
+																			'other' => __('PHP style format','category-posts'),
+																			), 'sitedateandtime', true);?>			
+						<?php echo $this->get_text_input_block_html($instance, 'date_format',  __( 'PHP Style Date format','category-posts' ), '', 'j M Y', $preset_date_format=='other');?>
+						<?php echo $this->get_text_input_block_html($instance, 'date_template',  __( 'Date display template','category-posts' ), '%date%', '', true);?>
+					</div>
+				</div>
 			</div>
 			<h4 data-panel="general"><?php _e('General','category-posts')?></h4>
 			<div>
