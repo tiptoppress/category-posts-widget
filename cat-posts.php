@@ -1593,7 +1593,7 @@ class Widget extends \WP_Widget {
 						$template = $this->convert_settings_to_template($instance);
 					} else
 						$template = $instance['template'];
-					echo $this->get_textarea_html($instance, 'template', __( 'Template','category-posts' ), '', $template, true);
+					echo $this->get_textarea_html($instance, 'template', __( 'Template','category-posts' ), '', $template, true, 5);
 					preg_match_all($this->get_template_regex(), $template, $matches);
 					$tags = array();
 					if (!empty($matches[0]))
