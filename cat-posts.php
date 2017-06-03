@@ -234,7 +234,11 @@ function admin_styles() {
 }	
 .category-widget-cont > div.open {
 	display:block;
-}	
+}
+.category-widget-cont th,
+.category-widget-cont tr {
+	vertical-align: baseline;
+}
 </style>
 <?php
 }
@@ -946,8 +950,7 @@ class Widget extends \WP_Widget {
             $ret .= $this->show_thumb($instance,$everything_is_link); 
         }
 
-		// Title
-		
+		// Post details (Template)
 		$widget = $this;
 		$ret .= preg_replace_callback($this->get_template_regex(), function ($matches) use ($widget, $instance,$everything_is_link) {
 			switch ($matches[0]) {
@@ -1364,27 +1367,27 @@ class Widget extends \WP_Widget {
 	 * generate a form P element containing a textarea input
 	 *
 	 * @since 4.8
-	 * @param array		$instance	The instance
-	 ^ @param string	$key		The key in the instance array
-	 * @param string	$label		The label to display and associate with the input
-	 * @param int		$default	The value to use if the key is not set in the instance
+	 * @param array		$instance		The instance
+	 ^ @param string	$key			The key in the instance array
+	 * @param string	$label			The label to display and associate with the input
+	 * @param int		$default		The value to use if the key is not set in the instance
 	 * @param string	$placeholder	The placeholder to use in the input
-	 * @param bool		$visible	Indicates if the element should be visible when rendered
+	 * @param bool		$visible		Indicates if the element should be visible when rendered
+	 * @param int		$num_rows		Number of rows
 	 *
 	 * @return string HTML a P element contaning the input, its label, class based on the key 
 	 *					and style set to display:none if visibility is off.
 	 */
-	private function get_textarea_html($instance, $key, $label, $default, $placeholder, $visible) {
+	private function get_textarea_html($instance, $key, $label, $default, $placeholder, $visible, $num_rows) {
 		
 		$value = $default;
 		
 		if (isset($instance[$key]))
 			$value = $instance[$key];
 		
-		$ret = '<label for="'.$this->get_field_id($key).'">'.esc_html($label)."</label>\n".
-					'<textarea placeholder="'.esc_attr($placeholder).'" id="'. $this->get_field_id($key).'" name="'. $this->get_field_name($key).'" type="text" autocomplete="off">'.esc_textarea($value).'</textarea>'."\n".
-				"\n";
-
+		$ret = '<label for="'.$this->get_field_id($key).'">'.esc_html($label)."</label><br />".
+					'<textarea rows="'.$num_rows.'" placeholder="'.esc_attr($placeholder).'" id="'. $this->get_field_id($key).'" name="'. $this->get_field_name($key).'" type="text" autocomplete="off">'.esc_textarea($value).'</textarea>'.
+				"<br />";
 				
 		return $this->get_wrap_block_html($ret, $key, $visible);
 	}
@@ -2082,7 +2085,7 @@ function customize_register($wp_customize) {
 				$widget->number = $p->ID.'_'.$k;
 				$widget->form($m);
 				$form = ob_get_clean();
-				$form = preg_replace_callback('/<(input|select)\s+.*name=("|\').*\[\w*\]\[([^\]]*)\][^>]*>/',
+				$form = preg_replace_callback('/<(input|select|textarea)\s+.*name=("|\').*\[\w*\]\[([^\]]*)\][^>]*>/',
 					function ($matches) use ($p, $wp_customize, $m, $k) {
 						$setting = '_virtual-'.WIDGET_BASE_ID.'['.$p->ID.']['.$k.']['.$matches[3].']';
 						if (!isset($m[$matches[3]]))
