@@ -480,57 +480,6 @@ class Widget extends \WP_Widget {
 	}
 	
 	/**
-	 * Calculate the HTML for showing the thumb of a post item.
-     * Expected to be called from a loop with globals properly set
-	 *
-	 * @param  array $instance Array which contains the various settings
-	 * @param  bool  $no_link  indicates whether the thumb should be wrapped in a link or a span
-	 * @return string The HTML for the thumb related to the post
-     *
-     * @since 4.6
-	 */
-	function show_thumb($instance,$no_link) {
-        $ret = '';
-
-		if ( isset( $instance["thumb"] ) && $instance["thumb"] &&
-			((isset($instance['default_thunmbnail']) && ($instance['default_thunmbnail']!= 0)) || has_post_thumbnail()) ) {
-
-            $class              = '';
-			$use_css_cropping   = isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping'];
-			$disable_css        = isset($instance['disable_css']) && $instance['disable_css'];
-			$everything_is_link = isset($instance['everything_is_link']) && $instance['everything_is_link'];
-			$show_post_format   = isset($instance['show_post_format']) && ($instance['show_post_format'] != 'none');
-			
-			if(isset($this->instance['thumb_hover']) && !$everything_is_link && !$disable_css) {
-				$class = "class=\"cat-post-thumbnail cat-post-" . $instance['thumb_hover'] . "\"";
-			} else {
-				$class = "class=\"cat-post-thumbnail\"";
-			}
-			
-            $title_args = array('echo'=>false);
-
-			if ($no_link)
-				$ret .= '<span '.$class . '">';
-			else
-				$ret .= '<a '.$class . ' href="'.get_the_permalink().'" title="'.the_title_attribute($title_args).'">';
-
-            $ret .= $this->the_post_thumbnail( array($this->instance['thumb_w'],$this->instance['thumb_h']));
-
-			if ($show_post_format || $instance['thumb_hover']) {
-				$format = get_post_format() ? : 'standard';
-				$ret .= '<span class="cat-post-format cat-post-format-'.$format.'"></span>';
-			}
-			
-			if ($no_link)
-				$ret .= '</span>';
-			else
-				$ret .= '</a>';
-		}
-
-        return $ret;
-	}
-	
-	/**
 	 * Calculate the wp-query arguments matching the filter settings of the widget
 	 *
 	 * @param  array $instance Array which contains the various settings
@@ -687,6 +636,9 @@ class Widget extends \WP_Widget {
 		if ( isset( $instance['date']) && $instance['date']) {
 			$template .= '\n\n%date%\n\n';
 		}
+		if ( isset( $instance['thumb']) && $instance['thumb']) {
+			$template .= '\n\n%thumb%\n\n';
+		}
 		if ( isset( $instance['excerpt'] ) && $instance['excerpt']) {
 			$template .= '%excerpt%';
 		}
@@ -742,6 +694,57 @@ class Widget extends \WP_Widget {
 		}
 		$ret .= '</p>';
 		return $ret;
+	}
+	
+	
+	/**
+	 * Calculate the HTML for showing the thumb of a post item.
+     * Expected to be called from a loop with globals properly set
+	 *
+	 * @param  array $instance Array which contains the various settings
+	 * @param  bool  $no_link  indicates whether the thumb should be wrapped in a link or a span
+	 * @return string The HTML for the thumb related to the post
+     *
+     * @since 4.6
+	 */
+	function itemThumb($instance,$no_link) {
+        $ret = '';
+
+		if ((isset($instance['default_thunmbnail']) && ($instance['default_thunmbnail']!= 0)) || has_post_thumbnail()) {
+
+            $class              = '';
+			$use_css_cropping   = isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping'];
+			$disable_css        = isset($instance['disable_css']) && $instance['disable_css'];
+			$everything_is_link = isset($instance['everything_is_link']) && $instance['everything_is_link'];
+			$show_post_format   = isset($instance['show_post_format']) && ($instance['show_post_format'] != 'none');
+			
+			if(isset($this->instance['thumb_hover']) && !$everything_is_link && !$disable_css) {
+				$class = "class=\"cat-post-thumbnail cat-post-" . $instance['thumb_hover'] . "\"";
+			} else {
+				$class = "class=\"cat-post-thumbnail\"";
+			}
+			
+            $title_args = array('echo'=>false);
+
+			if ($no_link)
+				$ret .= '<span '.$class . '">';
+			else
+				$ret .= '<a '.$class . ' href="'.get_the_permalink().'" title="'.the_title_attribute($title_args).'">';
+
+            $ret .= $this->the_post_thumbnail( array($this->instance['thumb_w'],$this->instance['thumb_h']));
+
+			if ($show_post_format || $instance['thumb_hover']) {
+				$format = get_post_format() ? : 'standard';
+				$ret .= '<span class="cat-post-format cat-post-format-'.$format.'"></span>';
+			}
+			
+			if ($no_link)
+				$ret .= '</span>';
+			else
+				$ret .= '</a>';
+		}
+
+        return $ret;
 	}
 	
 	/**
@@ -944,15 +947,10 @@ class Widget extends \WP_Widget {
 		if ($everything_is_link) {
 			$ret .= '<a class="cat-post-everything-is-link" href="'.get_the_permalink().'" title="">';
 		}
-		
-        // // Thumbnail position to top
-        // if (isset($instance["thumbTop"]) && $instance["thumbTop"]) {
-            // $ret .= $this->show_thumb($instance,$everything_is_link); 
-        // }
 
 		// Post details (Template)
 		$widget = $this;
-		$ret .= preg_replace_callback($this->get_template_regex(), function ($matches) use ($widget, $instance,$everything_is_link) {
+		$ret .= preg_replace_callback($this->get_template_regex(), function ($matches) use ($widget, $instance, $everything_is_link) {
 			switch ($matches[0]) {
 				case '%title%' : return $widget->itemTitle($instance,$everything_is_link);
 					break;
@@ -962,7 +960,7 @@ class Widget extends \WP_Widget {
 					break;
 				case '%date%' : return $widget->itemDate($instance,$everything_is_link);
 					break;
-				case '%thumb%' : return $widget->show_thumb($instance,$everything_is_link);
+				case '%thumb%' : return $widget->itemThumb($instance,$everything_is_link);
 					break;
 				case '%post_tag%' : return $widget->itemTags($instance,$everything_is_link);
 					break;
@@ -973,11 +971,6 @@ class Widget extends \WP_Widget {
 				return $matches[0];
 			}
 		},$template);
-		
-        // // Thumbnail position normal
-        // if( !(isset( $instance["thumbTop"] ) && $instance["thumbTop"])) {
-            // $ret .= $this->show_thumb($instance,$everything_is_link);
-        // }
 		
 		if ($everything_is_link) {
 			$ret .= '</a>';
@@ -1201,36 +1194,6 @@ class Widget extends \WP_Widget {
  			<?php echo $this->get_checkbox_block_html($instance, 'exclude_current_post', __( 'Exclude current post','category-posts' ), false, true);?>
  			<?php echo $this->get_checkbox_block_html($instance, 'hideNoThumb', __( 'Exclude posts which have no thumbnail','category-posts' ), false, true);?>
         </div>			
-<?php
-    }
-    
-	/**
-	 * Output the filter panel of the widget configuration form.
-	 *
-	 * @param  array $instance
-	 * @return void
-     *
-     * @since 4.6
-	 */
-    function formThumbnailPanel($instance) {
-		$instance = wp_parse_args( ( array ) $instance, array(
-			'thumb'						  => false,
-			'thumb_w'                     => get_option('thumbnail_size_w',150),
-			'thumb_h'                     => get_option('thumbnail_size_h',150),
-			'default_thunmbnail'          => 0,
-			'use_css_cropping'            => true,
-        ));
-		$thumb                       = !empty($instance['thumb']);
-		$thumb_w                     = $instance['thumb_w'];
-		$thumb_h                     = $instance['thumb_h'];
-		$default_thunmbnail          = $instance['default_thunmbnail'];
-		$use_css_cropping            = $instance['use_css_cropping'];
-		
-?>        
-        <h4 data-panel="thumbnail"><?php _e('Thumbnails','category-posts')?></h4>
-        <div>
- 			<?php echo $this->get_checkbox_block_html($instance, 'thumb', __( 'Show post thumbnail','category-posts' ), false, true);?>
-       </div>
 <?php
     }
 
@@ -1461,6 +1424,11 @@ class Widget extends \WP_Widget {
 			'hide_if_empty'                   => '',
 			'hide_social_buttons'             => '',
 			'preset_date_format'              => 'other',
+			'thumb'                           => false,
+			'thumb_w'                         => get_option('thumbnail_size_w',150),
+			'thumb_h'                         => get_option('thumbnail_size_h',150),
+			'default_thunmbnail'              => 0,
+			'use_css_cropping'                => true,
 		) );
 
 		$hide_post_titles                = $instance['hide_post_titles'];
@@ -1474,6 +1442,11 @@ class Widget extends \WP_Widget {
 		$disable_font_styles             = $instance['disable_font_styles'];
 		$hide_if_empty                   = $instance['hide_if_empty'];
 		$preset_date_format              = $instance['preset_date_format'];
+		$thumb                           = !empty($instance['thumb']);
+		$thumb_w                         = $instance['thumb_w'];
+		$thumb_h                         = $instance['thumb_h'];
+		$default_thunmbnail              = $instance['default_thunmbnail'];
+		$use_css_cropping                = $instance['use_css_cropping'];
 		
 		$cat = $instance['cat'];
 
@@ -1527,7 +1500,6 @@ class Widget extends \WP_Widget {
         <?php
             $this->formTitlePanel($instance);
             $this->formFilterPanel($instance);
-            $this->formThumbnailPanel($instance);
         ?>
 			<h4 data-panel="details"><?php _e('Post details','category-posts')?></h4>
 			<div>
@@ -1538,7 +1510,7 @@ class Widget extends \WP_Widget {
 						$template = $this->convert_settings_to_template($instance);
 					} else
 						$template = $instance['template'];
-					echo $this->get_textarea_html($instance, 'template', __( 'Template','category-posts' ), '', $template, true, 5);
+					echo $this->get_textarea_html($instance, 'template', __( 'Template','category-posts' ), $template, '', true, 5);
 					preg_match_all($this->get_template_regex(), $template, $matches);
 					$tags = array();
 					if (!empty($matches[0]))
@@ -1939,7 +1911,6 @@ function default_settings()  {
 				'footer_link_text'                => '',
 				'footer_link'                     => '',
 				'thumb'                           => false,
-				'thumbTop'                        => false,
 				'thumb_w'                         => get_option('thumbnail_size_w',150),
 				'thumb_h'                         => get_option('thumbnail_size_h',150),
 				'use_css_cropping'                => true,
@@ -2441,10 +2412,6 @@ class virtualWidget {
 				$rules[] = '.cat-post-item:last-child {border-bottom: none;}';
 			}
 
-			if (!(isset($settings['thumbTop']) && $settings['thumbTop'])) {
-				$rules[] = '.cat-post-thumbnail {float:left;}';
-			}
-
             // everything link related styling
 		    // if we are dealing with "everything is a link" option, we need to add the clear:both to the a element, not the div
 			if (isset( $settings['everything_is_link'] ) && $settings['everything_is_link']) {
@@ -2455,7 +2422,8 @@ class virtualWidget {
 			}
 
 			// add post format css if needed 
-			if (isset( $settings["thumb"] ) && $settings["thumb"]) {
+			if (isset($settings["template"]) && preg_match('/%thumb%/',$settings["template"])) {
+			// if (isset( $settings["thumb"] ) && $settings["thumb"]) {
 				if (!isset( $settings["show_post_format"] ) || (($settings["show_post_format"] != 'none') && ($settings["show_post_format"] != 'nocss'))) {
 					static $fonts_added = false;		
 					if (!$fonts_added) {
