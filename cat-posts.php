@@ -630,6 +630,8 @@ class Widget extends \WP_Widget {
 	 *  @since 4.8
 	 */
 	function convert_settings_to_template($instance) {
+		$template = '';
+		
 		if( !(isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'])) { 
 			$template .= '%title%';
 		}
@@ -647,7 +649,9 @@ class Widget extends \WP_Widget {
 		}
 		if ( isset( $instance['author'] ) && $instance['author']) {
 			$template .= '\n\n%author%\n\n';
-		}	
+		}
+		
+		return $template;
 	}
 
 	/**
