@@ -1187,8 +1187,8 @@ class Widget extends \WP_Widget {
                 </label>
             </p>
  			<?php echo $this->get_checkbox_block_html($instance, 'no_cat_childs', __( 'Exclude child categories','category-posts' ), false, true);?>
-			<?php echo $this->get_number_input_block_html($instance, 'num', __( 'Number of posts to show','category-posts' ), get_option('posts_per_page'), 1,'', true);?>
-			<?php echo $this->get_number_input_block_html($instance, 'offset', __( 'Start with post','category-posts' ), 1, 1,'', true);?>
+			<?php echo $this->get_number_input_block_html($instance, 'num', __( 'Number of posts to show','category-posts' ), get_option('posts_per_page'), 1,'', '', true);?>
+			<?php echo $this->get_number_input_block_html($instance, 'offset', __( 'Start with post','category-posts' ), 1, 1,'', '', true);?>
 			<?php echo $this->get_select_block_html($instance, 'sort_by', __( 'Sort by','category-posts' ), array(
 																'date' => __('Date','category-posts'),
 																'title' => __('Title','category-posts'),
@@ -1437,7 +1437,7 @@ class Widget extends \WP_Widget {
 	 * @return string HTML a P element contaning the input, its label, class based on the key 
 	 *					and style set to display:none if visibility is off.
 	 */
-	private function get_number_input_block_html($instance, $key, $label, $default, $min, $max, $visible) {
+	private function get_number_input_block_html($instance, $key, $label, $default, $min, $max, $placeholder, $visible) {
 		
 		$value = $default;
 		
@@ -1645,7 +1645,7 @@ class Widget extends \WP_Widget {
 				<div class="categoryposts-data-panel-excerpt" style="display:<?php echo (isset($tags['%excerpt%'])) ? 'block' : 'none'?>">
 					<p><?php echo __( 'Excerpt settings','category-posts' );?></p>
 					<div class="cpwp_ident">
-					<?php echo $this->get_number_input_block_html($instance, 'excerpt_length', __( 'Excerpt length (in words):','category-posts' ), get_option('posts_per_page'), 1,55, true);?>
+					<?php echo $this->get_number_input_block_html($instance, 'excerpt_length', __( 'Excerpt length (in words):','category-posts' ), get_option('posts_per_page'), 1,55, '', true);?>
 					<?php echo $this->get_text_input_block_html($instance, 'excerpt_more_text',  __( 'Excerpt \'more\' text:','category-posts' ), '', __('...','category-posts'), true);?>
 					<?php echo $this->get_checkbox_block_html($instance, 'excerpt_filters', __( 'Don\'t override Themes and plugin filters','category-posts' ), false, true);?>
 					</div>
