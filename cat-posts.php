@@ -762,7 +762,7 @@ class Widget extends \WP_Widget {
     function itemCategories($instance, $everything_is_link) {
 		
 		$ret = '<span class="cat-post-tax-category">';
-		$catIDs = wp_get_post_categories($post->ID, array('number'=>0));
+		$catIDs = wp_get_post_categories(get_the_ID(), array('number'=>0));
 		foreach ($catIDs as $catID) {
 			if ($everything_is_link)
 				$ret .= " " . get_cat_name($catID) . "";
@@ -783,7 +783,7 @@ class Widget extends \WP_Widget {
 	 */
     function itemTags($instance, $everything_is_link) {
 		
-		$ret .= '<span class="cat-post-tax-post_tag">';
+		$ret = '<span class="cat-post-tax-post_tag">';
 		$tagIDs = wp_get_post_tags(get_the_ID(), array('number'=>0));
 		foreach ($tagIDs as $tagID) {
 			if ($everything_is_link)
@@ -968,13 +968,13 @@ class Widget extends \WP_Widget {
 					break;
 				case '%post_tag%' : return $widget->itemTags($instance,$everything_is_link);
 					break;
-				case '%category%' : return $widget->itemCategory($instance,$everything_is_link);
+				case '%category%' : return $widget->itemCategories($instance,$everything_is_link);
 					break;
 				case '%excerpt%' : return $widget->itemExcerpt($instance,$everything_is_link);
 					break;
 				return $matches[0];
 			}
-		},$template);
+		}, $template);
 		
 		if ($everything_is_link) {
 			$ret .= '</a>';
@@ -1566,7 +1566,8 @@ class Widget extends \WP_Widget {
 					</table>
 				</div>				
 				<div class="categoryposts-toogle-template-help"><?php _e('Open quick template help','category-posts')?></div>	
-				
+
+				<?php // Excerpt settings ?>
 				<div class="categoryposts-data-panel-excerpt" style="display:<?php echo (isset($tags['%excerpt%'])) ? 'block' : 'none'?>">
 					<p><?php echo __( 'Excerpt settings','category-posts' );?></p>
 					<div class="cpwp_ident">
@@ -1589,6 +1590,7 @@ class Widget extends \WP_Widget {
 					</div>
 				</div>
 				
+				<?php // Thumbnail settings ?>
 				<div class="categoryposts-data-panel-thumbnail" style="display:<?php echo (isset($tags['%thumb%'])) ? 'block' : 'none'?>">
 					<p><?php echo __( 'Thumbnail settings','category-posts' );?></p>
 					<div class="cpwp_ident">
@@ -1941,7 +1943,7 @@ function default_settings()  {
 				'everything_is_link'			  => false,
 				'preset_date_format'              => 'sitedateandtime',
 				'date_template'                   => '%date%',
-				'template'                   	  => '%title%',
+				'template'                   	  => '%title%&#13;&#10;%thumb%',
 				);
 }
 
@@ -2401,8 +2403,8 @@ class virtualWidget {
 				$rules[] = '.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}';
 				$rules[] = '.cat-post-date {font-size: 14px; line-height: 18px; font-style: italic; margin-bottom: 5px;}';
 				$rules[] = '.cat-post-comment-num {font-size: 14px; line-height: 18px;}';
-				$rules[] = '.cat-post-category a {font-size: 14px; line-height: 18px; text-transform: uppercase;}';
-				$rules[] = '.cat-post-tag a, .cat-post-tag span {font-size: 12px; line-height: 18px; background: #EEEEEE; padding: 5px 10px;}';
+				$rules[] = '.cat-post-tax-category a {font-size: 14px; line-height: 26px; text-transform: uppercase;}';
+				$rules[] = '.cat-post-tax-post_tag a, .cat-post-tax-post_tag span {font-size: 12px; line-height: 18px; background: #EEEEEE; padding: 5px 10px;}';
 			}
 
 			/*
@@ -2479,14 +2481,14 @@ class virtualWidget {
 				// Twenty Sixteen Theme adds underlines to links with box whadow wtf ...
 				$ret[] = '#'.$widget_id.' .cat-post-thumbnail {box-shadow:none}'; // this for the thumb link
 				if (!(isset($settings['disable_font_styles']) && $settings['disable_font_styles'])) { // checks if disable font styles is not set
-					$ret[] = '#'.$widget_id.' .cat-post-tag a {box-shadow:none}';     // this for the tag link
-					$ret[] = '#'.$widget_id.' .cat-post-tag span {box-shadow:none}';     // this for the tag link
+					$ret[] = '#'.$widget_id.' .cat-post-tax-post_tag a {box-shadow:none}';     // this for the tag link
+					$ret[] = '#'.$widget_id.' .cat-post-tax-post_tag span {box-shadow:none}';     // this for the tag link
 				}
 				// Twenty Fifteen Theme adds border ...
 				$ret[] = '#'.$widget_id.' .cat-post-thumbnail {border:0}'; // this for the thumb link
 				if (!(isset($settings['disable_font_styles']) && $settings['disable_font_styles'])) { // checks if disable font styles is not set
-					$ret[] = '#'.$widget_id.' .cat-post-tag a {border:0}';     // this for the tag link
-					$ret[] = '#'.$widget_id.' .cat-post-tag span {border:0}';     // this for the tag link
+					$ret[] = '#'.$widget_id.' .cat-post-tax-post_tag a {border:0}';     // this for the tag link
+					$ret[] = '#'.$widget_id.' .cat-post-tax-post_tag span {border:0}';     // this for the tag link
 				}
 				// probably all Themes have too much margin on their p element when used in the shortcode
 				$ret[] = '#'.$widget_id.' p {margin:5px 0 0 0}';	/* since on bottom it will make the spacing on cover
