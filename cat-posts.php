@@ -725,7 +725,7 @@ class Widget extends \WP_Widget {
 				$date = get_the_time($date_format);
 				break;
 		}
-		$ret .= '<p class="cat-post-date">';
+		$ret .= '<span class="cat-post-date">';
 		if ( isset ( $instance["date_link"] ) && $instance["date_link"] && !$everything_is_link) { 
 			$ret .= '<a href="'.\get_the_permalink().'">';
 		}
@@ -736,7 +736,7 @@ class Widget extends \WP_Widget {
 		if ( isset ( $instance["date_link"] ) && $instance["date_link"] && !$everything_is_link ) { 
 			$ret .= '</a>';
 		}
-		$ret .= '</p>';
+		$ret .= '</span>';
 		return $ret;
 	}
 	
@@ -968,7 +968,14 @@ class Widget extends \WP_Widget {
 				return $matches[0];
 			}
 		},$template);
+
+		// Replace empty line with closin and opening P
+		$ret = str_replace("\n",'</p><p>',$ret);
+		$ret = '<p>'.$ret.'</p>';
 		
+		// replace new lines with spaces
+		$ret = str_replace("\n",' ',$ret);
+				
         // Thumbnail position normal
         if( !(isset( $instance["thumbTop"] ) && $instance["thumbTop"])) {
             $ret .= $this->show_thumb($instance,$everything_is_link);
