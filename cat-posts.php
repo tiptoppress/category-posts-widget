@@ -509,6 +509,11 @@ class Widget extends \WP_Widget {
             $args['offset'] = (int) $instance["offset"] - 1;
 		
         if (isset($instance["cat"]))  {
+			if($instance["cat"] == "rand") {
+				$categories = get_categories();
+				$instance["cat"] = $categories[array_rand($categories, 1)]->term_id;
+			}
+				
 			if (isset($instance["no_cat_childs"]) && $instance["no_cat_childs"])
 				$args['category__in'] = (int) $instance["cat"];	
 			else
@@ -1182,7 +1187,14 @@ class Widget extends \WP_Widget {
             <p>
                 <label>
                     <?php _e( 'Category','category-posts' ); ?>:
-                    <?php wp_dropdown_categories( array( 'show_option_all' => __('All categories','category-posts'), 'hide_empty'=> 0, 'name' => $this->get_field_name("cat"), 'selected' => $instance["cat"], 'class' => 'categoryposts-data-panel-filter-cat' ) ); ?>
+                    <?php wp_dropdown_categories( array( 
+													'show_option_all' => __('All categories','category-posts'), 
+													'hide_empty'=> 0, 'name' => $this->get_field_name("cat"), 
+													'selected' => $instance["cat"], 
+													'class' => 'categoryposts-data-panel-filter-cat',
+													'show_option_none'   => __('Show categories randomly','category-posts'),
+													'option_none_value'  => 'rand',
+												) ); ?>
                 </label>
             </p>
  			<?php echo $this->get_checkbox_block_html($instance, 'no_cat_childs', __( 'Exclude child categories','category-posts' ), false, true);?>
