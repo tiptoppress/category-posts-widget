@@ -131,6 +131,9 @@ We apologies for any headache this may cause you, but frankly it is better for y
 PHP 5.2 is very old and any support for it from the php developers had ended more then 5 years ago [php.net/eol.php](http://php.net/eol.php).
 We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wordpress.org/about/stats/) and we can't imagine this people will have no other problems, if they don't update.
 
+= You check the PHP version with phpversion(), but the widget don't work =
+Check also the .htaccess file, if there is an entry for an older PHP version.
+
 == Screenshots ==
 1. The widget configuration dialog.
 2. Front end of the widget using a default WordPress Theme.

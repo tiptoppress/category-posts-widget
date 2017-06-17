@@ -68,12 +68,10 @@ We've also started creating free widget extensions for the Premium Widget. The f
 * Option to make the widget date link to the category page.
 * Option to format the outputted date string.
 * Option to link to the category page below posts list.
-<<<<<<< HEAD
 * Option to add the SEO friendly attribute rel= with 'nofollow' or 'canonical' to all links.
 * Option to disable the widget CSS or more granular control of default styling with not apply the font styles.
-=======
 * Option to disable widget CSS or only the font styles.
->>>>>>> parent of c3c31b4... Add the attribute rel= with 'nofollow' or 'canonical' to all links. close #131
+* Add the attribute rel= with 'nofollow' or 'canonical' to all links. close #131
 * Multiple widgets.
 * Multi sites support.
 * Support localization with translate.wordpress.org
@@ -130,6 +128,9 @@ Some of the features that were used in that version needs PHP 5.3+.
 We apologies for any headache this may cause you, but frankly it is better for you to check with your hosting company how can you upgrade the PHP version that you are using, and not only in order to use this plugin. PHP 5.2 should be considered insecure now, and for your own sake you should upgrade.
 PHP 5.2 is very old and any support for it from the php developers had ended more then 5 years ago [php.net/eol.php](http://php.net/eol.php).
 We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wordpress.org/about/stats/) and we can't imagine this people will have no other problems, if they don't update.
+
+### You check the PHP version with phpversion(), but the widget don't work
+Check also the .htaccess file, if there is an entry for an older PHP version.
 
 ## Screenshots
 1. The widget configuration dialog.
