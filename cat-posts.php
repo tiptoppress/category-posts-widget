@@ -1146,6 +1146,11 @@ class Widget extends \WP_Widget {
 		$new_instance['title'] = sanitize_text_field( $new_instance['title'] );  // sanitize the title like core widgets do
 		if (!isset($new_instance['excerpt_filters']))
 			$new_instance['excerpt_filters'] = '';
+		if ( current_user_can( 'unfiltered_html' ) ) {
+			$instance['text'] = $new_instance['template'];
+		} else {
+			$instance['text'] = wp_kses_post( $new_instance['template'] );
+		}
 		return $new_instance;
 	}
 
