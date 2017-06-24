@@ -135,6 +135,37 @@
             }	
         },
 
+		selectPremadeTemplate: function(item) {
+			var panel = item.parentElement.parentElement;
+			var div = item.parentElement;
+            var select = jQuery(div).find('select');
+			var template = '%title%';
+			value = select.val();
+            switch (value) {
+				case 'title':
+					template = '%title%';
+					break;
+				case 'title_excerpt':
+					template = '%title%\n%excerpt%';
+					break;
+				case 'title_thumb':
+					template = '%title%\n%thumb%';
+					break;
+				case 'title_thum_excerpt':
+					template = '%title%\n%thumb%\n%excerpt%';
+					break;
+				case 'everything':
+					template = '%title%\n%thumb%\n%excerpt%\n\n';
+					template += 'Published by %author% on %date\n';
+					template += 'and has %commentnum% comments\n\n';
+					template += 'Categories: %category%\n\n';
+					template += 'Tags: %post_tag%';
+			}	
+            var textarea = jQuery(panel).find('.categoryPosts-template textarea');
+			textarea.val(template);
+			textarea.trigger('change');
+        },
+
 		// Close all open panels if open
 		autoCloseOpenPanels: function(_this) {
 			if( categoryPosts.accordion  ) {
@@ -208,7 +239,21 @@ jQuery(document).ready( function () {
 		jQuery('.cwp_default_thumb_remove').off('click').on('click', function () { // remove default thumb
 			cwp_namespace.removeDefaultThumbnailSelection(this);
 		});
-    // refresh panels to state before the refresh
+		
+		jQuery('.categoryPosts-template a').on('click', function (event) { // open template help
+			cwp_namespace.openTemplateHelp(this, event);
+		});
+		
+		jQuery('.cat-post-premade_templates button').on('click', function () { // select a pre made template
+			cwp_namespace.selectPremadeTemplate(this);
+		});
+
+		jQuery('.cat-post-premade_templates select').on('change', function (event) { // prevent refresh ontemplate selection
+			event.preventDefault();
+			event.stopPropagation();
+		});
+
+		// refresh panels to state before the refresh
         var id = jQuery(element).attr('id');
         if (cwp_namespace.open_panels.hasOwnProperty(id)) {
             var o = cwp_namespace.open_panels[id];
@@ -260,6 +305,15 @@ jQuery(document).ready( function () {
 		
 		jQuery('.categoryPosts-template a').on('click', function (event) { // open template help
 			cwp_namespace.openTemplateHelp(this, event);
+		});
+		
+		jQuery('.cat-post-premade_templates button').on('click', function () { // select a pre made template
+			cwp_namespace.selectPremadeTemplate(this);
+		});
+
+		jQuery('.cat-post-premade_templates select').on('change', function (event) { // prevent refresh ontemplate selection
+			event.preventDefault();
+			event.stopPropagation();
 		});
 	}
 	

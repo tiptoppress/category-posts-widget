@@ -1217,7 +1217,7 @@ class Widget extends \WP_Widget {
  			<?php echo $this->get_checkbox_block_html($instance, 'no_cat_childs', __( 'Exclude child categories','category-posts' ), false, true);?>
 			<?php echo $this->get_number_input_block_html($instance, 'num', __( 'Number of posts to show','category-posts' ), get_option('posts_per_page'), 1,'', '', true);?>
 			<?php echo $this->get_number_input_block_html($instance, 'offset', __( 'Start with post','category-posts' ), 1, 1,'', '', true);?>
-			<?php echo $this->get_select_block_html($instance, 'sort_by', __( 'Sort by','category-posts' ), array(
+			<?php echo $this->get_select_block_html($instance, 'sort_by', esc_html__( 'Sort by','category-posts' ), array(
 																'date' => __('Date','category-posts'),
 																'title' => __('Title','category-posts'),
 																'comment_count' => __('Number of comments','category-posts'),
@@ -1549,6 +1549,17 @@ class Widget extends \WP_Widget {
 					if (!empty($matches[0]))
 						$tags = array_flip($matches[0]);
 				?>
+				<div class="cat-post-premade_templates">
+					<label><?php esc_html_e( 'Select Premade template','category-posts' ) ?></label>
+					<select>
+						<option value="title"><?php esc_html_e('Post title only','category-posts')?></option>
+						<option value="title_excerpt"><?php esc_html_e('Post title and excerpt','category-posts')?></option>
+						<option value="title_thumb"><?php esc_html_e('Post title and thumbnail','category-posts')?></option>
+						<option value="title_thum_excerpt"><?php esc_html_e('Post title, thumbnail and excerpt','category-posts')?></option>
+						<option value="everything"><?php esc_html_e('Everything','category-posts')?></option>
+					</select>
+					<button type="button"><?php esc_html_e('Select the template','category-posts')?></button>
+				</div>
 				<div class="cat-post-template-help">
 					<p><?php esc_html_e('The following text will be replaced with the relevant information. In addition you can use any text and html (if you have the permisions) anywhere you want','category-posts')?>
 					</p>					
@@ -1608,7 +1619,7 @@ class Widget extends \WP_Widget {
 				<div class="categoryposts-data-panel-date" style="display:<?php echo (isset($tags['%date%'])) ? 'block' : 'none'?>">
 					<p><?php echo __( 'Date format settings','category-posts' );?></p>
 					<div class="cpwp_ident">
-						<?php echo $this->get_select_block_html($instance, 'preset_date_format', __( 'Date format','category-posts' ), array(
+						<?php echo $this->get_select_block_html($instance, 'preset_date_format', esc_html__( 'Date format','category-posts' ), array(
 																			'sitedateandtime' => __('Site date and time','category-posts'),
 																			'sitedate' => __('Site date','category-posts'),
 																			'sincepublished' => __('Time since published','category-posts'),
@@ -1636,7 +1647,7 @@ class Widget extends \WP_Widget {
 							</label>
 						</p>
 						<?php echo $this->get_checkbox_block_html($instance, 'use_css_cropping', __( 'CSS crop to requested size','category-posts' ), false, false);?>
-						<?php echo $this->get_select_block_html($instance, 'thumb_hover', __( 'Animation on mouse hover:','category-posts' ), array(
+						<?php echo $this->get_select_block_html($instance, 'thumb_hover', esc_html__( 'Animation on mouse hover:','category-posts' ), array(
 																			'none' => __('None','category-posts'),
 																			'dark' => __('Darker','category-posts'),
 																			'white' => __('Brighter','category-posts'),
@@ -1644,7 +1655,7 @@ class Widget extends \WP_Widget {
 																			'blur' => __('Blur','category-posts'),
 																			'icon' => __('Icon','category-posts'),
 																			), 'none',true);?>			
-						<?php echo $this->get_select_block_html($instance, 'show_post_format', __( 'Indicate post format','category-posts' ), array(
+						<?php echo $this->get_select_block_html($instance, 'show_post_format', esc_html__( 'Indicate post format','category-posts' ), array(
 																			'none' => __('None','category-posts'),
 																			'topleft' => __('Top left','category-posts'),
 																			'bottomleft' => __('Bottom left','category-posts'),
@@ -2432,8 +2443,6 @@ class virtualWidget {
 				$rules[] = '.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}';
 				$rules[] = '.cat-post-date {font-size: 14px; line-height: 18px; font-style: italic; margin-bottom: 5px;}';
 				$rules[] = '.cat-post-comment-num {font-size: 14px; line-height: 18px;}';
-				$rules[] = '.cat-post-tax-category a {font-size: 14px; line-height: 26px; text-transform: uppercase;}';
-				$rules[] = '.cat-post-tax-post_tag a, .cat-post-tax-post_tag span {font-size: 12px; line-height: 18px; background: #EEEEEE; padding: 5px 10px;}';
 			}
 
 			/*
