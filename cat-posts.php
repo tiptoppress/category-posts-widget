@@ -238,7 +238,12 @@ function admin_styles() {
 .category-widget-cont th,
 .category-widget-cont tr {
 	vertical-align: baseline;
+	text-align:start;
 }
+
+.cat-post-template-help {display:none;}
+
+.categoryPosts-template textarea {width:100%}
 </style>
 <?php
 }
@@ -1321,7 +1326,7 @@ class Widget extends \WP_Widget {
 		if (isset($instance[$key]))
 			$value = $instance[$key];
 		
-		$ret = '<label for="'.$this->get_field_id($key).'">'.esc_html($label)."</label><br />".
+		$ret = '<label for="'.$this->get_field_id($key).'">'.$label."</label><br />".
 					'<textarea rows="'.$num_rows.'" placeholder="'.esc_attr($placeholder).'" id="'. $this->get_field_id($key).'" name="'. $this->get_field_name($key).'" type="text" autocomplete="off">'.esc_textarea($value).'</textarea>'.
 				"<br />";
 				
@@ -1538,15 +1543,16 @@ class Widget extends \WP_Widget {
 						$template = $this->convert_settings_to_template($instance);
 					} else
 						$template = $instance['template'];
-					echo $this->get_textarea_html($instance, 'template', __( 'Template','category-posts' ), $template, '', true, 5);
+					echo $this->get_textarea_html($instance, 'template', __( 'Template','category-posts' ).' '. '<a href="#" title="'. esc_html__('Show template help','category-posts').'" >[?]</a>', $template, '', true, 5);
 					preg_match_all($this->get_template_regex(), $template, $matches);
 					$tags = array();
 					if (!empty($matches[0]))
 						$tags = array_flip($matches[0]);
 				?>
 				<div class="cat-post-template-help">
-					<p><?php esc_html_e('The following text will be replaced with the relevant information','category-posts')?><kjhgrfvgtui9p-
-					/p>					<table>
+					<p><?php esc_html_e('The following text will be replaced with the relevant information. In addition you can use any text and html (if you have the permisions) anywhere you want','category-posts')?>
+					</p>					
+					<table>
 						<tr>
 							<th><?php esc_html_e('New line','category-posts')?></th>
 							<td><?php esc_html_e('Space','category-posts')?></td>
@@ -1560,12 +1566,12 @@ class Widget extends \WP_Widget {
 							<td><?php esc_html_e('Post title','category-posts')?></td>
 						</tr>
 						<tr>
-							<th>%date%</th>
-							<td><?php esc_html_e('Post publish date','category-posts')?></td>
-						</tr>
-						<tr>
 							<th>%thumb%</th>
 							<td><?php esc_html_e('Post thumbnail','category-posts')?></td>
+						</tr>
+						<tr>
+							<th>%date%</th>
+							<td><?php esc_html_e('Post publish date','category-posts')?></td>
 						</tr>
 						<tr>
 							<th>%excerpt%</th>
@@ -1589,7 +1595,6 @@ class Widget extends \WP_Widget {
 						</tr>
 					</table>
 				</div>				
-				<div class="categoryposts-toogle-template-help"><?php _e('Open quick template help','category-posts')?></div>	
 
 				<?php // Excerpt settings ?>
 				<div class="categoryposts-data-panel-excerpt" style="display:<?php echo (isset($tags['%excerpt%'])) ? 'block' : 'none'?>">

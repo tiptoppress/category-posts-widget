@@ -95,6 +95,13 @@
             }	
         },
 			
+		// Show template help
+		openTemplateHelp: function(item,event) {
+			event.preventDefault();
+			var panel = item.parentElement.parentElement.parentElement;
+            jQuery(panel).find('.cat-post-template-help').show('slow');
+        },
+			
 		toggleAssignedCategoriesTop: function(item) {
             var value = jQuery(item).find("input").attr('checked');
 			var panel = item.parentElement.parentElement;
@@ -249,6 +256,10 @@ jQuery(document).ready( function () {
 		
 		jQuery('.categoryposts-data-panel-date-preset-format').on('change', function () { // change date format
 			cwp_namespace.toggleDateFormat(this);
+		});
+		
+		jQuery('.categoryPosts-template a').on('click', function (event) { // open template help
+			cwp_namespace.openTemplateHelp(this, event);
 		});
 	}
 	
