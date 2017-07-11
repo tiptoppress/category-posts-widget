@@ -896,6 +896,7 @@ class Widget extends \WP_Widget {
 		$this->instance = $instance;
 		
         $args = $this->queryArgs($instance);
+		$args = apply_filters('cpw_query_args',$args,$instance);
 		$cat_posts = new \WP_Query( $args );
 		
 		if ( !isset ( $instance["hide_if_empty"] ) || !$instance["hide_if_empty"] || $cat_posts->have_posts() ) {				
