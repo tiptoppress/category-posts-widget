@@ -3,7 +3,7 @@ Contributors: mark-k, kometschuh, mkrdip
 Donate link: http://mkrdip.me/donate
 Tags: category, categories, posts, widget, posts widget, recent posts, category recent posts, shortcode, sidebar, excerpt, multiple widgets
 Requires at least: 2.8
-Tested up to: 4.7.2
+Tested up to: 4.8
 Stable tag: 4.7.2
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
