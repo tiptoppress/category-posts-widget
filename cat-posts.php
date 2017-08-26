@@ -1521,6 +1521,11 @@ class Widget extends \WP_Widget {
 		.categoryposts-template-help td {
 			padding:2px;
 		}
+		
+		.categoryPosts-template textarea {
+			font-size:16px;
+			line-height:20px;
+		}
         </style>
 
         <?php
