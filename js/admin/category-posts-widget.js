@@ -156,7 +156,7 @@
 					break;
 				case 'everything':
 					template = '%title%\n%thumb%\n%excerpt%\n\n';
-					template += 'Published by %author% on %date\n';
+					template += 'Published by %author% on %date%\n';
 					template += 'and has %commentnum% comments\n\n';
 					template += 'Categories: %category%\n\n';
 					template += 'Tags: %post_tag%';
