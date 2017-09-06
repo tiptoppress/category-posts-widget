@@ -37,12 +37,12 @@ function wp_admin_bar_customize_menu() {
 		return;
 
 	$current_url = "";
-	if ( isset($_GET['post']) || $_GET['post'] !== '' )
+	if ( isset( $_GET['post'] ) && $_GET['post'] !== '' )
 		$current_url = get_permalink( $_GET['post'] );		
 	$customize_url = add_query_arg( 'url', urlencode( $current_url ), wp_customize_url() );
 
-	$p =  get_post( $_GET['post']);		
-	$names = shortcode_names(SHORTCODE_NAME,$p->post_content);
+	$p     = isset( $_GET['post'] ) && ! empty( $_GET['post'] ) ? get_post( $_GET['post']) : false;		
+	$names = $p ? shortcode_names( SHORTCODE_NAME, $p->post_content ) : array();
 	if( empty($names) )
 		return;
 		
