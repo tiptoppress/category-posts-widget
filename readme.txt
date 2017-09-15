@@ -22,34 +22,37 @@ We've also started creating free widget extensions for the Premium Widget. The f
 * Masonry (Responsive grid layouts)
 * Grid and Column full page layouts
 * Slider (Vertical and horizontal)
+* More complex ways to filter (all, any, exclude, also childes, AND or just OR rule)
 * Categories, Custom Post Types, Taxonomies, Events, Products, ...
 * Full background post images
 * Mouse hover effects for post thumbnail
 * <a target="_blank" href="http://tiptoppress.com/category/extensions/?utm_source=wordpress_org&utm_campaign=premium_features_extensions&utm_medium=web">Extensions</a>
 * E-Mail support
 * All free features
+* Free trail on localhost
 * More [examples on the demo pages](http://demo.tiptoppress.com/?utm_source=wordpress_org&utm_campaign=premium_features_demo&utm_medium=web)
 
 = Features =
-* Shortcode (Easily change all Shortcode options in the customizer.)
-* Support multiple shortcodes
-* Add option for post offset (use two or more widgets after another)
-* Add insert shortcode buttons to the editor toolbar
+* Shortcode (Easily change all Shortcode options in the customizer).
+* Support multiple shortcodes at the same post.
+* Add option for post offset (use two or more widgets after another).
+* Add UI buttons in the editor toolbar to insert shortcode.
+* Option to touch device friendly "everything is a link".
 * For editing shortcode adds a Customizer link to the admin-bar ("With one click to the Customizer").
 * Option to show post thumbnail & set dimensions by width & height.
-* Option for <a target="_blank" href="http://tiptoppress.com/css-image-crop/?utm_source=wordpress_org&utm_campaign=features_crop&utm_medium=web">client-side cropped thumbnail dimensions</a> by width & height.
-* Fluid images for Responsive Layouts
+* Option for <a target="_blank" href="http://tiptoppress.com/css-image-crop/?utm_source=wordpress_org&utm_campaign=features_crop_cpw&utm_medium=web">client-side cropped thumbnail dimensions</a> by width & height.
+* Fluid images for Responsive Layouts.
 * Option to set mouse hover effects for post thumbnail.
-* Set a thumbnail as default thumbnail
-* Add option to enable excerpt filters from Themes and plugins
+* Set a thumbnail as default thumbnail.
+* Add option to enable excerpt filters from Themes and plugins.
 * Jetpack 'Social buttons on posts' support.
-* Add option to disable social buttons, banner, ... in the excerpt
+* Add option to disable social buttons, banner, ... in the excerpt.
 * Option to change ordering of posts.
 * Set which category the posts should come form.
-* Add dropdownbox entry for 'all' categories
+* Add dropdownbox entry for 'all' categories.
 * Set how many posts to show.
 * Option to hide widget, if category have currently no posts.
-* Add option to disable subcategories
+* Add option to disable subcategories.
 * Option to put thumbnail on top.
 * Option to hide posts which have no thumbnail.
 * Option exclude current post.
@@ -62,11 +65,11 @@ We've also started creating free widget extensions for the Premium Widget. The f
 * Option to make the widget date link to the category page.
 * Option to format the outputted date string.
 * Option to link to the category page below posts list.
-* Option to disable widget CSS or only the font styles.
+* Option to disable the widget CSS or more granular control of default styling with not apply the font styles.
 * Multiple widgets.
 * Multi sites support.
 * Support localization with translate.wordpress.org
-* Use WP user profile for settings ('auto close' and if the shortcode button appears in the editor toolbar)
+* Use WP user profile for settings ('auto close' and if the shortcode button appears in the editor toolbar).
 
 = Documentation =
 * Full documentation on [tiptoppress.com](http://tiptoppress.com/category-posts-widget/documentation-4-7/?utm_source=wordpress_org&utm_campaign=documentation_4_7_cpw&utm_medium=web)
