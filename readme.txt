@@ -25,9 +25,10 @@ We've also started creating free widget extensions for the Premium Widget. The f
 * Categories, Custom Post Types, Taxonomies, Events, Products, ...
 * Full background post images
 * Mouse hover effects for post thumbnail
+* <a target="_blank" href="http://tiptoppress.com/category/extensions/?utm_source=wordpress_org&utm_campaign=premium_features_extensions&utm_medium=web">Extensions</a>
 * E-Mail support
 * All free features
-* More [examples on the demo pages](http://demo.tiptoppress.com/?utm_source=wordpress_org&utm_campaign=demo_cpw&utm_medium=web)
+* More [examples on the demo pages](http://demo.tiptoppress.com/?utm_source=wordpress_org&utm_campaign=premium_features_demo&utm_medium=web)
 
 = Features =
 * Shortcode (Easily change all Shortcode options in the customizer.)
@@ -36,7 +37,7 @@ We've also started creating free widget extensions for the Premium Widget. The f
 * Add insert shortcode buttons to the editor toolbar
 * For editing shortcode adds a Customizer link to the admin-bar ("With one click to the Customizer").
 * Option to show post thumbnail & set dimensions by width & height.
-* Option for <a target="_blank" href="http://tiptoppress.com/css-image-crop/?utm_source=wordpress_org&utm_campaign=features_crop_cpw&utm_medium=web">client-side cropped thumbnail dimensions</a> by width & height.
+* Option for <a target="_blank" href="http://tiptoppress.com/css-image-crop/?utm_source=wordpress_org&utm_campaign=features_crop&utm_medium=web">client-side cropped thumbnail dimensions</a> by width & height.
 * Fluid images for Responsive Layouts
 * Option to set mouse hover effects for post thumbnail.
 * Set a thumbnail as default thumbnail
@@ -71,7 +72,6 @@ We've also started creating free widget extensions for the Premium Widget. The f
 * Full documentation on [tiptoppress.com](http://tiptoppress.com/category-posts-widget/documentation-4-7/?utm_source=wordpress_org&utm_campaign=documentation_4_7_cpw&utm_medium=web)
 * Shortcode: Use [catposts] [in the content and edit options in the customizer](http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content/?utm_source=wordpress_org&utm_campaign=documentation_shortcode_cpw&utm_medium=web)
 * Formatting date and time: See <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>
-* Widget <a target="_blank" href="http://tiptoppress.com/category/widget-customization-and-filter-extensions/?utm_source=wordpress_org&utm_campaign=documentation_filter_cpw&utm_medium=web">customization and filter extensions</a>
 
 = Contribute =
 While using this plugin if you find any bug or any conflict, please submit an issue at 
@@ -169,7 +169,7 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 = 4.1.9 - May 5th 2016 =
 * Fixed undefined constant.
 
-= 4.1.8 - May 03th 2016 =
+= 4.1.8 - May 3th 2016 =
 * Add mouse hover effects: blur
 * Add option to choose allowed HTML in the excerpt
 * Add Jetpack 'Sharing - Show buttons on posts' support
