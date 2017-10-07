@@ -58,14 +58,16 @@
         },
 		
 		// Show hide foote link URL
-		toggleFooterLinkUrl: function(item) {
+		toggleCatSelection: function(item) {
             var cat = jQuery(item).find("option:selected").attr('value');
 			var panel = item.parentElement.parentElement.parentElement.parentElement;
             if(cat == '0') {
-                jQuery(panel).find('.categoryposts-data-panel-footer-footerLink').show();
+				jQuery(panel).find('.categoryPosts-title_link').hide();
+				jQuery(panel).find('.categoryPosts-title_link_url').show();
             }
             else {
-                jQuery(panel).find('.categoryposts-data-panel-footer-footerLink').hide();
+				jQuery(panel).find('.categoryPosts-title_link').show();
+				jQuery(panel).find('.categoryPosts-title_link_url').hide();
             }	
         },
 
@@ -80,7 +82,90 @@
                 jQuery(panel).find('.categoryposts-data-panel-general-disable-font-styles').show();
             }	
         },
+			
+		// Show hide other date format
+		toggleDateFormat: function(item) {
+            var value = jQuery(item).val();
+			var panel = item.parentElement.parentElement;
+            if( value != 'other') {
+                jQuery(panel).find('.categoryposts-data-panel-date-other-format').hide();
+            }
+            else {
+                jQuery(panel).find('.categoryposts-data-panel-date-other-format').show();
+            }	
+        },
+			
+		// Show template help
+		openTemplateHelp: function(item,event) {
+			event.preventDefault();
+			var panel = item.parentElement.parentElement.parentElement;
+            jQuery(panel).find('.cat-post-template-help').show('slow');
+        },
+			
+		toggleAssignedCategoriesTop: function(item) {
+            var value = jQuery(item).find("input").attr('checked');
+			var panel = item.parentElement.parentElement;
+            if(value == 'checked') {
+                jQuery(panel).find('.categoryposts-details-panel-assigned-cat-top').show();
+            }
+            else {
+                jQuery(panel).find('.categoryposts-details-panel-assigned-cat-top').hide();
+            }	
+        },
 		
+		toggleHideTitle: function(item) {
+            var value = jQuery(item).find("input").attr('checked');
+			var panel = item.parentElement.parentElement;
+            if (value != 'checked') {
+                jQuery(panel).find('.categoryposts-data-panel-title-settings').show();
+            }
+            else {
+                jQuery(panel).find('.categoryposts-data-panel-title-settings').hide();
+            }	
+        },
+
+		toggleThumb: function(item) {
+            var value = jQuery(item).find("input").attr('checked');
+			var panel = item.parentElement.parentElement;
+            if (value == 'checked') {
+                jQuery(panel).find('.categoryposts-data-panel-thumb-settings').show();
+            }
+            else {
+                jQuery(panel).find('.categoryposts-data-panel-thumb-settings').hide();
+            }	
+        },
+
+		selectPremadeTemplate: function(item) {
+			var panel = item.parentElement.parentElement;
+			var div = item.parentElement;
+            var select = jQuery(div).find('select');
+			var template = '%title%';
+			value = select.val();
+            switch (value) {
+				case 'title':
+					template = '%title%';
+					break;
+				case 'title_excerpt':
+					template = '%title%\n%excerpt%';
+					break;
+				case 'title_thumb':
+					template = '%title%\n%thumb%';
+					break;
+				case 'title_thum_excerpt':
+					template = '%title%\n%thumb%\n%excerpt%';
+					break;
+				case 'everything':
+					template = '%title%\n%thumb%\n%excerpt%\n\n';
+					template += 'Published by %author% on %date%\n';
+					template += 'and has %commentnum% comments\n\n';
+					template += 'Categories: %category%\n\n';
+					template += 'Tags: %post_tag%';
+			}	
+            var textarea = jQuery(panel).find('.categoryPosts-template textarea');
+			textarea.val(template);
+			textarea.trigger('change');
+        },
+
 		// Close all open panels if open
 		autoCloseOpenPanels: function(_this) {
 			if( categoryPosts.accordion  ) {
@@ -131,6 +216,8 @@
 	
 jQuery(document).ready( function () {
 	
+	var class_namespace = 'categoryPosts';
+
 	jQuery('.category-widget-cont h4').click(function () { // for widgets page
 		cwp_namespace.autoCloseOpenPanels(this);
 		// toggle panel open/close
@@ -139,6 +226,7 @@ jQuery(document).ready( function () {
 
 	// needed to reassign click handlers after widget refresh
 	jQuery(document).on('widget-added widget-updated', function(root,element){ // for customize and after save on widgets page
+		
 		jQuery('.category-widget-cont h4').off('click').on('click', function () {
 			cwp_namespace.autoCloseOpenPanels(this);
 			// toggle panel open/close
@@ -151,7 +239,21 @@ jQuery(document).ready( function () {
 		jQuery('.cwp_default_thumb_remove').off('click').on('click', function () { // remove default thumb
 			cwp_namespace.removeDefaultThumbnailSelection(this);
 		});
-    // refresh panels to state before the refresh
+		
+		jQuery('.categoryPosts-template a').on('click', function (event) { // open template help
+			cwp_namespace.openTemplateHelp(this, event);
+		});
+		
+		jQuery('.cat-post-premade_templates button').on('click', function () { // select a pre made template
+			cwp_namespace.selectPremadeTemplate(this);
+		});
+
+		jQuery('.cat-post-premade_templates select').on('change', function (event) { // prevent refresh ontemplate selection
+			event.preventDefault();
+			event.stopPropagation();
+		});
+
+		// refresh panels to state before the refresh
         var id = jQuery(element).attr('id');
         if (cwp_namespace.open_panels.hasOwnProperty(id)) {
             var o = cwp_namespace.open_panels[id];
@@ -160,19 +262,61 @@ jQuery(document).ready( function () {
 					.next().stop().show();
             }
         }
+		
+		setChangeHandlers();
 	});	
 
-	jQuery('.cwp_default_thumb_select').off('click').on('click', function () { // select default thumb
-		cwp_namespace.defaultThumbnailSelection(this, cwp_default_thumb_selection.frame_title,cwp_default_thumb_selection.button_title);
-	});
+	function setChangeHandlers() {
+		jQuery('.cwp_default_thumb_select').off('click').on('click', function () { // select default thumb
+			cwp_namespace.defaultThumbnailSelection(this, cwp_default_thumb_selection.frame_title,cwp_default_thumb_selection.button_title);
+		});
 
-	jQuery('.cwp_default_thumb_remove').off('click').on('click', function () { // remove default thumb
-		cwp_namespace.removeDefaultThumbnailSelection(this);
-	});
+		jQuery('.cwp_default_thumb_remove').off('click').on('click', function () { // remove default thumb
+			cwp_namespace.removeDefaultThumbnailSelection(this);
+		});
+		
+		jQuery('.'+class_namespace+'-excerpt').off('click').on('click', function () { 
+			cwp_namespace.toggleExcerptPanel(this);
+		});
+		
+		jQuery('.'+class_namespace+'-date').off('click').on('click', function () { 
+			cwp_namespace.toggleDatePanel(this);
+		});
+		
+		jQuery('.'+class_namespace+'-assigned_categories').off('click').on('click', function () {
+			cwp_namespace.toggleAssignedCategoriesTop(this);
+		});
+		
+		jQuery('.'+class_namespace+'-hide_title').off('click').on('click', function () {
+			cwp_namespace.toggleHideTitle(this);
+		});
+		
+		jQuery('.'+class_namespace+'-thumb').off('click').on('click', function () {
+			cwp_namespace.toggleThumb(this);
+		});
+		
+		jQuery('.categoryposts-data-panel-filter-cat').on('change', function () { // change category filter
+			cwp_namespace.toggleCatSelection(this);
+		});
+		
+		jQuery('.categoryposts-data-panel-date-preset-format').on('change', function () { // change date format
+			cwp_namespace.toggleDateFormat(this);
+		});
+		
+		jQuery('.categoryPosts-template a').on('click', function (event) { // open template help
+			cwp_namespace.openTemplateHelp(this, event);
+		});
+		
+		jQuery('.cat-post-premade_templates button').on('click', function () { // select a pre made template
+			cwp_namespace.selectPremadeTemplate(this);
+		});
+
+		jQuery('.cat-post-premade_templates select').on('change', function (event) { // prevent refresh ontemplate selection
+			event.preventDefault();
+			event.stopPropagation();
+		});
+	}
 	
-	jQuery('.categoryposts-data-panel-filter-cat').on('change', function () { // for widgets page
-		cwp_namespace.toggleFooterLinkUrl(this);
-	});
-	
+	setChangeHandlers();
 });
 
