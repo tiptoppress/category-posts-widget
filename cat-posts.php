@@ -506,6 +506,18 @@ class Widget extends \WP_Widget {
 			'orderby' => $sort_by,
 			'order' => $sort_order
 		);
+
+                $valid_status = array('publish', 'future', 'both');
+                if ( isset($instance['status']) && in_array($instance['status'],$valid_status) ) {
+                        $status = $instance['status'];
+			if ($status == 'both') {
+        			$args['post_status'] = array('publish', 'future');
+			} else {
+        			$args['post_status'] = $status;
+			}
+                } else {
+        		$args['post_status'] = 'publish';
+                }
         
         if (isset($instance["num"])) 
             $args['showposts'] = (int) $instance["num"];
@@ -1956,6 +1968,7 @@ function default_settings()  {
 				'num'                             => get_option('posts_per_page'),
 				'offset'                          => 1,
 				'sort_by'                         => 'date',
+				'status'                          => 'publish',
 				'asc_sort_order'                  => false,
 				'exclude_current_post'            => false,
 				'hideNoThumb'                     => false,
