@@ -542,6 +542,14 @@ class Widget extends \WP_Widget {
 			'orderby' => $sort_by,
 			'order' => $sort_order
 		);
+
+                $valid_status = array('publish', 'future', 'any');
+                if ( isset($instance['status']) && in_array($instance['status'],$valid_status) ) {
+                        $status = $instance['status'];
+                } else {
+                        $status = 'publish';
+                }
+        $args['post_status'] = $status;
         
         if (isset($instance["num"])) 
             $args['showposts'] = (int) $instance["num"];
@@ -1023,6 +1031,7 @@ class Widget extends \WP_Widget {
 			'num'                  => get_option('posts_per_page'),
 			'offset'               => 1,
 			'sort_by'              => '',
+			'status'               => '',
 			'asc_sort_order'       => '',
 			'exclude_current_post' => '',
 			'hideNoThumb'          => '',
@@ -1032,6 +1041,7 @@ class Widget extends \WP_Widget {
 		$num                  = $instance['num'];
 		$offset               = $instance['offset'];
 		$sort_by              = $instance['sort_by'];
+		$status               = $instance['status'];
 		$asc_sort_order       = $instance['asc_sort_order'];
 		$exclude_current_post = $instance['exclude_current_post'];
 		$hideNoThumb          = $instance['hideNoThumb'];
@@ -1061,6 +1071,16 @@ class Widget extends \WP_Widget {
                 <label for="<?php echo $this->get_field_id("offset"); ?>">
                     <?php _e('Start with post','category-posts'); ?>:
                     <input style="text-align: center; width: 30%;" id="<?php echo $this->get_field_id("offset"); ?>" name="<?php echo $this->get_field_name("offset"); ?>" type="number" min="1" value="<?php echo absint($instance["offset"]); ?>" />
+                </label>
+            </p>
+            <p>
+                <label for="<?php echo $this->get_field_id("status"); ?>">
+                    <?php _e('Status','category-posts'); ?>:
+                    <select id="<?php echo $this->get_field_id("status"); ?>" name="<?php echo $this->get_field_name("status"); ?>">
+                        <option value="publish"<?php selected( $instance["status"], "publish" ); ?>><?php _e('Published','category-posts')?></option>
+                        <option value="future"<?php selected( $instance["status"], "future" ); ?>><?php _e('Scheduled','category-posts')?></option>
+                        <option value="any"<?php selected( $instance["status"], "any" ); ?>><?php _e('Any','category-posts')?></option>
+                    </select>
                 </label>
             </p>
             <p>
@@ -1637,6 +1657,7 @@ function default_settings()  {
 				'num'                             => get_option('posts_per_page'),
 				'offset'                          => 1,
 				'sort_by'                         => 'date',
+				'status'                          => 'publish',
 				'asc_sort_order'                  => false,
 				'exclude_current_post'            => false,
 				'hideNoThumb'                     => false,
