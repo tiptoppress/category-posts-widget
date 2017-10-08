@@ -543,13 +543,17 @@ class Widget extends \WP_Widget {
 			'order' => $sort_order
 		);
 
-                $valid_status = array('publish', 'future');
+                $valid_status = array('publish', 'future', 'both');
                 if ( isset($instance['status']) && in_array($instance['status'],$valid_status) ) {
                         $status = $instance['status'];
+			if ($status == 'both') {
+        			$args['post_status'] = array('publish', 'future');
+			} else {
+        			$args['post_status'] = $status;
+			}
                 } else {
-                        $status = 'publish';
+        		$args['post_status'] = 'publish';
                 }
-        $args['post_status'] = $status;
         
         if (isset($instance["num"])) 
             $args['showposts'] = (int) $instance["num"];
@@ -1079,6 +1083,7 @@ class Widget extends \WP_Widget {
                     <select id="<?php echo $this->get_field_id("status"); ?>" name="<?php echo $this->get_field_name("status"); ?>">
                         <option value="publish"<?php selected( $instance["status"], "publish" ); ?>><?php _e('Published','category-posts')?></option>
                         <option value="future"<?php selected( $instance["status"], "future" ); ?>><?php _e('Scheduled','category-posts')?></option>
+                        <option value="both"<?php selected( $instance["status"], "both" ); ?>><?php _e('Published & Scheduled','category-posts')?></option>
                     </select>
                 </label>
             </p>
