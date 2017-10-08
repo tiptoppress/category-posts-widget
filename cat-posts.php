@@ -1229,6 +1229,11 @@ class Widget extends \WP_Widget {
  			<?php echo $this->get_checkbox_block_html($instance, 'no_cat_childs', __( 'Exclude child categories','category-posts' ), false, true);?>
 			<?php echo $this->get_number_input_block_html($instance, 'num', __( 'Number of posts to show','category-posts' ), get_option('posts_per_page'), 1,'', '', true);?>
 			<?php echo $this->get_number_input_block_html($instance, 'offset', __( 'Start with post','category-posts' ), 1, 1,'', '', true);?>
+			<?php echo $this->get_select_block_html($instance, 'status', esc_html__( 'Status','category-posts' ), array(
+																'publish' => __('Published','category-posts'),
+																'future' => __('Scheduled','category-posts'),
+																'both' => __('Published & Scheduled','category-posts'),
+																), 'publish', true);?>	
 			<?php echo $this->get_select_block_html($instance, 'sort_by', esc_html__( 'Sort by','category-posts' ), array(
 																'date' => __('Date','category-posts'),
 																'title' => __('Title','category-posts'),
