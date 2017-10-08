@@ -543,7 +543,7 @@ class Widget extends \WP_Widget {
 			'order' => $sort_order
 		);
 
-                $valid_status = array('publish', 'future', 'any');
+                $valid_status = array('publish', 'future');
                 if ( isset($instance['status']) && in_array($instance['status'],$valid_status) ) {
                         $status = $instance['status'];
                 } else {
@@ -1079,7 +1079,6 @@ class Widget extends \WP_Widget {
                     <select id="<?php echo $this->get_field_id("status"); ?>" name="<?php echo $this->get_field_name("status"); ?>">
                         <option value="publish"<?php selected( $instance["status"], "publish" ); ?>><?php _e('Published','category-posts')?></option>
                         <option value="future"<?php selected( $instance["status"], "future" ); ?>><?php _e('Scheduled','category-posts')?></option>
-                        <option value="any"<?php selected( $instance["status"], "any" ); ?>><?php _e('Any','category-posts')?></option>
                     </select>
                 </label>
             </p>
