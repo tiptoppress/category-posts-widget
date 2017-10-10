@@ -505,7 +505,7 @@ class Widget extends \WP_Widget {
             $title_args = array('echo'=>false);
 
 			if ($no_link)
-				$ret .= '<span '.$class . '">';
+				$ret .= '<span '.$class.'>';
 			else
 				$ret .= '<a '.$class . ' href="'.get_the_permalink().'" title="'.the_title_attribute($title_args).'">';
 
