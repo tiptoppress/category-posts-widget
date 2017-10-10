@@ -745,7 +745,7 @@ class Widget extends \WP_Widget {
 			$show_post_format   = isset($instance['show_post_format']) && ($instance['show_post_format'] != 'none');
 			
 			if(isset($this->instance['thumb_hover']) && !$everything_is_link && !$disable_css) {
-				$class = "class=\"cat-post-thumbnail cat-post-" . $instance['thumb_hover'] . "\"";
+				$class = "class=\"cat-post-thumbnail cat-post-".$instance['thumb_hover']."\"";
 			} else {
 				$class = "class=\"cat-post-thumbnail\"";
 			}
@@ -753,9 +753,9 @@ class Widget extends \WP_Widget {
             $title_args = array('echo'=>false);
 
 			if ($no_link)
-				$ret .= '<span '.$class . '">';
+				$ret .= '<span '.$class.'>';
 			else
-				$ret .= '<a '.$class . ' href="'.get_the_permalink().'" title="'.the_title_attribute($title_args).'">';
+				$ret .= '<a '.$class.' href="'.get_the_permalink().'" title="'.the_title_attribute($title_args).'">';
 
             $ret .= $this->the_post_thumbnail( array($this->instance['thumb_w'],$this->instance['thumb_h']));
 
