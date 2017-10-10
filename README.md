@@ -54,6 +54,7 @@ We've also started creating free widget extensions for the Premium Widget. The f
 * Option to change ordering of posts.
 * Set which category the posts should come form.
 * Add dropdownbox entry for 'all' categories.
+* Option to filter by post status.
 * Set how many posts to show.
 * Option to hide widget, if category have currently no posts.
 * Add option to disable subcategories.
@@ -137,6 +138,9 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 
 ## Changelog
 #### [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=github&utm_campaign=changelog_cpw&utm_medium=web)
+#### 4.7.3 - October 10th 2017
+* Add option to filter by post status
+* Fixed footer section do not change when switching to and from "all posts"
 
 #### 4.7.2 - February 25th 2017
 * Add option to disable only the font styles
