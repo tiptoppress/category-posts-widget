@@ -2033,9 +2033,9 @@ function save_post($pid,$post) {
 	
 	// check if only one shortcode format - non array of arrays, and convert it
 	if (!empty($meta) && !is_array(reset($meta)))
-		$meta = array ('' => $meta);  // the coversion
+		$meta = array ('' => $meta);  // the conversion
 	
-	$old_names = array_keys($meta); // keep list of curren shorcodes names to delete lter whatever was deleted
+	$old_names = array_keys($meta); // keep list of current shortcode names to delete lter whatever was deleted
 	$names = shortcode_names(SHORTCODE_NAME,$post->post_content);
 
 	// remove setting for unused names
