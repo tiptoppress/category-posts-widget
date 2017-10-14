@@ -141,6 +141,33 @@ function register_virtual_widgets() {
 	}
 }
 
+/**
+ *  Enquee the relevant css and scripts based on the actual settings of the widgets
+ *  displayed on the page
+ *  
+ *  @since 4.8
+ */
+function wp_enqueue_scripts() {
+
+	// registering do not do anything by itself so just get over with it first
+	wp_register_script( 'category-posts-productZoom', plugins_url('js/elevatezoom-3.0.8/jquery.elevateZoom.min.js',__FILE__),array('jquery'),VERSION,true );
+
+	$widgets = virtualWidget::getAllSettings();
+	foreach ($widgets as $setting) {
+		// enqueue product zoom?
+		if (isset($setting['thumb_hover']) && ($setting['thumb_hover'] == 'productZoom'))
+			// registering do not do anything by itself so just get over with it first
+			wp_enqueue_script( 'category-posts-productZoom' );
+	}
+}
+
+/**
+ * Register our styles
+ *
+ * @return void
+ */
+add_action( 'wp_enqueue_scripts', __NAMESPACE__.'\wp_enqueue_scripts' );
+
 add_action('wp_head',__NAMESPACE__.'\wp_head');
 
 /*
@@ -1126,7 +1153,9 @@ class Widget extends \WP_Widget {
 				$this->removeExcerpFilters($instance);
 			
 			wp_reset_postdata();
-			
+
+			add_action('wp_footer',function () use ($number,$instance) { footer_script($number,$instance);},100);
+						
 			$use_css_cropping = isset($this->instance['use_css_cropping']) && $this->instance['use_css_cropping'];
 
 			if ($use_css_cropping){
@@ -1675,6 +1704,7 @@ class Widget extends \WP_Widget {
 																			'white' => __('Brighter','category-posts'),
 																			'scale' => __('Zoom in','category-posts'),
 																			'blur' => __('Blur','category-posts'),
+																			'productZoom' => __('Product zoom + scroll','category-posts'),
 																			'icon' => __('Icon','category-posts'),
 																			), 'none',true);?>			
 						<?php echo $this->get_select_block_html($instance, 'show_post_format', esc_html__( 'Indicate post format','category-posts' ), array(
@@ -1762,6 +1792,33 @@ function register_widget() {
 }
 
 add_action( 'widgets_init', __NAMESPACE__.'\register_widget' );
+
+/*
+ *	Output initialization Javascript code for Styles
+ *	
+ *	Params:
+ *	  number: The widget number used to identify the specific list
+ *	  widgetsettings: The "instance" parameters of the widget
+ *	
+ * @return void
+ *
+ * @since 4.8
+ *
+*/
+function footer_script($number,$widgetsettings) {
+	// set prodct zoom configurations
+	if (isset($widgetsettings['thumb_hover']) && ($widgetsettings['thumb_hover'] == 'productZoom')) {
+		?>
+		<script type="text/javascript">
+			jQuery( document ).ready(function () {
+				jQuery('.cat-post-item span').elevateZoom({
+					zoomType:"inner"
+				});
+			});
+		</script>
+		<?php
+	}
+}
 
 /**
  * Output js code to handle responsive thumbnails
