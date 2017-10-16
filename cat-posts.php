@@ -1277,15 +1277,15 @@ class Widget extends \WP_Widget {
 			$hide_title = true;
 		}
 ?>
-        <h4 data-panel="title"><?php _e('Title','category-posts')?></h4>
-        <div>
-			<?php echo $this->get_checkbox_block_html($instance, 'hide_title', __( 'Hide title','category-posts' ), false, true);?>
-			<div class="cpwp_ident categoryposts-data-panel-title-settings" <?php if ($hide_title) echo 'style="display:none"';?>>
-				<?php echo $this->get_text_input_block_html($instance, 'title',  __( 'Title','category-posts' ), '', __('Recent Posts','category-posts'), true);?>
-				<?php echo $this->get_checkbox_block_html($instance, 'title_link', __( 'Make widget title link','category-posts' ), false, $cat != 0);?>
-				<?php echo $this->get_text_input_block_html($instance, 'title_link_url', __( 'Title link URL','category-posts' ), '', '', $cat == 0);?>
+	<h4 data-panel="title"><?php esc_html_e( 'Title', 'category-posts' )?></h4>
+	<div>
+		<?php echo $this->get_checkbox_block_html( $instance, 'hide_title', __( 'Hide title','category-posts' ), false, true );?>
+		<div class="cpwp_ident categoryposts-data-panel-title-settings" <?php if ( $hide_title ) echo 'style="display:none"';?>>
+			<?php echo $this->get_text_input_block_html( $instance, 'title',  __( 'Title','category-posts' ), '', __( 'Recent Posts','category-posts' ), true );?>
+			<?php echo $this->get_checkbox_block_html( $instance, 'title_link', __( 'Make widget title link','category-posts' ), false, 0 !== $cat );?>
+				<?php echo $this->get_text_input_block_html( $instance, 'title_link_url', __( 'Title link URL','category-posts' ), '', '', 0 === $cat );?>
 			</div>
-        </div>
+		</div>
 <?php
 	}
 
@@ -1301,34 +1301,36 @@ class Widget extends \WP_Widget {
 		$instance = wp_parse_args( ( array ) $instance, array( 'cat' => 0 ) );
 		$cat = $instance['cat'];
 ?>
-        <h4 data-panel="filter"><?php _e('Filter','category-posts');?></h4>
-        <div>
-            <p>
-                <label>
-                    <?php _e( 'Category','category-posts' ); ?>:
-                    <?php wp_dropdown_categories( array(
-													'show_option_all' => __('All categories','category-posts'),
-													'hide_empty'=> 0, 'name' => $this->get_field_name("cat"),
-													'selected' => $instance["cat"],
+	<h4 data-panel="filter"><?php esc_html_e( 'Filter', 'category-posts' );?></h4>
+	<div>
+		<p>
+			<label>
+				<?php esc_html_e( 'Category', 'category-posts' ); ?>:
+				<?php wp_dropdown_categories( array(
+													'show_option_all' => __( 'All categories', 'category-posts' ),
+													'hide_empty' => 0,
+													'name' => $this->get_field_name( 'cat' ),
+													'selected' => $instance['cat'],
 													'class' => 'categoryposts-data-panel-filter-cat',
-													'show_option_none'   => __('Show categories randomly','category-posts'),
+													'show_option_none'   => __( 'Show categories randomly', 'category-posts' ),
 													'option_none_value'  => 'rand',
-												) ); ?>
-                </label>
-            </p>
- 			<?php echo $this->get_checkbox_block_html($instance, 'no_cat_childs', __( 'Exclude child categories','category-posts' ), false, true);?>
-			<?php echo $this->get_number_input_block_html($instance, 'num', __( 'Number of posts to show','category-posts' ), get_option('posts_per_page'), 1,'', '', true);?>
+				) );
+				?>
+			</label>
+		</p>
+		<?php echo $this->get_checkbox_block_html( $instance, 'no_cat_childs', __( 'Exclude child categories','category-posts' ), false, true );?>
+		<?php echo $this->get_number_input_block_html( $instance, 'num', __( 'Number of posts to show', 'category-posts' ), get_option( 'posts_per_page' ), 1,'', '', true );?>
 			<?php echo $this->get_number_input_block_html($instance, 'offset', __( 'Start with post','category-posts' ), 1, 1,'', '', true);?>
 			<?php echo $this->get_select_block_html($instance, 'status', esc_html__( 'Status','category-posts' ), array(
-																'publish' => __('Published','category-posts'),
-																'future' => __('Scheduled','category-posts'),
-																'both' => __('Published & Scheduled','category-posts'),
+																'publish' => __( 'Published', 'category-posts' ),
+																'future' => __( 'Scheduled', 'category-posts' ),
+																'both' => __( 'Published & Scheduled', 'category-posts' ),
 																), 'publish', true);?>
 			<?php echo $this->get_select_block_html($instance, 'sort_by', esc_html__( 'Sort by','category-posts' ), array(
-																'date' => __('Date','category-posts'),
-																'title' => __('Title','category-posts'),
-																'comment_count' => __('Number of comments','category-posts'),
-																'rand' => __('Random','category-posts'),
+																'date' => __( 'Date', 'category-posts' ),
+																'title' => __( 'Title', 'category-posts' ),
+																'comment_count' => __( 'Number of comments', 'category-posts' ),
+																'rand' => __( 'Random', 'category-posts' ),
 																), 'date', true);?>
  			<?php echo $this->get_checkbox_block_html($instance, 'asc_sort_order', __( 'Reverse sort order (ascending','category-posts' ), false, true);?>
  			<?php echo $this->get_checkbox_block_html($instance, 'exclude_current_post', __( 'Exclude current post','category-posts' ), false, true);?>
@@ -1341,16 +1343,18 @@ class Widget extends \WP_Widget {
 	 *  Get a regex to parse the template in order to find the tags used in it
 	 */
 	private function get_template_regex() {
-		 $tags = array( 'author', 'title', 'date', 'thumb', 'excerpt', 'commentnum', 'post_tag','category' );
+		$tags = array( 'author', 'title', 'date', 'thumb', 'excerpt', 'commentnum', 'post_tag','category' );
 
-		 $regexp = '';
-		 foreach ( $tags as $t ) {
-			 if ( ! empty( $regexp ) )
-				 $regexp .= '|';
+		$regexp = '';
+		foreach ( $tags as $t ) {
+			if ( ! empty( $regexp ) ) {
+				$regexp .= '|';
+			}
 			$regexp .= '%' . $t . '%';
-		 }
-		 $regexp = '@(' . $regexp . ')@i';
-		 return $regexp;
+		}
+		$regexp = '@(' . $regexp . ')@i';
+
+		return $regexp;
 	}
 
 	/**
@@ -1366,12 +1370,13 @@ class Widget extends \WP_Widget {
 	 */
 	private function get_wrap_block_html( $html, $key, $visible ) {
 
-		$cl = ' class="'.__NAMESPACE__.'-'.esc_attr($key).'"';
+		$cl = ' class="' . __NAMESPACE__ . '-' . esc_attr( $key ) . '"';
 
 		$style = '';
-		if ( ! $visible )
+		if ( ! $visible ) {
 			$style = ' style="display:none"';
-		$ret = '<p'.$cl.$style.">\n".$html."</p>\n";
+		}
+		$ret = '<p' . $cl . $style . ">\n" . $html . "</p>\n";
 
 		return $ret;
 	}
@@ -1393,18 +1398,20 @@ class Widget extends \WP_Widget {
 	private function get_select_block_html( $instance, $key, $label, $list, $default, $visible ) {
 		$value = $default;
 
-		if (isset($instance[$key]))
-			$value = $instance[$key];
+		if ( isset( $instance[ $key ] ) ) {
+			$value = $instance[ $key ];
+		}
 
-		if (!array_key_exists($value,$list))
+		if ( ! array_key_exists( $value, $list ) ) {
 			$value = $default;
+		}
 
-		$ret = '<label for="'.$this->get_field_id($key)."\">\n".
-					$label.
-				"</label>\n".
-				'<select d="'. $this->get_field_id($key).'" name="'.$this->get_field_name($key).'"  autocomplete="off">'."\n";
-		foreach ($list as $v => $l) {
-			$ret .= '<option value="'.esc_attr($v).'" '.selected( $v, $value, false ).'>'.esc_html($l)."</option>\n";
+		$ret = '<label for="' . $this->get_field_id( $key ) . "\">\n" .
+					$label .
+				"</label>\n" .
+				'<select d="' . $this->get_field_id( $key ) . '" name="' . $this->get_field_name( $key ) . '"  autocomplete="off">' . "\n";
+		foreach ( $list as $v => $l ) {
+			$ret .= '<option value="' . esc_attr( $v ) . '" ' . selected( $v, $value, false ) . '>' . esc_html( $l ) . "</option>\n";
 		}
 		$ret .= "</select>\n";
 
@@ -1430,12 +1437,13 @@ class Widget extends \WP_Widget {
 
 		$value = $default;
 
-		if ( isset( $instance[ $key ] ) )
+		if ( isset( $instance[ $key ] ) ) {
 			$value = $instance[ $key ];
+		}
 
-		$ret = '<label for="'.$this->get_field_id($key).'">'.$label."</label><br />".
-					'<textarea rows="'.$num_rows.'" placeholder="'.esc_attr($placeholder).'" id="'. $this->get_field_id($key).'" name="'. $this->get_field_name($key).'" type="text" autocomplete="off">'.esc_textarea($value).'</textarea>'.
-				"<br />";
+		$ret = '<label for="' . $this->get_field_id( $key ) . '">' . $label . '</label><br />' .
+					'<textarea rows="' . $num_rows . '" placeholder="' . esc_attr( $placeholder ) . '" id="' . $this->get_field_id($key).'" name="'. $this->get_field_name($key) . '" type="text" autocomplete="off">' . esc_textarea( $value ) . '</textarea>' .
+				'<br />';
 
 		return $this->get_wrap_block_html( $ret, $key, $visible );
 	}
@@ -1458,12 +1466,13 @@ class Widget extends \WP_Widget {
 
 		$value = $default;
 
-		if ( isset( $instance[ $key ] ) )
+		if ( isset( $instance[ $key ] ) ) {
 			$value = $instance[ $key ];
+		}
 
-		$ret = '<label for="'.$this->get_field_id($key)."\">\n".
-					esc_html($label).
-					'<input placeholder="'.esc_attr($placeholder).'" id="'. $this->get_field_id($key).'" name="'. $this->get_field_name($key).'" type="text" value="'. esc_attr($value).'" autocomplete="off"/>'."\n".
+		$ret = '<label for="' . $this->get_field_id( $key ) . "\">\n" .
+					esc_html( $label ) .
+					'<input placeholder="' . esc_attr( $placeholder ) . '" id="' . $this->get_field_id( $key ) . '" name="'. $this->get_field_name( $key ) . '" type="text" value="' . esc_attr( $value ) . '" autocomplete="off"/>' . "\n" .
 				"</label>\n";
 
 		return $this->get_wrap_block_html( $ret, $key, $visible );
@@ -1489,18 +1498,21 @@ class Widget extends \WP_Widget {
 
 		$value = $default;
 
-		if ( isset( $instance[ $key ] ) )
+		if ( isset( $instance[ $key ] ) ) {
 			$value = $instance[ $key ];
+		}
 
 		$minmax = '';
-		if ( $min != '' )
-			$minmax .= ' min="'.$min.'"';
-		if ($max != '')
-			$minmax .= ' max="'.$max.'"';
+		if ( '' !== $min ) {
+			$minmax .= ' min="' . $min . '"';
+		}
+		if ('' !== $max ) {
+			$minmax .= ' max="' . $max . '"';
+		}
 
-		$ret = '<label for="'.$this->get_field_id($key)."\">\n".
-					esc_html($label).
-					'<input placeholder="'.$placeholder.'" id="'. $this->get_field_id($key).'" name="'. $this->get_field_name($key).'" type="number"'.$minmax.' value="'. esc_attr($value).'" autocomplete="off" />'."\n".
+		$ret = '<label for="' . $this->get_field_id( $key ) . "\">\n" .
+					esc_html( $label ) .
+					'<input placeholder="' . $placeholder . '" id="' . $this->get_field_id( $key ) . '" name="' . $this->get_field_name( $key ) . '" type="number"' . $minmax . ' value="' . esc_attr( $value ) . '" autocomplete="off" />' . "\n" .
 				"</label>\n";
 
 		return $this->get_wrap_block_html( $ret, $key, $visible );
@@ -1523,33 +1535,35 @@ class Widget extends \WP_Widget {
 
 		$value = $default;
 
-		if (array_key_exists($key,$instance))
-			if ($instance[$key])
+		if ( array_key_exists( $key, $instance ) ) {
+			if ( $instance[ $key ] ) {
 				$value = true;
-			else
+			} else {
 				$value = false;
-
-		$ret = '<label for="'.$this->get_field_id($key)."\">\n".
-					'<input id="'. $this->get_field_id($key).'" name="'. $this->get_field_name($key).'" type="checkbox" '. checked($value,true,false).' autocomplete="off"/>'."\n".
-					esc_html($label).
+			}
+		}
+		$ret = '<label for="' . $this->get_field_id( $key ) . "\">\n" .
+					'<input id="' . $this->get_field_id( $key ) . '" name="' . $this->get_field_name( $key ) . '" type="checkbox" ' . checked( $value, true, false ) . ' autocomplete="off"/>' . "\n" .
+					esc_html( $label ) .
 				"</label>\n";
 
-		return $this->get_wrap_block_html($ret, $key, $visible);
+		return $this->get_wrap_block_html( $ret, $key, $visible );
 	}
 
 	/**
 	 * The widget configuration form back end.
 	 *
-	 * @param  array $instance
+	 * @param  array $instance The parameters associated with the widget.
 	 * @return void
 	 */
 	function form( $instance ) {
-		if (count($instance) == 0) { // new widget, use defaults
- 			$instance = default_settings();
- 		} else { // updated widgets come from =< 4.6 excerpt filter is on
- 			if (!isset($instance['excerpt_filters']))
- 				$instance['excerpt_filters'] = 'on';
- 		}
+		if ( 0 === count( $instance ) ) { // new widget, use defaults.
+			$instance = default_settings();
+		} else { // updated widgets come from =< 4.6 excerpt filter is on.
+			if ( ! isset( $instance['excerpt_filters'] ) ) {
+				$instance['excerpt_filters'] = 'on';
+			}
+		}
 
 		$instance = wp_parse_args( ( array ) $instance, array(
 			'hide_post_titles'                => '',
@@ -1590,29 +1604,29 @@ class Widget extends \WP_Widget {
 
 		$cat = $instance['cat'];
 
-        if (!isset($style_done)) { // what an ugly hack, but can't figure out how to do it nicer on 4.3
+		if ( ! isset( $style_done ) ) { // what an ugly hack, but can't figure out how to do it nicer on 4.3.
 		?>
-        <style type="text/css">
-        .cpwp_ident {
+		<style type="text/css">
+		.cpwp_ident {
 			color: #6A6A6A;
 			background: #F1F1F1;
 			padding: 5px;
-        }
-        .cpwp_ident > .cpwp_ident {
-            border-left:5px solid #B3B3B3;
+		}
+		.cpwp_ident > .cpwp_ident {
+			border-left:5px solid #B3B3B3;
 			padding: 0 10px;
-        }
+		}
 		.cpwp_ident > p {
 			margin: 5px 0;
 		}
 		.cpwp_ident > label {
 			line-height: 2.75;
-            display: inline-block;
+			display: inline-block;
 		}
-        .cpwp_ident_top {
-            margin-top:-1em;
-            padding-top:1em;
-        }
+		.cpwp_ident_top {
+			margin-top:-1em;
+			padding-top:1em;
+		}
 
 		.category-widget-cont input[type="number"] {
 			width:5em;
@@ -1632,109 +1646,111 @@ class Widget extends \WP_Widget {
 			font-size:16px;
 			line-height:20px;
 		}
-        </style>
+		</style>
 
-        <?php
-                $style_done = true;
-            }
-        ?>
+		<?php
+			$style_done = true;
+		}
+		?>
 
 		<div class="category-widget-cont">
-            <p><a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=widget_cpw&utm_campaign=get_pro_cpw&utm_medium=form"><?php _e('Get the Pro version','category-posts'); ?></a></p>
-        <?php
-            $this->formTitlePanel( $instance );
-            $this->formFilterPanel( $instance );
-        ?>
-			<h4 data-panel="details"><?php _e('Post details','category-posts')?></h4>
+			<p><a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=widget_cpw&utm_campaign=get_pro_cpw&utm_medium=form"><?php esc_html_e( 'Get the Pro version', 'category-posts' ); ?></a></p>
+			<?php
+			$this->formTitlePanel( $instance );
+			$this->formFilterPanel( $instance );
+			?>
+			<h4 data-panel="details"><?php esc_html_e( 'Post details', 'category-posts' )?></h4>
 			<div>
-				<?php echo $this->get_checkbox_block_html($instance, 'everything_is_link', __( 'Everything is a link','category-posts' ), false, true);?>
+				<?php echo $this->get_checkbox_block_html( $instance, 'everything_is_link', __( 'Everything is a link','category-posts' ), false, true );?>
 				<?php
-					$template = '';
-					if (!isset($instance['template'])) {
-						$template = $this->convert_settings_to_template($instance);
-					} else
-						$template = $instance['template'];
-					echo $this->get_textarea_html($instance, 'template', __( 'Template','category-posts' ).' '. '<a href="#" title="'. esc_html__('Show template help','category-posts').'" >[?]</a>', $template, '', true, 5);
-					preg_match_all($this->get_template_regex(), $template, $matches);
-					$tags = array();
-					if (!empty($matches[0]))
-						$tags = array_flip($matches[0]);
+				$template = '';
+				if ( ! isset( $instance['template'] ) ) {
+					$template = $this->convert_settings_to_template( $instance );
+				} else {
+					$template = $instance['template'];
+				}
+				echo $this->get_textarea_html( $instance, 'template', __( 'Template','category-posts' ) . ' ' . '<a href="#" title="'. esc_html__( 'Show template help', 'category-posts' ) . '" >[?]</a>', $template, '', true, 5 );
+				preg_match_all( $this->get_template_regex(), $template, $matches );
+				$tags = array();
+				if ( ! empty( $matches[0] ) ) {
+					$tags = array_flip( $matches[0] );
+				}
 				?>
 				<div class="cat-post-premade_templates">
 					<label><?php esc_html_e( 'Select Premade template','category-posts' ) ?></label>
 					<select>
-						<option value="title"><?php esc_html_e('Post title only','category-posts')?></option>
-						<option value="title_excerpt"><?php esc_html_e('Post title and excerpt','category-posts')?></option>
-						<option value="title_thumb"><?php esc_html_e('Post title and thumbnail','category-posts')?></option>
-						<option value="title_thum_excerpt"><?php esc_html_e('Post title, thumbnail and excerpt','category-posts')?></option>
-						<option value="everything"><?php esc_html_e('Everything','category-posts')?></option>
+						<option value="title"><?php esc_html_e( 'Post title only', 'category-posts' )?></option>
+						<option value="title_excerpt"><?php esc_html_e( 'Post title and excerpt', 'category-posts' )?></option>
+						<option value="title_thumb"><?php esc_html_e( 'Post title and thumbnail', 'category-posts' )?></option>
+						<option value="title_thum_excerpt"><?php esc_html_e( 'Post title, thumbnail and excerpt', 'category-posts' )?></option>
+						<option value="everything"><?php esc_html_e( 'Everything', 'category-posts' )?></option>
 					</select>
-					<button type="button"><?php esc_html_e('Select the template','category-posts')?></button>
+					<button type="button"><?php esc_html_e( 'Select the template', 'category-posts' )?></button>
 				</div>
 				<div class="cat-post-template-help">
-					<p><?php esc_html_e('The following text will be replaced with the relevant information. In addition you can use any text and html (if you have the permisions) anywhere you want','category-posts')?>
+					<p><?php esc_html_e( 'The following text will be replaced with the relevant information. In addition you can use any text and html (if you have the permisions) anywhere you want', 'category-posts' )?>
 					</p>
 					<table>
 						<tr>
-							<th><?php esc_html_e('New line','category-posts')?></th>
-							<td><?php esc_html_e('Space','category-posts')?></td>
+							<th><?php esc_html_e( 'New line', 'category-posts' )?></th>
+							<td><?php esc_html_e( 'Space', 'category-posts' )?></td>
 						</tr>
 						<tr>
-							<th><?php esc_html_e('Empty line','category-posts')?></th>
-							<td><?php esc_html_e('Next line is a paragraph','category-posts')?></td>
+							<th><?php esc_html_e( 'Empty line', 'category-posts' )?></th>
+							<td><?php esc_html_e( 'Next line is a paragraph', 'category-posts' )?></td>
 						</tr>
 						<tr>
 							<th>%title%</th>
-							<td><?php esc_html_e('Post title','category-posts')?></td>
+							<td><?php esc_html_e( 'Post title', 'category-posts' )?></td>
 						</tr>
 						<tr>
 							<th>%thumb%</th>
-							<td><?php esc_html_e('Post thumbnail','category-posts')?></td>
+							<td><?php esc_html_e( 'Post thumbnail', 'category-posts' )?></td>
 						</tr>
 						<tr>
 							<th>%date%</th>
-							<td><?php esc_html_e('Post publish date','category-posts')?></td>
+							<td><?php esc_html_e( 'Post publish date', 'category-posts' )?></td>
 						</tr>
 						<tr>
 							<th>%excerpt%</th>
-							<td><?php esc_html_e('Post excerpt','category-posts')?></td>
+							<td><?php esc_html_e( 'Post excerpt', 'category-posts' )?></td>
 						</tr>
 						<tr>
 							<th>%author%</th>
-							<td><?php esc_html_e('Post author','category-posts')?></td>
+							<td><?php esc_html_e( 'Post author', 'category-posts' )?></td>
 						</tr>
 						<tr>
 							<th>%commentnum%</th>
-							<td><?php esc_html_e('The number of comments to the post','category-posts')?></td>
+							<td><?php esc_html_e( 'The number of comments to the post', 'category-posts' )?></td>
 						</tr>
 						<tr>
 							<th>%post_tag%</th>
-							<td><?php esc_html_e('Post tags','category-posts')?></td>
+							<td><?php esc_html_e( 'Post tags', 'category-posts' )?></td>
 						</tr>
 						<tr>
 							<th>%category%</th>
-							<td><?php esc_html_e('Post categories','category-posts')?></td>
+							<td><?php esc_html_e( 'Post categories', 'category-posts' )?></td>
 						</tr>
 					</table>
 				</div>
 
 				<?php // Excerpt settings. ?>
-				<div class="categoryposts-data-panel-excerpt" style="display:<?php echo (isset($tags['%excerpt%'])) ? 'block' : 'none'?>">
-					<p><?php echo __( 'Excerpt settings','category-posts' );?></p>
+				<div class="categoryposts-data-panel-excerpt" style="display:<?php echo ( isset( $tags['%excerpt%'] ) ) ? 'block' : 'none'?>">
+					<p><?php esc_html_e( 'Excerpt settings', 'category-posts' );?></p>
 					<div class="cpwp_ident">
-					<?php echo $this->get_number_input_block_html($instance, 'excerpt_length', __( 'Excerpt length (in words):','category-posts' ), get_option('posts_per_page'), 1,55, '', true);?>
-					<?php echo $this->get_text_input_block_html($instance, 'excerpt_more_text',  __( 'Excerpt \'more\' text:','category-posts' ), '', __('...','category-posts'), true);?>
-					<?php echo $this->get_checkbox_block_html($instance, 'excerpt_filters', __( 'Don\'t override Themes and plugin filters','category-posts' ), false, true);?>
+					<?php echo $this->get_number_input_block_html( $instance, 'excerpt_length', __( 'Excerpt length (in words):','category-posts' ), get_option( 'posts_per_page' ), 1, 55, '', true );?>
+					<?php echo $this->get_text_input_block_html( $instance, 'excerpt_more_text',  __( 'Excerpt \'more\' text:','category-posts' ), '', __( '...', 'category-posts' ), true );?>
+					<?php echo $this->get_checkbox_block_html( $instance, 'excerpt_filters', __( 'Don\'t override Themes and plugin filters','category-posts' ), false, true );?>
 					</div>
 				</div>
 				<div class="categoryposts-data-panel-date" style="display:<?php echo (isset($tags['%date%'])) ? 'block' : 'none'?>">
 					<p><?php echo __( 'Date format settings','category-posts' );?></p>
 					<div class="cpwp_ident">
 						<?php echo $this->get_select_block_html($instance, 'preset_date_format', esc_html__( 'Date format','category-posts' ), array(
-																			'sitedateandtime' => __('Site date and time','category-posts'),
-																			'sitedate' => __('Site date','category-posts'),
-																			'sincepublished' => __('Time since published','category-posts'),
-																			'other' => __('PHP style format','category-posts'),
+																			'sitedateandtime' => __( 'Site date and time', 'category-posts' ),
+																			'sitedate' => __( 'Site date', 'category-posts' ),
+																			'sincepublished' => __( 'Time since published', 'category-posts' ),
+																			'other' => __( 'PHP style format', 'category-posts' ),
 																			), 'sitedateandtime', true);?>
 						<?php echo $this->get_text_input_block_html($instance, 'date_format',  __( 'PHP Style Date format','category-posts' ), '', 'j M Y', $preset_date_format=='other');?>
 						<?php echo $this->get_text_input_block_html($instance, 'date_template',  __( 'Date display template','category-posts' ), '%date%', '', true);?>
@@ -1747,79 +1763,79 @@ class Widget extends \WP_Widget {
 					<div class="cpwp_ident">
 						<p>
 							<label>
-								<?php _e('Thumbnail dimensions (in pixels)','category-posts'); ?><br />
+								<?php esc_html_e( 'Thumbnail dimensions (in pixels)', 'category-posts' ); ?><br />
 								<label for="<?php echo $this->get_field_id("thumb_w"); ?>">
-									<?php _e('Width:','category-posts')?> <input style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo esc_attr($instance["thumb_w"]); ?>" />
+									<?php esc_html_e( 'Width:', 'category-posts' )?> <input style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_w"); ?>" name="<?php echo $this->get_field_name("thumb_w"); ?>" value="<?php echo esc_attr($instance["thumb_w"]); ?>" />
 								</label>
 
 								<label for="<?php echo $this->get_field_id("thumb_h"); ?>">
-									<?php _e('Height:','category-posts')?> <input style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo esc_attr($instance["thumb_h"]); ?>" />
+									<?php esc_html_e( 'Height:', 'category-posts' )?> <input style="width:30%;" type="number" min="1" id="<?php echo $this->get_field_id("thumb_h"); ?>" name="<?php echo $this->get_field_name("thumb_h"); ?>" value="<?php echo esc_attr($instance["thumb_h"]); ?>" />
 								</label>
 							</label>
 						</p>
 						<?php echo $this->get_checkbox_block_html($instance, 'use_css_cropping', __( 'CSS crop to requested size','category-posts' ), false, false);?>
 						<?php echo $this->get_select_block_html($instance, 'thumb_hover', esc_html__( 'Animation on mouse hover:','category-posts' ), array(
-																			'none' => __('None','category-posts'),
-																			'dark' => __('Darker','category-posts'),
-																			'white' => __('Brighter','category-posts'),
-																			'scale' => __('Zoom in','category-posts'),
-																			'blur' => __('Blur','category-posts'),
-																			'productZoom' => __('Product zoom + scroll','category-posts'),
-																			'icon' => __('Icon','category-posts'),
+																			'none' => __( 'None', 'category-posts' ),
+																			'dark' => __( 'Darker', 'category-posts' ),
+																			'white' => __( 'Brighter', 'category-posts' ),
+																			'scale' => __( 'Zoom in', 'category-posts' ),
+																			'blur' => __( 'Blur', 'category-posts' ),
+																			'productZoom' => __( 'Product zoom + scroll', 'category-posts' ),
+																			'icon' => __( 'Icon', 'category-posts' ),
 																			), 'none',true);?>
 						<?php echo $this->get_select_block_html($instance, 'show_post_format', esc_html__( 'Indicate post format','category-posts' ), array(
-																			'none' => __('None','category-posts'),
-																			'topleft' => __('Top left','category-posts'),
-																			'bottomleft' => __('Bottom left','category-posts'),
-																			'ceter' => __('Center','category-posts'),
-																			'topright' => __('Top right','category-posts'),
-																			'bottomright' => __('Bottom right','category-posts'),
-																			'nocss' => __('HTML without styling','category-posts'),
+																			'none' => __( 'None', 'category-posts' ),
+																			'topleft' => __( 'Top left', 'category-posts' ),
+																			'bottomleft' => __( 'Bottom left', 'category-posts' ),
+																			'ceter' => __( 'Center', 'category-posts' ),
+																			'topright' => __( 'Top right', 'category-posts' ),
+																			'bottomright' => __( 'Bottom right', 'category-posts' ),
+																			'nocss' => __( 'HTML without styling', 'category-posts' ),
 																			), 'none', true);?>
 						<p>
 							<label style="display:block">
-								<?php _e( 'Default thumbnail: ','category-posts' ); ?>
+								<?php esc_html_e( 'Default thumbnail: ','category-posts' ); ?>
 							</label>
-							<input type="hidden" class="default_thumb_id" id="<?php echo $this->get_field_id("default_thunmbnail"); ?>" name="<?php echo $this->get_field_name("default_thunmbnail"); ?>" value="<?php echo esc_attr($default_thunmbnail)?>"/>
+							<input type="hidden" class="default_thumb_id" id="<?php echo $this->get_field_id( 'default_thunmbnail'); ?>" name="<?php echo $this->get_field_name( "default_thunmbnail" ); ?>" value="<?php echo esc_attr( $default_thunmbnail )?>"/>
 							<span class="default_thumb_img">
 								<?php
-									if (!$default_thunmbnail)
-										_e('None','category-posts');
-									else {
-										$img = wp_get_attachment_image_src($default_thunmbnail);
-										echo '<img width="60" height="60" src="'.$img[0].'" />';
-									}
+								if ( ! $default_thunmbnail ) {
+									esc_html_e( 'None', 'category-posts' );
+								} else {
+									$img = wp_get_attachment_image_src( $default_thunmbnail );
+									echo '<img width="60" height="60" src="' . esc_url( $img[0] ) . '" />';
+								}
 								?>
 							</span>
 						</p>
 						<p>
 							<button type="button" class="cwp_default_thumb_select button upload-button">
-								<?php _e('Select image','category-posts')?>
+								<?php esc_html_e( 'Select image', 'category-posts' )?>
 							</button>
-							<button type="button" class="cwp_default_thumb_remove button upload-button" <?php if (!$default_thunmbnail) echo 'style="display:none"' ?> >
-								<?php _e('No default','category-posts')?>
+							<button type="button" class="cwp_default_thumb_remove button upload-button" <?php if ( ! $default_thunmbnail ) echo 'style="display:none"' ?> >
+								<?php esc_html_e( 'No default', 'category-posts' )?>
 							</button>
 						</p>
 					</div>
 				</div>
 
 			</div>
-			<h4 data-panel="general"><?php _e('General','category-posts')?></h4>
+			<h4 data-panel="general"><?php esc_html_e( 'General', 'category-posts' )?></h4>
 			<div>
 				<div class="cpwp_ident">
-					<?php echo $this->get_checkbox_block_html($instance, 'disable_css', __( 'Disable the built-in CSS','category-posts' ), false, true);?>
-					<?php echo $this->get_checkbox_block_html($instance, 'disable_font_styles', __( 'Disable only font styles','category-posts' ), false, true);?>
+					<?php echo $this->get_checkbox_block_html( $instance, 'disable_css', __( 'Disable the built-in CSS','category-posts' ), false, true );?>
+					<?php echo $this->get_checkbox_block_html( $instance, 'disable_font_styles', __( 'Disable only font styles','category-posts' ), false, true );?>
 				</div>
-				<?php echo $this->get_checkbox_block_html($instance, 'hide_if_empty', __( 'Hide if there are no matching posts','category-posts' ), false, true);?>
+				<?php echo $this->get_checkbox_block_html( $instance, 'hide_if_empty', __( 'Hide if there are no matching posts','category-posts' ), false, true );?>
 			</div>
-			<h4 data-panel="footer"><?php _e('Footer','category-posts')?></h4>
+			<h4 data-panel="footer"><?php esc_html_e( 'Footer', 'category-posts' )?></h4>
 			<div>
-				<?php echo $this->get_text_input_block_html($instance, 'footer_link_text',  __( 'Footer link text','category-posts' ), '', '', true);?>
-				<?php echo $this->get_text_input_block_html($instance, 'footer_link',  __( 'Footer link URL','category-posts' ), '', '', true);?>
+				<?php echo $this->get_text_input_block_html( $instance, 'footer_link_text',  __( 'Footer link text','category-posts' ), '', '', true );?>
+				<?php echo $this->get_text_input_block_html( $instance, 'footer_link',  __( 'Footer link URL','category-posts' ), '', '', true );?>
 			</div>
-            <p><a href="<?php echo get_edit_user_link().'#'.__NAMESPACE__ ?>"><?php _e('Widget admin behaviour settings','category-posts')?></a></p>
-            <p><a target="_blank" href="<?php echo DOC_URL ?>"><?php _e('Documentation','category-posts'); ?></a></p>
-            <p><a target="_blank" href="<?php echo SUPPORT_URL ?>"><?php _e('Support','category-posts'); ?></a></p>
+            <p><a href="<?php echo get_edit_user_link() . '#' .__NAMESPACE__ ?>"><?php esc_html_e( 'Widget admin behaviour settings', 'category-posts' )?></a></p>
+            <p><a target="_blank" href="<?php echo esc_url( DOC_URL ) ?>"><?php esc_html_e( 'Documentation', 'category-posts' ); ?></a></p>
+            <p><a target="_blank" href="<?php echo esc_url( SUPPORT_URL ) ?>"><?php esc_html_e( 'Support', 'category-posts' ); ?></a></p>
             <p><?php echo sprintf( wp_kses( __( 'We are on <a href="%1$s">Facebook</a> and <a href="%2$s">Twitter</a>.', 'category-posts' ), array(  'a' => array( 'href' => array() ) ) ), esc_url( 'https://www.facebook.com/TipTopPress' ), esc_url( 'https://twitter.com/TipTopPress' ) ); ?></br></br></p>
 		</div>
 		<?php
@@ -1840,11 +1856,11 @@ class Widget extends \WP_Widget {
 add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), __NAMESPACE__ . '\add_action_links' );
 
 function add_action_links ( $links ) {
-    $pro_link = array(
-        '<a target="_blank" href="'.PRO_URL.'">'.__('Get the Pro version','category-posts').'</a>',
-    );
+	$pro_link = array(
+		'<a target="_blank" href="' . esc_url( PRO_URL ) . '">' . __( 'Get the Pro version', 'category-posts' ) . '</a>',
+	);
 
-	$links = array_merge($pro_link, $links);
+	$links = array_merge( $pro_link, $links );
 
 	return $links;
 }
@@ -1867,7 +1883,7 @@ add_action( 'widgets_init', __NAMESPACE__ . '\register_widget' );
  */
 function footer_script( $number, $widgetsettings ) {
 	// set prodct zoom configurations.
-	if (isset($widgetsettings['thumb_hover']) && ($widgetsettings['thumb_hover'] == 'productZoom')) {
+	if ( isset( $widgetsettings['thumb_hover'] ) && ( $widgetsettings['thumb_hover'] == 'productZoom' ) ) {
 		?>
 		<script type="text/javascript">
 			jQuery( document ).ready(function () {
@@ -1954,15 +1970,15 @@ function change_cropped_image_dimensions() {
 				}
 
 <?php
-				/***
-				 *  cpw_crop_widgets is an internal filter that is used
+				/**
+				 *  The cpw_crop_widgets is an internal filter that is used
 				 *  to gather the ids of the widgets to which apply cropping
 				 *
-				 *  For eaier prevention of duplication, the widget id number should be an index
+				 *  For easier prevention of duplication, the widget id number should be an index
 				 *  in the array while the ratio of width/height be the value
 				 */
-				$widgets_ids = apply_filters('cpw_crop_widgets',array());
-				foreach ($widgets_ids as $number => $ratio) {
+				$widgets_ids = apply_filters( 'cpw_crop_widgets', array() );
+				foreach ( $widgets_ids as $number => $ratio ) {
 ?>
 				cwp_namespace.fluid_images.widget = jQuery('#<?php echo $number?>');
 				cwp_namespace.fluid_images.Widgets['<?php echo $number?>'] = new cwp_namespace.fluid_images.WidgetPosts(cwp_namespace.fluid_images.widget,<?php echo $ratio?>);
@@ -1999,17 +2015,20 @@ function change_cropped_image_dimensions() {
 function shortcode_settings( $name ) {
 	$meta = get_post_meta( get_the_ID(), SHORTCODE_META, true );
 
-	if (!empty($meta) && !is_array(reset($meta)))
-		$meta = array ('' => $meta);  // the coversion
+	if ( ! empty( $meta ) && ! is_array( reset( $meta ) ) ) {
+		$meta = array( '' => $meta );  // the coversion.
+	}
 
-	if (!isset($meta[$name])) // name do not exists? return empty array
+	if ( ! isset( $meta[ $name ] ) ) { // name do not exists? return empty array.
 		return array();
+	}
 
-	$instance = $meta[$name];
-	if (is_customize_preview()) {
-		$o=get_option('_virtual-'.WIDGET_BASE_ID);
-		if (is_array($o))
-			$instance=$o[get_the_ID()][$name];
+	$instance = $meta[ $name ];
+	if ( is_customize_preview() ) {
+		$o = get_option( '_virtual-' . WIDGET_BASE_ID );
+		if ( is_array( $o ) ) {
+			$instance = $o[ get_the_ID() ][ $name ];
+		}
 	}
 
 	return $instance;
@@ -2018,25 +2037,26 @@ function shortcode_settings( $name ) {
 /**
  *  Handle the shortcode
  *
- *  @param array $attr Array of the attributes to the short code, none is expected.
+ *  @param array  $attr Array of the attributes to the short code, none is expected.
  *  @param string $content The content enclosed in the shortcode, none is expected.
  *
  *  @return string An HTML of the "widget" based on its settings, actual or customized
  */
-function shortcode($attr,$content=null) {
+function shortcode( $attr, $content = null ) {
 	$repository = new virtualWidgetsRepository;
 
 	$shortcodes = $repository->getShortcodes();
 
 	$name = '';
-	if (isset($attr['name']))
+	if ( isset( $attr['name'] ) ) {
 		$name = $attr['name'];
+	}
 
-    if (is_singular()) {
-		if (isset($shortcodes[$name])) {
-			return $shortcodes[$name]->getHTML();
-        }
-    }
+	if ( is_singular() ) {
+		if ( isset( $shortcodes[ $name ] ) ) {
+			return $shortcodes[ $name ]->getHTML();
+		}
+	}
 
 	return '';
 }
@@ -2059,13 +2079,14 @@ function shortcode_names( $shortcode_name, $content ) {
 	$names = array();
 
 	$regex_pattern = get_shortcode_regex();
-	if (preg_match_all ('/'.$regex_pattern.'/s', $content, $matches)) {
-		foreach ($matches[2] as $k=>$shortcode) {
-			if ($shortcode == SHORTCODE_NAME) {
-                $name = '';
-				$atts = shortcode_parse_atts( $matches[3][$k] );
-				if (! empty( $atts['name']))
+	if ( preg_match_all( '/' . $regex_pattern . '/s', $content, $matches ) ) {
+		foreach ( $matches[2] as $k => $shortcode ) {
+			if ( SHORTCODE_NAME === $shortcode ) {
+				$name = '';
+				$atts = shortcode_parse_atts( $matches[3][ $k ] );
+				if ( ! empty( $atts['name'] ) ) {
 					$name = $atts['name'];
+				}
 				$names[] = $name;
 			}
 		}
@@ -2075,7 +2096,7 @@ function shortcode_names( $shortcode_name, $content ) {
 }
 
 /**
- *  Organized way to have rhw default widget settings accessible
+ *  Organized way to have the default widget settings accessible
  *
  *  @since 4.6
  */
@@ -2137,49 +2158,54 @@ function default_settings() {
  *
  *  @since 4.6
  */
-function save_post($pid,$post) {
+function save_post( $pid, $post ) {
 
-	// ignore revisions and auto saves
-	if ( wp_is_post_revision( $pid ) || wp_is_post_autosave($pid))
+	// ignore revisions and auto saves.
+	if ( wp_is_post_revision( $pid ) || wp_is_post_autosave( $pid ) ) {
 		return;
+	}
 
-    $meta = get_post_meta($pid,SHORTCODE_META,true);
-	if (empty($meta))
+	$meta = get_post_meta( $pid, SHORTCODE_META, true );
+	if ( empty( $meta ) ) {
 		$meta = array();
+	}
 
-	// check if only one shortcode format - non array of arrays, and convert it
-	if (!empty($meta) && !is_array(reset($meta)))
-		$meta = array ('' => $meta);  // the conversion
+	// check if only one shortcode format - non array of arrays, and convert it.
+	if ( ! empty( $meta ) && ! is_array( reset( $meta ) ) ) {
+		$meta = array( '' => $meta );  // the conversion.
+	}
 
-	$old_names = array_keys($meta); // keep list of current shortcode names to delete lter whatever was deleted
-	$names = shortcode_names(SHORTCODE_NAME,$post->post_content);
+	$old_names = array_keys( $meta ); // keep list of current shortcode names to delete lter whatever was deleted.
+	$names = shortcode_names( SHORTCODE_NAME, $post->post_content );
 
-	// remove setting for unused names
-	$to_delete = array_diff($old_names,$names);
-	foreach ($to_delete as $k)
-		unset($meta[$k]);
+	// remove setting for unused names.
+	$to_delete = array_diff( $old_names, $names );
+	foreach ( $to_delete as $k ) {
+		unset( $meta[ $k ] );
+	}
 
-	foreach ($names as $name) {
-		if (!isset($meta[$name])) {
-			$meta[$name] = default_settings();
+	foreach ( $names as $name ) {
+		if ( ! isset( $meta[ $name ] ) ) {
+			$meta[ $name ] = default_settings();
 		}
 	}
 
-	delete_post_meta($pid,SHORTCODE_META);
-    if (!empty($meta))
-        add_post_meta($pid,SHORTCODE_META,$meta,true);
+	delete_post_meta( $pid, SHORTCODE_META );
+	if ( ! empty( $meta ) ) {
+		add_post_meta( $pid, SHORTCODE_META, $meta, true );
+	}
 }
 
 add_action( 'save_post', __NAMESPACE__ . '\save_post', 10, 2 );
 
 function customize_register( $wp_customize ) {
 
-    class shortCodeControl extends \WP_Customize_Control {
-        public $form;
+	class shortCodeControl extends \WP_Customize_Control {
+		public $form;
 		public $title_postfix;
 
-        public function render_content() {
-			$widget_title = 'Category Posts Shortcode'.$this->title_postfix;
+		public function render_content() {
+			$widget_title = 'Category Posts Shortcode' . $this->title_postfix;
 			?>
 			<div class="widget-top">
 			<div class="widget-title"><h3><?php echo $widget_title; ?><span class="in-widget-title"></span></h3></div>
@@ -2192,55 +2218,59 @@ function customize_register( $wp_customize ) {
 				</div>
 			</div>
 			<?php
-        }
-    }
+		}
+	}
 
-    $args = array(
-        'post_type' => 'any',
-        'post_status' => 'any',
+	$args = array(
+		'post_type' => 'any',
+		'post_status' => 'any',
 		'posts_per_page' => -1,
-        'update_post_term_cache' => false,
-        'meta_query' => array(
+		'update_post_term_cache' => false,
+		'meta_query' => array(
 					array(
 					 'key' => SHORTCODE_META,
-					 'compare' => 'EXISTS'
-                     )
-				),
+					 'compare' => 'EXISTS',
+				 ),
+		),
 
-    );
-    $posts = get_posts($args);
+	);
+	$posts = get_posts( $args );
 
-    if (count($posts) > 0) {
-        $wp_customize->add_panel( __NAMESPACE__, array(
-            'title'           => __( 'Category Posts Shortcode', 'category-posts' ),
-            'priority'        => 300,
+	if ( count( $posts ) > 0 ) {
+		$wp_customize->add_panel( __NAMESPACE__, array(
+			'title'           => __( 'Category Posts Shortcode', 'category-posts' ),
+			'priority'        => 300,
 			'capability' => 'edit_theme_options',
-        ) );
+		) );
 
-        foreach($posts as $p) {
-            $widget = new Widget();
-            $meta = get_post_meta($p->ID,SHORTCODE_META,true);
-            if (!is_array($meta))
-                continue;
+		foreach ( $posts as $p ) {
+			$widget = new Widget();
+			$meta = get_post_meta( $p->ID, SHORTCODE_META, true );
+			if ( ! is_array( $meta ) ) {
+				continue;
+			}
 
-			if (!is_array(reset($meta))) // 4.6 format
-				$meta = array('' => $meta);
+			if ( ! is_array( reset( $meta ) ) ) { // 4.6 format.
+				$meta = array( '' => $meta );
+			}
 
-			foreach ($meta as $k => $m) {
-				$m = wp_parse_args($m,default_settings());
+			foreach ( $meta as $k => $m ) {
+				$m = wp_parse_args( $m, default_settings() );
 
-				if (count($meta) == 0) { // new widget, use defaults
+				if ( 0 === count( $meta ) ) { // new widget, use defaults.
 					;
-				} else { // updated widgets come from =< 4.6 excerpt filter is on
-					if (!isset($m['excerpt_filters']))
+				} else { // updated widgets come from =< 4.6 excerpt filter is on.
+					if ( ! isset( $m['excerpt_filters'] ) ) {
 						$m['excerpt_filters'] = 'on';
+					}
 				}
 
 				$section_title = $k;
-				if ($section_title == '')
-					$section_title = __('[shortcode]', 'category-posts');
+				if ( '' === $section_title ) {
+					$section_title = __( '[shortcode]', 'category-posts' );
+				}
 
-				$wp_customize->add_section( __NAMESPACE__.'-'.$p->id.'-'.$k, array(
+				$wp_customize->add_section( __NAMESPACE__ . '-' . $p->id . '-' . $k, array(
 					'title'           => $section_title,
 					'priority'        => 10,
 					'capability' => 'edit_theme_options',
@@ -2248,51 +2278,53 @@ function customize_register( $wp_customize ) {
 				) );
 
 				ob_start();
-				$widget->number = $p->ID.'_'.$k;
-				$widget->form($m);
+				$widget->number = $p->ID . '_' . $k;
+				$widget->form( $m );
 				$form = ob_get_clean();
 				$form = preg_replace_callback('/<(input|select|textarea)\s+.*name=("|\').*\[\w*\]\[([^\]]*)\][^>]*>/',
-					function ($matches) use ($p, $wp_customize, $m, $k) {
-						$setting = '_virtual-'.WIDGET_BASE_ID.'['.$p->ID.']['.$k.']['.$matches[3].']';
-						if (!isset($m[$matches[3]]))
-							$m[$matches[3]] = null;
+					function ( $matches ) use ( $p, $wp_customize, $m, $k ) {
+						$setting = '_virtual-' . WIDGET_BASE_ID . '[' . $p->ID . '][' . $k . '][' . $matches[3] . ']';
+						if ( ! isset( $m[ $matches[3] ] ) ) {
+							$m[ $matches[3] ] = null;
+						}
 						$wp_customize->add_setting( $setting, array(
-							'default' => $m[$matches[3]], // set default to current value
-							'type' => 'option'
+							'default' => $m[ $matches[3] ], // set default to current value.
+							'type' => 'option',
 						) );
 
-						return str_replace('<'.$matches[1],'<'.$matches[1].' data-customize-setting-link="'.$setting.'"',$matches[0]);
+						return str_replace( '<' . $matches[1], '<' . $matches[1] . ' data-customize-setting-link="' . $setting . '"' , $matches[0] );
 					},
 					$form
 				);
 
 				$args = array(
 						'label'   => __( 'Layout', 'twentyfourteen' ),
-						'section' => __NAMESPACE__.'-'.$p->id.'-'.$k,
+						'section' => __NAMESPACE__ . '-' . $p->id . '-' . $k,
 						'form' => $form,
-						'settings' => '_virtual-'.WIDGET_BASE_ID.'['.$p->ID.']['.$k.'][title]',
-						'active_callback' => function () use ($p) { return is_singular() && (get_the_ID()==$p->ID); }
+						'settings' => '_virtual-' . WIDGET_BASE_ID . '[' . $p->ID . '][' . $k . '][title]',
+						'active_callback' => function () use ( $p ) { return is_singular() && ( get_the_ID() === $p->ID); },
 						);
 
-				if (get_option('page_on_front') == $p->ID) {
+				if ( get_option( 'page_on_front' ) === $p->ID ) {
 					$args['active_callback'] = function () { return is_front_page(); };
 				}
 
 				$sc = new shortCodeControl(
 					$wp_customize,
-					'_virtual-'.WIDGET_BASE_ID.'['.$p->ID.']['.$k.'][title]',
+					'_virtual-' . WIDGET_BASE_ID . '[' . $p->ID . '][' . $k . '][title]',
 					$args
-					);
+				);
 
-				if ($k != '')
-					$sc->title_postfix = ' '.$k;
-				$wp_customize->add_control($sc);
+				if ( '' !== $k ) {
+					$sc->title_postfix = ' ' . $k;
+				}
+				$wp_customize->add_control( $sc );
 			}
-        }
-    }
+		}
+	}
 }
 
-add_action( 'customize_register', __NAMESPACE__.'\customize_register' );
+add_action( 'customize_register', __NAMESPACE__ . '\customize_register' );
 
 /**
  *  Save the virtual option used by the customizer into the proper meta values.
@@ -2305,20 +2337,22 @@ add_action( 'customize_register', __NAMESPACE__.'\customize_register' );
  *  @since 4.6
  */
 function customize_save_after() {
-    $virtual = get_option('_virtual-'.WIDGET_BASE_ID);
+	$virtual = get_option( '_virtual-' . WIDGET_BASE_ID );
 
-    if (is_array($virtual)) {
-        foreach ($virtual as $pid => $instance) {
-            $meta = get_post_meta($pid,SHORTCODE_META,true);
-			if (!empty($meta) && !is_array(reset($meta)))
-				$meta = array ('' => $meta);  // the coversion
-
-			foreach ($instance as $name=>$new) {
-				if (isset($meta[$name]))  // unlikely but maybe that short code was deleted by other session
-					$meta[$name] = array_merge($meta[$name],$new);
+	if ( is_array( $virtual ) ) {
+		foreach ( $virtual as $pid => $instance ) {
+			$meta = get_post_meta( $pid, SHORTCODE_META, true );
+			if ( ! empty( $meta ) && ! is_array( reset( $meta ) ) ) {
+				$meta = array( '' => $meta );  // the conversion.
 			}
-        }
-        update_post_meta($pid,SHORTCODE_META, $meta);
+
+			foreach ( $instance as $name => $new ) {
+				if ( isset( $meta[ $name ] ) ) { // unlikely but maybe that short code was deleted by other session.
+					$meta[ $name ] = array_merge( $meta[ $name ], $new );
+				}
+			}
+		}
+		update_post_meta( $pid, SHORTCODE_META, $meta );
 	}
 
 	delete_option( '_virtual-' . WIDGET_BASE_ID );
@@ -2419,72 +2453,83 @@ function mce_external_languages( $locales ) {
 
 add_filter( 'mce_external_languages', __NAMESPACE__ . '\mce_external_languages' );
 
-// user profile related functions
+/*
+ * user profile related functions.
+ */
 
-add_action( 'show_user_profile', __NAMESPACE__.'\show_user_profile' );
-add_action( 'edit_user_profile', __NAMESPACE__.'\show_user_profile' );
+add_action( 'show_user_profile', __NAMESPACE__ . '\show_user_profile' );
+add_action( 'edit_user_profile', __NAMESPACE__ . '\show_user_profile' );
 
 function show_user_profile( $user ) {
 
-	if ( ! current_user_can( 'edit_user', $user->ID ) )
+	if ( ! current_user_can( 'edit_user', $user->ID ) ) {
 		return;
+	}
 
-	if ( ! current_user_can( 'edit_theme_options', $user->ID ) )
+	if ( ! current_user_can( 'edit_theme_options', $user->ID ) ) {
 		return;
+	}
 
 	$meta = get_the_author_meta( __NAMESPACE__, $user->ID );
 
-	if ( empty( $meta) ) {
+	if ( empty( $meta ) ) {
 		$meta = array();
 	}
 
 	$accordion = false;
-	if (isset($meta['panels']))
+	if ( isset( $meta['panels'] ) ) {
 		$accordion = true;
+	}
 
 	$editor = false;
-	if ( isset( $meta['editor'] ) )
+	if ( isset( $meta['editor'] ) ) {
 		$editor = true;
+	}
 ?>
-	<h3 id="<?php echo __NAMESPACE__ ?>"><?php _e('Category Posts Widget behaviour settings','category-posts')?></h3>
+	<h3 id="<?php echo __NAMESPACE__ ?>"><?php esc_html_e( 'Category Posts Widget behaviour settings', 'category-posts' )?></h3>
 
 	<table class="form-table">
 		<tr>
-			<th><label for="<?php echo __NAMESPACE__?>[panels]"><?php _e('Open panels behavior','category-posts')?></label></th>
+			<th><label for="<?php echo __NAMESPACE__?>[panels]"><?php esc_html_e( 'Open panels behavior', 'category-posts' )?></label></th>
 			<td>
-				<input type="checkbox" name="<?php echo __NAMESPACE__?>[panels]" id="<?php echo __NAMESPACE__?>[panels]" <?php checked($accordion); ?>>
-				<label for=<?php echo __NAMESPACE__?>[panels]><?php _e('Close the curremtly open panel when opening a new one','category-posts')?></label>
+				<input type="checkbox" name="<?php echo __NAMESPACE__?>[panels]" id="<?php echo __NAMESPACE__?>[panels]" <?php checked( $accordion ); ?>>
+				<label for=<?php echo __NAMESPACE__?>[panels]><?php esc_html_e( 'Close the curremtly open panel when opening a new one', 'category-posts' )?></label>
 			</td>
 		</tr>
 		<tr>
-			<th><label for="<?php echo __NAMESPACE__?>[editor]"><?php _e('Visual editor button','category-posts')?></label></th>
+			<th><label for="<?php echo __NAMESPACE__?>[editor]"><?php esc_html_e( 'Visual editor button', 'category-posts' )?></label></th>
 			<td>
-				<input type="checkbox" name="<?php echo __NAMESPACE__?>[editor]" id="<?php echo __NAMESPACE__?>[editor]" <?php checked($editor); ?>>
-				<label for="<?php echo __NAMESPACE__?>[editor]"><?php _e('Hide the "insert shortcode" button from the editor','category-posts')?></label>
+				<input type="checkbox" name="<?php echo __NAMESPACE__?>[editor]" id="<?php echo __NAMESPACE__?>[editor]" <?php checked( $editor ); ?>>
+				<label for="<?php echo __NAMESPACE__?>[editor]"><?php esc_html_e( 'Hide the "insert shortcode" button from the editor', 'category-posts' )?></label>
 			</td>
 		</tr>
 	</table>
 <?php
 }
 
-add_action( 'personal_options_update', __NAMESPACE__.'\personal_options_update' );
-add_action( 'edit_user_profile_update', __NAMESPACE__.'\personal_options_update' );
+add_action( 'personal_options_update', __NAMESPACE__ . '\personal_options_update' );
+add_action( 'edit_user_profile_update', __NAMESPACE__ . '\personal_options_update' );
 
 function personal_options_update( $user_id ) {
 
-	if ( !current_user_can( 'edit_user', $user_id ) )
+	if ( !current_user_can( 'edit_user', $user_id ) ) {
 		return false;
+	}
 
-	if ( !current_user_can( 'edit_theme_options', $user_id ) )
+	if ( !current_user_can( 'edit_theme_options', $user_id ) ) {
 		return;
+	}
 
-	if (isset($_POST[__NAMESPACE__]))
+	if ( isset( $_POST[__NAMESPACE__] ) ) {
 		update_user_meta( $user_id, __NAMESPACE__, $_POST[__NAMESPACE__] );
-	else
+	} else {
 		delete_user_meta( $user_id, __NAMESPACE__);
+	}
 }
 
-// external API.
+/*
+ * external API.
+ */
 
 /**
  *  Class that represent a virtual widget. Each widget being created will have relevant
@@ -2522,7 +2567,7 @@ class virtualWidget {
 	}
 
 	/**
-	 *  return the HTML of the widget as is generated based on the settings passed at construction time
+	 *  Return the HTML of the widget as is generated based on the settings passed at construction time
 	 *
 	 *  @return string
 	 *
@@ -2530,19 +2575,19 @@ class virtualWidget {
 	 */
 	function getHTML() {
 
-		$widget=new Widget();
-		$widget->number = $this->id; // needed to make a unique id for the widget html element
+		$widget = new Widget();
+		$widget->number = $this->id; // needed to make a unique id for the widget html element.
 		ob_start();
-		$args = self::$collection[$this->id];
-		$args['is_shortcode'] = true;  // indicate that we are doing shortcode processing to outputting funtions
+		$args = self::$collection[ $this->id ];
+		$args['is_shortcode'] = true;  // indicate that we are doing shortcode processing to outputting funtions.
 		$widget->widget(array(
 							'before_widget' => '',
 							'after_widget' => '',
 							'before_title' => '',
-							'after_title' => ''
+							'after_title' => '',
 						), $args);
 		$ret = ob_get_clean();
-		$ret = '<div id="'.esc_attr($this->id).'" class="'.esc_attr($this->class).'">'.$ret.'</div>';
+		$ret = '<div id="' . esc_attr( $this->id ) . '" class="' . esc_attr( $this->class ) . '">' . $ret . '</div>';
 		return $ret;
 	}
 
@@ -2612,27 +2657,27 @@ class virtualWidget {
 			}
 
 			// add post format css if needed.
-			if (isset($settings["template"]) && preg_match('/%thumb%/',$settings["template"])) {
-			// if (isset( $settings["thumb"] ) && $settings["thumb"]) {
-				if (!isset( $settings["show_post_format"] ) || (($settings["show_post_format"] != 'none') && ($settings["show_post_format"] != 'nocss'))) {
+			if ( isset( $settings['template'] ) && preg_match( '/%thumb%/', $settings['template'] ) ) {
+			// if ( isset( $settings['thumb'] ) && $settings['thumb'] ) {
+				if ( ! isset( $settings['show_post_format'] ) || ( ( 'none' !== $settings['show_post_format'] ) && ( 'nocss' !== $settings['show_post_format'] ) ) ) {
 					static $fonts_added = false;
-					if (!$fonts_added) {
+					if ( ! $fonts_added ) {
 						$fonturl = esc_url( plugins_url( 'icons/font', __FILE__ ) );
-						$ret[] = "@font-face {\n".
-								 "font-family: 'cat_post';\n".
-								 "src: url('$fonturl/cat_post.eot?4618166');\n".
-								 "src: url('$fonturl/cat_post.eot?4618166#iefix') format('embedded-opentype'),\n".
-								 "	   url('$fonturl/cat_post.woff2?4618166') format('woff2'),\n".
-								 "	   url('$fonturl/cat_post.woff?4618166') format('woff'),\n".
-								 "	   url('$fonturl/cat_post.ttf?4618166') format('truetype');\n".
-								 " font-weight: normal;\n".
-								 " font-style: normal;\n".
+						$ret[] = "@font-face {\n" .
+								 "font-family: 'cat_post';\n" .
+								 "src: url('$fonturl/cat_post.eot?4618166');\n" .
+								 "src: url('$fonturl/cat_post.eot?4618166#iefix') format('embedded-opentype'),\n" .
+								 "	   url('$fonturl/cat_post.woff2?4618166') format('woff2'),\n" .
+								 "	   url('$fonturl/cat_post.woff?4618166') format('woff'),\n" .
+								 "	   url('$fonturl/cat_post.ttf?4618166') format('truetype');\n" .
+								 " font-weight: normal;\n" .
+								 " font-style: normal;\n" .
 								 "}\n";
 					}
 					$fonts_added = true;
 
-					$placement ='';
-					switch ($settings["show_post_format"]) {
+					$placement = '';
+					switch ( $settings['show_post_format'] ) {
 						case 'topleft': $placement = 'top:10%; left:10%;';
 							break;
 						case 'bottomleft': $placement = 'bottom:10%; left:10%;';
@@ -2645,9 +2690,9 @@ class virtualWidget {
 							break;
 					}
 					$rules[] = '.cat-post-thumbnail {position:relative}';
-					$rules[] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); '.
-								'font-size:14px; line-height:14px; padding:15px; border-radius:4px; background-color:rgba(0,0,0,.6); '.
-								$placement.'}';
+					$rules[] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); ' .
+								'font-size:14px; line-height:14px; padding:15px; border-radius:4px; background-color:rgba(0,0,0,.6); ' .
+								$placement . '}';
 
 					$rules[] = ".cat-post-format-image:before { content: '\\e800'; }";
 					$rules[] = ".cat-post-format-video:before { content: '\\e801'; }";
@@ -2661,21 +2706,21 @@ class virtualWidget {
 				$ret[] = '#' . $widget_id . ' ' . $rule;
 			}
 
-			if ($is_shortcode) {
+			if ( $is_shortcode ) {
 				// Twenty Sixteen Theme adds underlines to links with box whadow wtf ...
-				$ret[] = '#'.$widget_id.' .cat-post-thumbnail {box-shadow:none}'; // this for the thumb link
-				if (!(isset($settings['disable_font_styles']) && $settings['disable_font_styles'])) { // checks if disable font styles is not set
-					$ret[] = '#'.$widget_id.' .cat-post-tax-post_tag a {box-shadow:none}';     // this for the tag link
-					$ret[] = '#'.$widget_id.' .cat-post-tax-post_tag span {box-shadow:none}';     // this for the tag link
+				$ret[] = '#' . $widget_id . ' .cat-post-thumbnail {box-shadow:none}'; // this for the thumb link.
+				if ( ! ( isset( $settings['disable_font_styles'] ) && $settings['disable_font_styles'] ) ) { // checks if disable font styles is not set.
+					$ret[] = '#' . $widget_id . ' .cat-post-tax-post_tag a {box-shadow:none}';     // this for the tag link.
+					$ret[] = '#' . $widget_id . ' .cat-post-tax-post_tag span {box-shadow:none}';     // this for the tag link.
 				}
 				// Twenty Fifteen Theme adds border ...
-				$ret[] = '#'.$widget_id.' .cat-post-thumbnail {border:0}'; // this for the thumb link
-				if (!(isset($settings['disable_font_styles']) && $settings['disable_font_styles'])) { // checks if disable font styles is not set
-					$ret[] = '#'.$widget_id.' .cat-post-tax-post_tag a {border:0}';     // this for the tag link
-					$ret[] = '#'.$widget_id.' .cat-post-tax-post_tag span {border:0}';     // this for the tag link
+				$ret[] = '#' . $widget_id . ' .cat-post-thumbnail {border:0}'; // this for the thumb link.
+				if ( ! ( isset( $settings['disable_font_styles'] ) && $settings['disable_font_styles'] ) ) { // checks if disable font styles is not set.
+					$ret[] = '#' . $widget_id . ' .cat-post-tax-post_tag a {border:0}';     // this for the tag link.
+					$ret[] = '#' . $widget_id . ' .cat-post-tax-post_tag span {border:0}';     // this for the tag link.
 				}
 				// probably all Themes have too much margin on their p element when used in the shortcode
-				$ret[] = '#'.$widget_id.' p {margin:5px 0 0 0}';	/* since on bottom it will make the spacing on cover
+				$ret[] = '#' . $widget_id . ' p {margin:5px 0 0 0}';	/* since on bottom it will make the spacing on cover
 																	   bigger (add to the padding) use only top for now */
 			}
 		}
@@ -2754,6 +2799,7 @@ class virtualWidget {
 			echo "$rule\n";
 		}
 	}
+
 	/**
 	 *  Get the id the virtual widget was registered with
 	 *
@@ -2814,12 +2860,12 @@ class virtualWidgetsRepository {
 	/**
 	 *  Add a virtual widget representing awidget to the repository
 	 *
-	 *  @param string $index A name to identify the specific widget
-	 *  @param virtualWidget The virstual widget for it
+	 *  @param string        $index A name to identify the specific widget.
+	 *  @param virtualWidget $widget The virstual widget for it.
 	 *
 	 *  @since 4.7
 	 */
-	function addWidget($index,$widget) {
+	function addWidget( $index, $widget ) {
 		self::$widgetCollection[$index] = $widget;
 	}
 
