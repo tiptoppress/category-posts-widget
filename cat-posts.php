@@ -543,17 +543,19 @@ class Widget extends \WP_Widget {
 			'order' => $sort_order
 		);
 
-                $valid_status = array('publish', 'future', 'both');
-                if ( isset($instance['status']) && in_array($instance['status'],$valid_status) ) {
-                        $status = $instance['status'];
+		$valid_status = array('publish', 'future', 'both');
+		if ( isset($instance['status']) && in_array($instance['status'],$valid_status) ) {
+			$status = $instance['status'];
 			if ($status == 'both') {
         			$args['post_status'] = array('publish', 'future');
+			} else if ($status == 'publish') {
+				$args['post_status'] = array('publish', 'private');
 			} else {
-        			$args['post_status'] = $status;
+        		$args['post_status'] = $status;
 			}
-                } else {
-        		$args['post_status'] = 'publish';
-                }
+		} else {
+			$args['post_status'] = array('publish', 'private');
+		}
         
         if (isset($instance["num"])) 
             $args['showposts'] = (int) $instance["num"];
