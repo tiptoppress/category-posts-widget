@@ -569,16 +569,16 @@ class Widget extends \WP_Widget {
 			'order' => $sort_order,
 		);
 
-		$valid_status = array( 'publish', 'future', 'both' );
-		if ( isset( $instance['status'] ) && in_array( $instance['status'], $valid_status, true ) ) {
-			$status = $instance['status'];
-			if ( 'both' === $status ) {
-				$args['post_status'] = array( 'publish', 'future' );
-			} else {
-				$args['post_status'] = $status;
-			}
-		} else {
-			$args['post_status'] = 'publish';
+		$non_default_valid_status = array(
+			'publish',
+			'future',
+			'publish,future',
+			'private',
+			'private,publish',
+			'private,publish,future',
+		);
+		if ( isset( $instance['status'] ) && in_array( $instance['status'], $non_default_valid_status, true ) ) {
+			$args['post_status'] = $instance['status'];
 		}
 
 		if ( isset( $instance['num'] ) ) {
@@ -1331,20 +1331,25 @@ class Widget extends \WP_Widget {
 		</p>
 		<?php
 			echo $this->get_checkbox_block_html( $instance, 'no_cat_childs', __( 'Exclude child categories','category-posts' ), false, true );
-		    echo $this->get_number_input_block_html( $instance, 'num', __( 'Number of posts to show', 'category-posts' ), get_option( 'posts_per_page' ), 1,'', '', true );
-			echo $this->get_number_input_block_html( $instance, 'offset', __( 'Start with post','category-posts' ), 1, 1,'', '', true );
-			echo $this->get_select_block_html( $instance, 'status', esc_html__( 'Status','category-posts' ), array(
+			echo $this->get_select_block_html( $instance, 'status', __( 'Status','category-posts' ), array(
+																'default' => __( 'WordPress Default', 'category-posts' ),
 																'publish' => __( 'Published', 'category-posts' ),
 																'future' => __( 'Scheduled', 'category-posts' ),
-																'both' => __( 'Published & Scheduled', 'category-posts' ),
-			), 'publish', true );
-			echo $this->get_select_block_html( $instance, 'sort_by', esc_html__( 'Sort by','category-posts' ), array(
+																'private' => __( 'Private', 'category-posts' ),
+																'publish,future' => __( 'Published or Scheduled', 'category-posts' ),
+																'private,publish' => __( 'Published or Private', 'category-posts' ),
+																'private,future' => __( 'Private or Scheduled', 'category-posts' ),
+																'private,publish,future' => __( 'Published, Private or Scheduled', 'category-posts' ),
+															), 'default', true );
+		    echo $this->get_number_input_block_html( $instance, 'num', __( 'Number of posts to show', 'category-posts' ), get_option( 'posts_per_page' ), 1,'', '', true );
+			echo $this->get_number_input_block_html( $instance, 'offset', __( 'Start with post','category-posts' ), 1, 1,'', '', true );
+			echo $this->get_select_block_html( $instance, 'sort_by', __( 'Sort by','category-posts' ), array(
 																'date' => __( 'Date', 'category-posts' ),
 																'title' => __( 'Title', 'category-posts' ),
 																'comment_count' => __( 'Number of comments', 'category-posts' ),
 																'rand' => __( 'Random', 'category-posts' ),
 			), 'date', true );
-			echo $this->get_checkbox_block_html( $instance, 'asc_sort_order', __( 'Reverse sort order (ascending','category-posts' ), false, true );
+			echo $this->get_checkbox_block_html( $instance, 'asc_sort_order', __( 'Reverse sort order (ascending)','category-posts' ), false, true );
 			echo $this->get_checkbox_block_html( $instance, 'exclude_current_post', __( 'Exclude current post','category-posts' ), false, true );
 			echo $this->get_checkbox_block_html( $instance, 'hideNoThumb', __( 'Exclude posts which have no thumbnail','category-posts' ), false, true );
 			?>
