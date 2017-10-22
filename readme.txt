@@ -135,7 +135,7 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=wordpress_org&utm_campaign=changelog_cpw&utm_medium=web)
 
-= 4.7.4 - October 21th 2017
+= 4.7.4 - October 21th 2017 =
 * Bugfix for filter by post status (note private)
 
 = 4.7.3 - October 10th 2017 =
