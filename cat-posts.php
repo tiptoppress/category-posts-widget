@@ -200,13 +200,15 @@ function admin_scripts( $hook ) {
 		wp_register_script( 'category-posts-widget-admin-js', plugins_url( 'js/admin/category-posts-widget.js', __FILE__ ), array( 'jquery' ), VERSION, true );
 		wp_enqueue_script( 'category-posts-widget-admin-js' );
 
-		$user_data = array( 'accordion' => false );
+		$js_data = array( 'accordion' => false );
 		$meta = get_user_meta( get_current_user_id(), __NAMESPACE__, true );
 		if ( is_array( $meta ) && isset( $meta['panels'] ) ) {
-			$user_data['accordion'] = true;
+			$js_data['accordion'] = true;
 		}
+		$js_data['template_tags'] = get_template_tags();
+		$js_data[ __NAMESPACE__ ] = $js_data; // To make accessing the data in JS easier to understand.
 
-		wp_localize_script( 'category-posts-widget-admin-js', __NAMESPACE__, $user_data );
+		wp_localize_script( 'category-posts-widget-admin-js', 'tiptoppress', $js_data );
 		wp_enqueue_media();
 		wp_localize_script( 'category-posts-widget-admin-js', 'cwp_default_thumb_selection', array(
 			'frame_title' => __( 'Select a default thumbnail', 'category-posts' ),
@@ -217,7 +219,6 @@ function admin_scripts( $hook ) {
 }
 
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\admin_scripts' ); // "called on widgets.php and costumizer since 3.9.
-
 
 add_action( 'admin_init', __NAMESPACE__ . '\load_textdomain' );
 
@@ -238,6 +239,13 @@ function load_textdomain() {
 
 add_action( 'admin_print_styles-widgets.php', __NAMESPACE__ . '\admin_styles' );
 
+/**
+ * Add required admin styles.
+ *
+ * @return void.
+ *
+ * @since 4.1
+ **/
 function admin_styles() {
 ?>
 <style>
@@ -330,6 +338,39 @@ function get_image_size( $thumb_w, $thumb_h, $image_w, $image_h ) {
 	}
 
 	return $image_size;
+}
+
+/**
+ *  Get the tags which might be used in the template.
+ *
+ *  @since 4.8
+ *
+ *  @return array Array of strings of the tags.
+ */
+function get_template_tags() {
+	return array( 'author', 'title', 'date', 'thumb', 'excerpt', 'commentnum', 'post_tag','category' );
+}
+
+/**
+ *  Get a regex to parse the template in order to find the tags used in it.
+ *
+ *  @since 4.8
+ *
+ *  @return string The template parsing regex.
+ */
+function get_template_regex() {
+	$tags = get_template_tags();
+
+	$regexp = '';
+	foreach ( $tags as $t ) {
+		if ( ! empty( $regexp ) ) {
+			$regexp .= '|';
+		}
+		$regexp .= '%' . $t . '%';
+	}
+	$regexp = '@(' . $regexp . ')@i';
+
+	return $regexp;
 }
 
 /**
@@ -791,11 +832,7 @@ class Widget extends \WP_Widget {
 		if ( isset( $instance['date_link'] ) && $instance['date_link'] && ! $everything_is_link ) {
 			$ret .= '<a href="' . \get_the_permalink() . '">';
 		}
-		if ( isset( $instance['date_template'] ) ) {
-			$ret .= str_replace( '%date%', $date,$instance['date_template'] );
-		} else {
-			$ret .= $date;
-		}
+		$ret .= $date;
 
 		if ( isset( $instance['date_link'] ) && $instance['date_link'] && ! $everything_is_link ) {
 			$ret .= '</a>';
@@ -1065,7 +1102,7 @@ class Widget extends \WP_Widget {
 
 		// Post details (Template).
 		$widget = $this;
-		$ret .= preg_replace_callback( $this->get_template_regex(), function ( $matches ) use ( $widget, $instance, $everything_is_link ) {
+		$ret .= preg_replace_callback( get_template_regex(), function ( $matches ) use ( $widget, $instance, $everything_is_link ) {
 			switch ( $matches[0] ) {
 				case '%title%' : return $widget->itemTitle( $instance, $everything_is_link );
 					break;
@@ -1290,10 +1327,10 @@ class Widget extends \WP_Widget {
 ?>
 	<h4 data-panel="title"><?php esc_html_e( 'Title', 'category-posts' )?></h4>
 	<div>
-		<?php echo $this->get_checkbox_block_html( $instance, 'hide_title', __( 'Hide title','category-posts' ), false, true );?>
+		<?php echo $this->get_checkbox_block_html( $instance, 'hide_title', esc_html__( 'Hide title','category-posts' ), false, true );?>
 		<div class="cpwp_ident categoryposts-data-panel-title-settings" <?php if ( $hide_title ) echo 'style="display:none"';?>>
 			<?php echo $this->get_text_input_block_html( $instance, 'title',  __( 'Title','category-posts' ), '', __( 'Recent Posts','category-posts' ), true );?>
-			<?php echo $this->get_checkbox_block_html( $instance, 'title_link', __( 'Make widget title link','category-posts' ), false, 0 !== $cat );?>
+			<?php echo $this->get_checkbox_block_html( $instance, 'title_link', esc_html__( 'Make widget title link','category-posts' ), false, 0 !== $cat );?>
 				<?php echo $this->get_text_input_block_html( $instance, 'title_link_url', __( 'Title link URL','category-posts' ), '', '', 0 === $cat );?>
 			</div>
 		</div>
@@ -1330,7 +1367,7 @@ class Widget extends \WP_Widget {
 			</label>
 		</p>
 		<?php
-			echo $this->get_checkbox_block_html( $instance, 'no_cat_childs', __( 'Exclude child categories','category-posts' ), false, true );
+			echo $this->get_checkbox_block_html( $instance, 'no_cat_childs', esc_html__('Exclude child categories','category-posts' ), false, true );
 			echo $this->get_select_block_html( $instance, 'status', __( 'Status','category-posts' ), array(
 																'default' => __( 'WordPress Default', 'category-posts' ),
 																'publish' => __( 'Published', 'category-posts' ),
@@ -1349,30 +1386,12 @@ class Widget extends \WP_Widget {
 																'comment_count' => __( 'Number of comments', 'category-posts' ),
 																'rand' => __( 'Random', 'category-posts' ),
 			), 'date', true );
-			echo $this->get_checkbox_block_html( $instance, 'asc_sort_order', __( 'Reverse sort order (ascending)','category-posts' ), false, true );
-			echo $this->get_checkbox_block_html( $instance, 'exclude_current_post', __( 'Exclude current post','category-posts' ), false, true );
-			echo $this->get_checkbox_block_html( $instance, 'hideNoThumb', __( 'Exclude posts which have no thumbnail','category-posts' ), false, true );
+			echo $this->get_checkbox_block_html( $instance, 'asc_sort_order', esc_html__( 'Reverse sort order (ascending)','category-posts' ), false, true );
+			echo $this->get_checkbox_block_html( $instance, 'exclude_current_post', esc_html__( 'Exclude current post','category-posts' ), false, true );
+			echo $this->get_checkbox_block_html( $instance, 'hideNoThumb', esc_html__( 'Exclude posts which have no thumbnail','category-posts' ), false, true );
 			?>
 		</div>
 <?php
-	}
-
-	/**
-	 *  Get a regex to parse the template in order to find the tags used in it
-	 */
-	private function get_template_regex() {
-		$tags = array( 'author', 'title', 'date', 'thumb', 'excerpt', 'commentnum', 'post_tag','category' );
-
-		$regexp = '';
-		foreach ( $tags as $t ) {
-			if ( ! empty( $regexp ) ) {
-				$regexp .= '|';
-			}
-			$regexp .= '%' . $t . '%';
-		}
-		$regexp = '@(' . $regexp . ')@i';
-
-		return $regexp;
 	}
 
 	/**
@@ -1442,13 +1461,14 @@ class Widget extends \WP_Widget {
 	 * @since 4.8
 	 * @param array	 $instance		The instance.
 	 * @param string $key			The key in the instance array.
-	 * @param string $label			The label to display and associate with the input.
+	 * @param string $label			The label to display and associate with the input (should be html escaped).
 	 * @param int	 $default		The value to use if the key is not set in the instance.
-	 * @param string $placeholder	The placeholder to use in the input.
+	 * @param string $placeholder	The placeholder to use in the input (should be attribute escaped).
+	 * @param string $class      	The class to assign to the element (should be attribute escaped).
 	 * @param bool	 $visible		Indicates if the element should be visible when rendered.
 	 * @param int	 $num_rows		Number of rows.
 	 *
-	 * @return string HTML a P element contaning the input, its label, class based on the key
+	 * @return string HTML a P element containing the input, its label, class based on the key
 	 *					and style set to display:none if visibility is off.
 	 */
 	private function get_textarea_html( $instance, $key, $label, $default, $placeholder, $visible, $num_rows ) {
@@ -1459,9 +1479,8 @@ class Widget extends \WP_Widget {
 			$value = $instance[ $key ];
 		}
 
-		$ret = '<label for="' . $this->get_field_id( $key ) . '">' . $label . '</label><br />' .
-					'<textarea rows="' . $num_rows . '" placeholder="' . esc_attr( $placeholder ) . '" id="' . $this->get_field_id( $key ) . '" name="' . $this->get_field_name($key) . '" type="text" autocomplete="off">' . esc_textarea( $value ) . '</textarea>' .
-				'<br />';
+		$ret = '<p><label for="' . esc_attr( $this->get_field_id( $key ) ) . '">' . $label . '</label></p>' .
+					'<textarea class="' . esc_attr( $key ) . '" rows="' . esc_attr( $num_rows ) . '" placeholder="' . $placeholder . '" id="' . esc_attr( $this->get_field_id( $key ) ) . '" name="' . esc_attr( $this->get_field_name($key) ) . '" type="text" autocomplete="off">' . esc_textarea( $value ) . '</textarea>';
 
 		return $this->get_wrap_block_html( $ret, $key, $visible );
 	}
@@ -1530,7 +1549,7 @@ class Widget extends \WP_Widget {
 
 		$ret = '<label for="' . $this->get_field_id( $key ) . "\">\n" .
 					esc_html( $label ) .
-					'<input placeholder="' . $placeholder . '" id="' . esc_attr( $this->get_field_id( $key ) ) . '" name="' . esc_attr( $this->get_field_name( $key ) ) . '" type="number"' . $minmax . ' value="' . esc_attr( $value ) . '" autocomplete="off" />' . "\n" .
+					'<input placeholder="' . $placeholder . '" id="' . esc_attr( $this->get_field_id( $key ) ) . '" name="' . esc_attr( $this->get_field_name( $key ) ) . '" class="' . esc_attr( $key ) . '" type="number"' . $minmax . ' value="' . esc_attr( $value ) . '" autocomplete="off" />' . "\n" .
 				"</label>\n";
 
 		return $this->get_wrap_block_html( $ret, $key, $visible );
@@ -1543,6 +1562,7 @@ class Widget extends \WP_Widget {
 	 * @param array	 $instance	The instance.
 	 * @param string $key		The key in the instance array.
 	 * @param string $label		The label to display and associate with the checkbox.
+	 *                          should be escaped string.
 	 * @param bool	 $default	The value to use if the key is not set in the instance.
 	 * @param bool	 $visible	Indicates if the element should be visible when rendered.
 	 *
@@ -1561,8 +1581,8 @@ class Widget extends \WP_Widget {
 			}
 		}
 		$ret = '<label for="' . esc_attr( $this->get_field_id( $key ) ) . "\">\n" .
-					'<input id="' . esc_attr( $this->get_field_id( $key ) ) . '" name="' . esc_attr( $this->get_field_name( $key ) ) . '" type="checkbox" ' . checked( $value, true, false ) . ' autocomplete="off"/>' . "\n" .
-					esc_html( $label ) .
+					'<input id="' . esc_attr( $this->get_field_id( $key ) ) . '" class="' . esc_attr( $key ) . '" name="' . esc_attr( $this->get_field_name( $key ) ) . '" type="checkbox" ' . checked( $value, true, false ) . ' autocomplete="off"/>' . "\n" .
+					$label .
 				"</label>\n";
 
 		return $this->get_wrap_block_html( $ret, $key, $visible );
@@ -1680,76 +1700,81 @@ class Widget extends \WP_Widget {
 			<h4 data-panel="details"><?php esc_html_e( 'Post details', 'category-posts' )?></h4>
 			<div>
 				<?php
-				echo $this->get_checkbox_block_html( $instance, 'everything_is_link', __( 'Everything is a link','category-posts' ), false, true );
+				echo $this->get_checkbox_block_html( $instance, 'everything_is_link', esc_html__( 'Everything is a link','category-posts' ), false, true );
 				$template = '';
 				if ( ! isset( $instance['template'] ) ) {
 					$template = $this->convert_settings_to_template( $instance );
 				} else {
 					$template = $instance['template'];
 				}
-				echo $this->get_textarea_html( $instance, 'template', __( 'Template','category-posts' ) . ' ' . '<a href="#" title="'. esc_html__( 'Show template help', 'category-posts' ) . '" >[?]</a>', $template, '', true, 5 );
-				preg_match_all( $this->get_template_regex(), $template, $matches );
-				$tags = array();
-				if ( ! empty( $matches[0] ) ) {
-					$tags = array_flip( $matches[0] );
-				}
 				?>
-				<div class="cat-post-premade_templates">
-					<label><?php esc_html_e( 'Select Premade template','category-posts' ) ?></label>
-					<select>
-						<option value="title"><?php esc_html_e( 'Post title only', 'category-posts' )?></option>
-						<option value="title_excerpt"><?php esc_html_e( 'Post title and excerpt', 'category-posts' )?></option>
-						<option value="title_thumb"><?php esc_html_e( 'Post title and thumbnail', 'category-posts' )?></option>
-						<option value="title_thum_excerpt"><?php esc_html_e( 'Post title, thumbnail and excerpt', 'category-posts' )?></option>
-						<option value="everything"><?php esc_html_e( 'Everything', 'category-posts' )?></option>
-					</select>
-					<button type="button"><?php esc_html_e( 'Select the template', 'category-posts' )?></button>
-				</div>
-				<div class="cat-post-template-help">
-					<p><?php esc_html_e( 'The following text will be replaced with the relevant information. In addition you can use any text and html (if you have the permisions) anywhere you want', 'category-posts' )?>
-					</p>
-					<table>
-						<tr>
-							<th><?php esc_html_e( 'New line', 'category-posts' )?></th>
-							<td><?php esc_html_e( 'Space', 'category-posts' )?></td>
-						</tr>
-						<tr>
-							<th><?php esc_html_e( 'Empty line', 'category-posts' )?></th>
-							<td><?php esc_html_e( 'Next line is a paragraph', 'category-posts' )?></td>
-						</tr>
-						<tr>
-							<th>%title%</th>
-							<td><?php esc_html_e( 'Post title', 'category-posts' )?></td>
-						</tr>
-						<tr>
-							<th>%thumb%</th>
-							<td><?php esc_html_e( 'Post thumbnail', 'category-posts' )?></td>
-						</tr>
-						<tr>
-							<th>%date%</th>
-							<td><?php esc_html_e( 'Post publish date', 'category-posts' )?></td>
-						</tr>
-						<tr>
-							<th>%excerpt%</th>
-							<td><?php esc_html_e( 'Post excerpt', 'category-posts' )?></td>
-						</tr>
-						<tr>
-							<th>%author%</th>
-							<td><?php esc_html_e( 'Post author', 'category-posts' )?></td>
-						</tr>
-						<tr>
-							<th>%commentnum%</th>
-							<td><?php esc_html_e( 'The number of comments to the post', 'category-posts' )?></td>
-						</tr>
-						<tr>
-							<th>%post_tag%</th>
-							<td><?php esc_html_e( 'Post tags', 'category-posts' )?></td>
-						</tr>
-						<tr>
-							<th>%category%</th>
-							<td><?php esc_html_e( 'Post categories', 'category-posts' )?></td>
-						</tr>
-					</table>
+				<p><?php esc_html_e( 'Displayed parts', 'category-posts' ); ?></p>
+				<div class="cpwp_ident">
+					<?php
+					echo $this->get_textarea_html( $instance, 'template', esc_html__( 'Template', 'category-posts' ) . ' <button type="button" class="dashicons open-template-help dashicons-editor-help imgedit-help-toggle"><span class="screen-reader-text">' . esc_html__( 'Show template help', 'category-posts' ) . '</span></button>', $template, '', true, 5 );
+					preg_match_all( get_template_regex(), $template, $matches );
+					$tags = array();
+					if ( ! empty( $matches[0] ) ) {
+						$tags = array_flip( $matches[0] );
+					}
+					?>
+					<div class="cat-post-template-help">
+						<p><?php esc_html_e( 'The following text will be replaced with the relevant information. In addition you can use any text and html (if you have the permisions) anywhere you want', 'category-posts' )?>
+						</p>
+						<table>
+							<tr>
+								<th><?php esc_html_e( 'New line', 'category-posts' )?></th>
+								<td><?php esc_html_e( 'Space', 'category-posts' )?></td>
+							</tr>
+							<tr>
+								<th><?php esc_html_e( 'Empty line', 'category-posts' )?></th>
+								<td><?php esc_html_e( 'Next line is a paragraph', 'category-posts' )?></td>
+							</tr>
+							<tr>
+								<th>%title%</th>
+								<td><?php esc_html_e( 'Post title', 'category-posts' )?></td>
+							</tr>
+							<tr>
+								<th>%thumb%</th>
+								<td><?php esc_html_e( 'Post thumbnail', 'category-posts' )?></td>
+							</tr>
+							<tr>
+								<th>%date%</th>
+								<td><?php esc_html_e( 'Post publish date', 'category-posts' )?></td>
+							</tr>
+							<tr>
+								<th>%excerpt%</th>
+								<td><?php esc_html_e( 'Post excerpt', 'category-posts' )?></td>
+							</tr>
+							<tr>
+								<th>%author%</th>
+								<td><?php esc_html_e( 'Post author', 'category-posts' )?></td>
+							</tr>
+							<tr>
+								<th>%commentnum%</th>
+								<td><?php esc_html_e( 'The number of comments to the post', 'category-posts' )?></td>
+							</tr>
+							<tr>
+								<th>%post_tag%</th>
+								<td><?php esc_html_e( 'Post tags', 'category-posts' )?></td>
+							</tr>
+							<tr>
+								<th>%category%</th>
+								<td><?php esc_html_e( 'Post categories', 'category-posts' )?></td>
+							</tr>
+						</table>
+					</div>
+					<div class="cat-post-premade_templates">
+						<p><label><?php esc_html_e( 'Select Premade template', 'category-posts' ) ?></label></p>
+						<select>
+							<option value="title"><?php esc_html_e( 'Title on;y', 'category-posts' )?></option>
+							<option value="title_excerpt"><?php esc_html_e( 'Title and Excerpt', 'category-posts' )?></option>
+							<option value="title_thumb"><?php esc_html_e( 'Title and Thumbnail', 'category-posts' )?></option>
+							<option value="title_thum_excerpt"><?php esc_html_e( 'Title, Thumbnail and Excerpt', 'category-posts' )?></option>
+							<option value="everything"><?php esc_html_e( 'Everything', 'category-posts' )?></option>
+						</select>
+						<p><button type="button" class="button"><?php esc_html_e( 'Select this template', 'category-posts' )?></button></p>
+					</div>
 				</div>
 
 				<?php // Excerpt settings. ?>
@@ -1759,7 +1784,7 @@ class Widget extends \WP_Widget {
 					<?php
 					echo $this->get_number_input_block_html( $instance, 'excerpt_length', __( 'Excerpt length (in words):','category-posts' ), get_option( 'posts_per_page' ), 1, 55, '', true );
 					echo $this->get_text_input_block_html( $instance, 'excerpt_more_text',  __( 'Excerpt \'more\' text:','category-posts' ), '', __( '...', 'category-posts' ), true );
-					echo $this->get_checkbox_block_html( $instance, 'excerpt_filters', __( 'Don\'t override Themes and plugin filters','category-posts' ), false, true );
+					echo $this->get_checkbox_block_html( $instance, 'excerpt_filters', esc_html__( 'Don\'t override Themes and plugin filters','category-posts' ), false, true );
 					?>
 					</div>
 				</div>
@@ -1774,13 +1799,12 @@ class Widget extends \WP_Widget {
 																			'other' => __( 'PHP style format', 'category-posts' ),
 						), 'sitedateandtime', true );
 						echo $this->get_text_input_block_html( $instance, 'date_format',  __( 'PHP Style Date format','category-posts' ), '', 'j M Y', 'other' === $preset_date_format );
-						echo $this->get_text_input_block_html( $instance, 'date_template',  __( 'Date display template', 'category-posts' ), '%date%', '', true );
 						?>
 					</div>
 				</div>
 
 				<?php // Thumbnail settings. ?>
-				<div class="categoryposts-data-panel-thumbnail" style="display:<?php echo ( isset( $tags['%thumb%'] ) ) ? 'block' : 'none'?>">
+				<div class="categoryposts-data-panel-thumb" style="display:<?php echo ( isset( $tags['%thumb%'] ) ) ? 'block' : 'none'?>">
 					<p><?php esc_html_e( 'Thumbnail settings', 'category-posts' );?></p>
 					<div class="cpwp_ident">
 						<p>
@@ -1796,7 +1820,7 @@ class Widget extends \WP_Widget {
 							</label>
 						</p>
 						<?php
-						echo $this->get_checkbox_block_html( $instance, 'use_css_cropping', __( 'CSS crop to requested size','category-posts' ), false, false );
+						echo $this->get_checkbox_block_html( $instance, 'use_css_cropping', esc_html__( 'CSS crop to requested size','category-posts' ), false, false );
 						echo $this->get_select_block_html( $instance, 'thumb_hover', esc_html__( 'Animation on mouse hover:','category-posts' ), array(
 																			'none' => __( 'None', 'category-posts' ),
 																			'dark' => __( 'Darker', 'category-posts' ),
@@ -1847,10 +1871,10 @@ class Widget extends \WP_Widget {
 			<h4 data-panel="general"><?php esc_html_e( 'General', 'category-posts' )?></h4>
 			<div>
 				<div class="cpwp_ident">
-					<?php echo $this->get_checkbox_block_html( $instance, 'disable_css', __( 'Disable the built-in CSS','category-posts' ), false, true );?>
-					<?php echo $this->get_checkbox_block_html( $instance, 'disable_font_styles', __( 'Disable only font styles','category-posts' ), false, true );?>
+					<?php echo $this->get_checkbox_block_html( $instance, 'disable_css', esc_html__( 'Disable the built-in CSS','category-posts' ), false, true );?>
+					<?php echo $this->get_checkbox_block_html( $instance, 'disable_font_styles', esc_html__( 'Disable only font styles','category-posts' ), false, true );?>
 				</div>
-				<?php echo $this->get_checkbox_block_html( $instance, 'hide_if_empty', __( 'Hide if there are no matching posts','category-posts' ), false, true );?>
+				<?php echo $this->get_checkbox_block_html( $instance, 'hide_if_empty', esc_html__( 'Hide if there are no matching posts','category-posts' ), false, true );?>
 			</div>
 			<h4 data-panel="footer"><?php esc_html_e( 'Footer', 'category-posts' )?></h4>
 			<div>
@@ -2166,8 +2190,7 @@ function default_settings() {
 				'no_cat_childs'                   => false,
 				'everything_is_link'			  => false,
 				'preset_date_format'              => 'sitedateandtime',
-				'date_template'                   => '%date%',
-				'template'                   	  => '%title%&#13;&#10;%thumb%',
+				'template'                   	  => "%title%\n%thumb%",
 				);
 }
 
@@ -2682,7 +2705,6 @@ class virtualWidget {
 
 			// add post format css if needed.
 			if ( isset( $settings['template'] ) && preg_match( '/%thumb%/', $settings['template'] ) ) {
-			// if ( isset( $settings['thumb'] ) && $settings['thumb'] ) {
 				if ( ! isset( $settings['show_post_format'] ) || ( ( 'none' !== $settings['show_post_format'] ) && ( 'nocss' !== $settings['show_post_format'] ) ) ) {
 					static $fonts_added = false;
 					if ( ! $fonts_added ) {
