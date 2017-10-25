@@ -246,6 +246,10 @@ jQuery(document).ready( function () {
 			cwp_namespace.defaultThumbnailSelection(this, cwp_default_thumb_selection.frame_title,cwp_default_thumb_selection.button_title);
 		});
 
+		jQuery('.categoryposts-data-panel-filter-cat').on('change', function () { // change category filter
+			cwp_namespace.toggleCatSelection(this);
+		});
+
 		jQuery('.cwp_default_thumb_remove').off('click').on('click', function () { // remove default thumb
 			cwp_namespace.removeDefaultThumbnailSelection(this);
 		});
