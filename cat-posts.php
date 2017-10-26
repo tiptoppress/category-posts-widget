@@ -1370,7 +1370,7 @@ class Widget extends \WP_Widget {
 			</label>
 		</p>
 		<?php
-			echo $this->get_checkbox_block_html( $instance, 'no_cat_childs', esc_html__( 'Exclude child categories', 'category-posts' ), false, true );
+			echo $this->get_checkbox_block_html( $instance, 'no_cat_childs', esc_html__( 'Exclude child categories', 'category-posts' ), false, ! empty( $instance['cat'] ) );
 			echo $this->get_select_block_html( $instance, 'status', esc_html__( 'Status', 'category-posts' ), array(
 																'default' => esc_html__( 'WordPress Default', 'category-posts' ),
 																'publish' => esc_html__( 'Published', 'category-posts' ),

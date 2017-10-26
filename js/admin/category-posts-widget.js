@@ -40,12 +40,14 @@
             var cat = jQuery(item).find("option:selected").attr('value');
 			var panel = item.parentElement.parentElement.parentElement.parentElement;
             if(cat == '0') {
-				jQuery(panel).find('.categoryPosts-title_link').hide();
-				jQuery(panel).find('.categoryPosts-title_link_url').show();
+				jQuery(panel).find( '.categoryPosts-title_link' ).hide();
+				jQuery(panel).find( '.categoryPosts-title_link_url' ).show();
+				jQuery(panel).find( '.categoryPosts-no_cat_childs' ).hide();
             }
             else {
-				jQuery(panel).find('.categoryPosts-title_link').show();
-				jQuery(panel).find('.categoryPosts-title_link_url').hide();
+				jQuery(panel).find('.categoryPosts-title_link' ).show();
+				jQuery(panel).find('.categoryPosts-title_link_url' ).hide();
+				jQuery(panel).find( '.categoryPosts-no_cat_childs' ).show();
             }
         },
 
@@ -246,7 +248,7 @@ jQuery(document).ready( function () {
 			cwp_namespace.defaultThumbnailSelection(this, cwp_default_thumb_selection.frame_title,cwp_default_thumb_selection.button_title);
 		});
 
-		jQuery('.categoryposts-data-panel-filter-cat').on('change', function () { // change category filter
+		jQuery(document).on('change', class_namespace+' .categoryposts-data-panel-filter-cat', function () { // change category filter
 			cwp_namespace.toggleCatSelection(this);
 		});
 
@@ -260,10 +262,6 @@ jQuery(document).ready( function () {
 
 		jQuery(document).on('click', class_namespace+' .hide_title', function () {
 			cwp_namespace.toggleHideTitle(this);
-		});
-
-		jQuery('.categoryposts-data-panel-filter-cat').on('change', function () { // change category filter
-			cwp_namespace.toggleCatSelection(this);
 		});
 
 		jQuery(document).on('change', class_namespace+' .categoryposts-data-panel-date-preset-format', function () { // change date format
