@@ -68,10 +68,9 @@
             var value = jQuery(item).val();
 			var panel = item.parentElement.parentElement;
             if( value != 'other') {
-                jQuery(panel).find('.categoryposts-data-panel-date-other-format').hide();
-            }
-            else {
-                jQuery(panel).find('.categoryposts-data-panel-date-other-format').show();
+                jQuery(panel).find('.categoryPosts-date_format').hide();
+            } else {
+                jQuery(panel).find('.categoryPosts-date_format').show();
             }
         },
 
@@ -264,7 +263,7 @@ jQuery(document).ready( function () {
 			cwp_namespace.toggleHideTitle(this);
 		});
 
-		jQuery(document).on('change', class_namespace+' .categoryposts-data-panel-date-preset-format', function () { // change date format
+		jQuery(document).on('change', class_namespace+' .categoryPosts-preset_date_format select', function () { // change date format
 			cwp_namespace.toggleDateFormat(this);
 		});
 
