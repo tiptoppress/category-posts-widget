@@ -299,6 +299,13 @@ function admin_styles() {
 .cat-post-template-help {display:none;}
 
 .categoryPosts-template textarea {width:100%}
+
+.category-widget-cont .open-template-help {
+	border:0;
+	padding:0;
+	cursor: pointer;
+}
+
 </style>
 <?php
 }
