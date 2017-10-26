@@ -606,6 +606,7 @@ class Widget extends \WP_Widget {
 	 * @since 4.6
 	 */
 	function queryArgs( $instance ) {
+
 		$valid_sort_orders = array( 'date', 'title', 'comment_count', 'rand' );
 		if ( isset( $instance['sort_by'] ) && in_array( $instance['sort_by'], $valid_sort_orders, true ) ) {
 			$sort_by = $instance['sort_by'];
@@ -618,6 +619,7 @@ class Widget extends \WP_Widget {
 		$args = array(
 			'orderby' => $sort_by,
 			'order' => $sort_order,
+			'ignore_sticky_posts' => 1, // Make sure we do not get stickies out of order.
 		);
 
 		$non_default_valid_status = array(
@@ -1234,7 +1236,7 @@ class Widget extends \WP_Widget {
 				$current_post_id = get_the_ID();
 			}
 
-			if ( ! ( isset( $instance['is_shortcode'] ) && $instance['is_shortcode'] ) ) { // the intenal id is needed only for widgets.
+			if ( ! ( isset( $instance['is_shortcode'] ) && $instance['is_shortcode'] ) ) { // the internal id is needed only for widgets.
 				echo '<ul id="' . WIDGET_BASE_ID . '-' . $this->number . '-internal" class="' . WIDGET_BASE_ID . '-internal' . "\">\n";
 			} else {
 				echo '<ul>';
@@ -1944,7 +1946,7 @@ add_action( 'widgets_init', __NAMESPACE__ . '\register_widget' );
  * @since 4.8
  */
 function footer_script( $number, $widgetsettings ) {
-	// set prodct zoom configurations.
+	// set image zoom configurations.
 	if ( isset( $widgetsettings['thumb_hover'] ) && ( 'productZoom' === $widgetsettings['thumb_hover'] ) ) {
 		?>
 		<script type="text/javascript">
