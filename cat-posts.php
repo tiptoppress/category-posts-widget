@@ -1923,7 +1923,7 @@ add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), __NAMESPACE__ 
  */
 function add_action_links( $links ) {
 	$pro_link = array(
-		'<a target="_blank" href="' . esc_url( PRO_URL ) . '">' . __( 'Get the Pro version', 'category-posts' ) . '</a>',
+		'<a target="_blank" href="' . esc_url( PRO_URL ) . '">' . esc_html__( 'Get the Pro version', 'category-posts' ) . '</a>',
 	);
 
 	$links = array_merge( $pro_link, $links );
