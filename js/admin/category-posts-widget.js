@@ -186,7 +186,7 @@
 				var template = jQuery(elem).val();
 				var tags = tiptoppress[ this.php_settings_var ].template_tags;
 				var widget_cont = jQuery(elem.parentElement.parentElement.parentElement.parentElement);
-				for (var i = 0, len = tags.length; i < len; i++) {
+				for (var i = 0; i < tags.length; i++) {
 					if ( -1 !== template.indexOf( tags[i] ) ) {
 						widget_cont.find(this.template_panel_prefix + tags[i] ).show();
 					} else {
@@ -281,7 +281,7 @@ jQuery(document).ready( function () {
 			event.stopPropagation();
 		});
 
-		jQuery(document).on('input', class_namespace+' .template', function () { // prevent refresh ontemplate selection
+		jQuery(document).on('input', class_namespace+' .categoryPosts-template textarea', function () { // prevent refresh ontemplate selection
 			cwp_namespace.templateChange(this);
 		});
 	}
