@@ -2714,7 +2714,7 @@ class virtualWidget {
 			 *	so remove our border if we detect its use to avoid conflicting styling.
 			 */
 			if ( ! $is_shortcode && function_exists( 'twentyseventeen_setup' ) ) {
-				$rules[] = '.cat-post-item {list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+				$rules[] = '.cat-post-item {list-style: none; list-style-type: none; margin: 0;	padding: 3px 0;}';
 			} else {
 				$rules[] = '.cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
 				$rules[] = '.cat-post-item:last-child {border-bottom: none;}';
