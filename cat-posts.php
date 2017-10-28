@@ -1109,7 +1109,7 @@ class Widget extends \WP_Widget {
 
 		// Post details (Template).
 		$widget = $this;
-		$ret .= preg_replace_callback( get_template_regex(), function ( $matches ) use ( $widget, $instance, $everything_is_link ) {
+		$template_res = preg_replace_callback( get_template_regex(), function ( $matches ) use ( $widget, $instance, $everything_is_link ) {
 			switch ( $matches[0] ) {
 				case '%title%' : return $widget->itemTitle( $instance, $everything_is_link );
 					break;
@@ -1131,12 +1131,14 @@ class Widget extends \WP_Widget {
 			}
 		}, $template );
 
-		// Replace empty line with closin and opening P.
-		$ret = str_replace( "\n", '</p><p>', $ret );
-		$ret = '<p>' . $ret . '</p>';
+		// Replace empty line with closing and opening P.
+		$template_res = str_replace( "\n", '</p><p>', $template_res );
+		$template_res = '<p>' . $template_res . '</p>';
 
 		// replace new lines with spaces.
-		$ret = str_replace( "\n", ' ',$ret );
+		$template_res = str_replace( "\n", ' ',$template_res );
+
+		$ret .= $template_res;
 
 		if ( $everything_is_link ) {
 			$ret .= '</a>';
