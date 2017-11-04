@@ -631,7 +631,7 @@ class Widget extends \WP_Widget {
 						array(
 						 'key' => '_thumbnail_id',
 						 'compare' => 'EXISTS',
-				 		),
+					 ),
 					),
 				)
 			);
@@ -834,8 +834,7 @@ class Widget extends \WP_Widget {
 	function itemThumb( $instance, $no_link ) {
 		 $ret = '';
 
-		 if ( ( isset( $instance['default_thunmbnail'] ) && (0 !== $instance['default_thunmbnail'] ) ) || has_post_thumbnail() ) {
-
+		if ( ( isset( $instance['default_thunmbnail'] ) && (0 !== $instance['default_thunmbnail'] ) ) || has_post_thumbnail() ) {
 			$class              = '';
 			$use_css_cropping   = isset( $this->instance['use_css_cropping'] ) && $this->instance['use_css_cropping'];
 			$disable_css        = isset( $instance['disable_css'] ) && $instance['disable_css'];
@@ -1211,7 +1210,7 @@ class Widget extends \WP_Widget {
 			}
 
 			if ( ! ( isset( $instance['is_shortcode'] ) && $instance['is_shortcode'] ) ) { // the internal id is needed only for widgets.
-				echo '<ul id="' . WIDGET_BASE_ID . '-' . $this->number . '-internal" class="' . WIDGET_BASE_ID . '-internal' . "\">\n";
+				echo '<ul id="' . esc_attr( WIDGET_BASE_ID ) . '-' . esc_attr( $this->number ) . '-internal" class="' . esc_attr( WIDGET_BASE_ID ) . '-internal' . "\">\n";
 			} else {
 				echo '<ul>';
 			}
@@ -1351,7 +1350,7 @@ class Widget extends \WP_Widget {
 																'private,future' => esc_html__( 'Private or Scheduled', 'category-posts' ),
 																'private,publish,future' => esc_html__( 'Published, Private or Scheduled', 'category-posts' ),
 			), 'default', true );
-		    echo $this->get_number_input_block_html( $instance, 'num', esc_html__( 'Number of posts to show', 'category-posts' ), get_option( 'posts_per_page' ), 1,'', '', true );
+			echo $this->get_number_input_block_html( $instance, 'num', esc_html__( 'Number of posts to show', 'category-posts' ), get_option( 'posts_per_page' ), 1,'', '', true );
 			echo $this->get_number_input_block_html( $instance, 'offset', esc_html__( 'Start with post','category-posts' ), 1, 1,'', '', true );
 			echo $this->get_select_block_html( $instance, 'sort_by', esc_html__( 'Sort by','category-posts' ), array(
 																'date' => esc_html__( 'Date', 'category-posts' ),
@@ -1986,8 +1985,8 @@ function change_cropped_image_dimensions() {
 				$widgets_ids = apply_filters( 'cpw_crop_widgets', array() );
 				foreach ( $widgets_ids as $number => $ratio ) {
 				?>
-				cwp_namespace.fluid_images.widget = jQuery('#<?php echo $number?>');
-				cwp_namespace.fluid_images.Widgets['<?php echo $number?>'] = new cwp_namespace.fluid_images.WidgetPosts(cwp_namespace.fluid_images.widget,<?php echo $ratio?>);
+				cwp_namespace.fluid_images.widget = jQuery('#<?php echo esc_attr( $number ) ?>');
+				cwp_namespace.fluid_images.Widgets['<?php echo esc_attr( $number )?>'] = new cwp_namespace.fluid_images.WidgetPosts(cwp_namespace.fluid_images.widget,<?php echo esc_attr( $ratio )?>);
 <?php			} ?>
 
 <?php 			/* do on page load or on resize the browser window */ echo "\r\n" ?>
@@ -2218,7 +2217,7 @@ function customize_register( $wp_customize ) {
 			$widget_title = 'Category Posts Shortcode' . $this->title_postfix;
 			?>
 			<div class="widget-top">
-			<div class="widget-title"><h3><?php echo $widget_title; ?><span class="in-widget-title"></span></h3></div>
+			<div class="widget-title"><h3><?php echo esc_html( $widget_title ); ?><span class="in-widget-title"></span></h3></div>
 			</div>
 			<div class="widget-inside" style="display: block;">
 				<div class="form">
@@ -2472,6 +2471,13 @@ add_filter( 'mce_external_languages', __NAMESPACE__ . '\mce_external_languages' 
 add_action( 'show_user_profile', __NAMESPACE__ . '\show_user_profile' );
 add_action( 'edit_user_profile', __NAMESPACE__ . '\show_user_profile' );
 
+/**
+ *  Display the user specific setting on its profile page
+ *
+ *  @param WP_user $user The user for which the profile page displays information.
+ *
+ *  @since 4.7
+ */
 function show_user_profile( $user ) {
 
 	if ( ! current_user_can( 'edit_user', $user->ID ) ) {
@@ -2522,6 +2528,13 @@ function show_user_profile( $user ) {
 add_action( 'personal_options_update', __NAMESPACE__ . '\personal_options_update' );
 add_action( 'edit_user_profile_update', __NAMESPACE__ . '\personal_options_update' );
 
+/**
+ *  Handles saving user related settings as was set in the profile page.
+ *
+ *  @param int $user_id the ID of the user for which the data is saved..
+ *
+ *  @since 4.7
+ */
 function personal_options_update( $user_id ) {
 
 	if ( ! current_user_can( 'edit_user', $user_id ) ) {
@@ -2545,14 +2558,38 @@ function personal_options_update( $user_id ) {
 
 /**
  *  Class that represent a virtual widget. Each widget being created will have relevant
- *  CSS output in the header, but strill requires a call for getHTML method or renderHTML
+ *  CSS output in the header, but still requires a call for getHTML method or renderHTML
  *  to get or output the HTML
  *
  *  @since 4.7
  */
 class virtualWidget {
+
+	/**
+	 * A container for all the "active" objects
+	 *
+	 * @var Array
+	 *
+	 * @since 4.7
+	 */
 	private static $collection = array();
+
+	/**
+	 * The identifier use as the id of the root html element when the HTML is generated.
+	 *
+	 * @var string
+	 *
+	 * @since 4.7
+	 */
 	private $id;
+
+	/**
+	 * A container for all the "active" objects
+	 *
+	 * @var string The class name to be use us the class attribute on the root html element.
+	 *
+	 * @since 4.7
+	 */
 	private $class;
 
 	/**
@@ -2574,6 +2611,11 @@ class virtualWidget {
 		self::$collection[ $id ] = wp_parse_args( $args, default_settings() );
 	}
 
+	/**
+	 *  Do what ever cleanup needed when the object is destroyed.
+	 *
+	 *  @since 4.7
+	 */
 	function __destruct() {
 		 unset( self::$collection[ $this->id ] );
 	}
@@ -2661,7 +2703,7 @@ class virtualWidget {
 			}
 
 			// everything link related styling
-		    // if we are dealing with "everything is a link" option, we need to add the clear:both to the a element, not the div.
+			// if we are dealing with "everything is a link" option, we need to add the clear:both to the a element, not the div.
 			if ( isset( $settings['everything_is_link'] ) && $settings['everything_is_link'] ) {
 				$rules[] = '.cat-post-everything-is-link { }';
 				$rules[] = '.cat-post-item a:after {content: ""; display: table;	clear: both;}';
@@ -2801,6 +2843,8 @@ class virtualWidget {
 	 *
 	 *  Just a wrapper that output getCSSRules
 	 *
+	 * @param bool $is_shortcode Indicates if we are in the context os a shortcode.
+	 *
 	 *  @since 4.7
 	 */
 	function outputCSS( $is_shortcode ) {
@@ -2842,7 +2886,23 @@ class virtualWidget {
  *  @since 4.7
  */
 class virtualWidgetsRepository {
+
+	/**
+	 * Collection of objects representing shortcodes.
+	 *
+	 * @var array
+	 *
+	 * @since 4.7
+	 */
 	private static $shortcodeCollection = array();
+
+	/**
+	 * Collection of objects representing widgets.
+	 *
+	 * @var array
+	 *
+	 * @since 4.7
+	 */
 	private static $widgetCollection = array();
 
 	/**
