@@ -96,7 +96,7 @@ function wp_head() {
 <style type="text/css">
 	<?php
 	foreach ( $rules as $rule ) {
-		echo "$rule\n";
+		echo "$rule\n"; // Xss ok. raw css output, can not be html escaped.
 	}
 	?>
 </style>
@@ -1212,7 +1212,7 @@ class Widget extends \WP_Widget {
 		$cat_posts = new \WP_Query( $args );
 
 		if ( ! isset( $instance['hide_if_empty'] ) || ! $instance['hide_if_empty'] || $cat_posts->have_posts() ) {
-			echo $before_widget;
+			echo $before_widget; // Xss ok. This is how widget actually expected to behave.
 			echo $this->titleHTML( $before_title, $after_title, $instance );
 
 			$current_post_id = null;
@@ -1238,7 +1238,7 @@ class Widget extends \WP_Widget {
 			echo "</ul>\n";
 
 			echo $this->footerHTML( $instance );
-			echo $after_widget;
+			echo $after_widget; // Xss ok. This is how widget actually expected to behave.
 
 			// remove widget filters.
 			if ( ! isset( $instance['excerpt_filters'] ) || $instance['excerpt_filters'] ) { // pre 4.7 widgets has filters on.
