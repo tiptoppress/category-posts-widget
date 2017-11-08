@@ -1686,7 +1686,6 @@ class Widget extends \WP_Widget {
 			<h4 data-panel="details"><?php esc_html_e( 'Post details', 'category-posts' ); ?></h4>
 			<div>
 				<?php
-				echo $this->get_checkbox_block_html( $instance, 'everything_is_link', esc_html__( 'Everything is a link', 'category-posts' ), false, true );
 				$template = '';
 				if ( ! isset( $instance['template'] ) ) {
 					$template = $this->convert_settings_to_template( $instance );
@@ -1851,7 +1850,9 @@ class Widget extends \WP_Widget {
 						</p>
 					</div>
 				</div>
-
+				<?php
+				echo $this->get_checkbox_block_html( $instance, 'everything_is_link', esc_html__( 'Everything is a link', 'category-posts' ), false, true );
+				?>
 			</div>
 			<h4 data-panel="general"><?php esc_html_e( 'General', 'category-posts' ); ?></h4>
 			<div>
