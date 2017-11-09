@@ -1696,7 +1696,7 @@ class Widget extends \WP_Widget {
 				<p><?php esc_html_e( 'Displayed parts', 'category-posts' ); ?></p>
 				<div class="cpwp_ident">
 					<?php
-					echo $this->get_textarea_html( $instance, 'template', esc_html__( 'Template', 'category-posts' ) . ' <button type="button" class="dashicons open-template-help dashicons-editor-help imgedit-help-toggle"><span class="screen-reader-text">' . esc_html__( 'Show template help', 'category-posts' ) . '</span></button>', $template, '', true, 5 );
+					echo $this->get_textarea_html( $instance, 'template', esc_html__( 'Template', 'category-posts' ) . ' <a href="#" class="dashicons open-template-help dashicons-editor-help imgedit-help-toggle"><span class="screen-reader-text">' . esc_html__( 'Show template help', 'category-posts' ) . '</span></a>', $template, '', true, 5 );
 					preg_match_all( get_template_regex(), $template, $matches );
 					$tags = array();
 					if ( ! empty( $matches[0] ) ) {
