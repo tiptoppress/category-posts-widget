@@ -1464,7 +1464,7 @@ class Widget extends \WP_Widget {
 		}
 
 		$ret = '<label for="' . esc_attr( $this->get_field_id( $key ) ) . '">' . $label . '</label>' .
-					'<textarea rows="' . esc_attr( $num_rows ) . '" placeholder="' . $placeholder . '" id="' . esc_attr( $this->get_field_id( $key ) ) . '" name="' . esc_attr( $this->get_field_name( $key ) ) . '" type="text" autocomplete="off">' . esc_textarea( $value ) . '</textarea>';
+					'<textarea rows="' . esc_attr( $num_rows ) . '" placeholder="' . $placeholder . '" id="' . esc_attr( $this->get_field_id( $key ) ) . '" name="' . esc_attr( $this->get_field_name( $key ) ) . '" autocomplete="off">' . esc_textarea( $value ) . '</textarea>';
 
 		return $this->get_wrap_block_html( $ret, $key, $visible );
 	}
@@ -1794,14 +1794,14 @@ class Widget extends \WP_Widget {
 					<div class="cpwp_ident">
 						<p>
 							<label>
-								<?php esc_html_e( 'Thumbnail dimensions (in pixels)', 'category-posts' ); ?><br />
-								<label for="<?php echo esc_attr( $this->get_field_id( 'thumb_w' ) ); ?>">
-									<?php esc_html_e( 'Width:', 'category-posts' ); ?> <input style="width:30%;" type="number" min="1" id="<?php echo esc_attr( $this->get_field_id( 'thumb_w' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'thumb_w' ) ); ?>" value="<?php echo esc_attr( $instance['thumb_w'] ); ?>" />
-								</label>
+								<?php esc_html_e( 'Thumbnail dimensions (in pixels)', 'category-posts' ); ?>
+							</label><br />
+							<label for="<?php echo esc_attr( $this->get_field_id( 'thumb_w' ) ); ?>">
+								<?php esc_html_e( 'Width:', 'category-posts' ); ?> <input style="width:30%;" type="number" min="1" id="<?php echo esc_attr( $this->get_field_id( 'thumb_w' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'thumb_w' ) ); ?>" value="<?php echo esc_attr( $instance['thumb_w'] ); ?>" />
+							</label>
 
-								<label for="<?php echo esc_attr( $this->get_field_id( 'thumb_h' ) ); ?>">
-									<?php esc_html_e( 'Height:', 'category-posts' ); ?> <input style="width:30%;" type="number" min="1" id="<?php echo esc_attr( $this->get_field_id( 'thumb_h' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'thumb_h' ) ); ?>" value="<?php echo esc_attr( $instance['thumb_h'] ); ?>" />
-								</label>
+							<label for="<?php echo esc_attr( $this->get_field_id( 'thumb_h' ) ); ?>">
+								<?php esc_html_e( 'Height:', 'category-posts' ); ?> <input style="width:30%;" type="number" min="1" id="<?php echo esc_attr( $this->get_field_id( 'thumb_h' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'thumb_h' ) ); ?>" value="<?php echo esc_attr( $instance['thumb_h'] ); ?>" />
 							</label>
 						</p>
 						<?php
@@ -1870,7 +1870,7 @@ class Widget extends \WP_Widget {
 			<p><a href="<?php echo esc_url( get_edit_user_link() ) . '#' . __NAMESPACE__; ?>"><?php esc_html_e( 'Widget admin behaviour settings', 'category-posts' ); ?></a></p>
 			<p><a target="_blank" href="<?php echo esc_url( DOC_URL ); ?>"><?php esc_html_e( 'Documentation', 'category-posts' ); ?></a></p>
 			<p><a target="_blank" href="<?php echo esc_url( SUPPORT_URL ); ?>"><?php esc_html_e( 'Support', 'category-posts' ); ?></a></p>
-			<p><?php echo sprintf( wp_kses( __( 'We are on <a href="%1$s">Facebook</a> and <a href="%2$s">Twitter</a>.', 'category-posts' ), array( 'a' => array( 'href' => array() ) ) ), esc_url( 'https://www.facebook.com/TipTopPress' ), esc_url( 'https://twitter.com/TipTopPress' ) ); ?></br></br></p>
+			<p><?php echo sprintf( wp_kses( __( 'We are on <a href="%1$s">Facebook</a> and <a href="%2$s">Twitter</a>.', 'category-posts' ), array( 'a' => array( 'href' => array() ) ) ), esc_url( 'https://www.facebook.com/TipTopPress' ), esc_url( 'https://twitter.com/TipTopPress' ) ); ?></p>
 		</div>
 		<?php
 	}
