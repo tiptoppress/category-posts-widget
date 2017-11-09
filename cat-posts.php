@@ -1431,7 +1431,7 @@ class Widget extends \WP_Widget {
 		$ret = '<label for="' . $this->get_field_id( $key ) . "\">\n" .
 					$label .
 				"</label>\n" .
-				'<select d="' . $this->get_field_id( $key ) . '" name="' . $this->get_field_name( $key ) . '"  autocomplete="off">' . "\n";
+				'<select id="' . $this->get_field_id( $key ) . '" name="' . $this->get_field_name( $key ) . '"  autocomplete="off">' . "\n";
 		foreach ( $list as $v => $l ) {
 			$ret .= '<option value="' . esc_attr( $v ) . '" ' . selected( $v, $value, false ) . '>' . $l . "</option>\n";
 		}
@@ -1567,7 +1567,7 @@ class Widget extends \WP_Widget {
 			}
 		}
 		$ret = '<label for="' . esc_attr( $this->get_field_id( $key ) ) . "\">\n" .
-					'<input id="' . esc_attr( $this->get_field_id( $key ) ) . '" name="' . esc_attr( $this->get_field_name( $key ) ) . '" type="checkbox" ' . checked( $value, true, false ) . ' autocomplete="off"/>' . "\n" .
+					'<input id="' . esc_attr( $this->get_field_id( $key ) ) . '" name="' . esc_attr( $this->get_field_name( $key ) ) . '" type="checkbox" ' . checked( $value, true, false ) . '/>' . "\n" .
 					$label .
 				"</label>\n";
 
