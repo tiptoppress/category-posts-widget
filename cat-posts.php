@@ -937,6 +937,7 @@ class Widget extends \WP_Widget {
 	 * @since 4.8
 	 */
 	public function itemCommentNum( $instance, $everything_is_link ) {
+		global $post;
 
 		$ret = '<span class="cat-post-comment-num">';
 
