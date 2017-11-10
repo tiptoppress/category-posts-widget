@@ -131,6 +131,7 @@
             var textarea = jQuery(panel).find('textarea');
 			textarea.val(template);
 			textarea.trigger('input');
+			textarea.trigger('change');
         },
 
 		// Close all open panels if open
