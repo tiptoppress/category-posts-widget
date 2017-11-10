@@ -987,6 +987,7 @@ class Widget extends \WP_Widget {
 	 * @since 4.8
 	 */
 	public function itemExcerpt( $instance, $everything_is_link ) {
+		global $post;
 
 		// use the_excerpt filter to get the "normal" excerpt of the post
 		// then apply our filter to let users customize excerpts in their own way.
