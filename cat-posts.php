@@ -2297,7 +2297,11 @@ function customize_register( $wp_customize ) {
 				ob_start();
 
 				// For the form method to handle generation gracefully, the number needs to be a simple string, and the name might include other chars as well, so for simplisity md5 it.
-				$widget->number = $p->ID . '_' . md5( $k );
+				if ( '' !== $k ) {
+					$widget->number = $p->ID . '_' . md5( $k );
+				} else {
+					$widget->number = $p->ID . '_';
+				}
 
 				$widget->form( $m );
 				$form = ob_get_clean();
