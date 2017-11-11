@@ -2797,10 +2797,11 @@ class virtualWidget {
 					$ret[] = '#' . $widget_id . ' .cat-post-tax-post_tag a {border:0}';     // this for the tag link.
 					$ret[] = '#' . $widget_id . ' .cat-post-tax-post_tag span {border:0}';     // this for the tag link.
 				}
-				// probably all Themes have too much margin on their p element when used in the shortcode.
-				$ret[] = '#' . $widget_id . ' p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
-																	// bigger (add to the padding) use only top for now.
 			}
+
+			// probably all Themes have too much margin on their p element when used in the shortcode or widget.
+			$ret[] = '#' . $widget_id . ' p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
+																// bigger (add to the padding) use only top for now.
 		}
 
 		if ( ( isset( $settings['use_css_cropping'] ) && $settings['use_css_cropping'] ) || ! $disable_css ) {
