@@ -967,7 +967,7 @@ class Widget extends \WP_Widget {
 	 */
 	public function itemAuthor( $instance, $everything_is_link ) {
 
-		$ret .= '<span class="cat-post-author">';
+		$ret = '<span class="cat-post-author">';
 
 		if ( $everything_is_link ) {
 			$ret .= get_the_author();
