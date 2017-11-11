@@ -1531,7 +1531,7 @@ class Widget extends \WP_Widget {
 		}
 
 		$ret = '<label for="' . $this->get_field_id( $key ) . "\">\n" .
-					esc_html( $label ) .
+					esc_html( $label ) . "\n" .
 					'<input placeholder="' . $placeholder . '" id="' . esc_attr( $this->get_field_id( $key ) ) . '" name="' . esc_attr( $this->get_field_name( $key ) ) . '" class="' . esc_attr( $key ) . '" type="number"' . $minmax . ' value="' . esc_attr( $value ) . '" autocomplete="off" />' . "\n" .
 				"</label>\n";
 
@@ -1764,7 +1764,7 @@ class Widget extends \WP_Widget {
 					<p><?php esc_html_e( 'Excerpt settings', 'category-posts' ); ?></p>
 					<div class="cpwp_ident">
 					<?php
-					echo $this->get_number_input_block_html( $instance, 'excerpt_length', esc_html__( 'Excerpt length (in words):', 'category-posts' ), get_option( 'posts_per_page' ), 1, 55, '', true );
+					echo $this->get_number_input_block_html( $instance, 'excerpt_length', esc_html__( 'Excerpt length (words):', 'category-posts' ), get_option( 'posts_per_page' ), 1, 55, '', true );
 					echo $this->get_text_input_block_html( $instance, 'excerpt_more_text', esc_html__( 'Excerpt \'more\' text:', 'category-posts' ), '', esc_attr__( '...', 'category-posts' ), true );
 					echo $this->get_checkbox_block_html( $instance, 'excerpt_filters', esc_html__( 'Don\'t override Themes and plugin filters', 'category-posts' ), false, true );
 					?>
@@ -1789,19 +1789,11 @@ class Widget extends \WP_Widget {
 				<div class="categoryposts-data-panel-thumb" style="display:<?php echo ( isset( $tags['%thumb%'] ) ) ? 'block' : 'none'; ?>">
 					<p><?php esc_html_e( 'Thumbnail settings', 'category-posts' ); ?></p>
 					<div class="cpwp_ident">
-						<p>
-							<label>
-								<?php esc_html_e( 'Thumbnail dimensions (in pixels)', 'category-posts' ); ?>
-							</label><br />
-							<label for="<?php echo esc_attr( $this->get_field_id( 'thumb_w' ) ); ?>">
-								<?php esc_html_e( 'Width:', 'category-posts' ); ?> <input style="width:30%;" type="number" min="1" id="<?php echo esc_attr( $this->get_field_id( 'thumb_w' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'thumb_w' ) ); ?>" value="<?php echo esc_attr( $instance['thumb_w'] ); ?>" />
-							</label>
-
-							<label for="<?php echo esc_attr( $this->get_field_id( 'thumb_h' ) ); ?>">
-								<?php esc_html_e( 'Height:', 'category-posts' ); ?> <input style="width:30%;" type="number" min="1" id="<?php echo esc_attr( $this->get_field_id( 'thumb_h' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'thumb_h' ) ); ?>" value="<?php echo esc_attr( $instance['thumb_h'] ); ?>" />
-							</label>
-						</p>
+						<p><?php esc_html_e( 'Thumbnail dimensions (pixel)', 'category-posts' ); ?></p>
 						<?php
+						echo $this->get_number_input_block_html( $instance, 'thumb_w', esc_html__( 'Width:', 'category-posts' ), get_option( 'thumbnail_size_w', 150 ), 1, '', '', true );
+						echo $this->get_number_input_block_html( $instance, 'thumb_h', esc_html__( 'Height:', 'category-posts' ), get_option( 'thumbnail_size_h', 150 ), 1, '', '', true );
+
 						echo $this->get_checkbox_block_html( $instance, 'use_css_cropping', esc_html__( 'CSS crop to requested size', 'category-posts' ), false, false );
 						echo $this->get_select_block_html( $instance, 'thumb_hover', esc_html__( 'Animation on mouse hover:', 'category-posts' ), array(
 							'none'  => esc_html__( 'None', 'category-posts' ),
