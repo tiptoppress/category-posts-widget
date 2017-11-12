@@ -662,7 +662,7 @@ class Widget extends \WP_Widget {
 	public function titleHTML( $before_title, $after_title, $instance ) {
 		$ret = '';
 
-		if ( !isset( $instance['cat'] ) ) {
+		if ( ! isset( $instance['cat'] ) ) {
 			$instance['cat'] = 0;
 		}
 
@@ -674,6 +674,7 @@ class Widget extends \WP_Widget {
 				if ( $category_info && ! is_wp_error( $category_info ) ) {
 					$instance['title'] = $category_info->name;
 				} else {
+					$instance['cat'] = 0; // For further processing treat it like "all categories".
 					$instance['title'] = __( 'Recent Posts', 'category-posts' );
 				}
 			} else {
@@ -689,10 +690,14 @@ class Widget extends \WP_Widget {
 				$title = apply_filters( 'widget_title', $instance['title'] );
 			}
 
-			if ( isset( $instance['title_link'] ) && $instance['title_link'] && ( 0 !== $instance['cat'] ) ) {
-				$ret .= '<a href="' . get_category_link( $instance['cat'] ) . '">' . $title . '</a>';
-			} elseif ( isset( $instance['title_link_url'] ) && $instance['title_link_url'] && ( 0 === $instance['cat'] ) ) {
-				$ret .= '<a href="' . $instance['title_link_url'] . '">' . $title . '</a>';
+			if ( isset( $instance['title_link'] ) && $instance['title_link'] ) {
+				if ( 0 !== $instance['cat'] ) {
+					$ret .= '<a href="' . get_category_link( $instance['cat'] ) . '">' . $title . '</a>';
+				} elseif ( isset( $instance['title_link_url'] ) && $instance['title_link_url'] ) {
+					$ret .= '<a href="' . esc_url( $instance['title_link_url'] ) . '">' . $title . '</a>';
+				} else {
+					$ret .= '<a href="' . esc_url( $this->blog_page_url() ) . '">' . $title . '</a>';
+				}
 			} else {
 				$ret .= $title;
 			}
@@ -701,6 +706,25 @@ class Widget extends \WP_Widget {
 		}
 
 		return $ret;
+	}
+
+	/**
+	 * Get the URL of the blog page or home page if no explicit blog page is defined.
+	 *
+	 * @return string The URL of the blog page
+	 *
+	 * @since 4.8
+	 */
+	private function blog_page_url() {
+
+		$blog_page = get_option( 'page_for_posts' );
+		if ( $blog_page ) {
+			$url = get_permalink( $blog_page );
+		} else {
+			$url = home_url();
+		}
+
+		return $url;
 	}
 
 	/**
@@ -737,12 +761,7 @@ class Widget extends \WP_Widget {
 			if ( isset( $instance['cat'] ) && ( 0 !== $instance['cat'] ) && ( null !== get_category( $instance['cat'] ) ) ) {
 				$url = get_category_link( $instance['cat'] );
 			} else {
-				$blog_page = get_option( 'page_for_posts' );
-				if ( $blog_page ) {
-					$url = get_permalink( $blog_page );
-				} else {
-					$url = home_url();
-				}
+				$url = $this->blog_page_url();
 			}
 		}
 
