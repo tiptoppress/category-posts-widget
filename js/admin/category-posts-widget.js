@@ -7,12 +7,16 @@
  * Released under the GPLv2 license or later -  http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-    // namespace 
-    
+    // namespace
+
     var cwp_namespace = {
 
+		php_settings_var : 'categoryPosts',
+		widget_class : '.category-widget-cont',
+		template_panel_prefix : '.categoryposts-data-panel-',
         open_panels : {},  // holds an array of open panels per wiget id
-        
+		template_change_timer : null, // Used for debouncing change events generate when template changes.
+
         // generic click handler on the panel title
         clickHandler: function(element) {
             // open the div "below" the h4 title
@@ -26,47 +30,120 @@
                 o = this.open_panels[id];
             if (o.hasOwnProperty(panel))
                 delete o[panel];
-            else 
+            else
                 o[panel] = true;
             this.open_panels[id] = o;
         },
 
-        // Show hide excerpt options on excerpt option check box change
-        toggleExcerptPanel: function(item) {
-            var value = jQuery(item).find("input").attr('checked');		
-            var panel = item.parentElement.parentElement;
-            var layout = jQuery(panel).find(".layout_select option:selected").attr('value');
-            if(value == 'checked') {
-                jQuery(panel).find('.categoryposts-data-panel-excerpt').show();
+		// Show hide foote link URL
+		toggleCatSelection: function(item) {
+            var cat = jQuery(item).find("option:selected").attr('value');
+			var panel = item.parentElement.parentElement.parentElement.parentElement;
+            if(cat == '0') {
+				jQuery(panel).find( '.categoryPosts-title_link' ).hide();
+				jQuery(panel).find( '.categoryPosts-title_link_url' ).show();
+				jQuery(panel).find( '.categoryPosts-no_cat_childs' ).hide();
             }
             else {
-                jQuery(panel).find('.categoryposts-data-panel-excerpt').hide();
-            }	
+				jQuery(panel).find('.categoryPosts-title_link' ).show();
+				jQuery(panel).find('.categoryPosts-title_link_url' ).hide();
+				jQuery(panel).find( '.categoryPosts-no_cat_childs' ).show();
+            }
         },
-		
-        // Show hide date options on date option check box change
-        toggleDatePanel: function(item) {
-            var value = jQuery(item).find("input").attr('checked');		
-            var panel = item.parentElement.parentElement;
-            var layout = jQuery(panel).find(".layout_select option:selected").attr('value');
+
+		// Show hide disable font styles
+		toggleDisableFontStyles: function(item) {
+            var value = jQuery(item).find("input").attr('checked');
+			var panel = item.parentElement.parentElement;
             if(value == 'checked') {
-                jQuery(panel).find('.categoryposts-data-panel-date').show();
+                jQuery(panel).find('.categoryposts-data-panel-general-disable-font-styles').hide();
             }
             else {
-                jQuery(panel).find('.categoryposts-data-panel-date').hide();
-            }	
+                jQuery(panel).find('.categoryposts-data-panel-general-disable-font-styles').show();
+            }
         },
-		
+
+		// Show hide other date format
+		toggleDateFormat: function(item) {
+            var value = jQuery(item).val();
+			var panel = item.parentElement.parentElement;
+            if( value != 'other') {
+                jQuery(panel).find('.categoryPosts-date_format').hide();
+            } else {
+                jQuery(panel).find('.categoryPosts-date_format').show();
+            }
+        },
+
+		// Show template help
+		openTemplateHelp: function(item,event) {
+			event.preventDefault();
+			var panel = item.parentElement.parentElement.parentElement.parentElement;
+            jQuery(panel).find('.cat-post-template-help').show('slow');
+        },
+
+		toggleAssignedCategoriesTop: function(item) {
+            var value = jQuery(item).find("input").attr('checked');
+			var panel = item.parentElement.parentElement;
+            if(value == 'checked') {
+                jQuery(panel).find('.categoryposts-details-panel-assigned-cat-top').show();
+            }
+            else {
+                jQuery(panel).find('.categoryposts-details-panel-assigned-cat-top').hide();
+            }
+        },
+
+		toggleHideTitle: function(item) {
+            var value = jQuery(item).attr('checked');
+			var panel = item.parentElement.parentElement.parentElement;
+            if (value != 'checked') {
+                jQuery(panel).find('.categoryposts-data-panel-title-settings').show();
+            } else {
+                jQuery(panel).find('.categoryposts-data-panel-title-settings').hide();
+            }
+        },
+
+		selectPremadeTemplate: function(item) {
+			var panel = item.parentElement.parentElement.parentElement;
+			var div = item.parentElement.parentElement;
+            var select = jQuery(div).find('select');
+			var template = '%title%';
+			value = select.val();
+            switch (value) {
+				case 'title':
+					template = '%title%';
+					break;
+				case 'title_excerpt':
+					template = '%title%\n%excerpt%';
+					break;
+				case 'title_thumb':
+					template = '%title%\n%thumb%';
+					break;
+				case 'title_thum_excerpt':
+					template = '%title%\n%thumb%\n%excerpt%';
+					break;
+				case 'everything':
+					template = '%title%\n%thumb%\n%excerpt%\n\n';
+					template += 'Published by %author% on %date%\n';
+					template += 'and has %commentnum% comments\n\n';
+					template += 'Categories: %category%\n\n';
+					template += 'Tags: %post_tag%';
+			}
+            var textarea = jQuery(panel).find('textarea');
+			textarea.val(template);
+			textarea.trigger('input');
+			textarea.trigger('change');
+        },
+
 		// Close all open panels if open
 		autoCloseOpenPanels: function(_this) {
-			if( categoryPosts.accordion  ) {
+			if( tiptoppress[ this.php_settings_var ].accordion  ) {
 				if(!jQuery(_this).hasClass('open')) {
 					var jCloseElement = jQuery(_this).parent().find('.open');
 					this.clickHandler(jCloseElement);
 				}
 			}
 		},
-		
+
 		defaultThumbnailSelection: function (elem, title, button_title) {
 
 			var frame = wp.media({
@@ -94,7 +171,7 @@
 			frame.open();
 			return false;
 		},
-		
+
 		removeDefaultThumbnailSelection : function (elem) {
 			jQuery(elem).parent().prev().find('.default_thumb_img').html(cwp_default_thumb_selection.none);
 			jQuery(elem).hide();
@@ -102,11 +179,35 @@
 
 			return false;
 		},
-			
+
+		templateChange : function (elem) {
+
+			function adjustUiToTemplate() {
+				var template = jQuery(elem).val();
+				var tags = tiptoppress[ this.php_settings_var ].template_tags;
+				var widget_cont = jQuery(elem.parentElement.parentElement.parentElement.parentElement);
+				for (var i = 0; i < tags.length; i++) {
+					if ( -1 !== template.indexOf( tags[i] ) ) {
+						widget_cont.find(this.template_panel_prefix + tags[i] ).show();
+					} else {
+						widget_cont.find(this.template_panel_prefix + tags[i] ).hide();
+					}
+				}
+			}
+
+			if (null != this.template_change_timer) {
+				clearTimeout( this.template_change_timer );
+			}
+			this.template_change_timer = setTimeout(adjustUiToTemplate.bind(this), 250);
+
+		},
+
     }
-	
+
 jQuery(document).ready( function () {
-	
+
+	var class_namespace = '.category-widget-cont';
+
 	jQuery('.category-widget-cont h4').click(function () { // for widgets page
 		cwp_namespace.autoCloseOpenPanels(this);
 		// toggle panel open/close
@@ -115,6 +216,7 @@ jQuery(document).ready( function () {
 
 	// needed to reassign click handlers after widget refresh
 	jQuery(document).on('widget-added widget-updated', function(root,element){ // for customize and after save on widgets page
+
 		jQuery('.category-widget-cont h4').off('click').on('click', function () {
 			cwp_namespace.autoCloseOpenPanels(this);
 			// toggle panel open/close
@@ -127,7 +229,8 @@ jQuery(document).ready( function () {
 		jQuery('.cwp_default_thumb_remove').off('click').on('click', function () { // remove default thumb
 			cwp_namespace.removeDefaultThumbnailSelection(this);
 		});
-    // refresh panels to state before the refresh
+
+		// refresh panels to state before the refresh
         var id = jQuery(element).attr('id');
         if (cwp_namespace.open_panels.hasOwnProperty(id)) {
             var o = cwp_namespace.open_panels[id];
@@ -136,15 +239,52 @@ jQuery(document).ready( function () {
 					.next().stop().show();
             }
         }
-	});	
 
-	jQuery('.cwp_default_thumb_select').off('click').on('click', function () { // select default thumb
-		cwp_namespace.defaultThumbnailSelection(this, cwp_default_thumb_selection.frame_title,cwp_default_thumb_selection.button_title);
+		setChangeHandlers();
 	});
 
-	jQuery('.cwp_default_thumb_remove').off('click').on('click', function () { // remove default thumb
-		cwp_namespace.removeDefaultThumbnailSelection(this);
-	});
-	
+	function setChangeHandlers() {
+		jQuery('.cwp_default_thumb_select').off('click').on('click', function () { // select default thumb
+			cwp_namespace.defaultThumbnailSelection(this, cwp_default_thumb_selection.frame_title,cwp_default_thumb_selection.button_title);
+		});
+
+		jQuery(document).on('change', class_namespace+' .categoryposts-data-panel-filter-cat', function () { // change category filter
+			cwp_namespace.toggleCatSelection(this);
+		});
+
+		jQuery('.cwp_default_thumb_remove').off('click').on('click', function () { // remove default thumb
+			cwp_namespace.removeDefaultThumbnailSelection(this);
+		});
+
+		jQuery(class_namespace+'-assigned_categories').off('click').on('click', function () {
+			cwp_namespace.toggleAssignedCategoriesTop(this);
+		});
+
+		jQuery(document).on('click', class_namespace+' .hide_title', function () {
+			cwp_namespace.toggleHideTitle(this);
+		});
+
+		jQuery(document).on('change', class_namespace+' .categoryPosts-preset_date_format select', function () { // change date format
+			cwp_namespace.toggleDateFormat(this);
+		});
+
+		jQuery(document).on('click', class_namespace+' a.open-template-help', function (event) { // open template help
+			cwp_namespace.openTemplateHelp(this, event);
+		});
+
+		jQuery(document).on('click', class_namespace+' .cat-post-premade_templates button', function () { // select a pre made template
+			cwp_namespace.selectPremadeTemplate(this);
+		});
+
+		jQuery(document).on('change', class_namespace+' .cat-post-premade_templates select', function (event) { // prevent refresh ontemplate selection
+			event.preventDefault();
+			event.stopPropagation();
+		});
+
+		jQuery(document).on('input', class_namespace+' .categoryPosts-template textarea', function () { // prevent refresh ontemplate selection
+			cwp_namespace.templateChange(this);
+		});
+	}
+
+	setChangeHandlers();
 });
-
