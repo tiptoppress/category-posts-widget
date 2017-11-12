@@ -1305,7 +1305,12 @@ class Widget extends \WP_Widget {
 	 * @since 4.6
 	 */
 	public function formTitlePanel( $instance ) {
-		$cat = $instance['cat'];
+		if ( isset( $instance['cat'] ) ) {
+			$cat = $instance['cat'];
+		} else {
+			$cat = 0;
+		}
+
 		$hide_title = false;
 		if ( isset( $instance['hide_title'] ) && $instance['hide_title'] ) {
 			$hide_title = true;
