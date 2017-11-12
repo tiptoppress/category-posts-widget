@@ -245,24 +245,24 @@ class testWidgetFront extends WP_UnitTestCase {
 
 		// empty category.
 		$out = $widget->footerHTML(array(
-			'footer_link' => 'test',
+			'footer_link' => 'http://test.org',
 		));
-		$this->assertEquals( '<a class="cat-post-footer-link" href="http://example.org">test</a>', $out );
+		$this->assertEquals( '<a class="cat-post-footer-link" href="http://test.org">http://test.org</a>', $out );
 
-        // bad category
-        $out = $widget->footerHTML(array(
-                                    'footer_link'=>'test',
-                                    'cat'=>1000
-                                    ));
-        $this->assertEquals('<a class="cat-post-footer-link" href="http://example.org">test</a>',$out);
+		// bad category.
+		$out = $widget->footerHTML( array(
+			'footer_link' => 'http://test.org',
+			'cat'         => 1000,
+		) );
+		$this->assertEquals( '<a class="cat-post-footer-link" href="http://test.org">http://test.org</a>', $out );
 
-        // bad category no css
-        $out = $widget->footerHTML(array(
-                                    'footer_link'=>'test',
-                                    'cat'=>1000,
-                                    'disable_css' => true
-                                    ));
-        $this->assertEquals('<a href="http://example.org">test</a>',$out);
+		// bad category no css.
+		$out = $widget->footerHTML( array(
+			'footer_link' => 'http://test.org',
+			'cat'         => 1000,
+			'disable_css' => true,
+		) );
+		$this->assertEquals( '<a class="cat-post-footer-link" href="http://test.org">http://test.org</a>', $out );
 
         // valid category
         $cid = $this->factory->category->create(array('name'=>'test cat'));
