@@ -662,10 +662,14 @@ class Widget extends \WP_Widget {
 	public function titleHTML( $before_title, $after_title, $instance ) {
 		$ret = '';
 
-		// If not title, use the name of the category.
+		if ( !isset( $instance['cat'] ) ) {
+			$instance['cat'] = 0;
+		}
+
+		// If no title, use the name of the category.
 		if ( ! isset( $instance['title'] ) || ! $instance['title'] ) {
 			$instance['title'] = '';
-			if ( isset( $instance['cat'] ) ) {
+			if ( 0 !== $instance['cat'] ) {
 				$category_info = get_category( $instance['cat'] );
 				if ( $category_info && ! is_wp_error( $category_info ) ) {
 					$instance['title'] = $category_info->name;
