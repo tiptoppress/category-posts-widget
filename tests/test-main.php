@@ -487,7 +487,7 @@ class testWidgetFront extends WP_UnitTestCase {
 												'num'     => $num,
 												'offset'  => $offset,
 												'no_cat_childs' => $no_child,
-												'status' => $status,
+												'status'  => $status,
 											);
 											$expected = array(
 												'orderby' => $sort_criteria_results[ $ksc ],
@@ -575,16 +575,18 @@ class testWidgetFront extends WP_UnitTestCase {
 	}
 
 	/**
-	 *  Test the post_thumbnail method of the widget
+	 * Test the post_thumbnail method of the widget
+	 *
+	 * @since 4.6
 	 */
-	function test_the_post_thumbnail() {
+	public function test_the_post_thumbnail() {
 
 		global $wp_version;
 
 		$className = NS . '\Widget';
 		$widget = new $className();
 
-		// clean upload dir for consistant file names
+		// clean upload dir for consistent file names.
 		$dir = wp_upload_dir();
 		$dirurl = $dir['url'];
 		$dir = $dir['path'];
@@ -597,7 +599,7 @@ class testWidgetFront extends WP_UnitTestCase {
 				'post_status' => 'publish',
 			)
 		);
-		$thumbnail_id = _make_attachment( DIR_TESTDATA . '/images/canola.jpg' ); // wp-content\plugins\4.5\tests\phpunit\includes\..\data\images\canola.jpg
+		$thumbnail_id = _make_attachment( DIR_TESTDATA . '/images/canola.jpg' ); // wp-content\plugins\4.5\tests\phpunit\includes\..\data\images\canola.jpg.
 		set_post_thumbnail( $pid, $thumbnail_id );
 
 		global $post;
@@ -605,7 +607,7 @@ class testWidgetFront extends WP_UnitTestCase {
 		setup_postdata( $post );
 
 		// test no thumb width and height, should get same html
-		// there are slight differences with how versions handle "empty" values
+		// there are slight differences with how versions handle "empty" values.
 		if ( version_compare( $wp_version, '4.5', '<' ) ) {
 			$this->postThumbnailTester( '<img width="640" height="480" src="' . $dirurl . '/canola.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" srcset="' . $dirurl . '/canola-300x225.jpg 300w, ' . $dirurl . '/canola.jpg 640w" sizes="(max-width: 640px) 100vw, 640px" />', $widget, array() );
 		} else {
@@ -616,7 +618,7 @@ class testWidgetFront extends WP_UnitTestCase {
 
 		$this->postThumbnailTester( '<img width="10" height="10" src="' . $dirurl . '/canola-150x150.jpg" class="attachment-10x10 size-10x10 wp-post-image" />', $widget, array( '', 10 ) );
 
-		// equal to min thumb size. no manipulation needed
+		// equal to min thumb size. no manipulation needed.
 		$widget->instance = array(
 			'thumb_h' => 150,
 			'thumb_w' => 150,
@@ -643,14 +645,14 @@ class testWidgetFront extends WP_UnitTestCase {
 			);
 		}
 
-		// Use with "use_css_cropping"
+		// Use with "use_css_cropping".
 		$widget->instance = array(
 			'thumb_h'          => 150,
 			'thumb_w'          => 150,
 			'use_css_cropping' => true,
 		);
 		$this->postThumbnailTester(
-			'<span style="width:150px;height:150px;"><img style="margin-top:-0px;height:150px;clip:rect(auto,150px,auto,0px);width:auto;max-width:initial;" width=\'150\' height=\'150\' src="' . $dirurl . '/canola-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" /></span>',
+			'<span class="cat-post-crop" style="width:150px;height:150px;"><img style="margin-top:-0px;height:150px;clip:rect(auto,150px,auto,0px);width:auto;max-width:initial;" width=\'150\' height=\'150\' src="' . $dirurl . '/canola-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" /></span>',
 			$widget, array( 150, 150 )
 		);
 
@@ -666,7 +668,7 @@ class testWidgetFront extends WP_UnitTestCase {
 			);
 		} else {
 			$this->postThumbnailTester(
-				'<span style="width:200px;height:200px;"><img style="margin-left:-33.333333333333px;height:200px;clip:rect(auto,233.33333333333px,auto,33.333333333333px);width:auto;max-width:initial;" width=\'266.66666666667\' height=\'200\' src="' . $dirurl . '/canola.jpg" class="attachment-200x200 size-200x200 wp-post-image" srcset="' . $dirurl . '/canola.jpg 640w, ' . $dirurl . '/canola-300x225.jpg 300w" sizes="(max-width: 266.66666666667px) 100vw, 266.66666666667px" /></span>',
+				'<span class="cat-post-crop" style="width:200px;height:200px;"><img style="margin-left:-33.333333333333px;height:200px;clip:rect(auto,233.33333333333px,auto,33.333333333333px);width:auto;max-width:initial;" width=\'266.66666666667\' height=\'200\' src="' . $dirurl . '/canola.jpg" class="attachment-200x200 size-200x200 wp-post-image" srcset="' . $dirurl . '/canola.jpg 640w, ' . $dirurl . '/canola-300x225.jpg 300w" sizes="(max-width: 266.66666666667px) 100vw, 266.66666666667px" /></span>',
 				$widget, array( 200, 200 )
 			);
 		}
@@ -705,14 +707,14 @@ class testWidgetFront extends WP_UnitTestCase {
 			$widget, array( 200, 200 )
 		);
 
-		// Use with "use_css_cropping"
+		// Use with "use_css_cropping".
 		$widget->instance = array(
 			'thumb_h'          => 150,
 			'thumb_w'          => 150,
 			'use_css_cropping' => true,
 		);
 		$this->postThumbnailTester(
-			'<span style="width:150px;height:150px;"><img style="margin-top:-0px;height:150px;clip:rect(auto,150px,auto,0px);width:auto;max-width:initial;" width=\'150\' height=\'150\' src="' . $dirurl . '/test-image.jpg" class="attachment-150x150 size-150x150 wp-post-image" /></span>',
+			'<span class="cat-post-crop" style="width:150px;height:150px;"><img style="margin-top:-0px;height:150px;clip:rect(auto,150px,auto,0px);width:auto;max-width:initial;" width=\'150\' height=\'150\' src="' . $dirurl . '/test-image.jpg" class="attachment-150x150 size-150x150 wp-post-image" /></span>',
 			$widget, array( 150, 150 )
 		);
 
@@ -722,7 +724,7 @@ class testWidgetFront extends WP_UnitTestCase {
 			'use_css_cropping' => true,
 		);
 		$this->postThumbnailTester(
-			'<span style="width:200px;height:200px;"><img style="margin-top:-0px;height:200px;clip:rect(auto,200px,auto,0px);width:auto;max-width:initial;" width=\'200\' height=\'200\' src="' . $dirurl . '/test-image.jpg" class="attachment-200x200 size-200x200 wp-post-image" /></span>',
+			'<span class="cat-post-crop" style="width:200px;height:200px;"><img style="margin-top:-0px;height:200px;clip:rect(auto,200px,auto,0px);width:auto;max-width:initial;" width=\'200\' height=\'200\' src="' . $dirurl . '/test-image.jpg" class="attachment-200x200 size-200x200 wp-post-image" /></span>',
 			$widget, array( 200, 200 )
 		);
 
@@ -734,7 +736,7 @@ class testWidgetFront extends WP_UnitTestCase {
 				'post_status' => 'publish',
 			)
 		);
-		$thumbnail_id = _make_attachment( DIR_TESTDATA . '/images/33772.jpg' ); // wp-content\plugins\4.5\tests\phpunit\includes\..\data\images\33772.jpg
+		$thumbnail_id = _make_attachment( DIR_TESTDATA . '/images/33772.jpg' ); // wp-content\plugins\4.5\tests\phpunit\includes\..\data\images\33772.jpg.
 		set_post_thumbnail( $pid, $thumbnail_id );
 
 		$post = get_post( $pid );
@@ -776,7 +778,7 @@ class testWidgetFront extends WP_UnitTestCase {
 			'use_css_cropping' => true,
 		);
 		$this->postThumbnailTester(
-			'<span style="width:150px;height:150px;"><img style="margin-top:-0px;height:150px;clip:rect(auto,150px,auto,0px);width:auto;max-width:initial;" width=\'150\' height=\'150\' src="' . $dirurl . '/33772-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" /></span>',
+			'<span class="cat-post-crop" style="width:150px;height:150px;"><img style="margin-top:-0px;height:150px;clip:rect(auto,150px,auto,0px);width:auto;max-width:initial;" width=\'150\' height=\'150\' src="' . $dirurl . '/33772-150x150.jpg" class="attachment-150x150 size-150x150 wp-post-image" /></span>',
 			$widget, array( 150, 150 )
 		);
 
@@ -797,12 +799,12 @@ class testWidgetFront extends WP_UnitTestCase {
 			);
 		} else {
 			$this->postThumbnailTester(
-				'<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="' . $dirurl . '/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" srcset="' . $dirurl . '/33772.jpg 1920w, ' . $dirurl . '/33772-300x169.jpg 300w, ' . $dirurl . '/33772-768x432.jpg 768w, ' . $dirurl . '/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
+				'<span class="cat-post-crop" style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="' . $dirurl . '/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" srcset="' . $dirurl . '/33772.jpg 1920w, ' . $dirurl . '/33772-300x169.jpg 300w, ' . $dirurl . '/33772-768x432.jpg 768w, ' . $dirurl . '/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
 				$widget, array( 200, 200 )
 			);
 		}
 
-		// test default thumb
+		// test default thumb.
 		$pidd = $this->factory->post->create(
 			array(
 				'title'       => 'default thumb',
@@ -830,7 +832,7 @@ class testWidgetFront extends WP_UnitTestCase {
 			);
 		} else {
 			$this->postThumbnailTester(
-				'<span style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="' . $dirurl . '/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" srcset="' . $dirurl . '/33772.jpg 1920w, ' . $dirurl . '/33772-300x169.jpg 300w, ' . $dirurl . '/33772-768x432.jpg 768w, ' . $dirurl . '/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
+				'<span class="cat-post-crop" style="width:200px;height:200px;"><img style="margin-left:-77.777777777778px;height:200px;clip:rect(auto,277.77777777778px,auto,77.777777777778px);width:auto;max-width:initial;" width=\'355.55555555556\' height=\'200\' src="' . $dirurl . '/33772.jpg" class="attachment-200x200 size-200x200 wp-post-image" srcset="' . $dirurl . '/33772.jpg 1920w, ' . $dirurl . '/33772-300x169.jpg 300w, ' . $dirurl . '/33772-768x432.jpg 768w, ' . $dirurl . '/33772-1024x576.jpg 1024w" sizes="(max-width: 355.55555555556px) 100vw, 355.55555555556px" /></span>',
 				$widget, array( 200, 200 )
 			);
 		}
@@ -856,9 +858,9 @@ class testWidgetFront extends WP_UnitTestCase {
 	}
 
 	/**
-	 *  test that the global post variable is reset after widget loop
+	 * Test that the global post variable is reset after widget loop.
 	 */
-	function testLoopReset() {
+	public function testLoopReset() {
 		$className = NS . '\Widget';
 		$widget = new $className();
 
