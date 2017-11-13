@@ -783,22 +783,22 @@ class Widget extends \WP_Widget {
 		$template = '';
 
 		if ( ! ( isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'] ) ) {
-			$template .= '%title%';
+			$template .= "%title%\n";
 		}
 		if ( isset( $instance['date'] ) && $instance['date'] ) {
-			$template .= '\n\n%date%\n\n';
+			$template .= "%date%\n";
 		}
 		if ( isset( $instance['thumb'] ) && $instance['thumb'] ) {
-			$template .= '\n\n%thumb%\n\n';
+			$template .= "%thumb%\n";
 		}
 		if ( isset( $instance['excerpt'] ) && $instance['excerpt'] ) {
 			$template .= '%excerpt%';
 		}
 		if ( isset( $instance['comment_num'] ) && $instance['comment_num'] ) {
-			$template .= '\n\n%commentnum%\n\n';
+			$template .= "%commentnum%\n";
 		}
 		if ( isset( $instance['author'] ) && $instance['author'] ) {
-			$template .= '\n\n%author%\n\n';
+			$template .= "%author%\n";
 		}
 
 		return $template;
@@ -1134,11 +1134,16 @@ class Widget extends \WP_Widget {
 		}, $template );
 
 		// Replace empty line with closing and opening P.
+		$template_res = trim( $template_res );
 		$template_res = str_replace( "\n", '</p><p>', $template_res );
 		$template_res = '<p>' . $template_res . '</p>';
 
 		// replace new lines with spaces.
 		$template_res = str_replace( "\n", ' ', $template_res );
+
+		// remove double start and end paragraphs around excerpts.
+		$template_res = str_replace( '<p><p>', '<p>', $template_res );
+		$template_res = str_replace( '</p></p>', '</p>', $template_res );
 
 		$ret .= $template_res;
 
