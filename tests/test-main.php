@@ -1206,9 +1206,9 @@ class testWidgetFront extends WP_UnitTestCase {
 			)
 		);
 		$o = removeSpaceBetweenTags( ob_get_clean() );
-		$this->assertEquals( 'Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="cat-post-title" href="http://example.org/?p=' . $pid . '" rel="bookmark">test</a><p>more then one word</p></li></ul>', $o );
+		$this->assertEquals( 'Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><p><a class="cat-post-title" href="http://example.org/?p=' . $pid . '" rel="bookmark">test</a></p><p>more then one word</p></li></ul>', $o );
 
-		// test more text default
+		// test more text default.
 		ob_start();
 		$widget->widget(
 			array(
@@ -1225,7 +1225,7 @@ class testWidgetFront extends WP_UnitTestCase {
 			)
 		);
 		$o = removeSpaceBetweenTags( ob_get_clean() );
-		$this->assertEquals( 'Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="cat-post-title" href="http://example.org/?p=' . $pid . '" rel="bookmark">test</a><p>more <a class="cat-post-excerpt-more" href="http://example.org/?p=' . $pid . '" title="Continue reading test">[&hellip;]</a></p></li></ul>', $o );
+		$this->assertEquals( 'Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><p><a class="cat-post-title" href="http://example.org/?p=' . $pid . '" rel="bookmark">test</a></p><p>more <a class="cat-post-excerpt-more" href="http://example.org/?p=' . $pid . '" title="Continue reading test">[&hellip;]</a></p></li></ul>', $o );
 
 		ob_start();
 		$widget->widget(
@@ -1244,18 +1244,18 @@ class testWidgetFront extends WP_UnitTestCase {
 			)
 		);
 		$o = removeSpaceBetweenTags( ob_get_clean() );
-		$this->assertEquals( 'Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="cat-post-title" href="http://example.org/?p=' . $pid . '" rel="bookmark">test</a><p>more <a class="cat-post-excerpt-more" href="http://example.org/?p=' . $pid . '" title="Continue reading test">blabla</a></p></li></ul>', $o );
+		$this->assertEquals( 'Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><p><a class="cat-post-title" href="http://example.org/?p=' . $pid . '" rel="bookmark">test</a></p><p>more <a class="cat-post-excerpt-more" href="http://example.org/?p=' . $pid . '" title="Continue reading test">blabla</a></p></li></ul>', $o );
 
 	}
 }
 
 class testWidgetAdmin extends WP_UnitTestCase {
 
-	function testformTitlePanel() {
+	public function testformTitlePanel() {
 		$className = NS . '\Widget';
 		$widget = new $className();
 
-		// no setting
+		// no setting.
 		ob_start();
 		$widget->formTitlePanel( array() );
 		$out = removeSpaceBetweenTags( ob_get_contents() );
@@ -1268,7 +1268,7 @@ class testWidgetAdmin extends WP_UnitTestCase {
 					' Hide title </label></p></div>', $out
 		);
 
-		// title
+		// title.
 		ob_start();
 		$widget->formTitlePanel( array( 'title' => 'title <> me' ) );
 		$out = removeSpaceBetweenTags( ob_get_contents() );
@@ -1592,47 +1592,47 @@ class testShortCode extends WP_UnitTestCase {
 				'post_content' => '[' . self::SHORTCODE_NAME . ']',
 			)
 		);
-		// setup global enviroment
+		// setup global enviroment.
 		$this->go_to( '/?p=' . $pid );
 		the_post();
-		categoryposts\register_virtual_widgets(); // generate virtual widgets usually done in the head of the theme
+		categoryposts\register_virtual_widgets(); // generate virtual widgets usually done in the head of the theme.
 		ob_start();
 		the_content();
 		$content = ob_get_contents();
 		ob_end_clean();
 		$this->assertEquals(
 			'<div id="category-posts-shortcode-' . $pid . '" class="category-posts-shortcode">Recent Posts<ul>' .
-						   '<li class=\'cat-post-item cat-post-current\'><a class="post-title" href="http://example.org/?p=' . $pid . '" rel="bookmark">test</a> </li></ul>' .
-						   '</div>', str_replace( "\n", '', $content )
+						'<li class=\'cat-post-item cat-post-current\'><p><a class="cat-post-title" href="http://example.org/?p=' . $pid . '" rel="bookmark">test</a></p></li></ul>' .
+						'</div>', str_replace( "\n", '', $content )
 		);
 
-		// named shortcode
+		// named shortcode.
 		wp_update_post(
 			array(
 				'ID'           => $pid,
 				'post_content' => '[' . self::SHORTCODE_NAME . ' name="bla"]',
 			)
 		);
-		// setup global enviroment
+		// setup global environment.
 		$this->go_to( '/?p=' . $pid );
 		the_post();
-		categoryposts\register_virtual_widgets(); // generate virtual widgets usually done in the head of the theme
+		categoryposts\register_virtual_widgets(); // generate virtual widgets usually done in the head of the theme.
 		ob_start();
 		the_content();
 		$content = ob_get_contents();
 		ob_end_clean();
 		$this->assertEquals(
 			'<div id="category-posts-shortcode-' . $pid . '-bla" class="category-posts-shortcode">Recent Posts<ul>' .
-						   '<li class=\'cat-post-item cat-post-current\'><a class="post-title" href="http://example.org/?p=' . $pid . '" rel="bookmark">test</a> </li></ul>' .
-						   '</div>', str_replace( "\n", '', $content )
+						'<li class=\'cat-post-item cat-post-current\'><p><a class="cat-post-title" href="http://example.org/?p=' . $pid . '" rel="bookmark">test</a></p></li></ul>' .
+						'</div>', str_replace( "\n", '', $content )
 		);
 	}
 
 	/**
-	 *  test that the DB is cleaned after uninstall
+	 * Test that the DB is cleaned after uninstall.
 	 */
-	function test_uninstall() {
-		// test widget option
+	public function test_uninstall() {
+		// test widget option.
 		add_option( 'widget-category-posts', 'dummy' );
 		$uninstall = NS . '\uninstall';
 		$uninstall();
