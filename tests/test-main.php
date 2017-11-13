@@ -1344,38 +1344,40 @@ class testWidgetAdmin extends WP_UnitTestCase {
 
 function default_settings() {
 	return array(
-		'title'                => '',
+		'title'                => 'Recent Posts',
 		'title_link'           => false,
+		'title_link_url'       => '',
 		'hide_title'           => false,
-		'cat'                  => '',
+		'cat'                  => 0,
 		'num'                  => get_option( 'posts_per_page' ),
 		'sort_by'              => 'date',
+		'status'               => 'publish',
 		'asc_sort_order'       => false,
 		'exclude_current_post' => false,
 		'hideNoThumb'          => false,
 		'footer_link'          => '',
-		'thumb'                => false,
-		'thumbTop'             => false,
+		'footer_link_text'     => '',
 		'thumb_w'              => '150',
 		'thumb_h'              => '150',
-		'use_css_cropping'     => false,
+		'use_css_cropping'     => true,
 		'thumb_hover'          => 'none',
 		'hide_post_titles'     => false,
-		'excerpt'              => false,
 		'excerpt_length'       => 55,
-		'excerpt_more_text'    => '',
+		'excerpt_more_text'    => '...',
 		'comment_num'          => false,
-		'author'               => false,
-		'date'                 => false,
 		'date_link'            => false,
 		'date_format'          => '',
 		'disable_css'          => false,
+		'disable_font_styles'  => false,
 		'hide_if_empty'        => false,
 		'offset'               => 1,
 		'hide_social_buttons'  => '',
 		'no_cat_childs'        => false,
 		'excerpt_filters'      => false,
 		'everything_is_link'   => false,
+		'preset_date_format'   => 'sitedateandtime',
+		'template'             => "%title%\n%thumb%",
+		'show_post_format'     => 'none',
 	);
 }
 
@@ -1694,11 +1696,11 @@ class testVirtualwidget extends WP_UnitTestCase {
 	}
 
 	/**
-	 *  test that virtual widgets are added from the collectio
+	 * Test that virtual widgets are added from the collectio.
 	 */
-	function testConstructor() {
+	public function testConstructor() {
 
-		// test default setting with no override
+		// test default setting with no override.
 		$v = new categoryPosts\virtualWidget( 'test', 'testclass', array() );
 		$col = categoryPosts\virtualWidget::getAllSettings();
 		$this->assertEquals( $col['test'], default_settings() );
