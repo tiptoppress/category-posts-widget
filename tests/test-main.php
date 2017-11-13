@@ -1055,9 +1055,9 @@ class testWidgetFront extends WP_UnitTestCase {
 			)
 		);
 		$o = removeSpaceBetweenTags( ob_get_clean() );
-		$this->assertEquals( 'Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="cat-post-title" href="http://example.org/?p=' . $pid . '" rel="bookmark">test</a><p>more[more test]</p></li></ul>', $o );
+		$this->assertEquals( 'Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><p><a class="cat-post-title" href="http://example.org/?p=' . $pid . '" rel="bookmark">test</a></p><p>more[more test]</p></li></ul>', $o );
 
-		// test excerpt more filter
+		// test excerpt more filter.
 		ob_start();
 		$widget->widget(
 			array(
@@ -1074,7 +1074,7 @@ class testWidgetFront extends WP_UnitTestCase {
 			)
 		);
 		$o = removeSpaceBetweenTags( ob_get_clean() );
-		$this->assertEquals( 'Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="cat-post-title" href="http://example.org/?p=' . $pid . '" rel="bookmark">test</a><p>more <a class="cat-post-excerpt-more" href="http://example.org/?p=' . $pid . '">blabla</a></p></li></ul>', $o );
+		$this->assertEquals( 'Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><p><a class="cat-post-title" href="http://example.org/?p=' . $pid . '" rel="bookmark">test</a></p><p>more <a class="cat-post-excerpt-more more-link" href="http://example.org/?p=' . $pid . '">blabla</a></p></li></ul>', $o );
 
 		ob_start();
 		$widget->widget(
@@ -1093,7 +1093,7 @@ class testWidgetFront extends WP_UnitTestCase {
 			)
 		);
 		$o = removeSpaceBetweenTags( ob_get_clean() );
-		$this->assertEquals( 'Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><a class="cat-post-title" href="http://example.org/?p=' . $pid . '" rel="bookmark">test</a><p>more <a class="cat-post-excerpt-more" href="http://example.org/?p=' . $pid . '">blabla</a></p></li></ul>', $o );
+		$this->assertEquals( 'Uncategorized<ul id="category-posts--internal" class="category-posts-internal"><li class=\'cat-post-item cat-post-current\'><p><a class="cat-post-title" href="http://example.org/?p=' . $pid . '" rel="bookmark">test</a></p><p>more <a class="cat-post-excerpt-more more-link" href="http://example.org/?p=' . $pid . '">blabla</a></p></li></ul>', $o );
 
 		remove_filter( 'excerpt_more', array( $this, 'excerptMoreFilter' ), 10 );
 		remove_filter( 'excerpt_length', array( $this, 'excerptLengthFilter' ), 10 );
@@ -1101,9 +1101,9 @@ class testWidgetFront extends WP_UnitTestCase {
 	}
 
 	/**
-	 *  test that the excerpt filters are removed after the loop
+	 * Test that the excerpt filters are removed after the loop.
 	 */
-	function testExcerptFilterRemove() {
+	public function testExcerptFilterRemove() {
 		$className = NS . '\Widget';
 		$widget = new $className();
 
