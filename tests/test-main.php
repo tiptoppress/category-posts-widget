@@ -429,7 +429,7 @@ class testWidgetFront extends WP_UnitTestCase {
 		$nums_results = array( 10, 7, null, 0 );
 
 		$offsets = array( null, 1, 2, 4 );
-		$offset_results = array( null, null, 1, 3 ); // nuul for offset not set at all
+		$offset_results = array( null, null, 1, 3 ); // nuul for offset not set at all.
 
 		$hidethumbs = array( true, null, false );
 		$hidethumbs_results = array(
@@ -453,6 +453,16 @@ class testWidgetFront extends WP_UnitTestCase {
 			)
 		);
 
+		$statuses = array(
+			null,
+			'publish',
+			'future',
+			'publish,future',
+			'private',
+			'private,publish',
+			'private,publish,future',
+		);
+
 		$exclude_current = array( 'whatever', true, null, false );
 
 		$archivetests = array();
@@ -467,50 +477,58 @@ class testWidgetFront extends WP_UnitTestCase {
 							foreach ( $exclude_current as $ke => $exclude ) {
 								foreach ( $offsets as $of => $offset ) {
 									foreach ( $no_cat_childs as $onc => $no_child ) {
-										$instance = array(
-											'sort_by'     => $sc,
-											'asc_sort_order' => $so,
-											'cat'         => $cat,
-											'hideNoThumb' => $thumb,
-											'exclude_current_post' => $exclude,
-											'num'         => $num,
-											'offset'      => $offset,
-											'no_cat_childs' => $no_child,
-										);
-										$expected = array(
-											'orderby' => $sort_criteria_results[ $ksc ],
-											'order'   => $sort_order_results[ $kso ],
-										);
-										if ( $cat ) {
-											$expected[ $cat_param[ $onc ] ] = $cats_results[ $kcat ];
-										}
-
-										if ( $num ) {
-											$expected['showposts'] = $nums_results[ $knum ];
-										}
-
-										if ( $offset ) {
-											if ( $offset_results[ $of ] ) {
-												$expected['offset'] = $offset_results[ $of ];
+										foreach ( $statuses as $st => $status ) {
+											$instance = array(
+												'sort_by' => $sc,
+												'asc_sort_order' => $so,
+												'cat'     => $cat,
+												'hideNoThumb' => $thumb,
+												'exclude_current_post' => $exclude,
+												'num'     => $num,
+												'offset'  => $offset,
+												'no_cat_childs' => $no_child,
+												'status' => $status,
+											);
+											$expected = array(
+												'orderby' => $sort_criteria_results[ $ksc ],
+												'order'   => $sort_order_results[ $kso ],
+											);
+											if ( $cat ) {
+												$expected[ $cat_param[ $onc ] ] = $cats_results[ $kcat ];
 											}
-										}
 
-										if ( $thumb ) {
-											$expected['meta_query'] = $hidethumbs_results[ $kt ];
-										}
+											if ( $num ) {
+												$expected['showposts'] = $nums_results[ $knum ];
+											}
 
-										$expected['ignore_sticky_posts'] = 1;
-										
-										// tests for archive page.
-										$archivetests[] = $instance;
-										$archiveresults[] = $expected;
+											if ( $offset ) {
+												if ( $offset_results[ $of ] ) {
+													$expected['offset'] = $offset_results[ $of ];
+												}
+											}
 
-										// tests for single post page.
-										if ( $exclude ) {
-											$expected['post__not_in'] = array( $pid );
+											if ( $thumb ) {
+												$expected['meta_query'] = $hidethumbs_results[ $kt ];
+											}
+
+											$expected['ignore_sticky_posts'] = 1;
+
+											if ( $status ) {
+												$expected['post_status'] = $status;
+											}
+
+											// tests for archive page.
+											$archivetests[] = $instance;
+											$archiveresults[] = $expected;
+
+											// tests for single post page.
+											if ( $exclude ) {
+												$expected['post__not_in'] = array( $pid );
+											}
+
+											$posttests[] = $instance;
+											$postresults[] = $expected;
 										}
-										$posttests[] = $instance;
-										$postresults[] = $expected;
 									}
 								}
 							}
