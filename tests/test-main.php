@@ -336,7 +336,7 @@ class testWidgetFront extends WP_UnitTestCase {
         setup_postdata($post);
 
         $widget->instance["excerpt_more_text"] = 'text"';
-        $this->assertEquals(' <a class="cat-post-excerpt-more" href="http://example.org/?p='.$pid.'">text&quot;</a>',$widget->excerpt_more_filter(''));
+        $this->assertEquals(' <a class="cat-post-excerpt-more more-link" href="http://example.org/?p='.$pid.'">text&quot;</a>',$widget->excerpt_more_filter(''));
     }
 
     /**
