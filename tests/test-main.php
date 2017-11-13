@@ -264,45 +264,47 @@ class testWidgetFront extends WP_UnitTestCase {
 		) );
 		$this->assertEquals( '<a class="cat-post-footer-link" href="http://test.org">http://test.org</a>', $out );
 
-        // valid category
-        $cid = $this->factory->category->create(array('name'=>'test cat'));
+		// valid category.
+		$cid = $this->factory->category->create( array(
+			'name' => 'test cat',
+		) );
 
-        $out = $widget->footerHTML(array(
-                                    'footer_link'=>'test',
-                                    'cat'=>$cid
-                                    ));
-        $this->assertEquals('<a class="cat-post-footer-link" href="http://example.org/?cat='.$cid.'">test</a>',$out);
+		$out = $widget->footerHTML( array(
+			'footer_link' => 'http://test.org',
+			'cat'         => $cid,
+		) );
+		$this->assertEquals( '<a class="cat-post-footer-link" href="http://test.org">http://test.org</a>', $out );
 
-        // valid category explicit css
-        $out = $widget->footerHTML(array(
-                                    'footer_link'=>'test',
-                                    'disable_css' => false,
-                                    'cat'=>$cid
-                                    ));
-        $this->assertEquals('<a class="cat-post-footer-link" href="http://example.org/?cat='.$cid.'">test</a>',$out);
+		// valid category explicit css.
+		$out = $widget->footerHTML( array(
+			'footer_link' => 'http://test.org',
+			'disable_css' => false,
+			'cat'         => $cid,
+		) );
+		$this->assertEquals( '<a class="cat-post-footer-link" href="http://test.org">http://test.org</a>', $out );
 
-        // valid category no css
+		// valid category no css.
+		$out = $widget->footerHTML( array(
+			'footer_link' => 'http://test.org',
+			'cat'         => $cid,
+			'disable_css' => true,
+		) );
+		$this->assertEquals( '<a class="cat-post-footer-link" href="http://test.org">http://test.org</a>', $out );
 
-        $out = $widget->footerHTML(array(
-                                    'footer_link'=>'test',
-                                    'cat'=>$cid,
-                                    'disable_css' => true
-                                    ));
-        $this->assertEquals('<a href="http://example.org/?cat='.$cid.'">test</a>',$out);
+		// test footer link for "all categories" when a posts page is set.
+		$page = $this->factory->post->create( array(
+			'post_type'   => 'page',
+			'title'       => 'test',
+			'post_status' => 'publish',
+		) );
 
-		// test footer link for "all categories" when a posts page is set
-
-        $page = $this->factory->post->create(array('post_type' => 'page','title'=>'test','post_status'=>'publish'));
-
-		update_option('page_for_posts',$page);
-        $out = $widget->footerHTML(array(
-                                    'footer_link'=>'test',
-                                    'cat'=>0
-                                    ));
-        $this->assertEquals('<a class="cat-post-footer-link" href="http://example.org/?page_id='.$page.'">test</a>',$out);
-
-
-    }
+		update_option( 'page_for_posts', $page );
+		$out = $widget->footerHTML( array(
+			'footer_link' => 'http://test.org',
+			'cat'         => 0,
+		) );
+		$this->assertEquals( '<a class="cat-post-footer-link" href="http://test.org">http://test.org</a>', $out );
+	}
 
     /**
      *  Test the excerpt_length_filter method of the widget
