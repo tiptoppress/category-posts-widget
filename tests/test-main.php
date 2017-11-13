@@ -407,11 +407,12 @@ class testWidgetFront extends WP_UnitTestCase {
 		$className = NS . '\Widget';
 		$widget = new $className();
 
-		// no settings, just have defaults
+		// no settings, just have defaults.
 		$instance = array();
 		$expected = array(
-			'orderby' => 'date',
-			'order'   => 'DESC',
+			'orderby'             => 'date',
+			'order'               => 'DESC',
+			'ignore_sticky_posts' => 1,
 		);
 		$this->assertEquals( $expected, $widget->queryArgs( $instance ) );
 
@@ -498,11 +499,13 @@ class testWidgetFront extends WP_UnitTestCase {
 											$expected['meta_query'] = $hidethumbs_results[ $kt ];
 										}
 
-										// tests for archive page
+										$expected['ignore_sticky_posts'] = 1;
+										
+										// tests for archive page.
 										$archivetests[] = $instance;
 										$archiveresults[] = $expected;
 
-										// tests for single post page
+										// tests for single post page.
 										if ( $exclude ) {
 											$expected['post__not_in'] = array( $pid );
 										}
@@ -517,7 +520,7 @@ class testWidgetFront extends WP_UnitTestCase {
 			}
 		}
 
-		// test archive type of page
+		// test archive type of page.
 		$this->go_to( '/' );
 		foreach ( $archivetests as $k => $instance ) {
 			$this->assertEquals( $archiveresults[ $k ], $widget->queryArgs( $instance ) );
