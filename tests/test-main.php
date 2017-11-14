@@ -1738,19 +1738,19 @@ class testVirtualwidget extends WP_UnitTestCase {
 
 	}
 
-	function testGetCSSRules() {
+	public function testGetCSSRules() {
 		$v = new categoryPosts\virtualWidget(
 			'test', 'testclass', array(
 				'disable_css' => true,
 			)
 		);
 
-		// no css for widget
+		// no css for widget.
 		$test = array();
 		$v->getCSSRules( false, $test );
 		$this->assertEquals( array(), $test );
 
-		// no css for shortcode
+		// no css for shortcode.
 		$test = array();
 		$v->getCSSRules( false, $test );
 		$this->assertEquals( array(), $test );
@@ -1759,7 +1759,7 @@ class testVirtualwidget extends WP_UnitTestCase {
 			'test2', 'testclass', array()
 		);
 
-		// css for widget default settings
+		// css for widget default settings.
 		$test = array();
 		$v->getCSSRules( false, $test );
 		$expected = $this->defaultCss( 'test2-internal' );
@@ -1769,7 +1769,7 @@ class testVirtualwidget extends WP_UnitTestCase {
 
 		$this->assertEquals( $expected, $test );
 
-		// css for shortcode default settings
+		// css for shortcode default settings.
 		$test = array();
 		$v->getCSSRules( true, $test );
 		$expected = $this->defaultCss( 'test2' );

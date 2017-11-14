@@ -2820,7 +2820,7 @@ class virtualWidget {
 																// bigger (add to the padding) use only top for now.
 		}
 
-		if ( ( isset( $settings['use_css_cropping'] ) && $settings['use_css_cropping'] ) || ! $disable_css ) {
+		if ( ( isset( $settings['use_css_cropping'] ) && $settings['use_css_cropping'] ) && ! $disable_css ) {
 			if ( isset( $settings['use_css_cropping'] ) && $settings['use_css_cropping'] ) {
 				$ret[] = '#' . $widget_id . ' .cat-post-crop {overflow: hidden; display:block}';
 			} else {
