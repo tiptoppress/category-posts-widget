@@ -5,11 +5,11 @@ define( 'NS', 'categoryPosts' );
 /**
  *  Normalize html for comparison by removing white space between tags, and leading/ending space
  *
- *  @param [in] $string The html to normalize
- *  @return Normalized string
+ *  @param string $string The html to normalize.
+ *  @return string A Normalized string.
  */
 function removeSpaceBetweenTags( $string ) {
-	$string = preg_replace( '~\s+~', ' ', $string ); // collapse spaces the way html handles it
+	$string = preg_replace( '~\s+~', ' ', $string ); // collapse spaces the way html handles it.
 	return trim( preg_replace( '~>\s*<~', '><', $string ) );
 }
 
@@ -17,8 +17,8 @@ function removeSpaceBetweenTags( $string ) {
  *  Filter function to test the widget_title filter behaviour.
  *  Helps to check html escaping as a side job
  *
- *  @param [in] $title The title as passed to the filter
- *  @return whatever constant string
+ *  @param string $title The title as passed to the filter.
+ *  @return string whatever constant string
  */
 function titleFilterTest( $title ) {
 	return 'Me > You';
@@ -27,14 +27,14 @@ function titleFilterTest( $title ) {
 /**
  *  Add a file as an attachment.
  *
- *  @param string $filename The path of the file to add as an attachment
+ *  @param string $filename The path of the file to add as an attachment.
  *  @return int the ID of the new attachment
  */
 function _make_attachment( $filename ) {
 
 	$contents = file_get_contents( $filename );
 
-	$upload = wp_upload_bits( basename( $filename ), null, $contents );
+	$upload = wp_upload_bits( basename( $filename ), '', $contents );
 	$type = '';
 	if ( ! empty( $upload['type'] ) ) {
 		$type = $upload['type'];
@@ -53,7 +53,7 @@ function _make_attachment( $filename ) {
 		'guid'           => $upload['url'],
 	);
 
-	// Save the data
+	// Save the data.
 	$id = wp_insert_attachment( $attachment, $upload['file'] );
 	wp_update_attachment_metadata( $id, wp_generate_attachment_metadata( $id, $upload['file'] ) );
 
@@ -66,7 +66,7 @@ class testWidgetFront extends WP_UnitTestCase {
 	/**
 	 *  Check that there are no errors when instance is new
 	 */
-	function testNoSetting() {
+	public function testNoSetting() {
 		$className = NS . '\Widget';
 		$widget = new $className();
 		ob_start();
