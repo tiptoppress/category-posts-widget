@@ -2820,14 +2820,14 @@ class virtualWidget {
 																// bigger (add to the padding) use only top for now.
 		}
 
-		if ( ( isset( $settings['use_css_cropping'] ) && $settings['use_css_cropping'] ) && ! $disable_css ) {
-			if ( isset( $settings['use_css_cropping'] ) && $settings['use_css_cropping'] ) {
-				$ret[] = '#' . $widget_id . ' .cat-post-crop {overflow: hidden; display:block}';
-			} else {
-				$ret[] = '#' . $widget_id . ' .cat-post-thumbnail span {overflow: hidden; display:block}';
-			}
-			$ret[] = '#' . $widget_id . ' .cat-post-item img {margin: initial;}';
+		// Regardless if css is disabled we need some styling for the thumbnail
+		// to make sure cropping is properly done, and they fit the allocated space.
+		if ( isset( $settings['use_css_cropping'] ) && $settings['use_css_cropping'] ) {
+			$ret[] = '#' . $widget_id . ' .cat-post-crop {overflow: hidden; display:block}';
+		} else {
+			$ret[] = '#' . $widget_id . ' .cat-post-thumbnail span {overflow: hidden; display:block}';
 		}
+		$ret[] = '#' . $widget_id . ' .cat-post-item img {margin: initial;}';
 
 		if ( ! $disable_css ) { // backward compatibility to =< 4.7.
 			if ( isset( $settings['thumb_hover'] ) ) {
