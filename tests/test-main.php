@@ -1714,8 +1714,15 @@ class testVirtualwidget extends WP_UnitTestCase {
 
 	}
 
-	function defaultCss( $id ) {
-		$rules = array( // rules that should be applied to all widgets
+	/**
+	 * Generate css rules that are applied to all widgets.
+	 *
+	 * @since 4.7
+	 *
+	 * @param string $id the identifier to be use as the widget id.
+	 */
+	public function defaultCss( $id ) {
+		$rules = array(
 			'.cat-post-item span.cat-post-css-cropping img {max-width: initial;	max-height: initial;}',
 			'.cat-post-title {display: inline-block; font-size: 15px;}',
 			'.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}' .
