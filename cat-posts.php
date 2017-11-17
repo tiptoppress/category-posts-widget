@@ -2829,52 +2829,51 @@ class virtualWidget {
 		}
 		$ret[] = '#' . $widget_id . ' .cat-post-item img {margin: initial;}';
 
-		if ( ! $disable_css ) { // backward compatibility to =< 4.7.
-			if ( isset( $settings['thumb_hover'] ) ) {
-				switch ( $settings['thumb_hover'] ) {
-					case 'white':
-						$ret[] = '#' . $widget_id . ' .cat-post-white {background-color: white;}';
-						$ret[] = '#' . $widget_id . ' .cat-post-white img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-						$ret[] = '#' . $widget_id . ' .cat-post-white:hover img {opacity: 0.8;}';
-						break;
-					case 'dark':
-						$ret[] = '#' . $widget_id . ' .cat-post-dark img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-						$ret[] = '#' . $widget_id . ' .cat-post-dark:hover img {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}';
-						break;
-					case 'scale':
-						$ret[] = '#' . $widget_id . ' .cat-post-scale img {margin: initial; padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-						$ret[] = '#' . $widget_id . ' .cat-post-scale:hover img {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}';
-						break;
-					case 'blur':
-						$ret[] = '#' . $widget_id . ' .cat-post-blur img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-						$ret[] = '#' . $widget_id . ' .cat-post-blur:hover img {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}';
-						break;
-					case 'icon':
-						$fonturl = esc_url( plugins_url( 'icons/font', __FILE__ ) );
-						$ret[] = "@font-face {\n" .
-								"font-family: 'cat_post';\n" .
-								"src: url('$fonturl/cat_post.eot?4618166');\n" .
-								"src: url('$fonturl/cat_post.eot?4618166#iefix') format('embedded-opentype'),\n" .
-								"	   url('$fonturl/cat_post.woff2?4618166') format('woff2'),\n" .
-								"	   url('$fonturl/cat_post.woff?4618166') format('woff'),\n" .
-								"	   url('$fonturl/cat_post.ttf?4618166') format('truetype');\n" .
-								" font-weight: normal;\n" .
-								" font-style: normal;\n" .
-								"}\n";
+		// Some hover effect require css to work, add it even if CSS is disabled.
+		if ( isset( $settings['thumb_hover'] ) ) {
+			switch ( $settings['thumb_hover'] ) {
+				case 'white':
+					$ret[] = '#' . $widget_id . ' .cat-post-white {background-color: white;}';
+					$ret[] = '#' . $widget_id . ' .cat-post-white img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+					$ret[] = '#' . $widget_id . ' .cat-post-white:hover img {opacity: 0.8;}';
+					break;
+				case 'dark':
+					$ret[] = '#' . $widget_id . ' .cat-post-dark img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+					$ret[] = '#' . $widget_id . ' .cat-post-dark:hover img {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}';
+					break;
+				case 'scale':
+					$ret[] = '#' . $widget_id . ' .cat-post-scale img {margin: initial; padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+					$ret[] = '#' . $widget_id . ' .cat-post-scale:hover img {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}';
+					break;
+				case 'blur':
+					$ret[] = '#' . $widget_id . ' .cat-post-blur img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+					$ret[] = '#' . $widget_id . ' .cat-post-blur:hover img {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}';
+					break;
+				case 'icon':
+					$fonturl = esc_url( plugins_url( 'icons/font', __FILE__ ) );
+					$ret[] = "@font-face {\n" .
+							"font-family: 'cat_post';\n" .
+							"src: url('$fonturl/cat_post.eot?4618166');\n" .
+							"src: url('$fonturl/cat_post.eot?4618166#iefix') format('embedded-opentype'),\n" .
+							"	   url('$fonturl/cat_post.woff2?4618166') format('woff2'),\n" .
+							"	   url('$fonturl/cat_post.woff?4618166') format('woff'),\n" .
+							"	   url('$fonturl/cat_post.ttf?4618166') format('truetype');\n" .
+							" font-weight: normal;\n" .
+							" font-style: normal;\n" .
+							"}\n";
 
-						$ret[] = '#' . $widget_id . ' .cat-post-format-standard {opacity:0; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-						$ret[] = '#' . $widget_id . ' .cat-post-thumbnail:hover .cat-post-format-standard {opacity:1;}';
+					$ret[] = '#' . $widget_id . ' .cat-post-format-standard {opacity:0; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+					$ret[] = '#' . $widget_id . ' .cat-post-thumbnail:hover .cat-post-format-standard {opacity:1;}';
 
-						if ( isset( $settings['show_post_format'] ) && ( 'none' === $settings['show_post_format'] ) ) {
-							$ret[] = '#' . $widget_id . ' .cat-post-thumbnail {position:relative}';
-							$ret[] = '#' . $widget_id . ' .cat-post-icon .cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); ' .
-										'font-size:14px; line-height:14px; padding:15px; border-radius:4px; background-color:rgba(0,0,0,.6); ' .
-										'top:calc(50% - 25px); left:calc(50% - 25px);}';
-						}
+					if ( isset( $settings['show_post_format'] ) && ( 'none' === $settings['show_post_format'] ) ) {
+						$ret[] = '#' . $widget_id . ' .cat-post-thumbnail {position:relative}';
+						$ret[] = '#' . $widget_id . ' .cat-post-icon .cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); ' .
+									'font-size:14px; line-height:14px; padding:15px; border-radius:4px; background-color:rgba(0,0,0,.6); ' .
+									'top:calc(50% - 25px); left:calc(50% - 25px);}';
+					}
 
-						$ret[] = '#' . $widget_id . " .cat-post-format-standard:before {padding:15px 16px; content: '\\e806'; }";
-						break;
-				}
+					$ret[] = '#' . $widget_id . " .cat-post-format-standard:before {padding:15px 16px; content: '\\e806'; }";
+					break;
 			}
 		}
 	}
