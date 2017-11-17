@@ -2712,18 +2712,18 @@ class virtualWidget {
 		if ( ! $disable_css ) { // checks if css disable is not set.
 
 			$rules = array( // rules that should be applied to all widgets.
-				'.cat-post-item img {max-width: initial; max-height: initial; margin: initial;}',
-				'.cat-post-author {margin-bottom: 0;}',
-				'.cat-post-thumbnail {margin: 5px 10px 5px 0; display: table;}',
-				'.cat-post-item:before {content: ""; clear: both;}',
+				'thumb_clenup'  => '.cat-post-item img {max-width: initial; max-height: initial; margin: initial;}',
+				'author_clenup' => '.cat-post-author {margin-bottom: 0;}',
+				'thumb'         => '.cat-post-thumbnail {margin: 5px 10px 5px 0; display: table;}',
+				'item_clenup'   => '.cat-post-item:before {content: ""; clear: both;}',
 			);
 
 			if ( ! ( isset( $settings['disable_font_styles'] ) && $settings['disable_font_styles'] ) ) { // checks if disable font styles is not set.
 				// add general rules which apply to font styling.
-				$rules[] = '.cat-post-title {font-size: 15px;}';
-				$rules[] = '.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}';
-				$rules[] = '.cat-post-date {font-size: 14px; line-height: 18px; font-style: italic; margin-bottom: 5px;}';
-				$rules[] = '.cat-post-comment-num {font-size: 14px; line-height: 18px;}';
+				$rules['title_font'] = '.cat-post-title {font-size: 15px;}';
+				$rules['current_title_font'] = '.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}';
+				$rules['date_font'] = '.cat-post-date {font-size: 14px; line-height: 18px; font-style: italic; margin-bottom: 5px;}';
+				$rules['comment_num_font'] = '.cat-post-comment-num {font-size: 14px; line-height: 18px;}';
 			}
 
 			/*
@@ -2731,19 +2731,18 @@ class virtualWidget {
 			 *	so remove our border if we detect its use to avoid conflicting styling.
 			 */
 			if ( ! $is_shortcode && function_exists( 'twentyseventeen_setup' ) ) {
-				$rules[] = '.cat-post-item {list-style: none; list-style-type: none; margin: 0;	padding: 3px 0;}';
+				$rules['item_style'] = '.cat-post-item {list-style: none; list-style-type: none; margin: 0;	padding: 3px 0;}';
 			} else {
-				$rules[] = '.cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
-				$rules[] = '.cat-post-item:last-child {border-bottom: none;}';
+				$rules['item_style'] = '.cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+				$rules['last_item_style'] = '.cat-post-item:last-child {border-bottom: none;}';
 			}
 
 			// everything link related styling
 			// if we are dealing with "everything is a link" option, we need to add the clear:both to the a element, not the div.
 			if ( isset( $settings['everything_is_link'] ) && $settings['everything_is_link'] ) {
-				$rules[] = '.cat-post-everything-is-link { }';
-				$rules[] = '.cat-post-item a:after {content: ""; display: table;	clear: both;}';
+				$rules['after_item'] = '.cat-post-item a:after {content: ""; display: table;	clear: both;}';
 			} else {
-				$rules[] = '.cat-post-item:after {content: ""; display: table;	clear: both;}';
+				$rules['after_item'] = '.cat-post-item:after {content: ""; display: table;	clear: both;}';
 			}
 
 			// add post format css if needed.
@@ -2752,7 +2751,7 @@ class virtualWidget {
 					static $fonts_added = false;
 					if ( ! $fonts_added ) {
 						$fonturl = esc_url( plugins_url( 'icons/font', __FILE__ ) );
-						$ret[] = "@font-face {\n" .
+						$ret['post_format_font'] = "@font-face {\n" .
 								"font-family: 'cat_post';\n" .
 								"src: url('$fonturl/cat_post.eot?4618166');\n" .
 								"src: url('$fonturl/cat_post.eot?4618166#iefix') format('embedded-opentype'),\n" .
@@ -2783,16 +2782,16 @@ class virtualWidget {
 							$placement = 'bottom:10%; right:10%;';
 							break;
 					}
-					$rules[] = '.cat-post-thumbnail {position:relative}';
-					$rules[] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); ' .
+					$rules['post_format_thumb'] = '.cat-post-thumbnail {position:relative}';
+					$rules['post_format_icon_styling'] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); ' .
 								'font-size:14px; line-height:14px; padding:15px; border-radius:4px; background-color:rgba(0,0,0,.6); ' .
 								$placement . '}';
 
-					$rules[] = ".cat-post-format-image:before { content: '\\e800'; }";
-					$rules[] = ".cat-post-format-video:before { content: '\\e801'; }";
-					$rules[] = ".cat-post-format-chat:before { content: '\\e802'; }";
-					$rules[] = ".cat-post-format-audio:before { content: '\\e803'; }";
-					$rules[] = ".cat-post-format-gallery:before { content: '\\e805'; }";
+					$rules['post_format_icon_image'] = ".cat-post-format-image:before { content: '\\e800'; }";
+					$rules['post_format_icon_video'] = ".cat-post-format-video:before { content: '\\e801'; }";
+					$rules['post_format_icon_chat'] = ".cat-post-format-chat:before { content: '\\e802'; }";
+					$rules['post_format_icon_audio'] = ".cat-post-format-audio:before { content: '\\e803'; }";
+					$rules['post_format_icon_gallery'] = ".cat-post-format-gallery:before { content: '\\e805'; }";
 				}
 			}
 
@@ -2802,56 +2801,56 @@ class virtualWidget {
 
 			if ( $is_shortcode ) {
 				// Twenty Sixteen Theme adds underlines to links with box whadow wtf ...
-				$ret[] = '#' . $widget_id . ' .cat-post-thumbnail {box-shadow:none}'; // this for the thumb link.
+				$ret['twentysixteen_thumb'] = '#' . $widget_id . ' .cat-post-thumbnail {box-shadow:none}'; // this for the thumb link.
 				if ( ! ( isset( $settings['disable_font_styles'] ) && $settings['disable_font_styles'] ) ) { // checks if disable font styles is not set.
-					$ret[] = '#' . $widget_id . ' .cat-post-tax-post_tag a {box-shadow:none}';     // this for the tag link.
-					$ret[] = '#' . $widget_id . ' .cat-post-tax-post_tag span {box-shadow:none}';     // this for the tag link.
+					$ret['twentysixteen_tag_link'] = '#' . $widget_id . ' .cat-post-tax-post_tag a {box-shadow:none}';     // this for the tag link.
+					$ret['twentysixteen_tag_span'] = '#' . $widget_id . ' .cat-post-tax-post_tag span {box-shadow:none}';     // this for the tag link.
 				}
 				// Twenty Fifteen Theme adds border ...
-				$ret[] = '#' . $widget_id . ' .cat-post-thumbnail {border:0}'; // this for the thumb link.
+				$ret['twentysixteen_thumb'] = '#' . $widget_id . ' .cat-post-thumbnail {border:0}'; // this for the thumb link.
 				if ( ! ( isset( $settings['disable_font_styles'] ) && $settings['disable_font_styles'] ) ) { // checks if disable font styles is not set.
-					$ret[] = '#' . $widget_id . ' .cat-post-tax-post_tag a {border:0}';     // this for the tag link.
-					$ret[] = '#' . $widget_id . ' .cat-post-tax-post_tag span {border:0}';     // this for the tag link.
+					$ret['twentysixteen_tag_link'] = '#' . $widget_id . ' .cat-post-tax-post_tag a {border:0}';     // this for the tag link.
+					$ret['twentysixteen_tag_span'] = '#' . $widget_id . ' .cat-post-tax-post_tag span {border:0}';     // this for the tag link.
 				}
 			}
 
 			// probably all Themes have too much margin on their p element when used in the shortcode or widget.
-			$ret[] = '#' . $widget_id . ' p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
+			$ret['shortcode_styling'] = '#' . $widget_id . ' p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
 																// bigger (add to the padding) use only top for now.
 		}
 
 		// Regardless if css is disabled we need some styling for the thumbnail
 		// to make sure cropping is properly done, and they fit the allocated space.
 		if ( isset( $settings['use_css_cropping'] ) && $settings['use_css_cropping'] ) {
-			$ret[] = '#' . $widget_id . ' .cat-post-crop {overflow: hidden; display:block}';
+			$ret['thumb_crop'] = '#' . $widget_id . ' .cat-post-crop {overflow: hidden; display:block}';
 		} else {
-			$ret[] = '#' . $widget_id . ' .cat-post-thumbnail span {overflow: hidden; display:block}';
+			$ret['thumb_overflow'] = '#' . $widget_id . ' .cat-post-thumbnail span {overflow: hidden; display:block}';
 		}
-		$ret[] = '#' . $widget_id . ' .cat-post-item img {margin: initial;}';
+		$ret['thumb_styling'] = '#' . $widget_id . ' .cat-post-item img {margin: initial;}';
 
 		// Some hover effect require css to work, add it even if CSS is disabled.
 		if ( isset( $settings['thumb_hover'] ) ) {
 			switch ( $settings['thumb_hover'] ) {
 				case 'white':
-					$ret[] = '#' . $widget_id . ' .cat-post-white {background-color: white;}';
-					$ret[] = '#' . $widget_id . ' .cat-post-white img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-					$ret[] = '#' . $widget_id . ' .cat-post-white:hover img {opacity: 0.8;}';
+					$ret['white_hover_background'] = '#' . $widget_id . ' .cat-post-white {background-color: white;}';
+					$ret['white_hover_thumb'] = '#' . $widget_id . ' .cat-post-white img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+					$ret['white_hover_transform'] = '#' . $widget_id . ' .cat-post-white:hover img {opacity: 0.8;}';
 					break;
 				case 'dark':
-					$ret[] = '#' . $widget_id . ' .cat-post-dark img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-					$ret[] = '#' . $widget_id . ' .cat-post-dark:hover img {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}';
+					$ret['dark_hover_thumb'] = '#' . $widget_id . ' .cat-post-dark img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+					$ret['dark_hover_transform'] = '#' . $widget_id . ' .cat-post-dark:hover img {-webkit-filter: brightness(75%); -moz-filter: brightness(75%); -ms-filter: brightness(75%); -o-filter: brightness(75%); filter: brightness(75%);}';
 					break;
 				case 'scale':
-					$ret[] = '#' . $widget_id . ' .cat-post-scale img {margin: initial; padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-					$ret[] = '#' . $widget_id . ' .cat-post-scale:hover img {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}';
+					$ret['scale_hover_thumb'] = '#' . $widget_id . ' .cat-post-scale img {margin: initial; padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+					$ret['scale_hover_transform'] = '#' . $widget_id . ' .cat-post-scale:hover img {-webkit-transform: scale(1.1, 1.1); -ms-transform: scale(1.1, 1.1); transform: scale(1.1, 1.1);}';
 					break;
 				case 'blur':
-					$ret[] = '#' . $widget_id . ' .cat-post-blur img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-					$ret[] = '#' . $widget_id . ' .cat-post-blur:hover img {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}';
+					$ret['blur_hover_thumb'] = '#' . $widget_id . ' .cat-post-blur img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+					$ret['blur_hover_transform'] = '#' . $widget_id . ' .cat-post-blur:hover img {-webkit-filter: blur(2px); -moz-filter: blur(2px); -o-filter: blur(2px); -ms-filter: blur(2px); filter: blur(2px);}';
 					break;
 				case 'icon':
 					$fonturl = esc_url( plugins_url( 'icons/font', __FILE__ ) );
-					$ret[] = "@font-face {\n" .
+					$ret['icon_hover_font'] = "@font-face {\n" .
 							"font-family: 'cat_post';\n" .
 							"src: url('$fonturl/cat_post.eot?4618166');\n" .
 							"src: url('$fonturl/cat_post.eot?4618166#iefix') format('embedded-opentype'),\n" .
@@ -2862,8 +2861,8 @@ class virtualWidget {
 							" font-style: normal;\n" .
 							"}\n";
 
-					$ret[] = '#' . $widget_id . ' .cat-post-format-standard {opacity:0; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-					$ret[] = '#' . $widget_id . ' .cat-post-thumbnail:hover .cat-post-format-standard {opacity:1;}';
+					$ret['icon_hover_thumb'] = '#' . $widget_id . ' .cat-post-format-standard {opacity:0; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+					$ret['icon_hover_transform'] = '#' . $widget_id . ' .cat-post-thumbnail:hover .cat-post-format-standard {opacity:1;}';
 
 					if ( isset( $settings['show_post_format'] ) && ( 'none' === $settings['show_post_format'] ) ) {
 						$ret[] = '#' . $widget_id . ' .cat-post-thumbnail {position:relative}';
