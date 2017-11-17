@@ -1745,6 +1745,11 @@ class testVirtualwidget extends WP_UnitTestCase {
 
 	}
 
+	/**
+	 * Test getCSSRules method
+	 *
+	 * @since 4.7
+	 */
 	public function testGetCSSRules() {
 		$v = new categoryPosts\virtualWidget(
 			'test', 'testclass', array(
