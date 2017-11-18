@@ -2795,8 +2795,8 @@ class virtualWidget {
 				}
 			}
 
-			foreach ( $rules as $rule ) {
-				$ret[] = '#' . $widget_id . ' ' . $rule;
+			foreach ( $rules as $key => $rule ) {
+				$ret[ $key ] = '#' . $widget_id . ' ' . $rule;
 			}
 
 			if ( $is_shortcode ) {
