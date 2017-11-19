@@ -1190,7 +1190,7 @@ class testWidgetFront extends WP_UnitTestCase {
 
 		$this->go_to( '/?p=' . $pid );
 
-		// test length default
+		// test length default.
 		ob_start();
 		$widget->widget(
 			array(
@@ -1391,7 +1391,7 @@ class testShortCode extends WP_UnitTestCase {
 	 *  Test the generation and removal of met values when a shortcode is
 	 *  inserted and removed from content
 	 */
-	function testsave_post() {
+	public function testsave_post() {
 		$pid = $this->factory->post->create(
 			array(
 				'title'        => 'test',
@@ -1399,10 +1399,10 @@ class testShortCode extends WP_UnitTestCase {
 				'post_content' => '',
 			)
 		);
-		// test no meta when post created with no shortcode
+		// test no meta when post created with no shortcode.
 		$this->assertEmpty( get_post_meta( $pid, self::SHORTCODE_META, true ) );
 
-		// initialization to defaults when inserted
+		// initialization to defaults when inserted.
 		wp_update_post(
 			array(
 				'ID'           => $pid,
@@ -1414,7 +1414,7 @@ class testShortCode extends WP_UnitTestCase {
 			get_post_meta( $pid, self::SHORTCODE_META, true )
 		);
 
-		// test change in other parts of the content
+		// test change in other parts of the content.
 		wp_update_post(
 			array(
 				'ID'           => $pid,
@@ -1426,7 +1426,7 @@ class testShortCode extends WP_UnitTestCase {
 			get_post_meta( $pid, self::SHORTCODE_META, true )
 		);
 
-		// test removal
+		// test removal.
 		wp_update_post(
 			array(
 				'ID'           => $pid,
@@ -1436,7 +1436,7 @@ class testShortCode extends WP_UnitTestCase {
 		$this->assertEmpty( get_post_meta( $pid, self::SHORTCODE_META, true ) );
 
 		// same as above with name parameter
-		// initialization to defaults when inserted
+		// initialization to defaults when inserted.
 		wp_update_post(
 			array(
 				'ID'           => $pid,
@@ -1448,7 +1448,7 @@ class testShortCode extends WP_UnitTestCase {
 			get_post_meta( $pid, self::SHORTCODE_META, true )
 		);
 
-		// test change in other parts of the content
+		// test change in other parts of the content.
 		wp_update_post(
 			array(
 				'ID'           => $pid,
@@ -1460,7 +1460,7 @@ class testShortCode extends WP_UnitTestCase {
 			get_post_meta( $pid, self::SHORTCODE_META, true )
 		);
 
-		// test removal
+		// test removal.
 		wp_update_post(
 			array(
 				'ID'           => $pid,
@@ -1469,7 +1469,7 @@ class testShortCode extends WP_UnitTestCase {
 		);
 		$this->assertEmpty( get_post_meta( $pid, self::SHORTCODE_META, true ) );
 
-		// test multiple shortcodes
+		// test multiple shortcodes.
 		wp_update_post(
 			array(
 				'ID'           => $pid,
@@ -1489,10 +1489,10 @@ class testShortCode extends WP_UnitTestCase {
 	}
 
 	/**
-	 *  test the customize_save_after function to make sure the shortcode meta is updated (or not)
-	 *  when the customizer save.
+	 * Test the customize_save_after function to make sure the shortcode meta is updated (or not)
+	 * when the customizer save.
 	 */
-	function test_customize_save_after() {
+	public function test_customize_save_after() {
 		$pid = $this->factory->post->create(
 			array(
 				'title'        => 'test',
