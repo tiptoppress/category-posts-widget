@@ -1282,7 +1282,7 @@ class testWidgetAdmin extends WP_UnitTestCase {
 					' Hide title </label></p></div>', $out
 		);
 
-		// title and link
+		// title and link.
 		ob_start();
 		$widget->formTitlePanel(
 			array(
@@ -1302,7 +1302,7 @@ class testWidgetAdmin extends WP_UnitTestCase {
 					' Hide title </label></p></div>', $out
 		);
 
-		// no title just link
+		// no title just link.
 		ob_start();
 		$widget->formTitlePanel(
 			array(
@@ -1321,7 +1321,7 @@ class testWidgetAdmin extends WP_UnitTestCase {
 					' Hide title </label></p></div>', $out
 		);
 
-		// no title just link
+		// no title just link.
 		ob_start();
 		$widget->formTitlePanel(
 			array(
