@@ -1730,15 +1730,15 @@ class testVirtualwidget extends WP_UnitTestCase {
 			'.cat-post-comment-num {font-size: 12px; line-height: 18px;}',
 			'.cat-post-author {margin-bottom: 0;}',
 			'.cat-post-thumbnail {display: block;}',
-			'.cat-post-thumbnail img {margin: 5px 10px 5px 0;}',
-			'.cat-post-item:before {content: ""; display: table; clear: both;}',
+			'.cat-post-thumbnail {margin: 5px 10px 5px 0;}',
+			'item_clenup' => '.cat-post-item:before {content: ""; display: table; clear: both;}',
 			'.cat-post-item:after {content: ""; display: table;	clear: both;}',
 			'.cat-post-item .cat-post-css-cropping span {margin: 5px 10px 5px 0;  overflow: hidden; display:inline-block}',
 			'.cat-post-item .cat-post-css-cropping img {margin: initial;}',
 		);
 
-		foreach ( $rules as $rule ) {
-			$ret[] = '#' . $id . ' ' . $rule;
+		foreach ( $rules as $key => $rule ) {
+			$ret[ $key ] = '#' . $id . ' ' . $rule;
 		}
 
 		return $ret;
@@ -1757,15 +1757,23 @@ class testVirtualwidget extends WP_UnitTestCase {
 			)
 		);
 
-		// no css for widget.
+		// no css for widget. Only essential css should be returned.
 		$test = array();
+		$expected = array(
+			'thumb_crop'    => '#test-internal .cat-post-crop {overflow: hidden; display:block}',
+			'thumb_styling' => '#test-internal .cat-post-item img {margin: initial;}',
+		);
 		$v->getCSSRules( false, $test );
-		$this->assertEquals( array(), $test );
+		$this->assertEquals( $expected, $test );
 
 		// no css for shortcode.
 		$test = array();
-		$v->getCSSRules( false, $test );
-		$this->assertEquals( array(), $test );
+		$expected = array(
+			'thumb_crop'    => '#test .cat-post-crop {overflow: hidden; display:block}',
+			'thumb_styling' => '#test .cat-post-item img {margin: initial;}',
+		);
+		$v->getCSSRules( true, $test );
+		$this->assertEquals( $expected, $test );
 
 		$v = new categoryPosts\virtualWidget(
 			'test2', 'testclass', array()
@@ -1775,9 +1783,9 @@ class testVirtualwidget extends WP_UnitTestCase {
 		$test = array();
 		$v->getCSSRules( false, $test );
 		$expected = $this->defaultCss( 'test2-internal' );
-		$expected[] = '#test2-internal .cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
-		$expected[] = '#test2-internal .cat-post-item:last-child {border-bottom: none;}';
-		$expected[] = '#test2-internal .cat-post-thumbnail {float:left;}';
+		$expected['shortcode_styling'] = '#test2-internal .cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+		$expected['thumb_crop'] = '#test2-internal .cat-post-item:last-child {border-bottom: none;}';
+		$expected['thumb_styling'] = '#test2-internal .cat-post-thumbnail {float:left;}';
 
 		$this->assertEquals( $expected, $test );
 
@@ -1788,9 +1796,9 @@ class testVirtualwidget extends WP_UnitTestCase {
 		$expected[] = '#test2 .cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
 		$expected[] = '#test2 .cat-post-item:last-child {border-bottom: none;}';
 		$expected[] = '#test2 .cat-post-thumbnail {float:left;}';
-		$expected[] = '#test2 .cat-post-thumbnail a {box-shadow:none}'; // this for the thumb link
-		$expected[] = '#test2 .cat-post-thumbnail a {border:0}'; // this for the thumb link
-		$expected[] = '#test2 p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
+		$expected[] = '#test2 .cat-post-thumbnail a {box-shadow:none}'; // this for the thumb link.
+		$expected[] = '#test2 .cat-post-thumbnail a {border:0}'; // this for the thumb link.
+		$expected[] = '#test2 p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover.
 		$this->assertEquals( $expected, $test );
 
 		$v = new categoryPosts\virtualWidget(
@@ -1799,7 +1807,7 @@ class testVirtualwidget extends WP_UnitTestCase {
 			)
 		);
 
-		// css for widget with thumb up settings
+		// css for widget with thumb up settings.
 		$test = array();
 		$v->getCSSRules( false, $test );
 		$expected = $this->defaultCss( 'test3-internal' );
@@ -1808,15 +1816,15 @@ class testVirtualwidget extends WP_UnitTestCase {
 
 		$this->assertEquals( $expected, $test );
 
-		// css for shortcode with thumb up settings
+		// css for shortcode with thumb up settings.
 		$test = array();
 		$v->getCSSRules( true, $test );
 		$expected = $this->defaultCss( 'test3' );
 		$expected[] = '#test3 .cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
 		$expected[] = '#test3 .cat-post-item:last-child {border-bottom: none;}';
-		$expected[] = '#test3 .cat-post-thumbnail a {box-shadow:none}'; // this for the thumb link
-		$expected[] = '#test3 .cat-post-thumbnail a {border:0}'; // this for the thumb link
-		$expected[] = '#test3 p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
+		$expected[] = '#test3 .cat-post-thumbnail a {box-shadow:none}'; // this for the thumb link.
+		$expected[] = '#test3 .cat-post-thumbnail a {border:0}'; // this for the thumb link.
+		$expected[] = '#test3 p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover.
 
 		$this->assertEquals( $expected, $test );
 
@@ -1826,7 +1834,7 @@ class testVirtualwidget extends WP_UnitTestCase {
 			)
 		);
 
-		// css for widget with white hover settings
+		// css for widget with white hover settings.
 		$test = array();
 		$v->getCSSRules( false, $test );
 		$expected = $this->defaultCss( 'test4-internal' );
@@ -1839,7 +1847,7 @@ class testVirtualwidget extends WP_UnitTestCase {
 
 		$this->assertEquals( $expected, $test );
 
-		// css for shortcode with white hover settings
+		// css for shortcode with white hover settings.
 		$test = array();
 		$v->getCSSRules( true, $test );
 		$expected = $this->defaultCss( 'test4' );
@@ -1849,9 +1857,9 @@ class testVirtualwidget extends WP_UnitTestCase {
 		$expected[] = '#test4 .cat-post img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
 		$expected[] = '#test4 .cat-post-white {background-color: white;}';
 		$expected[] = '#test4 .cat-post-white img:hover {opacity: 0.8;}';
-		$expected[] = '#test4 .cat-post-thumbnail a {box-shadow:none}'; // this for the thumb link
-		$expected[] = '#test4 .cat-post-thumbnail a {border:0}'; // this for the thumb link
-		$expected[] = '#test4 p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
+		$expected[] = '#test4 .cat-post-thumbnail a {box-shadow:none}'; // this for the thumb link.
+		$expected[] = '#test4 .cat-post-thumbnail a {border:0}'; // this for the thumb link.
+		$expected[] = '#test4 p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover.
 
 		$this->assertEquals( $expected, $test );
 
@@ -1861,7 +1869,7 @@ class testVirtualwidget extends WP_UnitTestCase {
 			)
 		);
 
-		// css for widget with dark hover settings
+		// css for widget with dark hover settings.
 		$test = array();
 		$v->getCSSRules( false, $test );
 		$expected = $this->defaultCss( 'test5-internal' );
@@ -1873,7 +1881,7 @@ class testVirtualwidget extends WP_UnitTestCase {
 
 		$this->assertEquals( $expected, $test );
 
-		// css for shortcode with dark hover settings
+		// css for shortcode with dark hover settings.
 		$test = array();
 		$v->getCSSRules( true, $test );
 		$expected = $this->defaultCss( 'test5' );
