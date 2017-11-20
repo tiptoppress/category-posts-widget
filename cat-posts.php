@@ -2714,7 +2714,7 @@ class virtualWidget {
 			$rules = array( // rules that should be applied to all widgets.
 				'thumb_clenup'  => '.cat-post-item img {max-width: initial; max-height: initial; margin: initial;}',
 				'author_clenup' => '.cat-post-author {margin-bottom: 0;}',
-				'thumb'         => '.cat-post-thumbnail {margin: 5px 10px 5px 0; display: table;}',
+				'thumb'         => '.cat-post-thumbnail {margin: 5px 10px 5px 0;}',
 				'item_clenup'   => '.cat-post-item:before {content: ""; clear: both;}',
 			);
 
@@ -2822,9 +2822,9 @@ class virtualWidget {
 		// Regardless if css is disabled we need some styling for the thumbnail
 		// to make sure cropping is properly done, and they fit the allocated space.
 		if ( isset( $settings['use_css_cropping'] ) && $settings['use_css_cropping'] ) {
-			$ret['thumb_crop'] = '#' . $widget_id . ' .cat-post-crop {overflow: hidden; display:block}';
+			$ret['thumb_crop'] = '#' . $widget_id . ' .cat-post-crop {overflow: hidden; display:inline-block}';
 		} else {
-			$ret['thumb_overflow'] = '#' . $widget_id . ' .cat-post-thumbnail span {overflow: hidden; display:block}';
+			$ret['thumb_overflow'] = '#' . $widget_id . ' .cat-post-thumbnail span {overflow: hidden; display:inline-block}';
 		}
 		$ret['thumb_styling'] = '#' . $widget_id . ' .cat-post-item img {margin: initial;}';
 
