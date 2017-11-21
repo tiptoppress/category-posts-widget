@@ -1135,11 +1135,11 @@ class Widget extends \WP_Widget {
 
 		// Replace empty line with closing and opening P.
 		$template_res = trim( $template_res );
-		$template_res = str_replace( "\n", '</p><p>', $template_res );
+		$template_res = str_replace( "\r\n\r\n", '</p><p>', $template_res );
 		$template_res = '<p>' . $template_res . '</p>';
 
 		// replace new lines with spaces.
-		$template_res = str_replace( "\n", ' ', $template_res );
+		$template_res = str_replace( "\r\n", ' ', $template_res );
 
 		// remove double start and end paragraphs around excerpts.
 		$template_res = str_replace( '<p><p>', '<p>', $template_res );
