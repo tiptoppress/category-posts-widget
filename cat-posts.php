@@ -2829,7 +2829,7 @@ class virtualWidget {
 			// probably all Themes have too much margin on their p element when used in the shortcode or widget.
 			$ret['p_styling'] = '#' . $widget_id . ' p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
 																// bigger (add to the padding) use only top for now.
-			$ret['div_styling'] = '#' . $widget_id . ' div {margin:5px 0 0 0; clear:both;}'; // Add margin between the rows.
+			$ret['div_styling'] = '#' . $widget_id . ' li > div {margin:5px 0 0 0; clear:both;}'; // Add margin between the rows.
 		}
 
 		// Regardless if css is disabled we need some styling for the thumbnail
