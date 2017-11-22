@@ -773,32 +773,47 @@ class Widget extends \WP_Widget {
 	}
 
 	/**
-	 *  Convert pre 4.8 settings into template
+	 * Convert pre 4.8 settings into template
 	 *
 	 * @param  array $instance Array which contains the various settings.
 	 *
-	 *  @since 4.8
+	 * @since 4.8
 	 */
 	public function convert_settings_to_template( $instance ) {
+
+		$thumbtop = false;
+
 		$template = '';
 
-		if ( ! ( isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'] ) ) {
-			$template .= "%title%\n";
-		}
-		if ( isset( $instance['date'] ) && $instance['date'] ) {
-			$template .= "%date%\n";
-		}
 		if ( isset( $instance['thumb'] ) && $instance['thumb'] ) {
-			$template .= "%thumb%\n";
+			if ( isset( $instance['thumbTop'] ) && $instance['thumbTop'] ) {
+				$template .= "%thumb%\r\n\r\n";
+				$thumbtop = true;
+			} elseif ( isset( $instance['date'] ) && $instance['date'] ) {
+				if ( ! ( isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'] ) ) {
+					$template .= "%title%\r\n\r\n";
+				}
+				$template .= "%date%\r\n\r\n";
+				$template .= "%thumb%\r\n\r\n";
+			} elseif ( ! ( isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'] ) ) {
+				$template .= "%thumb%%title%\r\n\r\n";
+			}
+		} else {
+			if ( ! ( isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'] ) ) {
+				$template .= "%title%\r\n\r\n";
+			}
+			if ( isset( $instance['date'] ) && $instance['date'] ) {
+				$template .= "%date%\r\n\r\n";
+			}
 		}
 		if ( isset( $instance['excerpt'] ) && $instance['excerpt'] ) {
 			$template .= '%excerpt%';
 		}
 		if ( isset( $instance['comment_num'] ) && $instance['comment_num'] ) {
-			$template .= "%commentnum%\n";
+			$template .= "%commentnum%\r\n\r\n";
 		}
 		if ( isset( $instance['author'] ) && $instance['author'] ) {
-			$template .= "%author%\n";
+			$template .= "%author%\r\n\r\n";
 		}
 
 		return $template;
