@@ -352,6 +352,7 @@ function get_template_regex() {
 		}
 		$regexp .= '%' . $t . '%';
 	}
+
 	$regexp = '@(' . $regexp . ')@i';
 
 	return $regexp;
@@ -1150,15 +1151,11 @@ class Widget extends \WP_Widget {
 
 		// Replace empty line with closing and opening P.
 		$template_res = trim( $template_res );
-		$template_res = str_replace( "\r\n\r\n", '</p><p>', $template_res );
-		$template_res = '<p>' . $template_res . '</p>';
+		$template_res = str_replace( "\r\n\r\n", '</div><div>', $template_res );
+		$template_res = '<div>' . $template_res . '</div>';
 
 		// replace new lines with spaces.
 		$template_res = str_replace( "\r\n", ' ', $template_res );
-
-		// remove double start and end paragraphs around excerpts.
-		$template_res = str_replace( '<p><p>', '<p>', $template_res );
-		$template_res = str_replace( '</p></p>', '</p>', $template_res );
 
 		$ret .= $template_res;
 
@@ -2830,8 +2827,9 @@ class virtualWidget {
 			}
 
 			// probably all Themes have too much margin on their p element when used in the shortcode or widget.
-			$ret['shortcode_styling'] = '#' . $widget_id . ' p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
+			$ret['p_styling'] = '#' . $widget_id . ' p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
 																// bigger (add to the padding) use only top for now.
+			$ret['div_styling'] = '#' . $widget_id . ' div {margin:5px 0 0 0; clear:both;}'; // Add margin between the rows.
 		}
 
 		// Regardless if css is disabled we need some styling for the thumbnail
