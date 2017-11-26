@@ -1103,6 +1103,7 @@ class Widget extends \WP_Widget {
 		global $post;
 
 		$everything_is_link = isset( $instance['everything_is_link'] ) && $instance['everything_is_link'];
+		$thumb_float = isset( $instance['thumb_float'] ) && $instance['thumb_float'];
 
 		$template = '';
 		if ( isset( $instance['template'] ) ) {
@@ -1122,6 +1123,28 @@ class Widget extends \WP_Widget {
 
 		if ( $everything_is_link ) {
 			$ret .= '<a class="cat-post-everything-is-link" href="' . get_the_permalink() . '" title="">';
+		}
+
+		// Try to do smart formatting for none floating thumb based on its location.
+		if ( ! $thumb_float ) {
+			$template = preg_replace_callback('#\r\n\r\n(.*)%thumb%(.*)\r\n\r\n#', function ( $matches ) {
+				// If there is nothing on the same line, simply return it as it is.
+				if ( '' === $matches[1] && '' === $matches[2] ) {
+					return $matches[0];
+				}
+
+				// If there are things on both sides.
+				if ( '' !== $matches[1] && '' !== $matches[2] ) {
+					return "\r\n\r\n" . '<div class="cat-post-thumb-row"><div>' . $matches[1] . '</div>%thumb%<div>' . $matches[2] . '</div>' . "\r\n\r\n";
+				}
+
+				if ( '' !== $matches[1] ) {
+					return "\r\n\r\n" . '<div class="cat_flex"><div>' . $matches[1] . '</div>%thumb%' . "\r\n\r\n";
+				}
+
+				return "\r\n\r\n" . '<div class="cat_flex">%thumb%<div>' . $matches[2] . '</div>' . "\r\n\r\n";
+
+			}, "\r\n\r\n" . $template . "\r\n\r\n");
 		}
 
 		// Post details (Template).
@@ -1149,7 +1172,7 @@ class Widget extends \WP_Widget {
 			}
 		}, $template );
 
-		// Replace empty line with closing and opening P.
+		// Replace empty line with closing and opening DIV.
 		$template_res = trim( $template_res );
 		$template_res = str_replace( "\r\n\r\n", '</div><div>', $template_res );
 		$template_res = '<div>' . $template_res . '</div>';
@@ -1648,6 +1671,7 @@ class Widget extends \WP_Widget {
 			'thumb_h'             => get_option( 'thumbnail_size_h', 150 ),
 			'default_thunmbnail'  => 0,
 			'use_css_cropping'    => true,
+			'thumb_float'         => false,
 		) );
 
 		$hide_post_titles                = $instance['hide_post_titles'];
@@ -1665,6 +1689,7 @@ class Widget extends \WP_Widget {
 		$thumb_h                         = $instance['thumb_h'];
 		$default_thunmbnail              = $instance['default_thunmbnail'];
 		$use_css_cropping                = $instance['use_css_cropping'];
+		$thumb_float                     = $instance['thumb_float'];
 
 		$cat = $instance['cat'];
 
@@ -1761,7 +1786,7 @@ class Widget extends \WP_Widget {
 							</tr>
 							<tr>
 								<th>%thumb%</th>
-								<td><?php esc_html_e( 'Post thumbnail', 'category-posts' ); ?></td>
+								<td><?php esc_html_e( 'Post thumbnail possibly wrapped by text', 'category-posts' ); ?></td>
 							</tr>
 							<tr>
 								<th>%date%</th>
@@ -1837,6 +1862,7 @@ class Widget extends \WP_Widget {
 						echo $this->get_number_input_block_html( $instance, 'thumb_w', esc_html__( 'Width:', 'category-posts' ), get_option( 'thumbnail_size_w', 150 ), 1, '', '', true );
 						echo $this->get_number_input_block_html( $instance, 'thumb_h', esc_html__( 'Height:', 'category-posts' ), get_option( 'thumbnail_size_h', 150 ), 1, '', '', true );
 
+						echo $this->get_checkbox_block_html( $instance, 'thumb_float', esc_html__( 'Text wraps around thumbnail', 'category-posts' ), false, true );
 						echo $this->get_checkbox_block_html( $instance, 'use_css_cropping', esc_html__( 'CSS crop to requested size', 'category-posts' ), false, false );
 						echo $this->get_select_block_html( $instance, 'thumb_hover', esc_html__( 'Animation on mouse hover:', 'category-posts' ), array(
 							'none'  => esc_html__( 'None', 'category-posts' ),
@@ -2186,6 +2212,7 @@ function default_settings() {
 		'everything_is_link'   => false,
 		'preset_date_format'   => 'sitedateandtime',
 		'template'             => "%title%\n%thumb%",
+		'thumb_float'          => false,
 	);
 }
 
@@ -2834,12 +2861,48 @@ class virtualWidget {
 
 		// Regardless if css is disabled we need some styling for the thumbnail
 		// to make sure cropping is properly done, and they fit the allocated space.
-		if ( isset( $settings['use_css_cropping'] ) && $settings['use_css_cropping'] ) {
-			$ret['thumb_crop'] = '#' . $widget_id . ' .cat-post-crop {overflow: hidden; display:inline-block}';
-		} else {
-			$ret['thumb_overflow'] = '#' . $widget_id . ' .cat-post-thumbnail span {overflow: hidden; display:inline-block}';
+		if ( isset( $settings['template'] ) && preg_match( '/%thumb%/', $settings['template'], $m, PREG_OFFSET_CAPTURE ) ) {
+			if ( isset( $settings['use_css_cropping'] ) && $settings['use_css_cropping'] ) {
+				$ret['thumb_crop'] = '#' . $widget_id . ' .cat-post-crop {overflow: hidden; display:inline-block}';
+			} else {
+				$ret['thumb_overflow'] = '#' . $widget_id . ' .cat-post-thumbnail span {overflow: hidden; display:inline-block}';
+			}
+			$ret['thumb_styling'] = '#' . $widget_id . ' .cat-post-item img {margin: initial;}';
+
+			// Thumbnail related positioning rules.
+			$thumb_float = isset( $settings['thumb_float'] ) && $settings['thumb_float'];
+			if ( $thumb_float ) {
+				$float = 'left';
+				// try to check if it is end of line.
+				$offset = $m[0][1];
+				$after_thumb = substr( $settings['template'], $offset + 7, 4 );
+				$before_thumb = substr( $settings['template'], $offset - 4, 4 );
+				if ( empty( $after_thumb ) || ( "\r\n\r\n" === $after_thumb ) ) {
+					$float = 'right';
+					if ( ( 0 === $offset ) || ( "\r\n\r\n" === $before_thumb ) ) {
+						$float = '';
+					}
+				} else {
+					if ( empty( $after_thumb ) || ( "\r\n\r\n" === $after_thumb ) ) {
+						$float = '';
+					}
+				}
+
+				if ( ! empty( $float ) ) {
+					if ( is_rtl() ) {
+						$float = ( 'left' === $float ) ? 'right' : 'left';
+					}
+					$ret['thumb_float'] = '#' . $widget_id . ' .cat-post-thumbnail {float:' . $float . '}';
+
+					// If floating to the right adjust margin arround thumb.
+					if ( ( 'right' === $float ) && isset( $ret['thumb'] ) ) {
+						$ret['thumb'] = '#' . $widget_id . ' .cat-post-thumbnail {margin: 5px 0 5px 10px;}';
+					}
+				}
+			} else {
+				$ret['thumb_row'] = '#' . $widget_id . ' .cat-post-thumb-row {display:flex;}'; // Thumbnail container should flex.
+			}
 		}
-		$ret['thumb_styling'] = '#' . $widget_id . ' .cat-post-item img {margin: initial;}';
 
 		// Some hover effect require css to work, add it even if CSS is disabled.
 		if ( isset( $settings['thumb_hover'] ) ) {
