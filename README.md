@@ -107,6 +107,10 @@ Automatic installation is the easiest option as WordPress handles the file trans
 * Version 3.0 or later version uses WordPress 2.9's built in post thumbnail functionality.
 
 ## Frequently Asked Questions
+= How Category Posts Widget work with SiteOrigin Page Builder =
+Please add the widget with shortcode [catposts] inside a editor widget which is placed to a SiteOrigin Page Builder row.
+We also create a YouTube video: [How Category Posts Widget work with SiteOrigin Page Builder](http://tiptoppress.com/how-category-posts-widget-work-with-siteorigin-page-builder/)
+
 = Thumb and Title not able to float left =
 Check the option in the Thumbnails panels > "Show thumbnails above text".
 Then add this custom CSS:
