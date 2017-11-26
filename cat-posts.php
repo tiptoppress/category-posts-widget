@@ -81,22 +81,24 @@ function wp_head() {
 
 	$widget_repository = new virtualWidgetsRepository();
 
-	$rules = array();
+	$styles = array();
 
 	foreach ( $widget_repository->getShortcodes() as $widget ) {
-			$widget->getCSSRules( true, $rules );
+		$widget->getCSSRules( true, $styles );
 	}
 
 	foreach ( $widget_repository->getWidgets() as $widget ) {
-		$widget->getCSSRules( false, $rules );
+		$widget->getCSSRules( false, $styles );
 	}
 
-	if ( ! empty( $rules ) ) {
-		?>
+	if ( ! empty( $styles ) ) {
+	?>
 <style type="text/css">
 	<?php
-	foreach ( $rules as $rule ) {
-		echo "$rule\n"; // Xss ok. raw css output, can not be html escaped.
+	foreach ( $styles as $rules ) {
+		foreach ( $rules as $rule ) {
+			echo "$rule\n"; // Xss ok. raw css output, can not be html escaped.
+		}
 	}
 	?>
 </style>
@@ -2740,7 +2742,8 @@ class virtualWidget {
 	 *
 	 *  @since 4.7
 	 */
-	public function getCSSRules( $is_shortcode, &$ret ) {
+	public function getCSSRules( $is_shortcode, &$rules ) {
+		$ret = array();
 		$settings = self::$collection[ $this->id ];
 		$widget_id = $this->id;
 		if ( ! $is_shortcode ) {
@@ -2750,7 +2753,7 @@ class virtualWidget {
 
 		if ( ! $disable_css ) { // checks if css disable is not set.
 
-			$rules = array( // rules that should be applied to all widgets.
+			$styles = array( // styles that should be applied to all widgets.
 				'thumb_clenup'  => '.cat-post-item img {max-width: initial; max-height: initial; margin: initial;}',
 				'author_clenup' => '.cat-post-author {margin-bottom: 0;}',
 				'thumb'         => '.cat-post-thumbnail {margin: 5px 10px 5px 0;}',
@@ -2758,11 +2761,11 @@ class virtualWidget {
 			);
 
 			if ( ! ( isset( $settings['disable_font_styles'] ) && $settings['disable_font_styles'] ) ) { // checks if disable font styles is not set.
-				// add general rules which apply to font styling.
-				$rules['title_font'] = '.cat-post-title {font-size: 15px;}';
-				$rules['current_title_font'] = '.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}';
-				$rules['date_font'] = '.cat-post-date {font-size: 14px; line-height: 18px; font-style: italic; margin-bottom: 5px;}';
-				$rules['comment_num_font'] = '.cat-post-comment-num {font-size: 14px; line-height: 18px;}';
+				// add general styles which apply to font styling.
+				$styles['title_font'] = '.cat-post-title {font-size: 15px;}';
+				$styles['current_title_font'] = '.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}';
+				$styles['date_font'] = '.cat-post-date {font-size: 14px; line-height: 18px; font-style: italic; margin-bottom: 5px;}';
+				$styles['comment_num_font'] = '.cat-post-comment-num {font-size: 14px; line-height: 18px;}';
 			}
 
 			/*
@@ -2770,18 +2773,18 @@ class virtualWidget {
 			 *	so remove our border if we detect its use to avoid conflicting styling.
 			 */
 			if ( ! $is_shortcode && function_exists( 'twentyseventeen_setup' ) ) {
-				$rules['item_style'] = '.cat-post-item {list-style: none; list-style-type: none; margin: 0;	padding: 3px 0;}';
+				$styles['item_style'] = '.cat-post-item {list-style: none; list-style-type: none; margin: 0;	padding: 3px 0;}';
 			} else {
-				$rules['item_style'] = '.cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
-				$rules['last_item_style'] = '.cat-post-item:last-child {border-bottom: none;}';
+				$styles['item_style'] = '.cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+				$styles['last_item_style'] = '.cat-post-item:last-child {border-bottom: none;}';
 			}
 
 			// everything link related styling
 			// if we are dealing with "everything is a link" option, we need to add the clear:both to the a element, not the div.
 			if ( isset( $settings['everything_is_link'] ) && $settings['everything_is_link'] ) {
-				$rules['after_item'] = '.cat-post-item a:after {content: ""; display: table;	clear: both;}';
+				$styles['after_item'] = '.cat-post-item a:after {content: ""; display: table;	clear: both;}';
 			} else {
-				$rules['after_item'] = '.cat-post-item:after {content: ""; display: table;	clear: both;}';
+				$styles['after_item'] = '.cat-post-item:after {content: ""; display: table;	clear: both;}';
 			}
 
 			// add post format css if needed.
@@ -2821,21 +2824,21 @@ class virtualWidget {
 							$placement = 'bottom:10%; right:10%;';
 							break;
 					}
-					$rules['post_format_thumb'] = '.cat-post-thumbnail {position:relative}';
-					$rules['post_format_icon_styling'] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); ' .
+					$styles['post_format_thumb'] = '.cat-post-thumbnail {position:relative}';
+					$styles['post_format_icon_styling'] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); ' .
 								'font-size:14px; line-height:14px; padding:15px; border-radius:4px; background-color:rgba(0,0,0,.6); ' .
 								$placement . '}';
 
-					$rules['post_format_icon_image'] = ".cat-post-format-image:before { content: '\\e800'; }";
-					$rules['post_format_icon_video'] = ".cat-post-format-video:before { content: '\\e801'; }";
-					$rules['post_format_icon_chat'] = ".cat-post-format-chat:before { content: '\\e802'; }";
-					$rules['post_format_icon_audio'] = ".cat-post-format-audio:before { content: '\\e803'; }";
-					$rules['post_format_icon_gallery'] = ".cat-post-format-gallery:before { content: '\\e805'; }";
+					$styles['post_format_icon_image'] = ".cat-post-format-image:before { content: '\\e800'; }";
+					$styles['post_format_icon_video'] = ".cat-post-format-video:before { content: '\\e801'; }";
+					$styles['post_format_icon_chat'] = ".cat-post-format-chat:before { content: '\\e802'; }";
+					$styles['post_format_icon_audio'] = ".cat-post-format-audio:before { content: '\\e803'; }";
+					$styles['post_format_icon_gallery'] = ".cat-post-format-gallery:before { content: '\\e805'; }";
 				}
 			}
 
-			foreach ( $rules as $key => $rule ) {
-				$ret[ $key ] = '#' . $widget_id . ' ' . $rule;
+			foreach ( $styles as $key => $style ) {
+				$ret[ $key ] = '#' . $widget_id . ' ' . $style;
 			}
 
 			if ( $is_shortcode ) {
@@ -2951,6 +2954,7 @@ class virtualWidget {
 					break;
 			}
 		}
+		$rules[] = $ret;
 	}
 
 	/**
