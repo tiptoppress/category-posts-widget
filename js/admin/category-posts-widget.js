@@ -75,10 +75,10 @@
         },
 
 		// Show template help
-		openTemplateHelp: function(item,event) {
+		toggleTemplateHelp: function(item,event) {
 			event.preventDefault();
 			var panel = item.parentElement.parentElement.parentElement.parentElement;
-            jQuery(panel).find('.cat-post-template-help').show('slow');
+            jQuery(panel).find('.cat-post-template-help').toggle('slow');
         },
 
 		toggleAssignedCategoriesTop: function(item) {
@@ -268,8 +268,8 @@ jQuery(document).ready( function () {
 			cwp_namespace.toggleDateFormat(this);
 		});
 
-		jQuery(document).on('click', class_namespace+' a.open-template-help', function (event) { // open template help
-			cwp_namespace.openTemplateHelp(this, event);
+		jQuery(document).on('click', class_namespace+' a.toggle-template-help', function (event) { // show template help
+			cwp_namespace.toggleTemplateHelp(this, event);
 		});
 
 		jQuery(document).on('click', class_namespace+' .cat-post-premade_templates button', function () { // select a pre made template
