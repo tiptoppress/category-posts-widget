@@ -18,8 +18,8 @@ Adds a widget that shows the most recent posts from a single category.
 Category Posts Widget is a light widget designed to do one thing and do it well: display the most recent posts from a certain category.
 
 ### Term and Category based Posts Widget
-A <a target="_blank" href="http://tiptoppress.com/?utm_source=github&utm_campaign=premium_widget_cpw&utm_medium=web">premium version</a> of this free widget here created for big Wordpress sites.
-We've also started creating free widget extensions for the Premium Widget. The first extension is the <a href="https://github.com/tiptoppress/excerpt-extension">Excerpt Extension</a>.
+A <a href="http://tiptoppress.com/?utm_source=github&utm_campaign=premium_widget_cpw&utm_medium=web">premium version</a> of this free widget here created for big Wordpress sites.
+We've also started creating free widget Add-ons for the Premium Widget here: <a href="http://tiptoppress.com/extensions/?utm_source=wordpress_org&utm_campaign=premium_widget_cpw&utm_medium=web">Widget extensions</a>.
 
 ### Premium features
 * "Post List Alterations"
