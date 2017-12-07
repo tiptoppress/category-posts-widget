@@ -361,6 +361,53 @@ function get_template_regex() {
 }
 
 /**
+ * Convert pre 4.8 settings into template
+ *
+ * @param  array $instance Array which contains the various settings.
+ *
+ * @since 4.8
+ */
+function convert_settings_to_template( $instance ) {
+
+	$thumbtop = false;
+
+	$template = '';
+
+	if ( isset( $instance['thumb'] ) && $instance['thumb'] ) {
+		if ( isset( $instance['thumbTop'] ) && $instance['thumbTop'] ) {
+			$template .= "%thumb%\r\n\r\n";
+			$thumbtop = true;
+		} elseif ( isset( $instance['date'] ) && $instance['date'] ) {
+			if ( ! ( isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'] ) ) {
+				$template .= "%title%\r\n\r\n";
+			}
+			$template .= "%date%\r\n\r\n";
+			$template .= "%thumb%\r\n\r\n";
+		} elseif ( ! ( isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'] ) ) {
+			$template .= "%thumb%%title%\r\n\r\n";
+		}
+	} else {
+		if ( ! ( isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'] ) ) {
+			$template .= "%title%\r\n\r\n";
+		}
+		if ( isset( $instance['date'] ) && $instance['date'] ) {
+			$template .= "%date%\r\n\r\n";
+		}
+	}
+	if ( isset( $instance['excerpt'] ) && $instance['excerpt'] ) {
+		$template .= '%excerpt%';
+	}
+	if ( isset( $instance['comment_num'] ) && $instance['comment_num'] ) {
+		$template .= "%commentnum%\r\n\r\n";
+	}
+	if ( isset( $instance['author'] ) && $instance['author'] ) {
+		$template .= "%author%\r\n\r\n";
+	}
+
+	return $template;
+}
+
+/**
  * Category Posts Widget Class
  *
  * Shows the single category posts with some configurable options
@@ -776,53 +823,6 @@ class Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Convert pre 4.8 settings into template
-	 *
-	 * @param  array $instance Array which contains the various settings.
-	 *
-	 * @since 4.8
-	 */
-	public function convert_settings_to_template( $instance ) {
-
-		$thumbtop = false;
-
-		$template = '';
-
-		if ( isset( $instance['thumb'] ) && $instance['thumb'] ) {
-			if ( isset( $instance['thumbTop'] ) && $instance['thumbTop'] ) {
-				$template .= "%thumb%\r\n\r\n";
-				$thumbtop = true;
-			} elseif ( isset( $instance['date'] ) && $instance['date'] ) {
-				if ( ! ( isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'] ) ) {
-					$template .= "%title%\r\n\r\n";
-				}
-				$template .= "%date%\r\n\r\n";
-				$template .= "%thumb%\r\n\r\n";
-			} elseif ( ! ( isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'] ) ) {
-				$template .= "%thumb%%title%\r\n\r\n";
-			}
-		} else {
-			if ( ! ( isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'] ) ) {
-				$template .= "%title%\r\n\r\n";
-			}
-			if ( isset( $instance['date'] ) && $instance['date'] ) {
-				$template .= "%date%\r\n\r\n";
-			}
-		}
-		if ( isset( $instance['excerpt'] ) && $instance['excerpt'] ) {
-			$template .= '%excerpt%';
-		}
-		if ( isset( $instance['comment_num'] ) && $instance['comment_num'] ) {
-			$template .= "%commentnum%\r\n\r\n";
-		}
-		if ( isset( $instance['author'] ) && $instance['author'] ) {
-			$template .= "%author%\r\n\r\n";
-		}
-
-		return $template;
-	}
-
-	/**
 	 * Current post item date string based on the format requested in the settings
 	 *
 	 * @param  array $instance Array which contains the various settings.
@@ -1111,7 +1111,7 @@ class Widget extends \WP_Widget {
 		if ( isset( $instance['template'] ) ) {
 			$template = $instance['template'];
 		} else {
-			$template = $this->convert_settings_to_template( $instance );
+			$template = convert_settings_to_template( $instance );
 		}
 		$ret = '<li ';
 
@@ -1755,7 +1755,7 @@ class Widget extends \WP_Widget {
 				<?php
 				$template = '';
 				if ( ! isset( $instance['template'] ) ) {
-					$template = $this->convert_settings_to_template( $instance );
+					$template = convert_settings_to_template( $instance );
 				} else {
 					$template = $instance['template'];
 				}
@@ -2094,7 +2094,7 @@ function shortcode_settings( $name ) {
 	$meta = get_post_meta( get_the_ID(), SHORTCODE_META, true );
 
 	if ( ! empty( $meta ) && ! is_array( reset( $meta ) ) ) {
-		$meta = array( '' => $meta );  // the coversion.
+		$meta = array( '' => $meta );  // the conversion.
 	}
 
 	if ( ! isset( $meta[ $name ] ) ) { // name do not exists? return empty array.
@@ -2107,6 +2107,12 @@ function shortcode_settings( $name ) {
 		if ( is_array( $o ) ) {
 			$instance = $o[ get_the_ID() ][ $name ];
 		}
+	}
+	
+	if ( isset( $instance['template'] ) && $instance['template'] ) {
+		;
+	} else {
+		$instance['template'] = convert_settings_to_template( $instance );
 	}
 
 	return $instance;
@@ -2331,6 +2337,13 @@ function customize_register( $wp_customize ) {
 			}
 
 			foreach ( $meta as $k => $m ) {
+			
+				if ( isset( $m['template'] ) && $m['template'] ) {
+					;
+				} else {
+					$m['template'] = convert_settings_to_template( $m );
+				}
+			
 				$m = wp_parse_args( $m, default_settings() );
 
 				if ( 0 === count( $meta ) ) { // new widget, use defaults.
