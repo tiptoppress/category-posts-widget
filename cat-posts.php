@@ -1105,7 +1105,7 @@ class Widget extends \WP_Widget {
 		global $post;
 
 		$everything_is_link = isset( $instance['everything_is_link'] ) && $instance['everything_is_link'];
-		$thumb_float = isset( $instance['thumb_float'] ) && $instance['thumb_float'];
+		$wrap = isset( $instance['text_do_not_wrap_thumb'] ) && $instance['text_do_not_wrap_thumb'];
 
 		$template = '';
 		if ( isset( $instance['template'] ) ) {
@@ -1127,26 +1127,17 @@ class Widget extends \WP_Widget {
 			$ret .= '<a class="cat-post-everything-is-link" href="' . get_the_permalink() . '" title="">';
 		}
 
-		// Try to do smart formatting for none floating thumb based on its location.
-		if ( ! $thumb_float ) {
-			$template = preg_replace_callback('#\r\n\r\n(.*)%thumb%(.*)\r\n\r\n#', function ( $matches ) {
-				// If there is nothing on the same line, simply return it as it is.
-				if ( '' === $matches[1] && '' === $matches[2] ) {
-					return $matches[0];
+		// Try to do smart formatting for floating thumb based on its location.
+		if ( $wrap ) {
+			if( preg_match( '#(\%thumb\%)#', $template ) && ! preg_match( '#(\%thumb\%$)#', $template ) ) {
+				$thumb_flex = explode( '%thumb%', $template );
+				if( count( $thumb_flex ) == 1) {
+					$template = '<div class="cat-post-do-not-wrap-thumbnail">%thumb%<div>' . $thumb_flex[0] . '</div></div>';
+				}					
+				if( count( $thumb_flex ) == 2) {
+					$template =  $thumb_flex[0] . '<div class="cat-post-do-not-wrap-thumbnail">%thumb%<div>' . $thumb_flex[1] . '</div></div>';
 				}
-
-				// If there are things on both sides.
-				if ( '' !== $matches[1] && '' !== $matches[2] ) {
-					return "\r\n\r\n" . '<div class="cat-post-thumb-row"><div>' . $matches[1] . '</div>%thumb%<div>' . $matches[2] . '</div>' . "\r\n\r\n";
-				}
-
-				if ( '' !== $matches[1] ) {
-					return "\r\n\r\n" . '<div class="cat_flex"><div>' . $matches[1] . '</div>%thumb%' . "\r\n\r\n";
-				}
-
-				return "\r\n\r\n" . '<div class="cat_flex">%thumb%<div>' . $matches[2] . '</div>' . "\r\n\r\n";
-
-			}, "\r\n\r\n" . $template . "\r\n\r\n");
+			}
 		}
 
 		// Post details (Template).
@@ -1657,23 +1648,23 @@ class Widget extends \WP_Widget {
 		}
 
 		$instance = wp_parse_args( (array) $instance, array(
-			'hide_post_titles'    => '',
-			'excerpt'             => '',
-			'excerpt_more_text'   => '',
-			'excerpt_filters'     => '',
-			'date'                => '',
-			'date_format'         => '',
-			'disable_css'         => '',
-			'disable_font_styles' => '',
-			'hide_if_empty'       => '',
-			'hide_social_buttons' => '',
-			'preset_date_format'  => 'other',
-			'thumb'               => false,
-			'thumb_w'             => get_option( 'thumbnail_size_w', 150 ),
-			'thumb_h'             => get_option( 'thumbnail_size_h', 150 ),
-			'default_thunmbnail'  => 0,
-			'use_css_cropping'    => true,
-			'thumb_float'         => false,
+			'hide_post_titles'         => '',
+			'excerpt'                  => '',
+			'excerpt_more_text'        => '',
+			'excerpt_filters'          => '',
+			'date'                     => '',
+			'date_format'              => '',
+			'disable_css'              => '',
+			'disable_font_styles'      => '',
+			'hide_if_empty'            => '',
+			'hide_social_buttons'      => '',
+			'preset_date_format'       => 'other',
+			'thumb'                    => false,
+			'thumb_w'                  => get_option( 'thumbnail_size_w', 150 ),
+			'thumb_h'                  => get_option( 'thumbnail_size_h', 150 ),
+			'default_thunmbnail'       => 0,
+			'use_css_cropping'         => true,
+			'text_do_not_wrap_thumb'   => false,
 		) );
 
 		$hide_post_titles                = $instance['hide_post_titles'];
@@ -1691,7 +1682,7 @@ class Widget extends \WP_Widget {
 		$thumb_h                         = $instance['thumb_h'];
 		$default_thunmbnail              = $instance['default_thunmbnail'];
 		$use_css_cropping                = $instance['use_css_cropping'];
-		$thumb_float                     = $instance['thumb_float'];
+		$text_do_not_wrap_thumb          = $instance['text_do_not_wrap_thumb'];
 
 		$cat = $instance['cat'];
 
@@ -1864,7 +1855,7 @@ class Widget extends \WP_Widget {
 						echo $this->get_number_input_block_html( $instance, 'thumb_w', esc_html__( 'Width:', 'category-posts' ), get_option( 'thumbnail_size_w', 150 ), 1, '', '', true );
 						echo $this->get_number_input_block_html( $instance, 'thumb_h', esc_html__( 'Height:', 'category-posts' ), get_option( 'thumbnail_size_h', 150 ), 1, '', '', true );
 
-						echo $this->get_checkbox_block_html( $instance, 'thumb_float', esc_html__( 'Text wraps around thumbnail', 'category-posts' ), false, true );
+						echo $this->get_checkbox_block_html( $instance, 'text_do_not_wrap_thumb', esc_html__( 'Do not wrap thumbnail with overflowing text', 'category-posts' ), false, true );
 						echo $this->get_checkbox_block_html( $instance, 'use_css_cropping', esc_html__( 'CSS crop to requested size', 'category-posts' ), false, false );
 						echo $this->get_select_block_html( $instance, 'thumb_hover', esc_html__( 'Animation on mouse hover:', 'category-posts' ), array(
 							'none'  => esc_html__( 'None', 'category-posts' ),
@@ -2186,41 +2177,41 @@ function shortcode_names( $shortcode_name, $content ) {
  */
 function default_settings() {
 	return array(
-		'title'                => __( 'Recent Posts', 'category-posts' ),
-		'title_link'           => false,
-		'title_link_url'       => '',
-		'hide_title'           => false,
-		'cat'                  => 0,
-		'num'                  => get_option( 'posts_per_page' ),
-		'offset'               => 1,
-		'sort_by'              => 'date',
-		'status'               => 'publish',
-		'asc_sort_order'       => false,
-		'exclude_current_post' => false,
-		'hideNoThumb'          => false,
-		'footer_link_text'     => '',
-		'footer_link'          => '',
-		'thumb_w'              => get_option( 'thumbnail_size_w', 150 ),
-		'thumb_h'              => get_option( 'thumbnail_size_h', 150 ),
-		'use_css_cropping'     => true,
-		'thumb_hover'          => 'none',
-		'hide_post_titles'     => false,
-		'excerpt_length'       => 55,
-		'excerpt_more_text'    => __( '...', 'category-posts' ),
-		'excerpt_filters'      => false,
-		'comment_num'          => false,
-		'date_link'            => false,
-		'date_format'          => '',
-		'disable_css'          => false,
-		'disable_font_styles'  => false,
-		'hide_if_empty'        => false,
-		'show_post_format'     => 'none',
-		'hide_social_buttons'  => '',
-		'no_cat_childs'        => false,
-		'everything_is_link'   => false,
-		'preset_date_format'   => 'sitedateandtime',
-		'template'             => "%title%\n%thumb%",
-		'thumb_float'          => false,
+		'title'                   => __( 'Recent Posts', 'category-posts' ),
+		'title_link'              => false,
+		'title_link_url'          => '',
+		'hide_title'              => false,
+		'cat'                     => 0,
+		'num'                     => get_option( 'posts_per_page' ),
+		'offset'                  => 1,
+		'sort_by'                 => 'date',
+		'status'                  => 'publish',
+		'asc_sort_order'          => false,
+		'exclude_current_post'    => false,
+		'hideNoThumb'             => false,
+		'footer_link_text'        => '',
+		'footer_link'             => '',
+		'thumb_w'                 => get_option( 'thumbnail_size_w', 150 ),
+		'thumb_h'                 => get_option( 'thumbnail_size_h', 150 ),
+		'use_css_cropping'        => true,
+		'thumb_hover'             => 'none',
+		'hide_post_titles'        => false,
+		'excerpt_length'          => 55,
+		'excerpt_more_text'       => __( '...', 'category-posts' ),
+		'excerpt_filters'         => false,
+		'comment_num'             => false,
+		'date_link'               => false,
+		'date_format'             => '',
+		'disable_css'             => false,
+		'disable_font_styles'     => false,
+		'hide_if_empty'           => false,
+		'show_post_format'        => 'none',
+		'hide_social_buttons'     => '',
+		'no_cat_childs'           => false,
+		'everything_is_link'      => false,
+		'preset_date_format'      => 'sitedateandtime',
+		'template'                => "%title%\n%thumb%",
+		'text_do_not_wrap_thumb'  => false,
 	);
 }
 
@@ -2889,38 +2880,11 @@ class virtualWidget {
 			$ret['thumb_styling'] = '#' . $widget_id . ' .cat-post-item img {margin: initial;}';
 
 			// Thumbnail related positioning rules.
-			$thumb_float = isset( $settings['thumb_float'] ) && $settings['thumb_float'];
-			if ( $thumb_float ) {
-				$float = 'left';
-				// try to check if it is end of line.
-				$offset = $m[0][1];
-				$after_thumb = substr( $settings['template'], $offset + 7, 4 );
-				$before_thumb = substr( $settings['template'], $offset - 4, 4 );
-				if ( empty( $after_thumb ) || ( "\r\n\r\n" === $after_thumb ) ) {
-					$float = 'right';
-					if ( ( 0 === $offset ) || ( "\r\n\r\n" === $before_thumb ) ) {
-						$float = '';
-					}
-				} else {
-					if ( empty( $after_thumb ) || ( "\r\n\r\n" === $after_thumb ) ) {
-						$float = '';
-					}
-				}
-
-				if ( ! empty( $float ) ) {
-					if ( is_rtl() ) {
-						$float = ( 'left' === $float ) ? 'right' : 'left';
-					}
-					$ret['thumb_float'] = '#' . $widget_id . ' .cat-post-thumbnail {float:' . $float . '}';
-
-					// If floating to the right adjust margin arround thumb.
-					if ( ( 'right' === $float ) && isset( $ret['thumb'] ) ) {
-						$ret['thumb'] = '#' . $widget_id . ' .cat-post-thumbnail {margin: 5px 0 5px 10px;}';
-					}
-				}
-			} else {
-				$ret['thumb_row'] = '#' . $widget_id . ' .cat-post-thumb-row {display:flex;}'; // Thumbnail container should flex.
+			$wrap = isset( $settings['text_do_not_wrap_thumb'] ) && $settings['text_do_not_wrap_thumb'];
+			if ( $wrap ) {
+				$ret['thumb_flex'] = '#' . $widget_id . ' .cat-post-do-not-wrap-thumbnail {display:flex;}'; // Thumbnail container should flex.
 			}
+			$ret['text_do_not_wrap_thumb'] = '#' . $widget_id . ' .cat-post-thumbnail {float:left;}';
 		}
 
 		// Some hover effect require css to work, add it even if CSS is disabled.
