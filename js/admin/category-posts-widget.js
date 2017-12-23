@@ -122,11 +122,13 @@
 					template = '%title%\n%thumb%\n%excerpt%';
 					break;
 				case 'everything':
-					template = '%title%\n%thumb%\n%excerpt%\n\n';
-					template += 'Published by %author% on %date%\n';
-					template += 'and has %commentnum% comments\n\n';
+					template = '%thumb%\n\n';
+					template += '%title%\n\n';
+					template += '%date% // <span class="dashicons dashicons-admin-comments"></span> %commentnum%\n\n';
+					template += '<span class="dashicons dashicons-admin-users"></span> %author%\n\n';
+					template += '%excerpt%\n\n';
 					template += 'Categories: %category%\n\n';
-					template += 'Tags: %post_tag%';
+					template += '<span class="dashicons dashicons-tag"></span> %post_tag%';
 			}
             var textarea = jQuery(panel).find('textarea');
 			textarea.val(template);

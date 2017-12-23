@@ -1817,13 +1817,13 @@ class Widget extends \WP_Widget {
 						</table>
 					</div>
 					<div class="cat-post-premade_templates">
-						<p><label><?php esc_html_e( 'Select Premade template', 'category-posts' ); ?></label></p>
+						<p><label><?php esc_html_e( 'Select premade Template', 'category-posts' ); ?></label></p>
 						<select>
-							<option value="title"><?php esc_html_e( 'Title only', 'category-posts' ); ?></option>
+							<option value="title"><?php esc_html_e( 'Only the title', 'category-posts' ); ?></option>
 							<option value="title_excerpt"><?php esc_html_e( 'Title and Excerpt', 'category-posts' ); ?></option>
 							<option value="title_thumb"><?php esc_html_e( 'Title and Thumbnail', 'category-posts' ); ?></option>
 							<option value="title_thum_excerpt"><?php esc_html_e( 'Title, Thumbnail and Excerpt', 'category-posts' ); ?></option>
-							<option value="everything"><?php esc_html_e( 'Everything', 'category-posts' ); ?></option>
+							<option value="everything"><?php esc_html_e( 'All with icons', 'category-posts' ); ?></option>
 						</select>
 						<p><button type="button" class="button"><?php esc_html_e( 'Select this template', 'category-posts' ); ?></button></p>
 					</div>
@@ -2873,6 +2873,9 @@ class virtualWidget {
 			$ret['p_styling'] = '#' . $widget_id . ' p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
 																// bigger (add to the padding) use only top for now.
 			$ret['div_styling'] = '#' . $widget_id . ' li > div {margin:5px 0 0 0; clear:both;}'; // Add margin between the rows.
+			
+			// use WP dashicons in the template (e.g. for premade Template 'All and icons')
+			$ret['dashicons'] = '#' . $widget_id . ' .dashicons {vertical-align:middle;}';
 		}
 
 		// Regardless if css is disabled we need some styling for the thumbnail
