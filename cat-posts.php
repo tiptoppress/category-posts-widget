@@ -2862,7 +2862,7 @@ class virtualWidget {
 					$ret['twentysixteen_tag_span'] = '#' . $widget_id . ' .cat-post-tax-post_tag span {box-shadow:none}';     // this for the tag link.
 				}
 				// Twenty Fifteen Theme adds border ...
-				$ret['twentysixteen_thumb'] = '#' . $widget_id . ' .cat-post-thumbnail {border:0}'; // this for the thumb link.
+				$ret['twentyfifteen_thumb'] = '#' . $widget_id . ' .cat-post-thumbnail {border:0}'; // this for the thumb link.
 				if ( ! ( isset( $settings['disable_font_styles'] ) && $settings['disable_font_styles'] ) ) { // checks if disable font styles is not set.
 					$ret['twentysixteen_tag_link'] = '#' . $widget_id . ' .cat-post-tax-post_tag a {border:0}';     // this for the tag link.
 					$ret['twentysixteen_tag_span'] = '#' . $widget_id . ' .cat-post-tax-post_tag span {border:0}';     // this for the tag link.
