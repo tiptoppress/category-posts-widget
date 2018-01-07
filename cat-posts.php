@@ -1865,7 +1865,7 @@ class Widget extends \WP_Widget {
 							'blur'  => esc_html__( 'Blur', 'category-posts' ),
 							'icon'  => esc_html__( 'Icon', 'category-posts' ),
 						), 'none', true);
-						echo $this->get_select_block_html( $instance, 'show_post_format', esc_html__( 'Indicate post format', 'category-posts' ), array(
+						echo $this->get_select_block_html( $instance, 'show_post_format', esc_html__( 'Indicate post format and position', 'category-posts' ), array(
 							'none'        => esc_html__( 'None', 'category-posts' ),
 							'topleft'     => esc_html__( 'Top left', 'category-posts' ),
 							'bottomleft'  => esc_html__( 'Bottom left', 'category-posts' ),
@@ -2799,11 +2799,11 @@ class virtualWidget {
 						$fonturl = esc_url( plugins_url( 'icons/font', __FILE__ ) );
 						$ret['post_format_font'] = "@font-face {\n" .
 								"font-family: 'cat_post';\n" .
-								"src: url('$fonturl/cat_post.eot?4618166');\n" .
-								"src: url('$fonturl/cat_post.eot?4618166#iefix') format('embedded-opentype'),\n" .
-								"	   url('$fonturl/cat_post.woff2?4618166') format('woff2'),\n" .
-								"	   url('$fonturl/cat_post.woff?4618166') format('woff'),\n" .
-								"	   url('$fonturl/cat_post.ttf?4618166') format('truetype');\n" .
+								"src: url('$fonturl/cat_post.eot?58348147');\n" .
+								"src: url('$fonturl/cat_post.eot?58348147#iefix') format('embedded-opentype'),\n" .
+								"	   url('$fonturl/cat_post.woff2?58348147') format('woff2'),\n" .
+								"	   url('$fonturl/cat_post.woff?58348147') format('woff'),\n" .
+								"	   url('$fonturl/cat_post.ttf?58348147') format('truetype');\n" .
 								" font-weight: normal;\n" .
 								" font-style: normal;\n" .
 								"}\n";
@@ -2819,7 +2819,7 @@ class virtualWidget {
 							$placement = 'bottom:10%; left:10%;';
 							break;
 						case 'ceter':
-							$placement = 'top:calc(50% - 25px); left:calc(50% - 25px);';
+							$placement = 'top:calc(50% - 34px); left:calc(50% - 34px);';
 							break;
 						case 'topright':
 							$placement = 'top:10%; right:10%;';
@@ -2829,15 +2829,18 @@ class virtualWidget {
 							break;
 					}
 					$styles['post_format_thumb'] = '.cat-post-thumbnail {position:relative}';
-					$styles['post_format_icon_styling'] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); ' .
-								'font-size:14px; line-height:14px; padding:15px; border-radius:4px; background-color:rgba(0,0,0,.6); ' .
-								$placement . '}';
+					$styles['post_format_icon_styling'] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:#FFFFFF; font-size:64px; line-height: 1; ' . $placement . '}';
 
-					$styles['post_format_icon_image'] = ".cat-post-format-image:before { content: '\\e800'; }";
-					$styles['post_format_icon_video'] = ".cat-post-format-video:before { content: '\\e801'; }";
+					$styles['post_format_icon_aside'] = ".cat-post-format-aside:before { content: '\\f0f6'; }";
 					$styles['post_format_icon_chat'] = ".cat-post-format-chat:before { content: '\\e802'; }";
-					$styles['post_format_icon_audio'] = ".cat-post-format-audio:before { content: '\\e803'; }";
 					$styles['post_format_icon_gallery'] = ".cat-post-format-gallery:before { content: '\\e805'; }";
+					$styles['post_format_icon_link'] = ".cat-post-format-link:before { content: '\\e809'; }";
+					$styles['post_format_icon_image'] = ".cat-post-format-image:before { content: '\\e800'; }";
+					$styles['post_format_icon_quote'] = ".cat-post-format-quote:before { content: '\\f10d'; }";
+					$styles['post_format_icon_status'] = ".cat-post-format-status:before { content: '\\e80a'; }";
+					$styles['post_format_icon_video'] = ".cat-post-format-video:before { content: '\\e801'; }";
+					$styles['post_format_icon_audio'] = ".cat-post-format-audio:before { content: '\\e803'; }";
+					
 				}
 			}
 
@@ -2911,26 +2914,23 @@ class virtualWidget {
 					$fonturl = esc_url( plugins_url( 'icons/font', __FILE__ ) );
 					$ret['icon_hover_font'] = "@font-face {\n" .
 							"font-family: 'cat_post';\n" .
-							"src: url('$fonturl/cat_post.eot?4618166');\n" .
-							"src: url('$fonturl/cat_post.eot?4618166#iefix') format('embedded-opentype'),\n" .
-							"	   url('$fonturl/cat_post.woff2?4618166') format('woff2'),\n" .
-							"	   url('$fonturl/cat_post.woff?4618166') format('woff'),\n" .
-							"	   url('$fonturl/cat_post.ttf?4618166') format('truetype');\n" .
+							"src: url('$fonturl/cat_post.eot?58348147');\n" .
+							"src: url('$fonturl/cat_post.eot?58348147#iefix') format('embedded-opentype'),\n" .
+							"	   url('$fonturl/cat_post.woff2?58348147') format('woff2'),\n" .
+							"	   url('$fonturl/cat_post.woff?58348147') format('woff'),\n" .
+							"	   url('$fonturl/cat_post.ttf?58348147') format('truetype');\n" .
 							" font-weight: normal;\n" .
 							" font-style: normal;\n" .
 							"}\n";
 
 					$ret['icon_hover_thumb'] = '#' . $widget_id . ' .cat-post-format-standard {opacity:0; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
 					$ret['icon_hover_transform'] = '#' . $widget_id . ' .cat-post-thumbnail:hover .cat-post-format-standard {opacity:1;}';
-
 					if ( isset( $settings['show_post_format'] ) && ( 'none' === $settings['show_post_format'] ) ) {
 						$ret[] = '#' . $widget_id . ' .cat-post-thumbnail {position:relative}';
-						$ret[] = '#' . $widget_id . ' .cat-post-icon .cat-post-format:before {font-family: "cat_post"; position:absolute; color:white; border:1px solid rgba(255,255,255,.8); ' .
-									'font-size:14px; line-height:14px; padding:15px; border-radius:4px; background-color:rgba(0,0,0,.6); ' .
-									'top:calc(50% - 25px); left:calc(50% - 25px);}';
+						$ret[] = '#' . $widget_id . ' .cat-post-icon .cat-post-format:before {font-family: "cat_post"; position:absolute; color:#FFFFFF; font-size:64px; line-height: 1; ' .
+									'top:calc(50% - 34px); left:calc(50% - 34px);}';
 					}
-
-					$ret[] = '#' . $widget_id . " .cat-post-format-standard:before {padding:15px 16px; content: '\\e806'; }";
+					$ret[] = '#' . $widget_id . " .cat-post-format-standard:before {padding-left:12px; content: '\\e806'; }";
 					break;
 			}
 		}
