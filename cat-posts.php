@@ -889,10 +889,9 @@ class Widget extends \WP_Widget {
 			$class              = '';
 			$use_css_cropping   = isset( $this->instance['use_css_cropping'] ) && $this->instance['use_css_cropping'];
 			$disable_css        = isset( $instance['disable_css'] ) && $instance['disable_css'];
-			$everything_is_link = isset( $instance['everything_is_link'] ) && $instance['everything_is_link'];
 			$show_post_format   = isset( $instance['show_post_format'] ) && ( 'none' !== $instance['show_post_format'] );
 
-			if ( isset( $this->instance['thumb_hover'] ) && ! $everything_is_link && ! $disable_css ) {
+			if ( isset( $this->instance['thumb_hover'] ) && ! $disable_css ) {
 				$class = 'class="cat-post-thumbnail cat-post-' . $instance['thumb_hover'] . '"';
 			} else {
 				$class = 'class="cat-post-thumbnail"';
