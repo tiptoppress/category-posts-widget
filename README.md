@@ -145,11 +145,11 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 Check also the .htaccess file, if there is an entry for an older PHP version.
 
 ## Screenshots
-1. The widget configuration dialog.
-2. Front end of the widget using a default WordPress Theme.
+1. SVG icons support and hover effects
+2. Template to arrange the post details
 3. Use shortcode [catposts] in the content and edit options in the customizer.
-4. SVG icons
-5. Template to arrange the post details
+4. The widget configuration dialog.
+5. Front end of the widget using a default WordPress Theme.
 
 ## Changelog
 #### [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=github&utm_campaign=changelog_cpw&utm_medium=web)
