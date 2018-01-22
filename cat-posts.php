@@ -477,8 +477,13 @@ class Widget extends \WP_Widget {
 				$html = str_replace( '<img ', '<img style="' . $image['marginAttr'] . ':-' . $image['marginVal'] . 'px;height:' . $image['image_h']
 					. 'px;clip:rect(auto,' . ( $this->instance['thumb_w'] + $image['marginVal'] ) . 'px,auto,' . $image['marginVal']
 				. 'px);width:auto;max-width:initial;" ', $html );
-				// wrap span.
-				$html = '<span class="cat-post-crop" style="width:' . $this->instance['thumb_w'] . 'px;height:' . $this->instance['thumb_h'] . 'px;">'
+				// wrap span with post format.
+				$show_post_format   = isset( $this->instance['show_post_format'] ) && ( 'none' !== $this->instance['show_post_format'] );
+				if ( $show_post_format || $this->instance['thumb_hover'] ) {
+					$format = get_post_format() ? : 'standard';
+					$post_format_class = 'cat-post-format cat-post-format-' . $format;
+				}
+				$html = '<span class="cat-post-crop ' . $post_format_class . '" style="width:' . $this->instance['thumb_w'] . 'px;height:' . $this->instance['thumb_h'] . 'px;">'
 					. $html . '</span>';
 			} else {
 				// use_css_cropping is not used.
@@ -889,7 +894,6 @@ class Widget extends \WP_Widget {
 			$class              = '';
 			$use_css_cropping   = isset( $this->instance['use_css_cropping'] ) && $this->instance['use_css_cropping'];
 			$disable_css        = isset( $instance['disable_css'] ) && $instance['disable_css'];
-			$show_post_format   = isset( $instance['show_post_format'] ) && ( 'none' !== $instance['show_post_format'] );
 
 			if ( isset( $this->instance['thumb_hover'] ) && ! $disable_css ) {
 				$class = 'class="cat-post-thumbnail cat-post-' . $instance['thumb_hover'] . '"';
@@ -906,11 +910,6 @@ class Widget extends \WP_Widget {
 			}
 
 			$ret .= $this->the_post_thumbnail( array( $this->instance['thumb_w'], $this->instance['thumb_h'] ) );
-
-			if ( $show_post_format || $instance['thumb_hover'] ) {
-				$format = get_post_format() ? : 'standard';
-				$ret .= '<span class="cat-post-format cat-post-format-' . $format . '"></span>';
-			}
 
 			if ( $no_link ) {
 				$ret .= '</span>';
@@ -2827,7 +2826,7 @@ class virtualWidget {
 							$placement = 'bottom:10%; right:10%;';
 							break;
 					}
-					$styles['post_format_thumb'] = '.cat-post-thumbnail {position:relative}';
+					$styles['post_format_thumb'] = '.cat-post-thumbnail span {position:relative}';
 					$styles['post_format_icon_styling'] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:#FFFFFF; font-size:64px; line-height: 1; ' . $placement . '}';
 
 					$styles['post_format_icon_aside'] = ".cat-post-format-aside:before { content: '\\f0f6'; }";
@@ -2922,8 +2921,8 @@ class virtualWidget {
 							" font-style: normal;\n" .
 							"}\n";
 
-					$ret['icon_hover_thumb'] = '#' . $widget_id . ' .cat-post-format-standard {opacity:0; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-					$ret['icon_hover_transform'] = '#' . $widget_id . ' .cat-post-thumbnail:hover .cat-post-format-standard {opacity:1;}';
+					$ret['icon_hover_thumb'] = '#' . $widget_id . ' .cat-post-format-standard:before {opacity:0; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+					$ret['icon_hover_transform'] = '#' . $widget_id . ' .cat-post-thumbnail:hover .cat-post-format-standard:before {opacity:1;}';
 					if ( isset( $settings['show_post_format'] ) && ( 'none' === $settings['show_post_format'] ) ) {
 						$ret[] = '#' . $widget_id . ' .cat-post-thumbnail {position:relative}';
 						$ret[] = '#' . $widget_id . ' .cat-post-icon .cat-post-format:before {font-family: "cat_post"; position:absolute; color:#FFFFFF; font-size:64px; line-height: 1; ' .
