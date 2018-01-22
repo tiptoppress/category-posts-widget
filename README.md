@@ -37,6 +37,12 @@ We've also started creating free widget Add-ons for the Premium Widget here: <a 
 * More [examples on the demo pages](http://demo.tiptoppress.com/?utm_source=wordpress_org&utm_campaign=premium_features_demo&utm_medium=web)
 
 ### Features
+* SVG icon support for post formats
+* Template to arrange the post details
+* Premade Templates
+* New date format: Time since plublished
+* Filter by post status: Published, scheduled, private
+* New hover effect: SVG icon
 * Shortcode (Easily change all Shortcode options in the customizer).
 * Support multiple shortcodes at the same post.
 * Add option for post offset (use two or more widgets after another).
@@ -142,9 +148,19 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 1. The widget configuration dialog.
 2. Front end of the widget using a default WordPress Theme.
 3. Use shortcode [catposts] in the content and edit options in the customizer.
+4. SVG icons
+5. Template to arrange the post details
 
 ## Changelog
 #### [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=github&utm_campaign=changelog_cpw&utm_medium=web)
+#### 4.8 - January 22th 2018
+* SVG icon support for post formats
+* Template to arrange the post details
+* Premade Templates
+* Date format: Time since plublished
+* Filter by post status: Published, scheduled, private
+* Hover effect: SVG icon
+
 #### 4.7.4 - October 21th 2017
 * Bugfix for filter by post status (note private)
 
