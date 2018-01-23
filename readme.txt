@@ -37,6 +37,7 @@ We've also started creating free widget Add-ons for the Premium Widget here: [Wi
 * SVG icon support for post formats
 * Template to arrange the post details
 * Premade Templates
+* The Template text can a placeholder, text, HTML or HTML for icons
 * New date format: Time since plublished
 * Filter by post status: Published, scheduled, private
 * New hover effect: SVG icon
@@ -80,7 +81,7 @@ We've also started creating free widget Add-ons for the Premium Widget here: [Wi
 * Use WP user profile for settings ('auto close' and if the shortcode button appears in the editor toolbar).
 
 = Documentation =
-* Full [documentation](http://tiptoppress.com/category-posts-widget/documentation-4-7/?utm_source=wordpress_org&utm_campaign=documentation_4_7_cpw&utm_medium=web)
+* Full [documentation](http://tiptoppress.com/category-posts-widget/documentation-4-8/?utm_source=wordpress_org&utm_campaign=documentation_4_8_cpw&utm_medium=web)
 * Shortcode: Use [catposts] [in the content and edit options in the customizer](http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content/?utm_source=wordpress_org&utm_campaign=documentation_shortcode_cpw&utm_medium=web)
 * Formatting date and time: See <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>
 
@@ -110,6 +111,12 @@ Automatic installation is the easiest option as WordPress handles the file trans
 * Version 3.0 or later version uses WordPress 2.9's built in post thumbnail functionality.
 
 == Frequently Asked Questions ==
+= Template and post detail =
+Here You can control the [Post Detail parts](http://tiptoppress.com/category-posts-widget/documentation-4-8/#Post_details), which appears as part of the post item. All post detail will placed as placeholder. The text in the Template area can be a placeholder, text, HTML code or HTML code for icons.
+
+= SVG icons =
+For SVG icon HTML we recommend the WordPress Dashicons, which are included as default and can be used without any icon-font including [Dashicons](https://developer.wordpress.org/resource/dashicons/).
+
 = How Category Posts Widget work with SiteOrigin Page Builder =
 Please add the widget with shortcode [catposts] inside a editor widget which is placed to a SiteOrigin Page Builder row.
 We also create a YouTube video: [How Category Posts Widget work with SiteOrigin Page Builder](http://tiptoppress.com/how-category-posts-widget-work-with-siteorigin-page-builder/)
