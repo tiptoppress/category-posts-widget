@@ -113,21 +113,22 @@
 					template = '%title%';
 					break;
 				case 'title_excerpt':
-					template = '%title%\n%excerpt%';
+					template = '%title%\n\n%excerpt%';
 					break;
 				case 'title_thumb':
-					template = '%title%\n%thumb%';
+					template = '%title%\n\n%thumb%';
 					break;
 				case 'title_thum_excerpt':
-					template = '%title%\n%thumb%\n%excerpt%';
+					template = '%title%\n\n%thumb%\n%excerpt%';
 					break;
 				case 'everything':
-					template = '%thumb%\n\n';
-					template += '%title%\n\n';
-					template += '%date% // <span class="dashicons dashicons-admin-comments"></span> %commentnum%\n\n';
-					template += '<span class="dashicons dashicons-admin-users"></span> %author%\n\n';
-					template += '%excerpt%\n\n';
-					template += 'Categories: %category%\n\n';
+					template = '%title%\n\n';
+					template += '%date%\n\n';
+					template += '%thumb%\n';
+					template += '<span class="dashicons dashicons-admin-comments"></span> %commentnum% // ';
+					template += '<span class="dashicons dashicons-admin-users"></span> %author%\n';
+					template += '%excerpt%\n';
+					template += 'Categories: %category% // ';
 					template += '<span class="dashicons dashicons-tag"></span> %post_tag%';
 			}
             var textarea = jQuery(panel).find('textarea');

@@ -375,33 +375,33 @@ function convert_settings_to_template( $instance ) {
 
 	if ( isset( $instance['thumb'] ) && $instance['thumb'] ) {
 		if ( isset( $instance['thumbTop'] ) && $instance['thumbTop'] ) {
-			$template .= "%thumb%";
+			$template .= "%thumb%\n\n";
 			$thumbtop = true;
 		} elseif ( isset( $instance['date'] ) && $instance['date'] ) {
 			if ( ! ( isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'] ) ) {
-				$template .= "%title%";
+				$template .= "%title%\n\n";
 			}
-			$template .= "%date%";
-			$template .= "%thumb%";
+			$template .= "%date%\n\n";
+			$template .= "%thumb%\n\n";
 		} elseif ( ! ( isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'] ) ) {
-			$template .= "%thumb%%title%";
+			$template .= "%thumb%\n\n%title%\n\n";
 		}
 	} else {
 		if ( ! ( isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'] ) ) {
-			$template .= "%title%";
+			$template .= "%title%\n\n";
 		}
 		if ( isset( $instance['date'] ) && $instance['date'] ) {
-			$template .= "%date%";
+			$template .= "%date%\n\n";
 		}
 	}
 	if ( isset( $instance['excerpt'] ) && $instance['excerpt'] ) {
-		$template .= '%excerpt%';
+		$template .= '%excerpt%\n\n';
 	}
 	if ( isset( $instance['comment_num'] ) && $instance['comment_num'] ) {
-		$template .= "%commentnum%";
+		$template .= "%commentnum%\n\n";
 	}
 	if ( isset( $instance['author'] ) && $instance['author'] ) {
-		$template .= "%author%";
+		$template .= "%author%\n\n";
 	}
 
 	return $template;
@@ -1165,11 +1165,11 @@ class Widget extends \WP_Widget {
 
 		// Replace empty line with closing and opening DIV.
 		$template_res = trim( $template_res );
-		$template_res = str_replace( "\r\n\r\n", '</div><div>', $template_res );
+		$template_res = str_replace( "\n\n", '</div><div>', $template_res );
 		$template_res = '<div>' . $template_res . '</div>';
 
 		// replace new lines with spaces.
-		$template_res = str_replace( "\r\n", ' ', $template_res );
+		$template_res = str_replace( "\n\n", ' ', $template_res );
 
 		$ret .= $template_res;
 
@@ -2208,7 +2208,7 @@ function default_settings() {
 		'no_cat_childs'           => false,
 		'everything_is_link'      => false,
 		'preset_date_format'      => 'sitedateandtime',
-		'template'                => "%title%\n%thumb%",
+		'template'                => "%title%\n\n%thumb%",
 		'text_do_not_wrap_thumb'  => false,
 	);
 }
