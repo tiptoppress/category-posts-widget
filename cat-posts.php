@@ -369,19 +369,19 @@ function get_template_regex() {
  */
 function convert_settings_to_template( $instance ) {
 
-	$thumbtop = false;
-
 	$template = '';
 
 	if ( isset( $instance['thumb'] ) && $instance['thumb'] ) {
 		if ( isset( $instance['thumbTop'] ) && $instance['thumbTop'] ) {
-			$template .= "%thumb%\n";
-			$thumbtop = true;
-		} elseif ( isset( $instance['date'] ) && $instance['date'] ) {
+			$template .= "%thumb%\n\n";
 			if ( ! ( isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'] ) ) {
 				$template .= "%title%\n";
 			}
-			$template .= "%date%\n";
+		} elseif ( isset( $instance['date'] ) && $instance['date'] ) {
+			if ( ! ( isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'] ) ) {
+				$template .= "%title%\n\n";
+			}
+			$template .= "%date%\n\n";
 			$template .= "%thumb%\n";
 		} elseif ( ! ( isset( $instance['hide_post_titles'] ) && $instance['hide_post_titles'] ) ) {
 			$template .= "%thumb%\n%title%\n";
@@ -391,17 +391,17 @@ function convert_settings_to_template( $instance ) {
 			$template .= "%title%\n";
 		}
 		if ( isset( $instance['date'] ) && $instance['date'] ) {
-			$template .= "%date%\n";
+			$template .= "%date%\n\n";
 		}
 	}
 	if ( isset( $instance['excerpt'] ) && $instance['excerpt'] ) {
 		$template .= '%excerpt%';
 	}
 	if ( isset( $instance['comment_num'] ) && $instance['comment_num'] ) {
-		$template .= "%commentnum%\n";
+		$template .= "%commentnum%\n\n";
 	}
 	if ( isset( $instance['author'] ) && $instance['author'] ) {
-		$template .= "%author%\n";
+		$template .= "%author%\n\n";
 	}
 
 	return $template;
