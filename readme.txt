@@ -1,4 +1,4 @@
-=== Category Posts Widget ===
+﻿=== Category Posts Widget ===
 Contributors: mark-k, kometschuh, mkrdip
 Donate link: http://mkrdip.me/donate
 Tags: category, categories, posts, widget, posts widget, recent posts, category recent posts, shortcode, sidebar, excerpt, multiple widgets
@@ -149,11 +149,12 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 Check also the .htaccess file, if there is an entry for an older PHP version.
 
 == Screenshots ==
-1. SVG icons support and hover effects
-2. Template to arrange the post details
-3. Use shortcode [catposts] in the content and edit options in the customizer.
-4. The widget configuration dialog.
-5. Front end of the widget using a default WordPress Theme.
+1. Front end of the widget with SVG icon support for post formats, hover effects and the Template text-area.
+2. Template to arrange the post details with placeholders.
+3. Edit the widget options with the customizer.
+4. Use shortcode [catposts] in the content.
+5. The widget configuration dialog.
+6. Widget behaviour settings for each user.
 
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=wordpress_org&utm_campaign=changelog_cpw&utm_medium=web)
