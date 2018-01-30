@@ -1255,6 +1255,10 @@ class Widget extends \WP_Widget {
 	 * @since 4.1
 	 */
 	public function widget( $args, $instance ) {
+		
+		if ( 0 === count( $instance ) ) {
+			$instance = default_settings();
+		}		
 
 		extract( $args );
 		$this->instance = $instance;
