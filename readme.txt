@@ -4,7 +4,7 @@ Donate link: http://mkrdip.me/donate
 Tags: category, categories, posts, widget, posts widget, recent posts, category recent posts, shortcode, sidebar, excerpt, multiple widgets
 Requires at least: 2.8
 Tested up to: 4.9
-Stable tag: 4.8.1
+Stable tag: 4.8.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -159,8 +159,12 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=wordpress_org&utm_campaign=changelog_cpw&utm_medium=web)
 
+= 4.8.2 - January 30th 2018 =
+* Fixed Adding the widget with the customizer only the title is shown
+* Fixed Recognize "Empty lines" > Next line is a paragraph in the Template in widget areas
+
 = 4.8.1 - January 25th 2018 =
-* Fixed Recognize "Empty lines" > Next line is a paragraph in the Templaste
+* Fixed Recognize "Empty lines" > Next line is a paragraph in the Template
 
 = 4.8 - January 22th 2018 =
 * SVG icon support for post formats

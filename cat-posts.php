@@ -12,7 +12,7 @@ Plugin Name: Category Posts Widget
 Plugin URI: https://wordpress.org/plugins/category-posts/
 Description: Adds a widget that shows the most recent posts from a single category.
 Author: TipTopPress
-Version: 4.8.1
+Version: 4.8.2
 Author URI: http://tiptoppress.com
 Text Domain: category-posts
 Domain Path: /languages
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const VERSION        = '4.8.beta2';
+const VERSION        = '4.8.2';
 const DOC_URL        = 'http://tiptoppress.com/category-posts-widget/documentation-4-8?utm_source=widget_cpw&utm_campaign=documentation_4_8_cpw&utm_medium=form';
 const PRO_URL        = 'http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=widget_cpw&utm_campaign=get_pro_cpw&utm_medium=action_link';
 const SUPPORT_URL    = 'https://wordpress.org/support/plugin/category-posts';
@@ -1165,11 +1165,13 @@ class Widget extends \WP_Widget {
 
 		// Replace empty line with closing and opening DIV.
 		$template_res = trim( $template_res );
-		$template_res = str_replace( "\n\n", '</div><div>', $template_res );
+		$template_res = str_replace( "\n\r", '</div><div>', $template_res ); // in widget areas
+		$template_res = str_replace( "\n\n", '</div><div>', $template_res ); // as shortcode
 		$template_res = '<div>' . $template_res . '</div>';
 
 		// replace new lines with spaces.
-		$template_res = str_replace( "\n\n", ' ', $template_res );
+		$template_res = str_replace( "\n\r", ' ', $template_res ); // in widget areas
+		$template_res = str_replace( "\n\n", ' ', $template_res ); // as shortcode
 
 		$ret .= $template_res;
 
@@ -1756,7 +1758,7 @@ class Widget extends \WP_Widget {
 				<p><?php esc_html_e( 'Displayed parts', 'category-posts' ); ?></p>
 				<div class="cpwp_ident">
 					<?php
-					echo $this->get_textarea_html( $instance, 'template', esc_html__( 'Template', 'category-posts' ) . ' <a href="#" class="dashicons toggle-template-help dashicons-editor-help imgedit-help-toggle"><span class="screen-reader-text">' . esc_html__( 'Show template help', 'category-posts' ) . '</span></a>', $template, '', true, 5 );
+					echo $this->get_textarea_html( $instance, 'template', esc_html__( 'Template', 'category-posts' ) . ' <a href="#" class="dashicons toggle-template-help dashicons-editor-help imgedit-help-toggle"><span class="screen-reader-text">' . esc_html__( 'Show template help', 'category-posts' ) . '</span></a>', $template, '', true, 8 );
 					preg_match_all( get_template_regex(), $template, $matches );
 					$tags = array();
 					if ( ! empty( $matches[0] ) ) {

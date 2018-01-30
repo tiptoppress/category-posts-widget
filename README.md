@@ -163,6 +163,10 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 #### [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=github&utm_campaign=changelog_cpw&utm_medium=web)
 #### 4.8 - January 22th 2018
 
+= 4.8.2 - January 30th 2018 =
+* Fixed Adding the widget with the customizer only the title is shown
+* Fixed Recognize "Empty lines" > Next line is a paragraph in the Template in widget areas
+
 = 4.8.1 - January 25th 2018 =
 * Fixed Recognize "Empty lines" > Next line is a paragraph in the Templaste
 

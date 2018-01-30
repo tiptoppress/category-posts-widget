@@ -125,10 +125,10 @@
 					template = '%title%\n\n';
 					template += '%date%\n\n';
 					template += '%thumb%\n';
-					template += '<span class="dashicons dashicons-admin-comments"></span> %commentnum% // ';
+					template += '<span class="dashicons dashicons-admin-comments"></span> %commentnum% ';
 					template += '<span class="dashicons dashicons-admin-users"></span> %author%\n';
 					template += '%excerpt%\n';
-					template += 'Categories: %category% // ';
+					template += 'Categories: %category% ';
 					template += '<span class="dashicons dashicons-tag"></span> %post_tag%';
 			}
             var textarea = jQuery(panel).find('textarea');
