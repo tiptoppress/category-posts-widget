@@ -37,7 +37,7 @@ We've also started creating free widget Add-ons for the Premium Widget here: [Wi
 * SVG icon support for post formats
 * Template to arrange the post details
 * Premade Templates
-* The Template text can be a placeholder, plain text, HTML or HTML for icons
+* The Template text can be a post details placeholder, plain text, HTML or HTML for SVG icons
 * New date format: Time since plublished
 * Filter by post status: Published, scheduled, private
 * New hover effect: SVG icon
@@ -112,7 +112,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 == Frequently Asked Questions ==
 = Template, placeholder and post detail =
-Here You can control the [Post Detail parts](http://tiptoppress.com/category-posts-widget/documentation-4-8/#Post_details), which appears as part of the post item. All post detail will placed as placeholder. The text in the Template area can be a placeholder, plain text, HTML code or HTML code for icons.
+Here You can control the [Post Detail parts](http://tiptoppress.com/category-posts-widget/documentation-4-8/#Post_details), which appears as part of the post item. All post detail will placed as placeholder. The text in the Template area can be a post details placeholder, plain text, HTML or HTML for SVG icons.
 
 = Use SVG icons =
 For SVG icon HTML we recommend the [WordPress Dashicons](https://developer.wordpress.org/resource/dashicons/), which are included as default and can be used without any icon-font including.
