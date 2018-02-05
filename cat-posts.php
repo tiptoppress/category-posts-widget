@@ -1976,8 +1976,7 @@ add_action( 'widgets_init', __NAMESPACE__ . '\register_widget' );
  *
  * @since 4.7
  */
-function change_cropped_image_dimensions() {
-	?>
+function change_cropped_image_dimensions($number,$widgetsettings) {	?>
 	<script type="text/javascript">
 
 		if (typeof jQuery !== 'undefined')  {
@@ -2053,7 +2052,7 @@ function change_cropped_image_dimensions() {
 				$widgets_ids = apply_filters( 'cpw_crop_widgets', array() );
 				foreach ( $widgets_ids as $num => $ratio ) {
 					if($num != $number) {
-						break;
+						continue;
 					} ?>
 					cwp_namespace.fluid_images.widget = jQuery('#<?php echo esc_attr( $num ); ?>');
 					cwp_namespace.fluid_images.Widgets['<?php echo esc_attr( $num ); ?>'] = new cwp_namespace.fluid_images.WidgetPosts(cwp_namespace.fluid_images.widget,<?php echo esc_attr( $ratio ); ?>);
@@ -2068,7 +2067,7 @@ function change_cropped_image_dimensions() {
 			});
 		}
 	</script>
-	<?php
+<?php
 }
 
 /*
