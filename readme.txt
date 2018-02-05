@@ -34,13 +34,13 @@ We've also started creating free widget Add-ons for the Premium Widget here: [Wi
 * More examples on the [demo pages](http://demo.tiptoppress.com/?utm_source=wordpress_org&utm_campaign=demo_cpw&utm_medium=web)
 
 = Features =
-* SVG icon support for post formats
+* SVG font-icon support for post formats
 * Template to arrange the post details
 * Premade Templates
-* The Template text can be a post details placeholder, plain text, HTML or HTML for SVG icons
+* The Template text can be a post details placeholder, plain text, HTML or HTML for SVG font-icons
 * New date format: Time since plublished
 * Filter by post status: Published, scheduled, private
-* New hover effect: SVG icon
+* New hover effect: SVG font-icon
 * Shortcode (Easily change all Shortcode options in the customizer).
 * Support multiple shortcodes at the same post.
 * Add option for post offset (use two or more widgets after another).
@@ -115,7 +115,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 Here You can control the [Post Detail parts](http://tiptoppress.com/category-posts-widget/documentation-4-8/#Post_details), which appears as part of the post item. All post detail will placed as placeholder. The text in the Template area can be a post details placeholder, plain text, HTML or HTML for SVG icons.
 
 = Use SVG icons =
-For SVG icon HTML we recommend the [WordPress Dashicons](https://developer.wordpress.org/resource/dashicons/), which are included as default and can be used without any icon-font including.
+For SVG font-icon HTML we recommend the [WordPress Dashicons](https://developer.wordpress.org/resource/dashicons/), which are included as default and can be used without any font-icon including.
 
 = How Category Posts Widget work with SiteOrigin Page Builder =
 Please add the widget with shortcode [catposts] inside a editor widget which is placed to a SiteOrigin Page Builder row.
@@ -149,7 +149,7 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 Check also the .htaccess file, if there is an entry for an older PHP version.
 
 == Screenshots ==
-1. Front end of the widget with SVG icon support for post formats, hover effects and the Template text-area.
+1. Front end of the widget with SVG font-icon support for post formats, hover effects and the Template text-area.
 2. Template to arrange the post details with placeholders.
 3. Edit the widget options with the customizer.
 4. Use shortcode [catposts] in the content.
@@ -167,12 +167,12 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 * Fixed Recognize "Empty lines" > Next line is a paragraph in the Template
 
 = 4.8 - January 22th 2018 =
-* SVG icon support for post formats
+* SVG font-icon support for post formats
 * Template to arrange the post details
 * Premade Templates
 * Date format: Time since plublished
 * Filter by post status: Published, scheduled, private
-* Hover effect: SVG icon
+* Hover effect: SVG font-icon
 
 = 4.7.4 - October 21th 2017 =
 * Bugfix for filter by post status (note private)
