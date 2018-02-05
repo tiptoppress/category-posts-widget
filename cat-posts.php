@@ -1309,8 +1309,6 @@ class Widget extends \WP_Widget {
 			if ( $use_css_cropping ) {
 				// enqueue relevant scripts and parameters to perform cropping
 				// once we support only 4.5+ it can be refactored to use wp_add_inline_script.
-				wp_enqueue_script( 'jquery' ); // just in case the theme or other plugins didn't enqueue it.
-				add_action( 'wp_footer', __NAMESPACE__ . '\change_cropped_image_dimensions', 100 );  // add to the footer the cropping script.
 				$number = $this->number;
 				// a temporary hack to handle difference in the number in a true widget
 				// and the number format expected at the rest of the places.
@@ -1327,6 +1325,8 @@ class Widget extends \WP_Widget {
 						return $a;
 					}
 				);
+				wp_enqueue_script( 'jquery' ); // just in case the theme or other plugins didn't enqueue it.
+				add_action('wp_footer',function () use ($number,$instance) { __NAMESPACE__ . '\\' . change_cropped_image_dimensions($number,$instance);},100);
 			}
 		}
 	}
@@ -2042,7 +2042,7 @@ function change_cropped_image_dimensions() {
 					},
 				}
 
-				<?php
+<?php
 				/**
 				 *  The cpw_crop_widgets is an internal filter that is used
 				 *  to gather the ids of the widgets to which apply cropping
@@ -2051,13 +2051,15 @@ function change_cropped_image_dimensions() {
 				 *  in the array while the ratio of width/height be the value
 				 */
 				$widgets_ids = apply_filters( 'cpw_crop_widgets', array() );
-				foreach ( $widgets_ids as $number => $ratio ) {
-				?>
-				cwp_namespace.fluid_images.widget = jQuery('#<?php echo esc_attr( $number ); ?>');
-				cwp_namespace.fluid_images.Widgets['<?php echo esc_attr( $number ); ?>'] = new cwp_namespace.fluid_images.WidgetPosts(cwp_namespace.fluid_images.widget,<?php echo esc_attr( $ratio ); ?>);
-				<?php } ?>
+				foreach ( $widgets_ids as $num => $ratio ) {
+					if($num != $number) {
+						break;
+					} ?>
+					cwp_namespace.fluid_images.widget = jQuery('#<?php echo esc_attr( $num ); ?>');
+					cwp_namespace.fluid_images.Widgets['<?php echo esc_attr( $num ); ?>'] = new cwp_namespace.fluid_images.WidgetPosts(cwp_namespace.fluid_images.widget,<?php echo esc_attr( $ratio ); ?>);
+<?php			} ?>
 
-				<?php /* do on page load or on resize the browser window */ echo "\r\n"; ?>
+<?php			/* do on page load or on resize the browser window */ echo "\r\n"; ?>
 				jQuery(window).on('load resize', function() {
 					for (var widget in cwp_namespace.fluid_images.Widgets) {
 						cwp_namespace.fluid_images.Widgets[widget].changeImageSize();
