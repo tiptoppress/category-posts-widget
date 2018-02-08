@@ -1829,7 +1829,7 @@ class Widget extends \WP_Widget {
 					<p><?php esc_html_e( 'Excerpt settings', 'category-posts' ); ?></p>
 					<div class="cpwp_ident">
 					<?php
-					echo $this->get_number_input_block_html( $instance, 'excerpt_length', esc_html__( 'Excerpt length (words):', 'category-posts' ), get_option( 'posts_per_page' ), 1, 55, '', true );
+					echo $this->get_number_input_block_html( $instance, 'excerpt_length', esc_html__( 'Excerpt length (words):', 'category-posts' ), get_option( 'posts_per_page' ), 1, 200, '', true );
 					echo $this->get_text_input_block_html( $instance, 'excerpt_more_text', esc_html__( 'Excerpt \'more\' text:', 'category-posts' ), '', esc_attr__( '...', 'category-posts' ), true );
 					echo $this->get_checkbox_block_html( $instance, 'excerpt_filters', esc_html__( 'Don\'t override Themes and plugin filters', 'category-posts' ), false, true );
 					?>
