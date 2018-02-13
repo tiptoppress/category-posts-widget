@@ -38,7 +38,7 @@ We've also started creating free widget Add-ons for the Premium Widget here: <a 
 
 ### Features
 * SVG font-icon support for post formats
-* Template to arrange the post details
+* <a href="http://tiptoppress.com/template-arrange-post-details/">Template</a> to arrange the post details
 * Premade Templates
 * The Template text can be a post details placeholder, plain text, HTML or HTML for SVG font-icons
 * New date format: Time since plublished
@@ -117,24 +117,16 @@ Automatic installation is the easiest option as WordPress handles the file trans
 = Template, placeholder and post detail =
 Here You can control the [Post Detail parts](http://tiptoppress.com/category-posts-widget/documentation-4-8/#Post_details), which appears as part of the post item. All post detail will placed as placeholder. The text in the Template area can be a post details placeholder, plain text, HTML or HTML for SVG font-icons.
 
+<a href="http://tiptoppress.com/template-arrange-post-details/">How it works? and examples.</a>
+
+For more layout options please try our premium widget: [Term and Category based Posts Widget](http://tiptoppress.com/term-and-category-based-posts-widget/).
+
 = Use SVG font-icons =
 For SVG font-icon HTML we recommend the [WordPress Dashicons](https://developer.wordpress.org/resource/dashicons/), which are included as default and can be used without any icon-font including.
 
 = How Category Posts Widget work with SiteOrigin Page Builder =
 Please add the widget with shortcode [catposts] inside a editor widget which is placed to a SiteOrigin Page Builder row.
 We also create a YouTube video: [How Category Posts Widget work with SiteOrigin Page Builder](http://tiptoppress.com/how-category-posts-widget-work-with-siteorigin-page-builder/)
-
-= Thumb and Title not able to float left =
-Check the option in the Thumbnails panels > "Show thumbnails above text".
-Then add this custom CSS:
-
-.cat-post-thumbnail {
-	float: left !important;
-}
-
-If you use wordpress 4.7 or higher you can [add this custom CSS with the customizer](http://kometschuh.de/Easily-adding-custom-CSS-using-the-WordPress-Theme-customizer.html/?utm_source=wordpress_org&utm_campaign=faq_cpw&utm_medium=web)
-
-For more layout options please try our premium widget: [Term and Category based Posts Widget](http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=wordpress_org&utm_campaign=faq_cpw&utm_medium=web).
 
 = The font-size is different from that of other widgets or Theme elements? =
 Please use the option: "Disable widget CSS".
