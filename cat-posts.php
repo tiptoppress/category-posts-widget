@@ -281,7 +281,12 @@ function admin_styles() {
 	padding:0;
 	cursor: pointer;
 }
-
+ul.categories-select{
+	border: 5px solid #c00;
+}
+ul.categories-select ul.children{
+	margin-left: 24px;
+}
 </style>
 <?php
 }
@@ -679,11 +684,14 @@ class Widget extends \WP_Widget {
 			$args['offset'] = (int) $instance['offset'] - 1;
 		}
 		if ( isset( $instance['cat'] ) ) {
+			$args['category__in'] = $instance['cat'];
+			/*
 			if ( isset( $instance['no_cat_childs'] ) && $instance['no_cat_childs'] ) {
 				$args['category__in'] = (int) $instance['cat'];
 			} else {
 				$args['cat'] = (int) $instance['cat'];
 			}
+			*/
 		}
 
 		if ( is_singular() && isset( $instance['exclude_current_post'] ) && $instance['exclude_current_post'] ) {
@@ -1416,13 +1424,20 @@ class Widget extends \WP_Widget {
 	public function formFilterPanel( $instance ) {
 		$instance = wp_parse_args( (array) $instance, array( 'cat' => 0 ) );
 		$cat = $instance['cat'];
+		$walker = new Walker_Category_Checklist_Radiobuttons(
+			$this->get_field_name( 'cat' ),
+			$this->get_field_id( 'cat' )
+		);
 ?>
 	<h4 data-panel="filter"><?php esc_html_e( 'Filter', 'category-posts' ); ?></h4>
 	<div>
 		<p>
-			<label>
+			<label id="category-widget-categories-select">
 				<?php esc_html_e( 'Category', 'category-posts' ); ?>:
+				<ul class="categories-select">
 				<?php
+					wp_category_checklist( 0, 0, $instance['cat'], FALSE, $walker, FALSE );
+					/*
 					wp_dropdown_categories( array(
 						'show_option_all' => __( 'All categories', 'category-posts' ),
 						'hide_empty'      => 0,
@@ -1430,7 +1445,9 @@ class Widget extends \WP_Widget {
 						'selected'        => $instance['cat'],
 						'class'           => 'categoryposts-data-panel-filter-cat',
 					) );
+					*/
 				?>
+				</ul>
 			</label>
 		</p>
 		<?php
@@ -1806,6 +1823,12 @@ class Widget extends \WP_Widget {
 		.categoryPosts-template textarea {
 			font-size:16px;
 			line-height:20px;
+		}
+
+		ul.categories-select ul.children{
+			margin-top: 6px;
+			margin-bottom: 12px;
+			margin-left: 24px;
 		}
 		</style>
 
@@ -3140,4 +3163,37 @@ add_action( 'wp_loaded', __NAMESPACE__ . '\wp_loaded' );
 function wp_loaded() {
 	register_meta( 'post', SHORTCODE_META, null, '__return_false' ); // do not allow access to the shortcode meta
 																	// use the pre 4.6 format for backward compatibility.
+}
+
+
+/* Categories */
+// This is required to be sure Walker_Category_Checklist class is available
+require_once ABSPATH . 'wp-admin/includes/template.php';
+/**
+ * Custom walker to print category checkboxes for widget forms
+ */
+class Walker_Category_Checklist_RadioButtons extends \Walker_Category_Checklist {
+
+	private $name;
+	private $id;
+
+	function __construct( $name = '', $id = '' ) {
+		$this->name = $name;
+		$this->id = $id;
+	}
+
+	function start_el( &$output, $cat, $depth = 0, $args = array(), $id = 0 ) {
+		extract( $args );
+		if ( empty( $taxonomy ) ) $taxonomy = 'category';
+		$class = in_array( $cat->term_id, $popular_cats ) ? ' class="popular-category"' : '';
+		$id = $this->id . '-' . $cat->term_id;
+		$checked = checked( in_array( $cat->term_id, $selected_cats ), true, false );
+		$output .= "\n<li id='{$taxonomy}-{$cat->term_id}'$class>"
+			. '<label class="selectit"><input value="'
+			. $cat->term_id . '" type="checkbox" name="' . $this->name
+			. '[]" id="in-'. $id . '"' . $checked
+			. disabled( empty( $args['disabled'] ), false, false ) . ' /> '
+			. esc_html( apply_filters( 'the_category', $cat->name ) )
+			. '</label>';
+	}
 }
