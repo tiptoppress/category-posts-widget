@@ -170,6 +170,8 @@ add_action( 'wp_head', __NAMESPACE__ . '\wp_head' );
  */
 function admin_scripts( $hook ) {
 
+	wp_enqueue_script('jquery-ui-datepicker');
+
 	if ( 'widgets.php' === $hook ) { // enqueue only for widget admin and customizer.
 
 		// control open and close the widget section.
@@ -699,6 +701,31 @@ class Widget extends \WP_Widget {
 			) );
 		}
 
+		if( isset( $instance['date_period_from'] ) && isset( $instance['date_period_to'] ) ) {
+			if( trim( $instance['date_period_from'] ) == '' ){
+				$instance['date_period_from'] = '01 01 1974';
+			}
+			if( trim( $instance['date_period_to'] ) == '' ){
+				$instance['date_period_to'] = '31 12 2037';
+			}
+
+			$date_period_from_parts = explode( ' ', $instance["date_period_from"] );
+			$instance["date_period_from"] = $date_period_from_parts[2].'-'.$date_period_from_parts[1].'-'.$date_period_from_parts[0].' 00:00:00';
+
+			$date_period_to_parts = explode( ' ', $instance["date_period_to"] );
+			$instance["date_period_to"] = $date_period_to_parts[2].'-'.$date_period_to_parts[1].'-'.$date_period_to_parts[0].' 23:59:59';
+
+
+			$args = array_merge( $args, array( 'date_query' => array(
+					array(
+						'after' => $instance['date_period_from'],
+						'before' => $instance['date_period_to'],
+					)
+				)
+				)
+			);
+		}
+
 		return $args;
 	}
 
@@ -1131,7 +1158,7 @@ class Widget extends \WP_Widget {
 				$thumb_flex = explode( '%thumb%', $template );
 				if( count( $thumb_flex ) == 1) {
 					$template = '<div class="cat-post-do-not-wrap-thumbnail">%thumb%<div>' . $thumb_flex[0] . '</div></div>';
-				}					
+				}
 				if( count( $thumb_flex ) == 2) {
 					$template =  $thumb_flex[0] . '<div class="cat-post-do-not-wrap-thumbnail">%thumb%<div>' . $thumb_flex[1] . '</div></div>';
 				}
@@ -1426,6 +1453,10 @@ class Widget extends \WP_Widget {
 			), 'default', true );
 			echo $this->get_number_input_block_html( $instance, 'num', esc_html__( 'Number of posts to show', 'category-posts' ), get_option( 'posts_per_page' ), 1, '', '', true );
 			echo $this->get_number_input_block_html( $instance, 'offset', esc_html__( 'Start with post', 'category-posts' ), 1, 1, '', '', true );
+
+			echo $this->get_text_date_block_html( $instance, 'date_period_from', esc_html__( 'Posts since', 'category-posts' ), '', '', true );
+			echo $this->get_text_date_block_html( $instance, 'date_period_to', esc_html__( 'Posts to', 'category-posts' ), '', '', true );
+
 			echo $this->get_select_block_html( $instance, 'sort_by', esc_html__( 'Sort by', 'category-posts' ), array(
 				'date'          => esc_html__( 'Date', 'category-posts' ),
 				'title'         => esc_html__( 'Title', 'category-posts' ),
@@ -1562,6 +1593,52 @@ class Widget extends \WP_Widget {
 		return $this->get_wrap_block_html( $ret, $key, $visible );
 	}
 
+
+	/**
+	 * Generate a form P element containing a text input with datepicker
+	 *
+	 * @since 4.8.3
+	 * @param array  $instance  The instance.
+	 * @param string $key       The key in the instance array.
+	 * @param string $label     The label to display and associate with the input.
+	 *                          Should be html escaped.
+	 * @param int    $default   The value to use if the key is not set in the instance.
+	 * @param string $placeholder The placeholder to use in the input. should be attribute escaped.
+	 * @param bool   $visible   Indicates if the element should be visible when rendered.
+	 *
+	 * @return string HTML a P element contaning the input, its label, class based on the key
+	 *                and style set to display:none if visibility is off.
+	 */
+	private function get_text_date_block_html( $instance, $key, $label, $default, $placeholder, $visible ) {
+
+		$value = $default;
+
+		if ( isset( $instance[ $key ] ) ) {
+			$value = $instance[ $key ];
+		}
+
+		$ret = '<label for="' . $this->get_field_id( $key ) . "\">\n" .
+			$label .
+			'<input class="datepick" placeholder="' . $placeholder . '" id="' . $this->get_field_id( $key ) . '" name="' . $this->get_field_name( $key ) . '" type="text" value="' . esc_attr( $value ) . '" autocomplete="off"/>' . "\n" .
+			"</label>\n";
+
+		$ret .= '<script type="text/javascript">
+
+            jQuery(document).ready(function($){
+                $( "#'.$this->get_field_id( $key ).'" ).datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    dateFormat : \'dd mm yy\'
+                });
+            });
+
+            </script>';
+
+		return $this->get_wrap_block_html( $ret, $key, $visible );
+	}
+
+
 	/**
 	 * Generate a form P element containing a number input
 	 *
@@ -1658,6 +1735,8 @@ class Widget extends \WP_Widget {
 			'excerpt_filters'          => '',
 			'date'                     => '',
 			'date_format'              => '',
+			'date_period_from'         => '',
+			'date_period_to'           => '',
 			'disable_css'              => '',
 			'disable_font_styles'      => '',
 			'hide_if_empty'            => '',
@@ -1677,6 +1756,8 @@ class Widget extends \WP_Widget {
 		$excerpt_filters                 = $instance['excerpt_filters'];
 		$date                            = $instance['date'];
 		$date_format                     = $instance['date_format'];
+		$date_period_from                = $instance['date_period_from'];
+		$date_period_to                  = $instance['date_period_to'];
 		$disable_css                     = $instance['disable_css'];
 		$disable_font_styles             = $instance['disable_font_styles'];
 		$hide_if_empty                   = $instance['hide_if_empty'];
@@ -2104,7 +2185,7 @@ function shortcode_settings( $name ) {
 			$instance = $o[ get_the_ID() ][ $name ];
 		}
 	}
-	
+
 	if ( isset( $instance['template'] ) && $instance['template'] ) {
 		;
 	} else {
@@ -2333,13 +2414,13 @@ function customize_register( $wp_customize ) {
 			}
 
 			foreach ( $meta as $k => $m ) {
-			
+
 				if ( isset( $m['template'] ) && $m['template'] ) {
 					;
 				} else {
 					$m['template'] = convert_settings_to_template( $m );
 				}
-			
+
 				$m = wp_parse_args( $m, default_settings() );
 
 				if ( 0 === count( $meta ) ) { // new widget, use defaults.
@@ -2845,7 +2926,7 @@ class virtualWidget {
 					$styles['post_format_icon_status'] = ".cat-post-format-status:before { content: '\\e80a'; }";
 					$styles['post_format_icon_video'] = ".cat-post-format-video:before { content: '\\e801'; }";
 					$styles['post_format_icon_audio'] = ".cat-post-format-audio:before { content: '\\e803'; }";
-					
+
 				}
 			}
 
@@ -2872,7 +2953,7 @@ class virtualWidget {
 			$ret['p_styling'] = '#' . $widget_id . ' p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
 																// bigger (add to the padding) use only top for now.
 			$ret['div_styling'] = '#' . $widget_id . ' li > div {margin:5px 0 0 0; clear:both;}'; // Add margin between the rows.
-			
+
 			// use WP dashicons in the template (e.g. for premade Template 'All and icons')
 			$ret['dashicons'] = '#' . $widget_id . ' .dashicons {vertical-align:middle;}';
 		}
