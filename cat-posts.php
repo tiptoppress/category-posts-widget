@@ -170,6 +170,8 @@ add_action( 'wp_head', __NAMESPACE__ . '\wp_head' );
  */
 function admin_scripts( $hook ) {
 
+	wp_enqueue_script('jquery-ui-datepicker');
+
 	if ( 'widgets.php' === $hook ) { // enqueue only for widget admin and customizer.
 
 		// control open and close the widget section.
@@ -279,7 +281,12 @@ function admin_styles() {
 	padding:0;
 	cursor: pointer;
 }
-
+ul.categories-select{
+	border: 5px solid #c00;
+}
+ul.categories-select ul.children{
+	margin-left: 24px;
+}
 </style>
 <?php
 }
@@ -677,11 +684,14 @@ class Widget extends \WP_Widget {
 			$args['offset'] = (int) $instance['offset'] - 1;
 		}
 		if ( isset( $instance['cat'] ) ) {
+			$args['category__in'] = $instance['cat'];
+			/*
 			if ( isset( $instance['no_cat_childs'] ) && $instance['no_cat_childs'] ) {
 				$args['category__in'] = (int) $instance['cat'];
 			} else {
 				$args['cat'] = (int) $instance['cat'];
 			}
+			*/
 		}
 
 		if ( is_singular() && isset( $instance['exclude_current_post'] ) && $instance['exclude_current_post'] ) {
@@ -697,6 +707,31 @@ class Widget extends \WP_Widget {
 					),
 				),
 			) );
+		}
+
+		if( isset( $instance['date_period_from'] ) && isset( $instance['date_period_to'] ) ) {
+			if( trim( $instance['date_period_from'] ) == '' ){
+				$instance['date_period_from'] = '01 01 1974';
+			}
+			if( trim( $instance['date_period_to'] ) == '' ){
+				$instance['date_period_to'] = '31 12 2037';
+			}
+
+			$date_period_from_parts = explode( ' ', $instance["date_period_from"] );
+			$instance["date_period_from"] = $date_period_from_parts[2].'-'.$date_period_from_parts[1].'-'.$date_period_from_parts[0].' 00:00:00';
+
+			$date_period_to_parts = explode( ' ', $instance["date_period_to"] );
+			$instance["date_period_to"] = $date_period_to_parts[2].'-'.$date_period_to_parts[1].'-'.$date_period_to_parts[0].' 23:59:59';
+
+
+			$args = array_merge( $args, array( 'date_query' => array(
+					array(
+						'after' => $instance['date_period_from'],
+						'before' => $instance['date_period_to'],
+					)
+				)
+				)
+			);
 		}
 
 		return $args;
@@ -1131,7 +1166,7 @@ class Widget extends \WP_Widget {
 				$thumb_flex = explode( '%thumb%', $template );
 				if( count( $thumb_flex ) == 1) {
 					$template = '<div class="cat-post-do-not-wrap-thumbnail">%thumb%<div>' . $thumb_flex[0] . '</div></div>';
-				}					
+				}
 				if( count( $thumb_flex ) == 2) {
 					$template =  $thumb_flex[0] . '<div class="cat-post-do-not-wrap-thumbnail">%thumb%<div>' . $thumb_flex[1] . '</div></div>';
 				}
@@ -1395,13 +1430,20 @@ class Widget extends \WP_Widget {
 	public function formFilterPanel( $instance ) {
 		$instance = wp_parse_args( (array) $instance, array( 'cat' => 0 ) );
 		$cat = $instance['cat'];
+		$walker = new Walker_Category_Checklist_Radiobuttons(
+			$this->get_field_name( 'cat' ),
+			$this->get_field_id( 'cat' )
+		);
 ?>
 	<h4 data-panel="filter"><?php esc_html_e( 'Filter', 'category-posts' ); ?></h4>
 	<div>
 		<p>
-			<label>
+			<label id="category-widget-categories-select">
 				<?php esc_html_e( 'Category', 'category-posts' ); ?>:
+				<ul class="categories-select">
 				<?php
+					wp_category_checklist( 0, 0, $instance['cat'], FALSE, $walker, FALSE );
+					/*
 					wp_dropdown_categories( array(
 						'show_option_all' => __( 'All categories', 'category-posts' ),
 						'hide_empty'      => 0,
@@ -1409,7 +1451,9 @@ class Widget extends \WP_Widget {
 						'selected'        => $instance['cat'],
 						'class'           => 'categoryposts-data-panel-filter-cat',
 					) );
+					*/
 				?>
+				</ul>
 			</label>
 		</p>
 		<?php
@@ -1426,6 +1470,10 @@ class Widget extends \WP_Widget {
 			), 'default', true );
 			echo $this->get_number_input_block_html( $instance, 'num', esc_html__( 'Number of posts to show', 'category-posts' ), get_option( 'posts_per_page' ), 1, '', '', true );
 			echo $this->get_number_input_block_html( $instance, 'offset', esc_html__( 'Start with post', 'category-posts' ), 1, 1, '', '', true );
+
+			echo $this->get_text_date_block_html( $instance, 'date_period_from', esc_html__( 'Posts since', 'category-posts' ), '', '', true );
+			echo $this->get_text_date_block_html( $instance, 'date_period_to', esc_html__( 'Posts to', 'category-posts' ), '', '', true );
+
 			echo $this->get_select_block_html( $instance, 'sort_by', esc_html__( 'Sort by', 'category-posts' ), array(
 				'date'          => esc_html__( 'Date', 'category-posts' ),
 				'title'         => esc_html__( 'Title', 'category-posts' ),
@@ -1562,6 +1610,52 @@ class Widget extends \WP_Widget {
 		return $this->get_wrap_block_html( $ret, $key, $visible );
 	}
 
+
+	/**
+	 * Generate a form P element containing a text input with datepicker
+	 *
+	 * @since 4.8.3
+	 * @param array  $instance  The instance.
+	 * @param string $key       The key in the instance array.
+	 * @param string $label     The label to display and associate with the input.
+	 *                          Should be html escaped.
+	 * @param int    $default   The value to use if the key is not set in the instance.
+	 * @param string $placeholder The placeholder to use in the input. should be attribute escaped.
+	 * @param bool   $visible   Indicates if the element should be visible when rendered.
+	 *
+	 * @return string HTML a P element contaning the input, its label, class based on the key
+	 *                and style set to display:none if visibility is off.
+	 */
+	private function get_text_date_block_html( $instance, $key, $label, $default, $placeholder, $visible ) {
+
+		$value = $default;
+
+		if ( isset( $instance[ $key ] ) ) {
+			$value = $instance[ $key ];
+		}
+
+		$ret = '<label for="' . $this->get_field_id( $key ) . "\">\n" .
+			$label .
+			'<input class="datepick" placeholder="' . $placeholder . '" id="' . $this->get_field_id( $key ) . '" name="' . $this->get_field_name( $key ) . '" type="text" value="' . esc_attr( $value ) . '" autocomplete="off"/>' . "\n" .
+			"</label>\n";
+
+		$ret .= '<script type="text/javascript">
+
+            jQuery(document).ready(function($){
+                $( "#'.$this->get_field_id( $key ).'" ).datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    numberOfMonths: 1,
+                    dateFormat : \'dd mm yy\'
+                });
+            });
+
+            </script>';
+
+		return $this->get_wrap_block_html( $ret, $key, $visible );
+	}
+
+
 	/**
 	 * Generate a form P element containing a number input
 	 *
@@ -1658,6 +1752,8 @@ class Widget extends \WP_Widget {
 			'excerpt_filters'          => '',
 			'date'                     => '',
 			'date_format'              => '',
+			'date_period_from'         => '',
+			'date_period_to'           => '',
 			'disable_css'              => '',
 			'disable_font_styles'      => '',
 			'hide_if_empty'            => '',
@@ -1677,6 +1773,8 @@ class Widget extends \WP_Widget {
 		$excerpt_filters                 = $instance['excerpt_filters'];
 		$date                            = $instance['date'];
 		$date_format                     = $instance['date_format'];
+		$date_period_from                = $instance['date_period_from'];
+		$date_period_to                  = $instance['date_period_to'];
 		$disable_css                     = $instance['disable_css'];
 		$disable_font_styles             = $instance['disable_font_styles'];
 		$hide_if_empty                   = $instance['hide_if_empty'];
@@ -1731,6 +1829,12 @@ class Widget extends \WP_Widget {
 		.categoryPosts-template textarea {
 			font-size:16px;
 			line-height:20px;
+		}
+
+		ul.categories-select ul.children{
+			margin-top: 6px;
+			margin-bottom: 12px;
+			margin-left: 24px;
 		}
 		</style>
 
@@ -2104,7 +2208,7 @@ function shortcode_settings( $name ) {
 			$instance = $o[ get_the_ID() ][ $name ];
 		}
 	}
-	
+
 	if ( isset( $instance['template'] ) && $instance['template'] ) {
 		;
 	} else {
@@ -2333,13 +2437,13 @@ function customize_register( $wp_customize ) {
 			}
 
 			foreach ( $meta as $k => $m ) {
-			
+
 				if ( isset( $m['template'] ) && $m['template'] ) {
 					;
 				} else {
 					$m['template'] = convert_settings_to_template( $m );
 				}
-			
+
 				$m = wp_parse_args( $m, default_settings() );
 
 				if ( 0 === count( $meta ) ) { // new widget, use defaults.
@@ -2845,7 +2949,7 @@ class virtualWidget {
 					$styles['post_format_icon_status'] = ".cat-post-format-status:before { content: '\\e80a'; }";
 					$styles['post_format_icon_video'] = ".cat-post-format-video:before { content: '\\e801'; }";
 					$styles['post_format_icon_audio'] = ".cat-post-format-audio:before { content: '\\e803'; }";
-					
+
 				}
 			}
 
@@ -2872,7 +2976,7 @@ class virtualWidget {
 			$ret['p_styling'] = '#' . $widget_id . ' p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
 																// bigger (add to the padding) use only top for now.
 			$ret['div_styling'] = '#' . $widget_id . ' li > div {margin:5px 0 0 0; clear:both;}'; // Add margin between the rows.
-			
+
 			// use WP dashicons in the template (e.g. for premade Template 'All and icons')
 			$ret['dashicons'] = '#' . $widget_id . ' .dashicons {vertical-align:middle;}';
 		}
@@ -3066,4 +3170,37 @@ add_action( 'wp_loaded', __NAMESPACE__ . '\wp_loaded' );
 function wp_loaded() {
 	register_meta( 'post', SHORTCODE_META, null, '__return_false' ); // do not allow access to the shortcode meta
 																	// use the pre 4.6 format for backward compatibility.
+}
+
+
+/* Categories */
+// This is required to be sure Walker_Category_Checklist class is available
+require_once ABSPATH . 'wp-admin/includes/template.php';
+/**
+ * Custom walker to print category checkboxes for widget forms
+ */
+class Walker_Category_Checklist_RadioButtons extends \Walker_Category_Checklist {
+
+	private $name;
+	private $id;
+
+	function __construct( $name = '', $id = '' ) {
+		$this->name = $name;
+		$this->id = $id;
+	}
+
+	function start_el( &$output, $cat, $depth = 0, $args = array(), $id = 0 ) {
+		extract( $args );
+		if ( empty( $taxonomy ) ) $taxonomy = 'category';
+		$class = in_array( $cat->term_id, $popular_cats ) ? ' class="popular-category"' : '';
+		$id = $this->id . '-' . $cat->term_id;
+		$checked = checked( in_array( $cat->term_id, $selected_cats ), true, false );
+		$output .= "\n<li id='{$taxonomy}-{$cat->term_id}'$class>"
+			. '<label class="selectit"><input value="'
+			. $cat->term_id . '" type="checkbox" name="' . $this->name
+			. '[]" id="in-'. $id . '"' . $checked
+			. disabled( empty( $args['disabled'] ), false, false ) . ' /> '
+			. esc_html( apply_filters( 'the_category', $cat->name ) )
+			. '</label>';
+	}
 }
