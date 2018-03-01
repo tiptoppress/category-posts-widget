@@ -1310,8 +1310,10 @@ class Widget extends \WP_Widget {
 			wp_reset_postdata();
 
 			$use_css_cropping = isset( $this->instance['use_css_cropping'] ) && $this->instance['use_css_cropping'];
+			$empty_dimensions = empty( $this->instance['thumb_w'] ) || empty( $this->instance['thumb_h'] );
+			$thumb = isset( $this->instance['template'] ) && preg_match( '/%thumb%/', $this->instance['template'] );
 
-			if ( $use_css_cropping ) {
+			if ( $use_css_cropping && ! $empty_dimensions && $thumb ) {
 				// enqueue relevant scripts and parameters to perform cropping
 				// once we support only 4.5+ it can be refactored to use wp_add_inline_script.
 				$number = $this->number;
