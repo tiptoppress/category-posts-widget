@@ -441,8 +441,13 @@ class Widget extends \WP_Widget {
 	 * @since 4.1
 	 */
 	public function post_thumbnail_html( $html, $post_id, $post_thumbnail_id, $size, $attr ) {
-		if ( empty( $this->instance['thumb_w'] ) || empty( $this->instance['thumb_h'] ) ) {
-			return $html; // bail out if no full dimensions defined.
+		
+		$use_css_cropping = isset( $this->instance['use_css_cropping'] ) && $this->instance['use_css_cropping'];
+		$empty_dimensions = empty( $this->instance['thumb_w'] ) || empty( $this->instance['thumb_h'] );
+		$thumb = isset( $this->instance['template'] ) && preg_match( '/%thumb%/', $this->instance['template'] );
+		
+		if ( ! $use_css_cropping && $empty_dimensions && ! $thumb ) {
+			return $html; // If no full dimensions defined, just do not cropping for that image
 		}
 		$meta = image_get_intermediate_size( $post_thumbnail_id, $size );
 
