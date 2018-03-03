@@ -12,7 +12,7 @@ Plugin Name: Category Posts Widget
 Plugin URI: https://wordpress.org/plugins/category-posts/
 Description: Adds a widget that shows the most recent posts from a single category.
 Author: TipTopPress
-Version: 4.8.2
+Version: 4.8.3
 Author URI: http://tiptoppress.com
 Text Domain: category-posts
 Domain Path: /languages
@@ -446,7 +446,7 @@ class Widget extends \WP_Widget {
 		$empty_dimensions = empty( $this->instance['thumb_w'] ) || empty( $this->instance['thumb_h'] );
 		$thumb = isset( $this->instance['template'] ) && preg_match( '/%thumb%/', $this->instance['template'] );
 		
-		if ( ! $use_css_cropping && $empty_dimensions && ! $thumb ) {
+		if ( ! ( $use_css_cropping && ! $empty_dimensions && $thumb ) ) {
 			return $html; // If no full dimensions defined, just do not cropping for that image
 		}
 		$meta = image_get_intermediate_size( $post_thumbnail_id, $size );

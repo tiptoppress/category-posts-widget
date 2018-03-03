@@ -154,6 +154,8 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 ## Changelog
 #### [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=github&utm_campaign=changelog_cpw&utm_medium=web)
 #### 4.8 - January 22th 2018
+= 4.8.3 - March 03th 2018 =
+* Fixed Updated widget with zero for the thumb dimensions caused a JavaScript error
 
 = 4.8.2 - January 30th 2018 =
 * Fixed Adding the widget with the customizer only the title is shown
