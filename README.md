@@ -128,8 +128,13 @@ For SVG font-icon HTML we recommend the [WordPress Dashicons](https://developer.
 Please add the widget with shortcode [catposts] inside a editor widget which is placed to a SiteOrigin Page Builder row.
 We also create a YouTube video: [How Category Posts Widget work with SiteOrigin Page Builder](http://tiptoppress.com/how-category-posts-widget-work-with-siteorigin-page-builder/)
 
-= How Category Posts Widget work with SiteOrigin Page Builder =
+= How Category Posts Widget work with Divi Builder =
 You can create a new Divi widget area and put our widgets into a Divi Sidebar Module: [How to put a widget into Divi Module](https://divibooster.com/how-to-put-a-widget-into-divi-module/).
+
+= How our widgets works with other page builder plugins like Elementor, Thrive Architect etc. =
+We recommend for all other page builder plugins like Elementor or Thrive Architect to use the [WP Custom Widget Area](https://wordpress.org/plugins/wp-custom-widget-area/) plugin in additional.
+
+Use the [WP Custom Widget Area](https://wordpress.org/plugins/wp-custom-widget-area/) plugin and create a new custom area with this plugin and place the shortcode (from the new created widget area) to a post or page. Then add our widget to the new created custom widget area  the widgets admin site (Dashboard > Appearance > Widgets > … ).
 
 = The font-size is different from that of other widgets or Theme elements? =
 Please use the option: "Disable widget CSS".
