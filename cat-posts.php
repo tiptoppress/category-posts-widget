@@ -571,70 +571,9 @@ class Widget extends \WP_Widget {
 	 * @since 4.6
 	 */
 	public function apply_the_excerpt( $text ) {
-		$ret = '';
-		if ( isset( $this->instance['hide_social_buttons'] ) && $this->instance['hide_social_buttons'] ) {
-			$ret = $text;
-		} else {
-			$ret = apply_filters( 'the_content', $text );
-		}
+		$ret = apply_filters( 'the_content', $text );
+
 		return $ret;
-	}
-
-	/**
-	 * Excerpt allow HTML
-	 *
-	 * @param string $text The HTML with other applied excerpt filters.
-	 */
-	public function allow_html_excerpt( $text ) {
-		global $post, $wp_filter;
-		$new_excerpt_length = ( isset( $this->instance['excerpt_length'] ) && $this->instance['excerpt_length'] > 0 ) ? $this->instance['excerpt_length'] : 55;
-		if ( '' === $text ) {
-			$text = get_the_content( '' );
-			$text = strip_shortcodes( $text );
-			$text = apply_filters( 'the_content', $text );
-			$text = str_replace( '\]\]\>', ']]&gt;', $text );
-			$text = preg_replace( '@<script[^>]*?>.*?</script>@si', '', $text );
-			$cphtml = array(
-				'&lt;a&gt;',
-				'&lt;br&gt;',
-				'&lt;em&gt;',
-				'&lt;i&gt;',
-				'&lt;ul&gt;',
-				'&lt;ol&gt;',
-				'&lt;li&gt;',
-				'&lt;p&gt;',
-				'&lt;img&gt;',
-				'&lt;script&gt;',
-				'&lt;style&gt;',
-				'&lt;video&gt;',
-				'&lt;audio&gt;',
-			);
-			$allowed_HTML = '';
-			foreach ( $cphtml as $index => $name ) {
-				if ( in_array( (string) ( $index ), $this->instance['excerpt_allowed_elements'], true ) ) {
-					$allowed_HTML .= $cphtml[ $index ];
-				}
-			}
-			$text = strip_tags( $text, htmlspecialchars_decode( $allowed_HTML ) );
-			$excerpt_length = $new_excerpt_length;
-
-			if ( ! empty( $this->instance['excerpt_more_text'] ) ) {
-				$excerpt_more = $this->excerpt_more_filter( $this->instance['excerpt_more_text'] );
-			} elseif ( $filterName = key( $wp_filter['excerpt_more'][10] ) ) {
-				$excerpt_more = $wp_filter['excerpt_more'][10][ $filterName ]['function']( 0 );
-			} else {
-				$excerpt_more = '[...]';
-			}
-
-			$words = explode( ' ', $text, $excerpt_length + 1 );
-			if ( count( $words ) > $excerpt_length ) {
-				array_pop( $words );
-				array_push( $words, $excerpt_more );
-				$text = implode( ' ', $words );
-			}
-		}
-
-		return '<p>' . $text . '</p>';
 	}
 
 	/**
@@ -1226,12 +1165,7 @@ class Widget extends \WP_Widget {
 				add_filter( 'excerpt_more', array( $this, 'excerpt_more_filter' ) );
 			}
 
-			if ( isset( $instance['excerpt_allow_html'] ) ) {
-				remove_filter( 'get_the_excerpt', 'wp_trim_excerpt' );
-				add_filter( 'the_excerpt', array( $this, 'allow_html_excerpt' ) );
-			} else {
-				add_filter( 'the_excerpt', array( $this, 'apply_the_excerpt' ) );
-			}
+			add_filter( 'the_excerpt', array( $this, 'apply_the_excerpt' ) );
 		}
 	}
 
@@ -1247,7 +1181,6 @@ class Widget extends \WP_Widget {
 		remove_filter( 'excerpt_length', array( $this, 'excerpt_length_filter' ) );
 		remove_filter( 'excerpt_more', array( $this, 'excerpt_more_filter' ) );
 		add_filter( 'get_the_excerpt', 'wp_trim_excerpt' );
-		remove_filter( 'the_excerpt', array( $this, 'allow_html_excerpt' ) );
 		remove_filter( 'the_excerpt', array( $this, 'apply_the_excerpt' ) );
 	}
 
@@ -1671,7 +1604,6 @@ class Widget extends \WP_Widget {
 			'disable_css'              => '',
 			'disable_font_styles'      => '',
 			'hide_if_empty'            => '',
-			'hide_social_buttons'      => '',
 			'preset_date_format'       => 'other',
 			'thumb'                    => false,
 			'thumb_w'                  => get_option( 'thumbnail_size_w', 150 ),
@@ -2227,7 +2159,6 @@ function default_settings() {
 		'disable_font_styles'     => false,
 		'hide_if_empty'           => false,
 		'show_post_format'        => 'none',
-		'hide_social_buttons'     => '',
 		'no_cat_childs'           => false,
 		'everything_is_link'      => false,
 		'preset_date_format'      => 'sitedateandtime',
