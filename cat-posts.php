@@ -1747,8 +1747,10 @@ class Widget extends \WP_Widget {
 		?>
 
 		<div class="category-widget-cont">
+			<?php if ( ! class_exists( '\\termcategoryPostsPro\\Widget' ) ) { ?>
 			<p><a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=widget_cpw&utm_campaign=get_pro_cpw&utm_medium=form"><?php esc_html_e( 'Get the Pro version', 'category-posts' ); ?></a></p>
 			<?php
+			}
 			$this->formTitlePanel( $instance );
 			$this->formFilterPanel( $instance );
 			?>
@@ -1958,11 +1960,14 @@ add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), __NAMESPACE__ 
  * @param array $links The current links about to be displayed.
  */
 function add_action_links( $links ) {
-	$pro_link = array(
-		'<a target="_blank" href="' . esc_url( PRO_URL ) . '">' . esc_html__( 'Get the Pro version', 'category-posts' ) . '</a>',
-	);
 
-	$links = array_merge( $pro_link, $links );
+	if ( ! class_exists( '\\termcategoryPostsPro\\Widget' ) ) {
+		$pro_link = array(
+			'<a target="_blank" href="' . esc_url( PRO_URL ) . '">' . esc_html__( 'Get the Pro version', 'category-posts' ) . '</a>',
+		);
+
+		$links = array_merge( $pro_link, $links );
+	}
 
 	return $links;
 }
