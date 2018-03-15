@@ -660,6 +660,7 @@ class Widget extends \WP_Widget {
 			'orderby'             => $sort_by,
 			'order'               => $sort_order,
 			'ignore_sticky_posts' => 1, // Make sure we do not get stickies out of order.
+			'no_found_rows'       => true, // Do not count the total numbers of rows by default.
 		);
 
 		$non_default_valid_status = array(
