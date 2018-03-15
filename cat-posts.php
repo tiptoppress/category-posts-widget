@@ -12,7 +12,7 @@ Plugin Name: Category Posts Widget
 Plugin URI: https://wordpress.org/plugins/category-posts/
 Description: Adds a widget that shows the most recent posts from a single category.
 Author: TipTopPress
-Version: 4.8.3
+Version: 4.9.beta1
 Author URI: http://tiptoppress.com
 Text Domain: category-posts
 Domain Path: /languages
@@ -25,8 +25,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const VERSION        = '4.8.2';
-const DOC_URL        = 'http://tiptoppress.com/category-posts-widget/documentation-4-8?utm_source=widget_cpw&utm_campaign=documentation_4_8_cpw&utm_medium=form';
+const VERSION        = '4.9.beta1';
+const DOC_URL        = 'http://tiptoppress.com/category-posts-widget/documentation-4-9?utm_source=widget_cpw&utm_campaign=documentation_4_8_cpw&utm_medium=form';
 const PRO_URL        = 'http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=widget_cpw&utm_campaign=get_pro_cpw&utm_medium=action_link';
 const SUPPORT_URL    = 'https://wordpress.org/support/plugin/category-posts';
 const SHORTCODE_NAME = 'catposts';
@@ -441,11 +441,11 @@ class Widget extends \WP_Widget {
 	 * @since 4.1
 	 */
 	public function post_thumbnail_html( $html, $post_id, $post_thumbnail_id, $size, $attr ) {
-		
+
 		$use_css_cropping = isset( $this->instance['use_css_cropping'] ) && $this->instance['use_css_cropping'];
 		$empty_dimensions = empty( $this->instance['thumb_w'] ) || empty( $this->instance['thumb_h'] );
 		$thumb = isset( $this->instance['template'] ) && preg_match( '/%thumb%/', $this->instance['template'] );
-		
+
 		if ( ! ( $use_css_cropping && ! $empty_dimensions && $thumb ) ) {
 			return $html; // If no full dimensions defined, just do not cropping for that image
 		}
@@ -1136,7 +1136,7 @@ class Widget extends \WP_Widget {
 				$thumb_flex = explode( '%thumb%', $template );
 				if( count( $thumb_flex ) == 1) {
 					$template = '<div class="cat-post-do-not-wrap-thumbnail">%thumb%<div>' . $thumb_flex[0] . '</div></div>';
-				}					
+				}
 				if( count( $thumb_flex ) == 2) {
 					$template =  $thumb_flex[0] . '<div class="cat-post-do-not-wrap-thumbnail">%thumb%<div>' . $thumb_flex[1] . '</div></div>';
 				}
@@ -1262,10 +1262,10 @@ class Widget extends \WP_Widget {
 	 * @since 4.1
 	 */
 	public function widget( $args, $instance ) {
-		
+
 		if ( 0 === count( $instance ) ) {
 			$instance = default_settings();
-		}		
+		}
 
 		extract( $args );
 		$this->instance = $instance;
@@ -2111,7 +2111,7 @@ function shortcode_settings( $name ) {
 			$instance = $o[ get_the_ID() ][ $name ];
 		}
 	}
-	
+
 	if ( isset( $instance['template'] ) && $instance['template'] ) {
 		;
 	} else {
@@ -2340,13 +2340,13 @@ function customize_register( $wp_customize ) {
 			}
 
 			foreach ( $meta as $k => $m ) {
-			
+
 				if ( isset( $m['template'] ) && $m['template'] ) {
 					;
 				} else {
 					$m['template'] = convert_settings_to_template( $m );
 				}
-			
+
 				$m = wp_parse_args( $m, default_settings() );
 
 				if ( 0 === count( $meta ) ) { // new widget, use defaults.
@@ -2852,7 +2852,7 @@ class virtualWidget {
 					$styles['post_format_icon_status'] = ".cat-post-format-status:before { content: '\\e80a'; }";
 					$styles['post_format_icon_video'] = ".cat-post-format-video:before { content: '\\e801'; }";
 					$styles['post_format_icon_audio'] = ".cat-post-format-audio:before { content: '\\e803'; }";
-					
+
 				}
 			}
 
@@ -2879,7 +2879,7 @@ class virtualWidget {
 			$ret['p_styling'] = '#' . $widget_id . ' p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
 																// bigger (add to the padding) use only top for now.
 			$ret['div_styling'] = '#' . $widget_id . ' li > div {margin:5px 0 0 0; clear:both;}'; // Add margin between the rows.
-			
+
 			// use WP dashicons in the template (e.g. for premade Template 'All and icons')
 			$ret['dashicons'] = '#' . $widget_id . ' .dashicons {vertical-align:middle;}';
 		}
