@@ -93,7 +93,7 @@ function wp_head() {
 
 	if ( ! empty( $styles ) ) {
 	?>
-<style type="text/css">
+<style>
 	<?php
 	foreach ( $styles as $rules ) {
 		foreach ( $rules as $rule ) {
@@ -1699,7 +1699,7 @@ class Widget extends \WP_Widget {
 
 		if ( ! isset( $style_done ) ) { // what an ugly hack, but can't figure out how to do it nicer on 4.3.
 		?>
-		<style type="text/css">
+		<style>
 		.cpwp_ident {
 			color: #6A6A6A;
 			background: #F1F1F1;
@@ -1988,8 +1988,8 @@ add_action( 'widgets_init', __NAMESPACE__ . '\register_widget' );
  *
  * @since 4.7
  */
-function change_cropped_image_dimensions($number,$widgetsettings) {	?>
-	<script type="text/javascript">
+function change_cropped_image_dimensions( $number, $widgetsettings ) {	?>
+	<script>
 
 		if (typeof jQuery !== 'undefined')  {
 
