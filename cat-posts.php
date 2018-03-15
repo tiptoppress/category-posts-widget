@@ -447,7 +447,7 @@ class Widget extends \WP_Widget {
 		$thumb = isset( $this->instance['template'] ) && preg_match( '/%thumb%/', $this->instance['template'] );
 
 		if ( ! ( $use_css_cropping && ! $empty_dimensions && $thumb ) ) {
-			return $html; // If no full dimensions defined, just do not cropping for that image
+			return $html; // If no full dimensions defined, just do not cropping for that image.
 		}
 		$meta = image_get_intermediate_size( $post_thumbnail_id, $size );
 
@@ -1133,13 +1133,13 @@ class Widget extends \WP_Widget {
 
 		// Try to do smart formatting for floating thumb based on its location.
 		if ( $wrap ) {
-			if( preg_match( '#(\%thumb\%)#', $template ) && ! preg_match( '#(\%thumb\%$)#', $template ) ) {
+			if ( preg_match( '#(\%thumb\%)#', $template ) && ! preg_match( '#(\%thumb\%$)#', $template ) ) {
 				$thumb_flex = explode( '%thumb%', $template );
-				if( count( $thumb_flex ) == 1) {
+				if ( 1 === count( $thumb_flex ) ) {
 					$template = '<div class="cat-post-do-not-wrap-thumbnail">%thumb%<div>' . $thumb_flex[0] . '</div></div>';
 				}
-				if( count( $thumb_flex ) == 2) {
-					$template =  $thumb_flex[0] . '<div class="cat-post-do-not-wrap-thumbnail">%thumb%<div>' . $thumb_flex[1] . '</div></div>';
+				if ( 2 === count( $thumb_flex ) ) {
+					$template = $thumb_flex[0] . '<div class="cat-post-do-not-wrap-thumbnail">%thumb%<div>' . $thumb_flex[1] . '</div></div>';
 				}
 			}
 		}
@@ -1171,8 +1171,8 @@ class Widget extends \WP_Widget {
 
 		// Replace empty line with closing and opening DIV.
 		$template_res = trim( $template_res );
-		$template_res = str_replace( "\n\r", '</div><div>', $template_res ); // in widget areas
-		$template_res = str_replace( "\n\n", '</div><div>', $template_res ); // as shortcode
+		$template_res = str_replace( "\n\r", '</div><div>', $template_res ); // in widget areas.
+		$template_res = str_replace( "\n\n", '</div><div>', $template_res ); // as shortcode.
 		$template_res = '<div>' . $template_res . '</div>';
 
 		// replace new lines with spaces.
@@ -1334,7 +1334,9 @@ class Widget extends \WP_Widget {
 					}
 				);
 				wp_enqueue_script( 'jquery' ); // just in case the theme or other plugins didn't enqueue it.
-				add_action('wp_footer',function () use ($number,$instance) { __NAMESPACE__ . '\\' . change_cropped_image_dimensions($number,$instance);},100);
+				add_action( 'wp_footer', function () use ( $number, $instance ) {
+					__NAMESPACE__ . '\\' . change_cropped_image_dimensions( $number, $instance );
+				}, 100 );
 			}
 		}
 	}
@@ -1383,7 +1385,7 @@ class Widget extends \WP_Widget {
 	<h4 data-panel="title"><?php esc_html_e( 'Title', 'category-posts' ); ?></h4>
 	<div>
 		<?php echo $this->get_checkbox_block_html( $instance, 'hide_title', esc_html__( 'Hide title', 'category-posts' ), false, true ); ?>
-		<div class="cpwp_ident categoryposts-data-panel-title-settings" <?php if ( $hide_title ) { echo 'style="display:none"'; } ?>>
+		<div class="cpwp_ident categoryposts-data-panel-title-settings" <?php echo ( $hide_title ) ? 'style="display:none"' : ''; ?>>
 			<?php echo $this->get_text_input_block_html( $instance, 'title', esc_html__( 'Title', 'category-posts' ), '', __( 'Recent Posts', 'category-posts' ), true ); ?>
 			<?php echo $this->get_checkbox_block_html( $instance, 'title_link', esc_html__( 'Make widget title link', 'category-posts' ), false, 0 !== $cat ); ?>
 				<?php echo $this->get_text_input_block_html( $instance, 'title_link_url', esc_html__( 'Title link URL', 'category-posts' ), '', '', 0 === $cat ); ?>
@@ -1909,7 +1911,7 @@ class Widget extends \WP_Widget {
 							<button type="button" class="cwp_default_thumb_select button upload-button">
 								<?php esc_html_e( 'Select image', 'category-posts' ); ?>
 							</button>
-							<button type="button" class="cwp_default_thumb_remove button upload-button" <?php if ( ! $default_thunmbnail ) { echo 'style="display:none"'; } ?> >
+							<button type="button" class="cwp_default_thumb_remove button upload-button" <?php echo ( ! $default_thunmbnail ) ? 'style="display:none"' : ''; ?> >
 								<?php esc_html_e( 'No default', 'category-posts' ); ?>
 							</button>
 						</p>
@@ -1985,11 +1987,12 @@ add_action( 'widgets_init', __NAMESPACE__ . '\register_widget' );
 /**
  * Output js code to handle responsive thumbnails
  *
- * @return void
- *
+ * @param string $number         The unique id of the widget to be used to indicate
+ *                               the relevant widget to apply to.
+ * @param array  $widgetsettings The widget settings.
  * @since 4.7
  */
-function change_cropped_image_dimensions( $number, $widgetsettings ) {	?>
+function change_cropped_image_dimensions( $number, $widgetsettings ) {?>
 	<script>
 
 		if (typeof jQuery !== 'undefined')  {
