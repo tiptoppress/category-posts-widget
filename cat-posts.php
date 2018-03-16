@@ -79,7 +79,7 @@ add_action( 'admin_bar_menu', __NAMESPACE__ . '\wp_admin_bar_customize_menu', 35
  */
 function wp_head() {
 
-	$widget_repository = new virtualWidgetsRepository();
+	$widget_repository = new Virtual_Widgets_Repository();
 
 	$styles = array();
 
@@ -119,7 +119,7 @@ function register_virtual_widgets() {
 	global $post;
 	global $wp_registered_widgets;
 
-	$repository = new virtualWidgetsRepository();
+	$repository = new Virtual_Widgets_Repository();
 
 	// check first for shortcode settings.
 	if ( is_singular() ) {
@@ -132,7 +132,7 @@ function register_virtual_widgets() {
 				if ( '' !== $name ) { // if not default name append to the id.
 					$id .= '-' . sanitize_title( $name ); // sanitize to be on the safe side, not sure where when and how this will be used.
 				}
-				$repository->addShortcode( $name, new virtualWidget( $id, WIDGET_BASE_ID . '-shortcode', $meta ) );
+				$repository->addShortcode( $name, new Virtual_Widget( $id, WIDGET_BASE_ID . '-shortcode', $meta ) );
 			}
 		}
 	}
@@ -153,7 +153,7 @@ function register_virtual_widgets() {
 						$widgetclass = new $class();
 						$allsettings = $widgetclass->get_settings();
 						$settings = isset( $allsettings[ str_replace( $widget_base . '-', '', $widget ) ] ) ? $allsettings[ str_replace( $widget_base . '-', '', $widget ) ] : false;
-						$repository->addWidget( $widget, new virtualWidget( $widget, $widget, $settings ) );
+						$repository->addWidget( $widget, new Virtual_Widget( $widget, $widget, $settings ) );
 					}
 				}
 			}
@@ -483,7 +483,7 @@ class Widget extends \WP_Widget {
 					. 'px;clip:rect(auto,' . ( $this->instance['thumb_w'] + $image['marginVal'] ) . 'px,auto,' . $image['marginVal']
 				. 'px);width:auto;max-width:initial;" ', $html );
 				// wrap span with post format.
-				$show_post_format   = isset( $this->instance['show_post_format'] ) && ( 'none' !== $this->instance['show_post_format'] );
+				$show_post_format = isset( $this->instance['show_post_format'] ) && ( 'none' !== $this->instance['show_post_format'] );
 				if ( $show_post_format || $this->instance['thumb_hover'] ) {
 					$format = get_post_format() ? : 'standard';
 					$post_format_class = 'cat-post-format cat-post-format-' . $format;
@@ -1115,8 +1115,8 @@ class Widget extends \WP_Widget {
 		$template_res = '<div>' . $template_res . '</div>';
 
 		// replace new lines with spaces.
-		$template_res = str_replace( "\n\r", ' ', $template_res ); // in widget areas
-		$template_res = str_replace( "\n\n", ' ', $template_res ); // as shortcode
+		$template_res = str_replace( "\n\r", ' ', $template_res ); // in widget areas.
+		$template_res = str_replace( "\n\n", ' ', $template_res ); // as shortcode.
 
 		$ret .= $template_res;
 
@@ -1319,7 +1319,7 @@ class Widget extends \WP_Widget {
 	<div>
 		<?php echo $this->get_checkbox_block_html( $instance, 'hide_title', esc_html__( 'Hide title', 'category-posts' ), false, true ); ?>
 		<div class="cpwp_ident categoryposts-data-panel-title-settings" <?php echo ( $hide_title ) ? 'style="display:none"' : ''; ?>>
-			<?php echo $this->get_text_input_block_html( $instance, 'title', esc_html__( 'Title', 'category-posts' ), '', __( 'Recent Posts', 'category-posts' ), true ); ?>
+			<?php echo $this->get_text_input_block_html( $instance, 'title', esc_html__( 'Title', 'category-posts' ), '', esc_attr__( 'Recent Posts', 'category-posts' ), true ); ?>
 			<?php echo $this->get_checkbox_block_html( $instance, 'title_link', esc_html__( 'Make widget title link', 'category-posts' ), false, 0 !== $cat ); ?>
 				<?php echo $this->get_text_input_block_html( $instance, 'title_link_url', esc_html__( 'Title link URL', 'category-posts' ), '', '', 0 === $cat ); ?>
 			</div>
@@ -1367,7 +1367,7 @@ class Widget extends \WP_Widget {
 				'private,future'         => esc_html__( 'Private or Scheduled', 'category-posts' ),
 				'private,publish,future' => esc_html__( 'Published, Private or Scheduled', 'category-posts' ),
 			), 'default', true );
-			echo $this->get_number_input_block_html( $instance, 'num', esc_html__( 'Number of posts to show', 'category-posts' ), get_option( 'posts_per_page' ), 1, '', '', true );
+			echo $this->get_number_input_block_html( $instance, 'num', esc_html__( 'Number of posts to show', 'category-posts' ), esc_attr( get_option( 'posts_per_page' ) ), 1, '', '', true );
 			echo $this->get_number_input_block_html( $instance, 'offset', esc_html__( 'Start with post', 'category-posts' ), 1, 1, '', '', true );
 			echo $this->get_select_block_html( $instance, 'sort_by', esc_html__( 'Sort by', 'category-posts' ), array(
 				'date'          => esc_html__( 'Date', 'category-posts' ),
@@ -1595,22 +1595,22 @@ class Widget extends \WP_Widget {
 		}
 
 		$instance = wp_parse_args( (array) $instance, array(
-			'hide_post_titles'         => '',
-			'excerpt'                  => '',
-			'excerpt_more_text'        => '',
-			'excerpt_filters'          => '',
-			'date'                     => '',
-			'date_format'              => '',
-			'disable_css'              => '',
-			'disable_font_styles'      => '',
-			'hide_if_empty'            => '',
-			'preset_date_format'       => 'other',
-			'thumb'                    => false,
-			'thumb_w'                  => get_option( 'thumbnail_size_w', 150 ),
-			'thumb_h'                  => get_option( 'thumbnail_size_h', 150 ),
-			'default_thunmbnail'       => 0,
-			'use_css_cropping'         => true,
-			'text_do_not_wrap_thumb'   => false,
+			'hide_post_titles'       => '',
+			'excerpt'                => '',
+			'excerpt_more_text'      => '',
+			'excerpt_filters'        => '',
+			'date'                   => '',
+			'date_format'            => '',
+			'disable_css'            => '',
+			'disable_font_styles'    => '',
+			'hide_if_empty'          => '',
+			'preset_date_format'     => 'other',
+			'thumb'                  => false,
+			'thumb_w'                => get_option( 'thumbnail_size_w', 150 ),
+			'thumb_h'                => get_option( 'thumbnail_size_h', 150 ),
+			'default_thunmbnail'     => 0,
+			'use_css_cropping'       => true,
+			'text_do_not_wrap_thumb' => false,
 		) );
 
 		$hide_post_titles                = $instance['hide_post_titles'];
@@ -1800,8 +1800,8 @@ class Widget extends \WP_Widget {
 					<div class="cpwp_ident">
 						<p><?php esc_html_e( 'Thumbnail dimensions (pixel)', 'category-posts' ); ?></p>
 						<?php
-						echo $this->get_number_input_block_html( $instance, 'thumb_w', esc_html__( 'Width:', 'category-posts' ), get_option( 'thumbnail_size_w', 150 ), 1, '', '', true );
-						echo $this->get_number_input_block_html( $instance, 'thumb_h', esc_html__( 'Height:', 'category-posts' ), get_option( 'thumbnail_size_h', 150 ), 1, '', '', true );
+						echo $this->get_number_input_block_html( $instance, 'thumb_w', esc_html__( 'Width:', 'category-posts' ), esc_attr( get_option( 'thumbnail_size_w', 150 ) ), 1, '', '', true );
+						echo $this->get_number_input_block_html( $instance, 'thumb_h', esc_html__( 'Height:', 'category-posts' ), esc_attr( get_option( 'thumbnail_size_h', 150 ) ), 1, '', '', true );
 
 						echo $this->get_checkbox_block_html( $instance, 'text_do_not_wrap_thumb', esc_html__( 'Do not wrap thumbnail with overflowing text', 'category-posts' ), false, true );
 						echo $this->get_checkbox_block_html( $instance, 'use_css_cropping', esc_html__( 'CSS crop to requested size', 'category-posts' ), false, false );
@@ -1924,7 +1924,8 @@ add_action( 'widgets_init', __NAMESPACE__ . '\register_widget' );
  * @param array  $widgetsettings The widget settings.
  * @since 4.7
  */
-function change_cropped_image_dimensions( $number, $widgetsettings ) {?>
+function change_cropped_image_dimensions( $number, $widgetsettings ) {
+	?>
 	<script>
 
 		if (typeof jQuery !== 'undefined')  {
@@ -1989,7 +1990,7 @@ function change_cropped_image_dimensions( $number, $widgetsettings ) {?>
 					},
 				}
 
-<?php
+				<?php
 				/**
 				 *  The cpw_crop_widgets is an internal filter that is used
 				 *  to gather the ids of the widgets to which apply cropping
@@ -1999,14 +2000,15 @@ function change_cropped_image_dimensions( $number, $widgetsettings ) {?>
 				 */
 				$widgets_ids = apply_filters( 'cpw_crop_widgets', array() );
 				foreach ( $widgets_ids as $num => $ratio ) {
-					if($num != $number) {
+					if ( $num !== $number ) {
 						continue;
-					} ?>
+					}
+				?>
 					cwp_namespace.fluid_images.widget = jQuery('#<?php echo esc_attr( $num ); ?>');
 					cwp_namespace.fluid_images.Widgets['<?php echo esc_attr( $num ); ?>'] = new cwp_namespace.fluid_images.WidgetPosts(cwp_namespace.fluid_images.widget,<?php echo esc_attr( $ratio ); ?>);
-<?php			} ?>
+<?php } ?>
 
-<?php			/* do on page load or on resize the browser window */ echo "\r\n"; ?>
+<?php /* do on page load or on resize the browser window */ echo "\r\n"; ?>
 				jQuery(window).on('load resize', function() {
 					for (var widget in cwp_namespace.fluid_images.Widgets) {
 						cwp_namespace.fluid_images.Widgets[widget].changeImageSize();
@@ -2071,7 +2073,7 @@ function shortcode_settings( $name ) {
  *  @return string An HTML of the "widget" based on its settings, actual or customized
  */
 function shortcode( $attr, $content = null ) {
-	$repository = new virtualWidgetsRepository();
+	$repository = new Virtual_Widgets_Repository();
 
 	$shortcodes = $repository->getShortcodes();
 
@@ -2130,40 +2132,40 @@ function shortcode_names( $shortcode_name, $content ) {
  */
 function default_settings() {
 	return array(
-		'title'                   => __( 'Recent Posts', 'category-posts' ),
-		'title_link'              => false,
-		'title_link_url'          => '',
-		'hide_title'              => false,
-		'cat'                     => 0,
-		'num'                     => get_option( 'posts_per_page' ),
-		'offset'                  => 1,
-		'sort_by'                 => 'date',
-		'status'                  => 'publish',
-		'asc_sort_order'          => false,
-		'exclude_current_post'    => false,
-		'hideNoThumb'             => false,
-		'footer_link_text'        => '',
-		'footer_link'             => '',
-		'thumb_w'                 => get_option( 'thumbnail_size_w', 150 ),
-		'thumb_h'                 => get_option( 'thumbnail_size_h', 150 ),
-		'use_css_cropping'        => true,
-		'thumb_hover'             => 'none',
-		'hide_post_titles'        => false,
-		'excerpt_length'          => 55,
-		'excerpt_more_text'       => __( '...', 'category-posts' ),
-		'excerpt_filters'         => false,
-		'comment_num'             => false,
-		'date_link'               => false,
-		'date_format'             => '',
-		'disable_css'             => false,
-		'disable_font_styles'     => false,
-		'hide_if_empty'           => false,
-		'show_post_format'        => 'none',
-		'no_cat_childs'           => false,
-		'everything_is_link'      => false,
-		'preset_date_format'      => 'sitedateandtime',
-		'template'                => "%title%\n\n%thumb%",
-		'text_do_not_wrap_thumb'  => false,
+		'title'                  => __( 'Recent Posts', 'category-posts' ),
+		'title_link'             => false,
+		'title_link_url'         => '',
+		'hide_title'             => false,
+		'cat'                    => 0,
+		'num'                    => get_option( 'posts_per_page' ),
+		'offset'                 => 1,
+		'sort_by'                => 'date',
+		'status'                 => 'publish',
+		'asc_sort_order'         => false,
+		'exclude_current_post'   => false,
+		'hideNoThumb'            => false,
+		'footer_link_text'       => '',
+		'footer_link'            => '',
+		'thumb_w'                => get_option( 'thumbnail_size_w', 150 ),
+		'thumb_h'                => get_option( 'thumbnail_size_h', 150 ),
+		'use_css_cropping'       => true,
+		'thumb_hover'            => 'none',
+		'hide_post_titles'       => false,
+		'excerpt_length'         => 55,
+		'excerpt_more_text'      => __( '...', 'category-posts' ),
+		'excerpt_filters'        => false,
+		'comment_num'            => false,
+		'date_link'              => false,
+		'date_format'            => '',
+		'disable_css'            => false,
+		'disable_font_styles'    => false,
+		'hide_if_empty'          => false,
+		'show_post_format'       => 'none',
+		'no_cat_childs'          => false,
+		'everything_is_link'     => false,
+		'preset_date_format'     => 'sitedateandtime',
+		'template'               => "%title%\n\n%thumb%",
+		'text_do_not_wrap_thumb' => false,
 	);
 }
 
@@ -2225,10 +2227,15 @@ add_action( 'save_post', __NAMESPACE__ . '\save_post', 10, 2 );
  */
 function customize_register( $wp_customize ) {
 
-	class shortCodeControl extends \WP_Customize_Control {
+	class ShortCode_Control extends \WP_Customize_Control {
 		public $form;
 		public $title_postfix;
 
+		/**
+		 * Render the control.
+		 *
+		 * @since 4.6
+		 */
 		public function render_content() {
 			$widget_title = 'Category Posts Shortcode' . $this->title_postfix;
 			?>
@@ -2352,7 +2359,7 @@ function customize_register( $wp_customize ) {
 					};
 				}
 
-				$sc = new shortCodeControl(
+				$sc = new ShortCode_Control(
 					$wp_customize,
 					'_virtual-' . WIDGET_BASE_ID . '[' . $p->ID . '][' . $k . '][title]',
 					$args
@@ -2595,7 +2602,7 @@ function personal_options_update( $user_id ) {
  *
  *  @since 4.7
  */
-class virtualWidget {
+class Virtual_Widget {
 
 	/**
 	 * A container for all the "active" objects
@@ -2694,7 +2701,7 @@ class virtualWidget {
 	 *  Calculate the CSS rules required for the widget as is generated based on the settings passed at construction time
 	 *
 	 *  @param bool  $is_shortcode Indicated if rules are generated for a shortcode.
-	 *  @param array $ret "returned" Collection of CSS rules.
+	 *  @param array $rules "returned" Collection of CSS rules.
 	 *
 	 *  @since 4.7
 	 */
@@ -2820,7 +2827,7 @@ class virtualWidget {
 																// bigger (add to the padding) use only top for now.
 			$ret['div_styling'] = '#' . $widget_id . ' li > div {margin:5px 0 0 0; clear:both;}'; // Add margin between the rows.
 
-			// use WP dashicons in the template (e.g. for premade Template 'All and icons')
+			// use WP dashicons in the template (e.g. for premade Template 'All and icons').
 			$ret['dashicons'] = '#' . $widget_id . ' .dashicons {vertical-align:middle;}';
 		}
 
@@ -2936,7 +2943,7 @@ class virtualWidget {
  *
  *  @since 4.7
  */
-class virtualWidgetsRepository {
+class Virtual_Widgets_Repository {
 
 	/**
 	 * Collection of objects representing shortcodes.
@@ -2959,8 +2966,8 @@ class virtualWidgetsRepository {
 	/**
 	 *  Add a virtual widget representing a shortcode to the repository
 	 *
-	 *  @param string        $index  A name to identify the specific shortcode.
-	 *  @param virtualWidget $widget The virtual widget for it.
+	 *  @param string         $index  A name to identify the specific shortcode.
+	 *  @param Virtual_Widget $widget The virtual widget for it.
 	 *
 	 *  @since 4.7
 	 */
@@ -2982,8 +2989,8 @@ class virtualWidgetsRepository {
 	/**
 	 *  Add a virtual widget representing awidget to the repository
 	 *
-	 *  @param string        $index A name to identify the specific widget.
-	 *  @param virtualWidget $widget The virstual widget for it.
+	 *  @param string         $index A name to identify the specific widget.
+	 *  @param Virtual_Widget $widget The virstual widget for it.
 	 *
 	 *  @since 4.7
 	 */
