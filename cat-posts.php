@@ -174,7 +174,7 @@ add_action( 'wp_head', __NAMESPACE__ . '\wp_head' );
  */
 function admin_scripts( $hook ) {
 
-	if ( 'widgets.php' === $hook || $hook == 'post.php' ) { // enqueue only for widget admin and customizer. (add if post.php: fix make widget SiteOrigin Page Builder plugin, GH issue #181)
+	if ( 'widgets.php' === $hook || 'post.php' === $hook  ) { // enqueue only for widget admin and customizer. (add if post.php: fix make widget SiteOrigin Page Builder plugin, GH issue #181)
 
 		// control open and close the widget section.
 		wp_register_script( 'category-posts-widget-admin-js', plugins_url( 'js/admin/category-posts-widget.js', __FILE__ ), array( 'jquery' ), VERSION, true );
