@@ -4,7 +4,7 @@ Donate link: http://mkrdip.me/donate
 Tags: category, categories, posts, widget, posts widget, recent posts, category recent posts, shortcode, sidebar, excerpt, multiple widgets
 Requires at least: 2.8
 Tested up to: 4.9
-Stable tag: 4.8.3
+Stable tag: 4.8.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -209,6 +209,9 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 * Simple API for external use
 * Support localization with translate.wordpress.org: Portuguese (Brazil) thank you [Henrique Vianna](https://profiles.wordpress.org/hvianna/) and German by [Daniel Floeter](https://profiles.wordpress.org/kometschuh/)
 * Remove allow_html option (Instead we recommend to use the [manual excerpt](https://codex.wordpress.org/Excerpt#How_to_add_excerpts_to_posts) or we support this option furthermore in the [Term Posts Excerpt Extension](https://github.com/tiptoppress/term-posts-excerpt-extension) for the premium version)
+
+= 4.8.4 - April 02nd 2018 =
+* Fixed Make widget SiteOrigin Page Builder Compatible
 
 = 4.6.2 - August 28th 2016 =
 * Fixed only five widget instances can be costumized with shortcodes.
