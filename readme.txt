@@ -159,6 +159,9 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=wordpress_org&utm_campaign=changelog_cpw&utm_medium=web)
 
+= 4.8.4 - April 02nd 2018 =
+* Fixed Make widget SiteOrigin Page Builder Compatible
+
 = 4.8.3 - March 03th 2018 =
 * Fixed Updated widget with zero for the thumb dimensions caused a JavaScript error
 
@@ -209,9 +212,6 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 * Simple API for external use
 * Support localization with translate.wordpress.org: Portuguese (Brazil) thank you [Henrique Vianna](https://profiles.wordpress.org/hvianna/) and German by [Daniel Floeter](https://profiles.wordpress.org/kometschuh/)
 * Remove allow_html option (Instead we recommend to use the [manual excerpt](https://codex.wordpress.org/Excerpt#How_to_add_excerpts_to_posts) or we support this option furthermore in the [Term Posts Excerpt Extension](https://github.com/tiptoppress/term-posts-excerpt-extension) for the premium version)
-
-= 4.8.4 - April 02nd 2018 =
-* Fixed Make widget SiteOrigin Page Builder Compatible
 
 = 4.6.2 - August 28th 2016 =
 * Fixed only five widget instances can be costumized with shortcodes.
