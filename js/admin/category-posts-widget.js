@@ -218,7 +218,7 @@ jQuery(document).ready( function () {
 	});
 
 	// needed to reassign click handlers after widget refresh
-	jQuery(document).on('widget-added widget-updated', function(root,element){ // for customize and after save on widgets page
+	jQuery(document).on('widget-added widget-updated panelsopen', function(root,element){ // for customize and after save on widgets page (add panelsopen: fix make widget SiteOrigin Page Builder plugin, GH issue #181)
 
 		jQuery('.category-widget-cont h4').off('click').on('click', function () {
 			cwp_namespace.autoCloseOpenPanels(this);

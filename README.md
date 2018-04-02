@@ -161,18 +161,20 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 
 ## Changelog
 #### [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=github&utm_campaign=changelog_cpw&utm_medium=web)
-#### 4.8 - January 22th 2018
-= 4.8.3 - March 03th 2018 =
+#### 4.8.4 - April 02nd 2018
+* Fixed Make widget SiteOrigin Page Builder Compatible
+
+#### 4.8.3 - March 03th 2018
 * Fixed Updated widget with zero for the thumb dimensions caused a JavaScript error
 
-= 4.8.2 - January 30th 2018 =
+#### 4.8.2 - January 30th 2018
 * Fixed Adding the widget with the customizer only the title is shown
 * Fixed Recognize "Empty lines" > Next line is a paragraph in the Template in widget areas
 
-= 4.8.1 - January 25th 2018 =
+#### 4.8.1 - January 25th 2018
 * Fixed Recognize "Empty lines" > Next line is a paragraph in the Template
 
-= 4.8 - January 22th 2018 =
+#### 4.8 - January 22th 2018
 * SVG font-icon support for post formats
 * Template to arrange the post details
 * Premade Templates
