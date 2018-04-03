@@ -4,7 +4,7 @@ Donate link: http://mkrdip.me/donate
 Tags: category, categories, posts, widget, posts widget, recent posts, category recent posts, shortcode, sidebar, excerpt, multiple widgets
 Requires at least: 2.8
 Tested up to: 4.9
-Stable tag: 4.8.4
+Stable tag: 4.8.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -158,6 +158,9 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=wordpress_org&utm_campaign=changelog_cpw&utm_medium=web)
+
+= 4.8.5 - April 02nd 2018 =
+* Fixed Tabs not working
 
 = 4.8.4 - April 02nd 2018 =
 * Fixed Make widget SiteOrigin Page Builder Compatible

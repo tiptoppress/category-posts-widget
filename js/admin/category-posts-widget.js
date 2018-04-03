@@ -271,7 +271,7 @@ jQuery(document).ready( function () {
 			cwp_namespace.toggleDateFormat(this);
 		});
 
-		jQuery(document).off('click').on('click', class_namespace+' a.toggle-template-help', function (event) { // show template help
+		jQuery(document).off('click', class_namespace+' a.toggle-template-help').on('click', class_namespace+' a.toggle-template-help', function (event) { // show template help
 			cwp_namespace.toggleTemplateHelp(this, event);
 		});
 

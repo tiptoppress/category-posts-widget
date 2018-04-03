@@ -161,6 +161,9 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 
 ## Changelog
 #### [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=github&utm_campaign=changelog_cpw&utm_medium=web)
+#### 4.8.5 - April 02nd 2018
+* Fixed Tabs not working
+
 #### 4.8.4 - April 02nd 2018
 * Fixed Make widget SiteOrigin Page Builder Compatible
 
