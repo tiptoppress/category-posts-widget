@@ -172,7 +172,7 @@ add_action( 'wp_head', __NAMESPACE__ . '\wp_head' );
  *
  */
 function frontend_script() {
-	wp_enqueue_script( 'front-end-widget-js', plugins_url( 'js/frontend/widget.js', __FILE__ ), array( 'jquery' ), VERSION, true );
+	wp_enqueue_script( 'cat-posts-frontend-js', plugins_url( 'js/frontend/widget.js', __FILE__ ), array( 'jquery' ), VERSION, true );
 }
 
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\frontend_script' );
@@ -229,67 +229,7 @@ function load_textdomain() {
  * @since 4.1
  **/
 function admin_styles() {
-?>
-<style>
-.category-widget-cont h4 {
-	padding: 12px 15px;
-	cursor: pointer;
-	margin: 5px 0;
-	border: 1px solid #E5E5E5;
-}
-.category-widget-cont h4:first-child {
-	margin-top: 10px;
-}
-.category-widget-cont h4:last-of-type {
-	margin-bottom: 10px;
-}
-.category-widget-cont h4:after {
-	float:right;
-	font-family: "dashicons";
-	content: '\f140';
-	-ms-transform: translate(-1px,1px);
-	-webkit-transform: translate(-1px,1px);
-	-moz-transform: translate(-1px,1px);
-	transform: translate(-1px,1px);
-	-ms-transition: all 600ms;
-	-webkit-transition: all 600ms;
-	-moz-transition: all 600ms;
-	transition: all 600ms;
-}
-.category-widget-cont h4.open:after {
-	-ms-transition: all 600ms;
-	-webkit-transition: all 600ms;
-	-moz-transition: all 600ms;
-	transition: all 600ms;
-	-ms-transform: rotate(180deg);
-	-webkit-transform: rotate(180deg);
-	-moz-transform: rotate(180deg);
-	transform: rotate(180deg);
-}
-.category-widget-cont > div {
-	display:none;
-}
-.category-widget-cont > div.open {
-	display:block;
-}
-.category-widget-cont th,
-.category-widget-cont tr {
-	vertical-align: baseline;
-	text-align:start;
-}
-
-.cat-post-template-help {display:none;}
-
-.categoryPosts-template textarea {width:100%}
-
-.category-widget-cont .open-template-help {
-	border:0;
-	padding:0;
-	cursor: pointer;
-}
-
-</style>
-<?php
+	wp_enqueue_style( 'cat-posts-admin-styles', plugins_url( 'styles/admin/cat-posts.css', __FILE__ ), array(), VERSION, false );
 }
 
 add_action( 'admin_print_styles-widgets.php', __NAMESPACE__ . '\admin_styles' );

@@ -1238,54 +1238,6 @@ class Widget extends \WP_Widget {
 		$text_do_not_wrap_thumb          = $instance['text_do_not_wrap_thumb'];
 
 		$cat = $instance['cat'];
-
-		if ( ! isset( $style_done ) ) { // what an ugly hack, but can't figure out how to do it nicer on 4.3.
-		?>
-		<style>
-		.cpwp_ident {
-			color: #6A6A6A;
-			background: #F1F1F1;
-			padding: 5px;
-		}
-		.cpwp_ident > .cpwp_ident {
-			border-left:5px solid #B3B3B3;
-			padding: 0 10px;
-		}
-		.cpwp_ident > p {
-			margin: 5px 0;
-		}
-		.cpwp_ident > label {
-			line-height: 2.75;
-			display: inline-block;
-		}
-		.cpwp_ident_top {
-			margin-top:-1em;
-			padding-top:1em;
-		}
-
-		.category-widget-cont input[type="number"] {
-			width:5em;
-			text-align:center;
-		}
-
-		.categoryposts-template-help th {
-			text-align:start;
-			font-weight:bold;
-		}
-
-		.categoryposts-template-help td {
-			padding:2px;
-		}
-
-		.categoryPosts-template textarea {
-			font-size:16px;
-			line-height:20px;
-		}
-		</style>
-
-		<?php
-			$style_done = true;
-		}
 		?>
 
 		<div class="category-widget-cont">
