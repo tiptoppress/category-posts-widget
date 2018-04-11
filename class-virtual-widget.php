@@ -136,6 +136,7 @@ class Virtual_Widget {
 		if ( ! $disable_css ) { // checks if css disable is not set.
 
 			$styles = array( // styles that should be applied to all widgets.
+				'normalize'     => 'ul {padding: 0;}',
 				'thumb_clenup'  => '.cat-post-item img {max-width: initial; max-height: initial; margin: initial;}',
 				'author_clenup' => '.cat-post-author {margin-bottom: 0;}',
 				'thumb'         => '.cat-post-thumbnail {margin: 5px 10px 5px 0;}',
