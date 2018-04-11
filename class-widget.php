@@ -876,7 +876,7 @@ class Widget extends \WP_Widget {
 				wp_enqueue_script( 'jquery' ); // just in case the theme or other plugins didn't enqueue it.
 				add_action( 'wp_footer', function () use ( $number, $instance ) {
 					__NAMESPACE__ . '\\' . change_cropped_image_dimensions( $number, $instance );
-				}, 100 );
+				}, 10 );
 			}
 		}
 	}
