@@ -1,9 +1,16 @@
-
+/**
+ * Category Posts Widget
+ * https://github.com/tiptoppress/category-posts-widget
+ *
+ * Adds a widget that shows the most recent posts from a single category.
+ *
+ * Released under the GPLv2 license or later -  http://www.gnu.org/licenses/gpl-2.0.html
+ */
+ 
 if (typeof jQuery !== 'undefined')  {
 
 	var cwp_namespace = window.cwp_namespace || {};
-	cwp_namespace.fluid_images = window.cwp_namespace.fluid_images || {};
-	cwp_namespace.fluid_images.crop = {
+	cwp_namespace.fluid_images = {
 
 		Widgets : {},
 		widget : null,
@@ -25,7 +32,7 @@ if (typeof jQuery !== 'undefined')  {
 
 			for( var i = 0; i < this.allSpans.length; i++ ){
 				var imageRatio = this.firstSpan.width() / jQuery(this.allSpans[i]).find( 'img' ).height();
-				this.Spans[i] = new cwp_namespace.fluid_images.crop.Span( jQuery(this.allSpans[i]), imageRatio );
+				this.Spans[i] = new cwp_namespace.fluid_images.Span( jQuery(this.allSpans[i]), imageRatio );
 			}
 
 			this.changeImageSize = function changeImageSize() {
@@ -51,17 +58,19 @@ if (typeof jQuery !== 'undefined')  {
 		},
 	}
 	
-	jQuery.each(cwp_namespace.fluid_images.ratios, function(num, ratio) {		
-		cwp_namespace.fluid_images.crop.widget = jQuery('#' + num);
-		cwp_namespace.fluid_images.crop.Widgets[num] = new cwp_namespace.fluid_images.crop.WidgetPosts(cwp_namespace.fluid_images.crop.widget, ratio);
-	});
-		
-	jQuery( document ).ready(function () {
+	jQuery( document ).ready(function () {	
+		// get all widgets as object
+		jQuery.each( jQuery('[data-image-ratio]'), function( indes ) {
+			var num = jQuery(this).attr('id'),
+				ratio = jQuery(this).data("image-ratio");
+			cwp_namespace.fluid_images.widget = jQuery('#' + num);
+			cwp_namespace.fluid_images.Widgets[num] = new cwp_namespace.fluid_images.WidgetPosts(cwp_namespace.fluid_images.widget, ratio);
+		});
 
-		//do on page load or on resize the browser window
+		// crop on page load or on resize the browser window
 		jQuery(window).on('load resize', function() {
-			for (var widget in cwp_namespace.fluid_images.crop.Widgets) {
-				cwp_namespace.fluid_images.crop.Widgets[widget].changeImageSize();
+			for (var widget in cwp_namespace.fluid_images.Widgets) {
+				cwp_namespace.fluid_images.Widgets[widget].changeImageSize();
 			}
 		});
 	});

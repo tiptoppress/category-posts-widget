@@ -818,13 +818,18 @@ class Widget extends \WP_Widget {
 			echo $before_widget; // Xss ok. This is how widget actually expected to behave.
 			echo $this->titleHTML( $before_title, $after_title, $instance );
 
-			$current_post_id = null;
-			if ( is_singular() ) {
-				$current_post_id = get_the_ID();
+			// image crop ratio
+			$ratio = "";			
+			$use_css_cropping = isset( $this->instance['use_css_cropping'] ) && $this->instance['use_css_cropping'];
+			$empty_dimensions = empty( $this->instance['thumb_w'] ) || empty( $this->instance['thumb_h'] );
+			$thumb = isset( $this->instance['template'] ) && preg_match( '/%thumb%/', $this->instance['template'] );
+
+			if ( $use_css_cropping && ! $empty_dimensions && $thumb ) {
+				$ratio = "data-image-ratio='" . ($this->instance['thumb_w'] / $this->instance['thumb_h']) . "'";
 			}
 
 			if ( ! ( isset( $instance['is_shortcode'] ) && $instance['is_shortcode'] ) ) { // the internal id is needed only for widgets.
-				echo '<ul id="' . esc_attr( WIDGET_BASE_ID ) . '-' . esc_attr( $this->number ) . '-internal" class="' . esc_attr( WIDGET_BASE_ID ) . '-internal' . "\">\n";
+				echo '<ul id="' . esc_attr( WIDGET_BASE_ID ) . '-' . esc_attr( $this->number ) . '-internal" ' . $ratio . ' class="' . esc_attr( WIDGET_BASE_ID ) . '-internal' . "\">\n";
 			} else {
 				echo '<ul>';
 			}
@@ -832,6 +837,11 @@ class Widget extends \WP_Widget {
 			// set widget filters.
 			if ( ! isset( $instance['excerpt_filters'] ) || $instance['excerpt_filters'] ) { // pre 4.7 widgets has filters on.
 				$this->setExcerpFilters( $instance );
+			}
+
+			$current_post_id = null;
+			if ( is_singular() ) {
+				$current_post_id = get_the_ID();
 			}
 
 			while ( $cat_posts->have_posts() ) {
@@ -849,35 +859,6 @@ class Widget extends \WP_Widget {
 			}
 
 			wp_reset_postdata();
-
-			$use_css_cropping = isset( $this->instance['use_css_cropping'] ) && $this->instance['use_css_cropping'];
-			$empty_dimensions = empty( $this->instance['thumb_w'] ) || empty( $this->instance['thumb_h'] );
-			$thumb = isset( $this->instance['template'] ) && preg_match( '/%thumb%/', $this->instance['template'] );
-
-			if ( $use_css_cropping && ! $empty_dimensions && $thumb ) {
-				// enqueue relevant scripts and parameters to perform cropping
-				// once we support only 4.5+ it can be refactored to use wp_add_inline_script.
-				$number = $this->number;
-				// a temporary hack to handle difference in the number in a true widget
-				// and the number format expected at the rest of the places.
-				if ( is_numeric( $number ) ) {
-					$number = WIDGET_BASE_ID . '-' . $number;
-				}
-
-				// add Javascript to change change cropped image dimensions on load and window resize.
-				$thumb_w = $this->instance['thumb_w'];
-				$thumb_h = $this->instance['thumb_h'];
-				add_filter( 'cpw_crop_widgets',
-					function ( $a ) use ( $number, $thumb_w, $thumb_h ) {
-						$a[ $number ] = $thumb_w / $thumb_h;
-						return $a;
-					}
-				);
-				wp_enqueue_script( 'jquery' ); // just in case the theme or other plugins didn't enqueue it.
-				add_action( 'wp_footer', function () use ( $number, $instance ) {
-					__NAMESPACE__ . '\\' . change_cropped_image_dimensions( $number, $instance );
-				}, 10 );
-			}
 		}
 	}
 

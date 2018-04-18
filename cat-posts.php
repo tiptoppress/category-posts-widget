@@ -172,7 +172,7 @@ add_action( 'wp_head', __NAMESPACE__ . '\wp_head' );
  *
  */
 function frontend_script() {
-	wp_enqueue_script( 'cat-posts-frontend-js', plugins_url( 'js/frontend/widget.js', __FILE__ ), array( 'jquery' ), VERSION, true );
+	wp_enqueue_script( 'cat-posts-frontend-js', plugins_url( 'js/frontend/category-posts-frontend.js', __FILE__ ), array( 'jquery' ), VERSION, true );
 }
 
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\frontend_script' );
@@ -229,7 +229,7 @@ function load_textdomain() {
  * @since 4.1
  **/
 function admin_styles() {
-	wp_enqueue_style( 'cat-posts-admin-styles', plugins_url( 'styles/admin/cat-posts.css', __FILE__ ), array(), VERSION, false );
+	wp_enqueue_style( 'cat-posts-admin-styles', plugins_url( 'styles/admin/category-posts-widget.css', __FILE__ ), array(), VERSION, false );
 }
 
 add_action( 'admin_print_styles-widgets.php', __NAMESPACE__ . '\admin_styles' );
@@ -400,48 +400,6 @@ function register_widget() {
 }
 
 add_action( 'widgets_init', __NAMESPACE__ . '\register_widget' );
-
-/**
- * Output js code to handle responsive thumbnails
- *
- * @param string $number         The unique id of the widget to be used to indicate
- *                               the relevant widget to apply to.
- * @param array  $widgetsettings The widget settings.
- * @since 4.7
- */
-function change_cropped_image_dimensions( $number, $widgetsettings ) {
-	?>
-	<script>
-
-		if (typeof jQuery !== 'undefined')  {
-
-<?php 		// namespace. ?>
-			var cwp_namespace = window.cwp_namespace || {};
-			cwp_namespace.fluid_images = cwp_namespace.fluid_images || {};
-			cwp_namespace.fluid_images.ratios = cwp_namespace.fluid_images.ratios || {};
-
-			<?php
-			/**
-			 *  The cpw_crop_widgets is an internal filter that is used
-			 *  to gather the ids of the widgets to which apply cropping
-			 *
-			 *  For easier prevention of duplication, the widget id number should be an index
-			 *  in the array while the ratio of width/height be the value
-			 */
-			$widgets_ids = apply_filters( 'cpw_crop_widgets', array() );
-			foreach ( $widgets_ids as $num => $ratio ) {
-				if ( $num !== $number ) {
-					continue;
-				}
-			?>
-				jQuery.extend(cwp_namespace.fluid_images.ratios,{
-					'<?php echo esc_attr( $num ); ?>':<?php echo esc_attr( $ratio ); ?>
-				});
-<?php 			} ?>
-		}
-	</script>
-<?php
-}
 
 /*
  * shortcode section.
