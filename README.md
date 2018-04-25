@@ -30,27 +30,27 @@ We've also started creating free widget Add-ons for the Premium Widget here: <a 
 * Masonry (Responsive grid layouts)
 * Custom Post Types, Events, Products
 * Multi selection
-* More complex ways to filter (ALL, AND, Exclude, Childes or just OR)
+* More complex ways to filter (OR, AND, Exclude, ALL, Childes)
 * Mouse hover effects
 * Widget Extensions
 * Custom filter- and action hooks (for development)
 * All free features
 * E-Mail support
 * Free trail on localhost
-* More examples on the [demo pages](http://demo.tiptoppress.com/?utm_source=wordpress_org&utm_campaign=demo_cpw&utm_medium=web)
+* More examples on the [demo pages](http://demo.tiptoppress.com/?utm_source=wordpress_org&utm_campaign=premium_features_demo&utm_medium=web)
 
 ### Features
-* Shor SVG font-icon for "post formats"
+* Show SVG font-icon for "post formats"
 * [Template](http://tiptoppress.com/template-arrange-post-details/) to arrange the post details
 * Premade Templates
 * The Template text can be a post details placeholder, plain text, HTML or HTML for SVG font-icons
-* Option to set mouse hover effects for post thumbnail, e.g, zoom, SVG font-icon
+* Mouse hover effects for post thumbnail, e.g, zoom, SVG font-icon
 * Shortcode (Easily change all Shortcode options in the customizer).
 * Support multiple shortcodes at the same post.
-* Add option for post offset (use two or more widgets after another).
-* Add UI buttons in the editor toolbar to insert shortcode.
+* Option for post offset (use two or more widgets after another).
+* UI buttons in the editor toolbar to insert shortcode.
 * Option to touch device friendly "everything is a link".
-* For editing shortcode adds a Customizer link to the admin-bar ("With one click to the Customizer").
+* Additional customizer link at the admin-bar ("With one click to the Customizer").
 * Thumbnail width & height (<a target="_blank" href="http://tiptoppress.com/css-image-crop/?utm_source=wordpress_org&utm_campaign=features_crop_cpw&utm_medium=web">CSS cropping</a>).
 * Fluid images (Responsive layout support).
 * Set default thumbnail.
