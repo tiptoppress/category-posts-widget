@@ -825,7 +825,7 @@ class Widget extends \WP_Widget {
 			$thumb = isset( $this->instance['template'] ) && preg_match( '/%thumb%/', $this->instance['template'] );
 
 			if ( $use_css_cropping && ! $empty_dimensions && $thumb ) {
-				$ratio = "data-image-ratio='" . ($this->instance['thumb_w'] / $this->instance['thumb_h']) . "'";
+				$ratio = "data-cpw-image-ratio='" . ($this->instance['thumb_w'] / $this->instance['thumb_h']) . "'";
 			}
 
 			if ( ! ( isset( $instance['is_shortcode'] ) && $instance['is_shortcode'] ) ) { // the internal id is needed only for widgets.
