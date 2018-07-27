@@ -907,7 +907,7 @@ function show_user_profile( $user ) {
 			<th><label for="<?php echo __NAMESPACE__; ?>[panels]"><?php esc_html_e( 'Open panels behavior', 'category-posts' ); ?></label></th>
 			<td>
 				<input type="checkbox" name="<?php echo __NAMESPACE__; ?>[panels]" id="<?php echo __NAMESPACE__; ?>[panels]" <?php checked( $accordion ); ?>>
-				<label for=<?php echo __NAMESPACE__; ?>[panels]><?php esc_html_e( 'Close the curremtly open panel when opening a new one', 'category-posts' ); ?></label>
+				<label for=<?php echo __NAMESPACE__; ?>[panels]><?php esc_html_e( 'Close the currently open panel when opening a new one', 'category-posts' ); ?></label>
 			</td>
 		</tr>
 		<tr>
