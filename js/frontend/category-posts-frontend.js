@@ -6,10 +6,14 @@
  *
  * Released under the GPLv2 license or later -  http://www.gnu.org/licenses/gpl-2.0.html
  */
- 
+
 if (typeof jQuery !== 'undefined')  {
 
 	var cwp_namespace = window.cwp_namespace || {};
+
+	/**
+	 * Object handling responsive images.
+	 */
 	cwp_namespace.fluid_images = {
 
 		Widgets : {},
@@ -57,8 +61,8 @@ if (typeof jQuery !== 'undefined')  {
 			}
 		},
 	}
-	
-	jQuery( document ).ready(function () {	
+
+	jQuery( document ).ready(function () {
 		// get all widgets as object
 		jQuery.each( jQuery('[data-cpw-image-ratio]'), function( indes ) {
 			var num = jQuery(this).attr('id'),
