@@ -618,7 +618,7 @@ add_action( 'save_post', __NAMESPACE__ . '\save_post', 10, 2 );
  */
 function customize_register( $wp_customize ) {
 
-	require_once __DIR__ . '\class-shortcode-control.php';
+	require_once __DIR__ . '/class-shortcode-control.php';
 
 	$args = array(
 		'post_type'              => 'any',
