@@ -63,11 +63,12 @@ if (typeof jQuery !== 'undefined')  {
 	}
 
 	jQuery( document ).ready(function () {
+		var uid =1;
 		// get all widgets as object
 		jQuery.each( jQuery('[data-cpw-image-ratio]'), function( indes ) {
-			var num = jQuery(this).attr('id'),
+			var num = uid++,
 				ratio = jQuery(this).data("cpw-image-ratio");
-			cwp_namespace.fluid_images.widget = jQuery('#' + num);
+			cwp_namespace.fluid_images.widget = jQuery(this);
 			cwp_namespace.fluid_images.Widgets[num] = new cwp_namespace.fluid_images.WidgetPosts(cwp_namespace.fluid_images.widget, ratio);
 		});
 

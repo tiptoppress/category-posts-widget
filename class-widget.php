@@ -831,7 +831,15 @@ class Widget extends \WP_Widget {
 			if ( ! ( isset( $instance['is_shortcode'] ) && $instance['is_shortcode'] ) ) { // the internal id is needed only for widgets.
 				echo '<ul id="' . esc_attr( WIDGET_BASE_ID ) . '-' . esc_attr( $this->number ) . '-internal" ' . $ratio . ' class="' . esc_attr( WIDGET_BASE_ID ) . '-internal' . "\">\n";
 			} else {
-				echo '<ul>';
+				echo '<ul ' . $ratio . '>';
+			}
+
+			if ( '' !== $ratio ) {
+				if ( apply_filters( 'cpw_enqueue_resources', false ) ) {
+					frontend_script();
+				} else {
+					add_action( 'wp_footer', __NAMESPACE__ . '\embed_front_end_scripts' );
+				}
 			}
 
 			// set widget filters.

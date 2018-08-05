@@ -176,7 +176,16 @@ function frontend_script() {
 	wp_enqueue_script( 'cat-posts-frontend-js', plugins_url( 'js/frontend/category-posts-frontend.js', __FILE__ ), array( 'jquery' ), VERSION, true );
 }
 
-add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\frontend_script' );
+/**
+ * Embed the front end JS in the HTML footer.
+ *
+ * @since 4.9
+ */
+function embed_front_end_scripts() {
+	echo '<script>';
+	include __DIR__ . '/js/frontend/category-posts-frontend.js';
+	echo '</script>';
+}
 
 /**
  * Enqueue widget related scripts for the widget admin page and customizer.
