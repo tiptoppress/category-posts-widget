@@ -170,6 +170,7 @@ add_action( 'wp_head', __NAMESPACE__ . '\wp_head' );
 /**
  * Enqueue widget related scripts for the widget front-end
  *
+ * @since 4.8
  */
 function frontend_script() {
 	wp_enqueue_script( 'cat-posts-frontend-js', plugins_url( 'js/frontend/category-posts-frontend.js', __FILE__ ), array( 'jquery' ), VERSION, true );
