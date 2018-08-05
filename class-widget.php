@@ -818,14 +818,14 @@ class Widget extends \WP_Widget {
 			echo $before_widget; // Xss ok. This is how widget actually expected to behave.
 			echo $this->titleHTML( $before_title, $after_title, $instance );
 
-			// image crop ratio
-			$ratio = "";			
+			// image crop ratio.
+			$ratio = '';
 			$use_css_cropping = isset( $this->instance['use_css_cropping'] ) && $this->instance['use_css_cropping'];
 			$empty_dimensions = empty( $this->instance['thumb_w'] ) || empty( $this->instance['thumb_h'] );
 			$thumb = isset( $this->instance['template'] ) && preg_match( '/%thumb%/', $this->instance['template'] );
 
 			if ( $use_css_cropping && ! $empty_dimensions && $thumb ) {
-				$ratio = "data-cpw-image-ratio='" . ($this->instance['thumb_w'] / $this->instance['thumb_h']) . "'";
+				$ratio = "data-cpw-image-ratio='" . ( $this->instance['thumb_w'] / $this->instance['thumb_h'] ) . "'";
 			}
 
 			if ( ! ( isset( $instance['is_shortcode'] ) && $instance['is_shortcode'] ) ) { // the internal id is needed only for widgets.
