@@ -818,13 +818,18 @@ class Widget extends \WP_Widget {
 			echo $before_widget; // Xss ok. This is how widget actually expected to behave.
 			echo $this->titleHTML( $before_title, $after_title, $instance );
 
-			$current_post_id = null;
-			if ( is_singular() ) {
-				$current_post_id = get_the_ID();
+			// image crop ratio
+			$ratio = "";			
+			$use_css_cropping = isset( $this->instance['use_css_cropping'] ) && $this->instance['use_css_cropping'];
+			$empty_dimensions = empty( $this->instance['thumb_w'] ) || empty( $this->instance['thumb_h'] );
+			$thumb = isset( $this->instance['template'] ) && preg_match( '/%thumb%/', $this->instance['template'] );
+
+			if ( $use_css_cropping && ! $empty_dimensions && $thumb ) {
+				$ratio = "data-cpw-image-ratio='" . ($this->instance['thumb_w'] / $this->instance['thumb_h']) . "'";
 			}
 
 			if ( ! ( isset( $instance['is_shortcode'] ) && $instance['is_shortcode'] ) ) { // the internal id is needed only for widgets.
-				echo '<ul id="' . esc_attr( WIDGET_BASE_ID ) . '-' . esc_attr( $this->number ) . '-internal" class="' . esc_attr( WIDGET_BASE_ID ) . '-internal' . "\">\n";
+				echo '<ul id="' . esc_attr( WIDGET_BASE_ID ) . '-' . esc_attr( $this->number ) . '-internal" ' . $ratio . ' class="' . esc_attr( WIDGET_BASE_ID ) . '-internal' . "\">\n";
 			} else {
 				echo '<ul>';
 			}
@@ -832,6 +837,11 @@ class Widget extends \WP_Widget {
 			// set widget filters.
 			if ( ! isset( $instance['excerpt_filters'] ) || $instance['excerpt_filters'] ) { // pre 4.7 widgets has filters on.
 				$this->setExcerpFilters( $instance );
+			}
+
+			$current_post_id = null;
+			if ( is_singular() ) {
+				$current_post_id = get_the_ID();
 			}
 
 			while ( $cat_posts->have_posts() ) {
@@ -849,35 +859,6 @@ class Widget extends \WP_Widget {
 			}
 
 			wp_reset_postdata();
-
-			$use_css_cropping = isset( $this->instance['use_css_cropping'] ) && $this->instance['use_css_cropping'];
-			$empty_dimensions = empty( $this->instance['thumb_w'] ) || empty( $this->instance['thumb_h'] );
-			$thumb = isset( $this->instance['template'] ) && preg_match( '/%thumb%/', $this->instance['template'] );
-
-			if ( $use_css_cropping && ! $empty_dimensions && $thumb ) {
-				// enqueue relevant scripts and parameters to perform cropping
-				// once we support only 4.5+ it can be refactored to use wp_add_inline_script.
-				$number = $this->number;
-				// a temporary hack to handle difference in the number in a true widget
-				// and the number format expected at the rest of the places.
-				if ( is_numeric( $number ) ) {
-					$number = WIDGET_BASE_ID . '-' . $number;
-				}
-
-				// add Javascript to change change cropped image dimensions on load and window resize.
-				$thumb_w = $this->instance['thumb_w'];
-				$thumb_h = $this->instance['thumb_h'];
-				add_filter( 'cpw_crop_widgets',
-					function ( $a ) use ( $number, $thumb_w, $thumb_h ) {
-						$a[ $number ] = $thumb_w / $thumb_h;
-						return $a;
-					}
-				);
-				wp_enqueue_script( 'jquery' ); // just in case the theme or other plugins didn't enqueue it.
-				add_action( 'wp_footer', function () use ( $number, $instance ) {
-					__NAMESPACE__ . '\\' . change_cropped_image_dimensions( $number, $instance );
-				}, 100 );
-			}
 		}
 	}
 
@@ -1238,54 +1219,6 @@ class Widget extends \WP_Widget {
 		$text_do_not_wrap_thumb          = $instance['text_do_not_wrap_thumb'];
 
 		$cat = $instance['cat'];
-
-		if ( ! isset( $style_done ) ) { // what an ugly hack, but can't figure out how to do it nicer on 4.3.
-		?>
-		<style>
-		.cpwp_ident {
-			color: #6A6A6A;
-			background: #F1F1F1;
-			padding: 5px;
-		}
-		.cpwp_ident > .cpwp_ident {
-			border-left:5px solid #B3B3B3;
-			padding: 0 10px;
-		}
-		.cpwp_ident > p {
-			margin: 5px 0;
-		}
-		.cpwp_ident > label {
-			line-height: 2.75;
-			display: inline-block;
-		}
-		.cpwp_ident_top {
-			margin-top:-1em;
-			padding-top:1em;
-		}
-
-		.category-widget-cont input[type="number"] {
-			width:5em;
-			text-align:center;
-		}
-
-		.categoryposts-template-help th {
-			text-align:start;
-			font-weight:bold;
-		}
-
-		.categoryposts-template-help td {
-			padding:2px;
-		}
-
-		.categoryPosts-template textarea {
-			font-size:16px;
-			line-height:20px;
-		}
-		</style>
-
-		<?php
-			$style_done = true;
-		}
 		?>
 
 		<div class="category-widget-cont">

@@ -218,7 +218,7 @@ jQuery(document).ready( function () {
 	});
 
 	// needed to reassign click handlers after widget refresh
-	jQuery(document).on('widget-added widget-updated', function(root,element){ // for customize and after save on widgets page
+	jQuery(document).on('widget-added widget-updated panelsopen', function(root,element){ // for customize and after save on widgets page (add panelsopen: fix make widget SiteOrigin Page Builder plugin, GH issue #181)
 
 		jQuery('.category-widget-cont h4').off('click').on('click', function () {
 			cwp_namespace.autoCloseOpenPanels(this);
@@ -271,7 +271,7 @@ jQuery(document).ready( function () {
 			cwp_namespace.toggleDateFormat(this);
 		});
 
-		jQuery(document).off('click').on('click', class_namespace+' a.toggle-template-help', function (event) { // show template help
+		jQuery(document).off('click', class_namespace+' a.toggle-template-help').on('click', class_namespace+' a.toggle-template-help', function (event) { // show template help
 			cwp_namespace.toggleTemplateHelp(this, event);
 		});
 

@@ -136,6 +136,7 @@ class Virtual_Widget {
 		if ( ! $disable_css ) { // checks if css disable is not set.
 
 			$styles = array( // styles that should be applied to all widgets.
+				'normalize'     => 'ul {padding: 0;}',
 				'thumb_clenup'  => '.cat-post-item img {max-width: initial; max-height: initial; margin: initial;}',
 				'author_clenup' => '.cat-post-author {margin-bottom: 0;}',
 				'thumb'         => '.cat-post-thumbnail {margin: 5px 10px 5px 0;}',
@@ -272,7 +273,7 @@ class Virtual_Widget {
 		if ( isset( $settings['thumb_hover'] ) ) {
 			switch ( $settings['thumb_hover'] ) {
 				case 'white':
-					$ret['white_hover_background'] = '#' . $widget_id . ' .cat-post-white {background-color: white;}';
+					$ret['white_hover_background'] = '#' . $widget_id . ' .cat-post-white span {background-color: white;}';
 					$ret['white_hover_thumb'] = '#' . $widget_id . ' .cat-post-white img {padding-bottom: 0 !important; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
 					$ret['white_hover_transform'] = '#' . $widget_id . ' .cat-post-white:hover img {opacity: 0.8;}';
 					break;

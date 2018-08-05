@@ -168,13 +168,23 @@ function register_virtual_widgets() {
 add_action( 'wp_head', __NAMESPACE__ . '\wp_head' );
 
 /**
+ * Enqueue widget related scripts for the widget front-end
+ *
+ */
+function frontend_script() {
+	wp_enqueue_script( 'cat-posts-frontend-js', plugins_url( 'js/frontend/category-posts-frontend.js', __FILE__ ), array( 'jquery' ), VERSION, true );
+}
+
+add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\frontend_script' );
+
+/**
  * Enqueue widget related scripts for the widget admin page and customizer.
  *
  * @param string $hook the name of the admin hook for which the function was triggered.
  */
 function admin_scripts( $hook ) {
 
-	if ( 'widgets.php' === $hook ) { // enqueue only for widget admin and customizer.
+	if ( 'widgets.php' === $hook || 'post.php' === $hook  ) { // enqueue only for widget admin and customizer. (add if post.php: fix make widget SiteOrigin Page Builder plugin, GH issue #181)
 
 		// control open and close the widget section.
 		wp_register_script( 'category-posts-widget-admin-js', plugins_url( 'js/admin/category-posts-widget.js', __FILE__ ), array( 'jquery' ), VERSION, true );
@@ -213,80 +223,19 @@ function load_textdomain() {
 	load_plugin_textdomain( 'category-posts', false, plugin_basename( dirname( __FILE__ ) ) . '/languages' );
 }
 
-/*
- * Add styles for widget sections
- */
-
-add_action( 'admin_print_styles-widgets.php', __NAMESPACE__ . '\admin_styles' );
-
 /**
- * Add required admin styles.
+ * Add styles for widget admin sections
  *
  * @since 4.1
  **/
 function admin_styles() {
-?>
-<style>
-.category-widget-cont h4 {
-	padding: 12px 15px;
-	cursor: pointer;
-	margin: 5px 0;
-	border: 1px solid #E5E5E5;
-}
-.category-widget-cont h4:first-child {
-	margin-top: 10px;
-}
-.category-widget-cont h4:last-of-type {
-	margin-bottom: 10px;
-}
-.category-widget-cont h4:after {
-	float:right;
-	font-family: "dashicons";
-	content: '\f140';
-	-ms-transform: translate(-1px,1px);
-	-webkit-transform: translate(-1px,1px);
-	-moz-transform: translate(-1px,1px);
-	transform: translate(-1px,1px);
-	-ms-transition: all 600ms;
-	-webkit-transition: all 600ms;
-	-moz-transition: all 600ms;
-	transition: all 600ms;
-}
-.category-widget-cont h4.open:after {
-	-ms-transition: all 600ms;
-	-webkit-transition: all 600ms;
-	-moz-transition: all 600ms;
-	transition: all 600ms;
-	-ms-transform: rotate(180deg);
-	-webkit-transform: rotate(180deg);
-	-moz-transform: rotate(180deg);
-	transform: rotate(180deg);
-}
-.category-widget-cont > div {
-	display:none;
-}
-.category-widget-cont > div.open {
-	display:block;
-}
-.category-widget-cont th,
-.category-widget-cont tr {
-	vertical-align: baseline;
-	text-align:start;
+	wp_enqueue_style( 'cat-posts-admin-styles', plugins_url( 'styles/admin/category-posts-widget.css', __FILE__ ), array(), VERSION, false );
 }
 
-.cat-post-template-help {display:none;}
+add_action( 'admin_print_styles-widgets.php', __NAMESPACE__ . '\admin_styles' );
 
-.categoryPosts-template textarea {width:100%}
-
-.category-widget-cont .open-template-help {
-	border:0;
-	padding:0;
-	cursor: pointer;
-}
-
-</style>
-<?php
-}
+// fix make widget SiteOrigin Page Builder plugin, GH issue #181
+add_action('siteorigin_panel_enqueue_admin_scripts', __NAMESPACE__ . '\admin_styles' );
 
 /**
  * Get image size
@@ -451,110 +400,6 @@ function register_widget() {
 }
 
 add_action( 'widgets_init', __NAMESPACE__ . '\register_widget' );
-
-/**
- * Output js code to handle responsive thumbnails
- *
- * @param string $number         The unique id of the widget to be used to indicate
- *                               the relevant widget to apply to.
- * @param array  $widgetsettings The widget settings.
- * @since 4.7
- */
-function change_cropped_image_dimensions( $number, $widgetsettings ) {
-	?>
-	<script>
-
-		if (typeof jQuery !== 'undefined')  {
-
-			jQuery( document ).ready(function () {
-
-<?php // namespace. ?>
-				var cwp_namespace = window.cwp_namespace || {};
-				cwp_namespace.fluid_images = cwp_namespace.fluid_images || {};
-
-				cwp_namespace.fluid_images = {
-
-<?php // variables. ?>
-					Widgets : {},
-					widget : null,
-
-<?php // class. ?>
-					Span : function (_self, _imageRatio) {
-
-<?php // variables. ?>
-						this.self = _self;
-						this.imageRatio = _imageRatio;
-					},
-
-<?php // class. ?>
-					WidgetPosts : function (widget, ratio) {
-
-<?php // variables. ?>
-						this.Spans = {};
-						this.allSpans = widget.find( '.cat-post-crop' );
-						this.firstSpan = this.allSpans.first();
-						this.maxSpanWidth = this.firstSpan.width();
-						this.firstListItem = this.firstSpan.closest( 'li' );
-						this.ratio = ratio;
-
-						for( var i = 0; i < this.allSpans.length; i++ ){
-							var imageRatio = this.firstSpan.width() / jQuery(this.allSpans[i]).find( 'img' ).height();
-							this.Spans[i] = new cwp_namespace.fluid_images.Span( jQuery(this.allSpans[i]), imageRatio );
-						}
-
-<?php // functions. ?>
-						this.changeImageSize = function changeImageSize() {
-
-							this.listItemWidth = this.firstListItem.width();
-							this.SpanWidth = this.firstSpan.width();
-
-							if(this.listItemWidth < this.SpanWidth ||	<?php /* if the layout-width have not enough space to show the regular source-width */ echo "\r\n"; ?>
-								this.listItemWidth < this.maxSpanWidth) {				<?php /* defined start and stop working width for the image: Accomplish only the image width will be get smaller as the source-width */ echo "\r\n"; ?>
-									this.allSpans.width( this.listItemWidth );
-									var spanHeight = this.listItemWidth / this.ratio;
-									this.allSpans.height( spanHeight );
-
-									for( var index in this.Spans ){
-										var imageHeight = this.listItemWidth / this.Spans[index].imageRatio;
-										jQuery(this.Spans[index].self).find( 'img' ).css({
-											height: imageHeight,
-											marginTop: -(imageHeight - spanHeight) / 2
-										});
-									};
-							}
-						}
-					},
-				}
-
-				<?php
-				/**
-				 *  The cpw_crop_widgets is an internal filter that is used
-				 *  to gather the ids of the widgets to which apply cropping
-				 *
-				 *  For easier prevention of duplication, the widget id number should be an index
-				 *  in the array while the ratio of width/height be the value
-				 */
-				$widgets_ids = apply_filters( 'cpw_crop_widgets', array() );
-				foreach ( $widgets_ids as $num => $ratio ) {
-					if ( $num !== $number ) {
-						continue;
-					}
-				?>
-					cwp_namespace.fluid_images.widget = jQuery('#<?php echo esc_attr( $num ); ?>');
-					cwp_namespace.fluid_images.Widgets['<?php echo esc_attr( $num ); ?>'] = new cwp_namespace.fluid_images.WidgetPosts(cwp_namespace.fluid_images.widget,<?php echo esc_attr( $ratio ); ?>);
-<?php } ?>
-
-<?php /* do on page load or on resize the browser window */ echo "\r\n"; ?>
-				jQuery(window).on('load resize', function() {
-					for (var widget in cwp_namespace.fluid_images.Widgets) {
-						cwp_namespace.fluid_images.Widgets[widget].changeImageSize();
-					}
-				});
-			});
-		}
-	</script>
-<?php
-}
 
 /*
  * shortcode section.
@@ -1062,7 +907,7 @@ function show_user_profile( $user ) {
 			<th><label for="<?php echo __NAMESPACE__; ?>[panels]"><?php esc_html_e( 'Open panels behavior', 'category-posts' ); ?></label></th>
 			<td>
 				<input type="checkbox" name="<?php echo __NAMESPACE__; ?>[panels]" id="<?php echo __NAMESPACE__; ?>[panels]" <?php checked( $accordion ); ?>>
-				<label for=<?php echo __NAMESPACE__; ?>[panels]><?php esc_html_e( 'Close the curremtly open panel when opening a new one', 'category-posts' ); ?></label>
+				<label for=<?php echo __NAMESPACE__; ?>[panels]><?php esc_html_e( 'Close the currently open panel when opening a new one', 'category-posts' ); ?></label>
 			</td>
 		</tr>
 		<tr>
