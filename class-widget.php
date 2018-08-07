@@ -809,12 +809,17 @@ class Widget extends \WP_Widget {
 		}
 
 		extract( $args );
+
 		$this->instance = $instance;
 
-		$args = $this->queryArgs( $instance );
-		$cat_posts = new \WP_Query( $args );
+		$current_post_id = '';
+		if ( is_singular() ) {
+			$current_post_id = get_the_ID();
+		}
 
-		if ( ! isset( $instance['hide_if_empty'] ) || ! $instance['hide_if_empty'] || $cat_posts->have_posts() ) {
+		$items = $this->get_elements_HTML( $instance, $current_post_id, 0, 0 );
+
+		if ( ! isset( $instance['hide_if_empty'] ) || ! $instance['hide_if_empty'] || ! empty( $items ) ) {
 			echo $before_widget; // Xss ok. This is how widget actually expected to behave.
 			echo $this->titleHTML( $before_title, $after_title, $instance );
 
@@ -847,14 +852,8 @@ class Widget extends \WP_Widget {
 				$this->setExcerpFilters( $instance );
 			}
 
-			$current_post_id = null;
-			if ( is_singular() ) {
-				$current_post_id = get_the_ID();
-			}
-
-			while ( $cat_posts->have_posts() ) {
-				$cat_posts->the_post();
-				echo $this->itemHTML( $instance, $current_post_id );
+			foreach ( $items as $item ) {
+				echo $item;
 			}
 			echo "</ul>\n";
 
@@ -868,6 +867,55 @@ class Widget extends \WP_Widget {
 
 			wp_reset_postdata();
 		}
+	}
+
+	/**
+	 * Get an array of HTML pre item, for item starting from a specific position.
+	 *
+	 * @since 4.9
+	 *
+	 * @param array  $instance    An array containing the settings of the widget.
+	 * @param string $singular_id The ID of the post in which the widget is rendered,
+	 *                            an empty string indicates the rendering context
+	 *                            is not singular.
+	 * @param int    $start       The start element (0 based).
+	 * @param int    $number      The maximal number of elements to return. A value of 0
+	 *                            Indicates to use the widget settings for that.
+	 *
+	 * @return string[] Array of HTML per element with the $start element first
+	 *                  $start+1 next etc. An empty array is returned if there
+	 *                  are no applicable items.
+	 */
+	public function get_elements_HTML( $instance, $singular_id, $start, $number ) {
+		$ret = array();
+
+		if ( 0 === count( $instance ) ) {
+			$instance = default_settings();
+		}
+
+		$this->instance = $instance;
+
+		$instance['offset'] = $start;
+		$number = (int) $number; // sanitize number with the side effect of non
+								// numbers are converted to zero.
+		if ( 0 < $number ) {
+			$instance['num'] = $number;
+		}
+		$args = $this->queryArgs( $instance );
+		$cat_posts = new \WP_Query( $args );
+		$current_post_id = null;
+		if ( '' !== $singular_id ) {
+			$current_post_id = $singular_id;
+		}
+
+		while ( $cat_posts->have_posts() ) {
+			$cat_posts->the_post();
+			$ret[] = $this->itemHTML( $instance, $current_post_id );
+		}
+
+		wp_reset_postdata();
+
+		return $ret;
 	}
 
 	/**
