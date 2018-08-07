@@ -424,7 +424,8 @@ add_action( 'widgets_init', __NAMESPACE__ . '\register_widget' );
  * @param string $pid  The ID of the post in which the shortcode is.
  * @param string $name The name of the shortcode to retun, empty string indicates the nameless.
  *
- * @return array the shortcode settings if a short code exists or empty string, empty array if name not found
+ * @return array The shortcode settings if a short code name exists or is an empty string,
+ *               empty array if name not found.
  *
  * @since 4.6
  */
