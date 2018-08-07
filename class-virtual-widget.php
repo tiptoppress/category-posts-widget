@@ -108,21 +108,24 @@ class Virtual_Widget {
 	 *
 	 * @since 4.9
 	 *
-	 * @param int $start  The start element (0 based).
-	 * @param int $number The maximal number of elements to return. A value of 0
-	 *                    Indicates to use the widget settings for that.
+	 * @param int    $start  The start element (0 based).
+	 * @param int    $number The maximal number of elements to return. A value of 0
+	 *                       Indicates to use the widget settings for that.
+	 * @param string $context The ID of the post in which the items will be displayed.
+	 *                        A empty string or any value which is not of an ID
+	 *                        of actual post will be treated as if there is no context.
 	 *
 	 * @return string[] Array of HTML per element with the $start element first
 	 *                  $start+1 next etc. An empty array is returned if there
 	 *                  are no applicable items.
 	 */
-	public function get_elements_HTML( $start, $number ) {
+	public function get_elements_HTML( $start, $number, $context ) {
 		$ret = array();
 
 		$widget = new Widget();
 		$widget->number = $this->id; // needed to make a unique id for the widget html element.
 
-		$ret = $widget->get_elements_HTML( self::$collection[ $this->id ], '', $start, $number );
+		$ret = $widget->get_elements_HTML( self::$collection[ $this->id ], $context, $start, $number );
 		return $ret;
 	}
 

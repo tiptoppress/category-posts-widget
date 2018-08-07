@@ -24,6 +24,7 @@ function get_next_elements( \WP_REST_Request $request ) {
 	$id = (string) $request['id'];
 	$start = (int) $request['start'];
 	$number = (int) $request['number'];
+	$context = (string) $request['context'];
 
 	$ret = [];
 
@@ -37,7 +38,7 @@ function get_next_elements( \WP_REST_Request $request ) {
 					$settings = shortcode_settings( $pid, $name );
 					if ( ! empty( $settings ) ) {
 						$virtual_widget = new Virtual_Widget( '', '', $settings );
-						$ret = $virtual_widget->get_elements_HTML( $start, $number );
+						$ret = $virtual_widget->get_elements_HTML( $start, $number, $context );
 					}
 				}
 				break;
@@ -49,7 +50,7 @@ function get_next_elements( \WP_REST_Request $request ) {
 					$allsettings = $widgetclass->get_settings();
 					if ( isset( $allsettings[ $id ] ) ) {
 						$virtual_widget = new Virtual_Widget( '', '', $allsettings[ $id ] );
-						$ret = $virtual_widget->get_elements_HTML( $start, $number );
+						$ret = $virtual_widget->get_elements_HTML( $start, $number, $context );
 					}
 				}
 				break;
@@ -63,7 +64,7 @@ function get_next_elements( \WP_REST_Request $request ) {
  * This function is where we register our routes for our example endpoint.
  */
 function register_route() {
-	register_rest_route( __NAMESPACE__, '/loadmore/(?P<id>[\w-]+)/(?P<start>[\d]+)/(?P<number>[\d]+)/', array(
+	register_rest_route( __NAMESPACE__, '/loadmore/(?P<id>[\w-]+)/(?P<start>[\d]+)/(?P<number>[\d]+)/(?P<context>[\w]+)', array(
 		'methods'  => 'GET',
 		'callback' => __NAMESPACE__ . '\get_next_elements',
 	) );

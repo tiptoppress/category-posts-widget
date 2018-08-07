@@ -905,7 +905,7 @@ class Widget extends \WP_Widget {
 		$cat_posts = new \WP_Query( $args );
 		$current_post_id = null;
 		if ( '' !== $singular_id ) {
-			$current_post_id = $singular_id;
+			$current_post_id = (int) $singular_id;
 		}
 
 		while ( $cat_posts->have_posts() ) {
