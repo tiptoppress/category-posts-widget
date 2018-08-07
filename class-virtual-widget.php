@@ -42,9 +42,9 @@ class Virtual_Widget {
 	private $id;
 
 	/**
-	 * A container for all the "active" objects
+	 * The class name to be use us the class attribute on the root html element.
 	 *
-	 * @var string The class name to be use us the class attribute on the root html element.
+	 * @var string
 	 *
 	 * @since 4.7
 	 */
@@ -100,6 +100,29 @@ class Virtual_Widget {
 		), $args);
 		$ret = ob_get_clean();
 		$ret = '<div id="' . esc_attr( $this->id ) . '" class="' . esc_attr( $this->class ) . '">' . $ret . '</div>';
+		return $ret;
+	}
+
+	/**
+	 * Get an array of HTML pre item, for item starting from a specific position.
+	 *
+	 * @since 4.9
+	 *
+	 * @param int $start  The start element (0 based).
+	 * @param int $number The maximal number of elements to return. A value of 0
+	 *                    Indicates to use the widget settings for that.
+	 *
+	 * @return string[] Array of HTML per element with the $start element first
+	 *                  $start+1 next etc. An empty array is returned if there
+	 *                  are no applicable items.
+	 */
+	public function get_elements_HTML( $start, $number ) {
+		$ret = array();
+
+		$widget = new Widget();
+		$widget->number = $this->id; // needed to make a unique id for the widget html element.
+
+		$ret = $widget->get_elements_HTML( self::$collection[ $this->id ], '', $start, $number );
 		return $ret;
 	}
 

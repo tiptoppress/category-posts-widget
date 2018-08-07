@@ -36,6 +36,7 @@ const WIDGET_BASE_ID = 'category-posts';
 require_once __DIR__ . '/class-virtual-widget.php';
 require_once __DIR__ . '/class-virtual-widgets-repository.php';
 require_once __DIR__ . '/class-widget.php';
+require_once __DIR__ . '/loadmore.php';
 
 /**
  *  Adds the "Customize" link to the Toolbar on edit mode.
