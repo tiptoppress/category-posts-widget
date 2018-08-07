@@ -130,7 +130,7 @@ function register_virtual_widgets() {
 		$names = shortcode_names( SHORTCODE_NAME, $post->post_content );
 
 		foreach ( $names as $name ) {
-			$meta = shortcode_settings( $name );
+			$meta = shortcode_settings( get_the_ID(), $name );
 			if ( is_array( $meta ) ) {
 				$id = WIDGET_BASE_ID . '-shortcode-' . get_the_ID(); // needed to make a unique id for the widget html element.
 				if ( '' !== $name ) { // if not default name append to the id.
@@ -416,19 +416,20 @@ add_action( 'widgets_init', __NAMESPACE__ . '\register_widget' );
  */
 
 /**
- *  Get shortcode settings taking into account if it is being customized
+ * Get shortcode settings taking into account if it is being customized
  *
- *  When not customized returns the settings as stored in the meta, but when
- *  it is customized returns the setting stored in the virtual option used by the customizer
+ * When not customized returns the settings as stored in the meta, but when
+ * it is customized returns the setting stored in the virtual option used by the customizer
  *
- *  @param string $name The name of the shortcode to retun, empty string indicates the nameless.
+ * @param string $pid  The ID of the post in which the shortcode is.
+ * @param string $name The name of the shortcode to retun, empty string indicates the nameless.
  *
- *  @return array the shortcode settings if a short code exists or empty string, empty array if name not found
+ * @return array the shortcode settings if a short code exists or empty string, empty array if name not found
  *
- *  @since 4.6
+ * @since 4.6
  */
-function shortcode_settings( $name ) {
-	$meta = get_post_meta( get_the_ID(), SHORTCODE_META, true );
+function shortcode_settings( $pid, $name ) {
+	$meta = get_post_meta( $pid, SHORTCODE_META, true );
 
 	if ( ! empty( $meta ) && ! is_array( reset( $meta ) ) ) {
 		$meta = array( '' => $meta );  // the conversion.
@@ -442,7 +443,7 @@ function shortcode_settings( $name ) {
 	if ( is_customize_preview() ) {
 		$o = get_option( '_virtual-' . WIDGET_BASE_ID );
 		if ( is_array( $o ) ) {
-			$instance = $o[ get_the_ID() ][ $name ];
+			$instance = $o[ $pid ][ $name ];
 		}
 	}
 
