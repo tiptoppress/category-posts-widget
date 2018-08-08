@@ -6,7 +6,7 @@ gulp.task( 'default', [ 'scripts' ] )
 
 // Gulp task to minify JavaScript files
 gulp.task('scripts', function() {
-  return gulp.src('./js/**/*.js')
+  return gulp.src(['./js/**/*.js', '!./js/**/*.min.js'])
     // Minify the file
     .pipe(uglify())
 	.pipe(rename({suffix: '.min'}))
