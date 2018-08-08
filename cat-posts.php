@@ -197,8 +197,16 @@ function admin_scripts( $hook ) {
 
 	if ( 'widgets.php' === $hook || 'post.php' === $hook  ) { // enqueue only for widget admin and customizer. (add if post.php: fix make widget SiteOrigin Page Builder plugin, GH issue #181)
 
-		// control open and close the widget section.
-		wp_register_script( 'category-posts-widget-admin-js', plugins_url( 'js/admin/category-posts-widget.min.js', __FILE__ ), array( 'jquery' ), VERSION, true );
+		/*
+		 * Add script to control admin UX.
+		 */
+
+		// Use unminified version of JS when debuging, and minified when not.
+		$suffix = 'min.js';
+		if ( defined( 'WP_DEBUG' ) ) {
+			$suffix = 'js';
+		}
+		wp_register_script( 'category-posts-widget-admin-js', plugins_url( 'js/admin/category-posts-widget.' . $suffix, __FILE__ ), array( 'jquery' ), VERSION, true );
 		wp_enqueue_script( 'category-posts-widget-admin-js' );
 
 		$js_data = array( 'accordion' => false );
@@ -560,6 +568,8 @@ function default_settings() {
 		'preset_date_format'     => 'sitedateandtime',
 		'template'               => "%title%\n\n%thumb%",
 		'text_do_not_wrap_thumb' => false,
+		'enable_loadmore'        => false,
+		'loadmore_text'          => __('Load More', 'category-posts'),
 	);
 }
 

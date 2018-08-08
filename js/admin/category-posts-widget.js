@@ -102,6 +102,16 @@
             }
         },
 
+		toggleLoadMore: function(item) {
+            var value = jQuery(item).attr('checked');
+			var panel = item.parentElement.parentElement.parentElement;
+            if (value != 'checked') {
+                jQuery(panel).find('.loadmore-settings').hide();
+            } else {
+                jQuery(panel).find('.loadmore-settings').show();
+            }
+        },
+
 		selectPremadeTemplate: function(item) {
 			var panel = item.parentElement.parentElement.parentElement;
 			var div = item.parentElement.parentElement;
@@ -265,6 +275,10 @@ jQuery(document).ready( function () {
 
 		jQuery(document).on('click', class_namespace+' .hide_title', function () {
 			cwp_namespace.toggleHideTitle(this);
+		});
+
+		jQuery(document).on('click', class_namespace+' .categoryPosts-enable_loadmore input', function () {
+			cwp_namespace.toggleLoadMore(this);
 		});
 
 		jQuery(document).on('change', class_namespace+' .categoryPosts-preset_date_format select', function () { // change date format

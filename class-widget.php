@@ -1456,6 +1456,10 @@ class Widget extends \WP_Widget {
 					<?php echo $this->get_checkbox_block_html( $instance, 'disable_font_styles', esc_html__( 'Disable only font styles', 'category-posts' ), false, true ); ?>
 				</div>
 				<?php echo $this->get_checkbox_block_html( $instance, 'hide_if_empty', esc_html__( 'Hide if there are no matching posts', 'category-posts' ), false, true ); ?>
+				<?php echo $this->get_checkbox_block_html( $instance, 'enable_loadmore', esc_html__( 'Enable Load More', 'category-posts' ), false, true ); ?>
+				<div class="cpwp_ident loadmore-settings" style="display:<?php echo ( $instance['enable_loadmore'] ) ? 'block' : 'none'; ?>">
+					<?php echo $this->get_text_input_block_html( $instance, 'loadmore_text', esc_html__( 'Button text', 'category-posts' ), '', '', true ); ?>
+				</div>
 			</div>
 			<h4 data-panel="footer"><?php esc_html_e( 'Footer', 'category-posts' ); ?></h4>
 			<div>
