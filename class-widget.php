@@ -335,6 +335,39 @@ class Widget extends \WP_Widget {
 	}
 
 	/**
+	 * Calculate the HTML of the load more button based on the widget settings
+	 *
+	 * @param  array $instance Array which contains the various settings.
+	 *
+	 * @return string The HTML for the load more area
+	 *
+	 * @since 4.9
+	 */
+	public function loadMoreHTML( $instance ) {
+
+		if ( ! $instance['enable_loadmore'] ) {
+			return '';
+		}
+
+		$ret = '<div class="' . __NAMESPACE__ . '-loadmore">';
+		$context = 0;
+		if ( is_singular() ) {
+			$context = get_the_ID();
+		}
+
+		add_action( 'wp_footer', __NAMESPACE__ . '\embed_loadmore_scripts' );
+
+		// We rely on the widget number to be properly set.
+		$id = str_replace( WIDGET_BASE_ID . '-', '', $this->number );
+		$number = $instance['num'];
+		$start = $instance['offset'] + $number;
+
+		$ret .= '<button type="button" data-id="' . esc_attr( $id ) . '" data-start="' . esc_attr( $start ) . '" data-context="' . esc_attr( $context ) . '" data-number="' . esc_attr( $number ) . '">' . esc_html( $instance['loadmore_text'] ) . '</button>';
+		$ret .= '</div>';
+		return $ret;
+	}
+
+	/**
 	 * Calculate the HTML of the footer based on the widget settings
 	 *
 	 * @param  array $instance Array which contains the various settings.
@@ -856,6 +889,11 @@ class Widget extends \WP_Widget {
 				echo $item;
 			}
 			echo "</ul>\n";
+
+			// Load more only if we think we have more items.
+			if ( count( $items ) === (int) $instance['num'] ) {
+				echo $this->loadMoreHTML( $instance );
+			}
 
 			echo $this->footerHTML( $instance );
 			echo $after_widget; // Xss ok. This is how widget actually expected to behave.
