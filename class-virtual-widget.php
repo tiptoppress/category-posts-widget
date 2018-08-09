@@ -340,7 +340,8 @@ class Virtual_Widget {
 			}
 
 			if ( $settings['enable_loadmore'] ) {
-				$ret['loadmore'] = '#' . $widget_id . ' .' . __NAMESPACE__ . '-loadmore {text-align:center;}';
+				// $this->id is ued over $widget_id because we need the id of the outer div, not the UL itself.
+				$ret['loadmore'] = '#' . $this->id . ' .' . __NAMESPACE__ . '-loadmore {text-align:center;}';
 			}
 		}
 		$rules[] = $ret;
