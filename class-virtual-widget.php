@@ -338,6 +338,10 @@ class Virtual_Widget {
 					$ret[] = '#' . $widget_id . " .cat-post-format-standard:before {padding-left:12px; content: '\\e806'; }";
 					break;
 			}
+
+			if ( $settings['enable_loadmore'] ) {
+				$ret['loadmore'] = '#' . $widget_id . ' .' . __NAMESPACE__ . '-loadmore {text-align:center;}';
+			}
 		}
 		$rules[] = $ret;
 	}
