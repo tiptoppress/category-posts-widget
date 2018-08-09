@@ -358,7 +358,14 @@ class Widget extends \WP_Widget {
 		add_action( 'wp_footer', __NAMESPACE__ . '\embed_loadmore_scripts' );
 
 		// We rely on the widget number to be properly set.
-		$id = str_replace( WIDGET_BASE_ID . '-', '', $this->number );
+		// but need a slight different handling for proper widgets.
+		if ( is_int( $this->number ) ) {
+			// it is a proper widget, add the prefix.
+			$id = 'widget-' . $this->number;
+		} else {
+			$id = str_replace( WIDGET_BASE_ID . '-', '', $this->number );
+		}
+
 		$number = $instance['num'];
 		$start = $instance['offset'] + $number;
 		$loading = $instance['loading_text'];
