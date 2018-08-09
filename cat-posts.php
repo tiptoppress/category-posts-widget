@@ -189,23 +189,6 @@ function embed_front_end_scripts() {
 }
 
 /**
- * Embed the front end JS for load more.
- *
- * @since 4.9
- */
-function embed_loadmore_scripts() {
-	echo '<script>';
-	$suffix = 'min.js';
-	if ( defined( 'WP_DEBUG' ) ) {
-		$suffix = 'js';
-	}
-	echo 'var tiptoppress = Array();';
-	echo 'tiptoppress["' . esc_js( __NAMESPACE__ ) . '"] = { json_root_url : "' . esc_js( rest_url( __NAMESPACE__ . '/loadmore' ) ) . '"};';
-	include __DIR__ . '/js/frontend/loadmore.' . $suffix;
-	echo '</script>';
-}
-
-/**
  * Enqueue widget related scripts for the widget admin page and customizer.
  *
  * @param string $hook the name of the admin hook for which the function was triggered.
@@ -586,7 +569,8 @@ function default_settings() {
 		'template'               => "%title%\n\n%thumb%",
 		'text_do_not_wrap_thumb' => false,
 		'enable_loadmore'        => false,
-		'loadmore_text'          => __('Load More', 'category-posts'),
+		'loadmore_text'          => __( 'Load More', 'category-posts' ),
+		'loading_text'           => __( 'Loading...', 'category-posts' ),
 	);
 }
 

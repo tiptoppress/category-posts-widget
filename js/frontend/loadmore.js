@@ -22,7 +22,11 @@ if (typeof jQuery !== 'undefined')  {
 			var context = $this.data( 'context' );
 			var url = tiptoppress[php_settings_var].json_root_url;
 			var $ul = jQuery(this.parentElement.parentElement).find('ul'); // The UL of the widget.
+			var orig_text = $this.text();
+			var loading_text = $this.data( 'loading' );
 
+			// Change the button text to indicate loading.
+			$this.text( loading_text );
 			// Get the data from the server
 			jQuery.getJSON(url + '/' + id + '/' + start + '/' + number + '/' + context + '/', function ( data ) {
 				// appened the returned data to the UL in the returned order.
@@ -35,7 +39,8 @@ if (typeof jQuery !== 'undefined')  {
 					$this.data( 'start', start+number );
 				}
 			}).always( function () {
-				// Turn off spinner;
+				// Revert to original text.
+				$this.text( orig_text );
 			});
 		});
 	});

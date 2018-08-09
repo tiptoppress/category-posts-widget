@@ -361,8 +361,9 @@ class Widget extends \WP_Widget {
 		$id = str_replace( WIDGET_BASE_ID . '-', '', $this->number );
 		$number = $instance['num'];
 		$start = $instance['offset'] + $number;
+		$loading = $instance['loading_text'];
 
-		$ret .= '<button type="button" data-id="' . esc_attr( $id ) . '" data-start="' . esc_attr( $start ) . '" data-context="' . esc_attr( $context ) . '" data-number="' . esc_attr( $number ) . '">' . esc_html( $instance['loadmore_text'] ) . '</button>';
+		$ret .= '<button type="button" data-loading="' . esc_attr( $loading ) . '" data-id="' . esc_attr( $id ) . '" data-start="' . esc_attr( $start ) . '" data-context="' . esc_attr( $context ) . '" data-number="' . esc_attr( $number ) . '">' . esc_html( $instance['loadmore_text'] ) . '</button>';
 		$ret .= '</div>';
 		return $ret;
 	}
@@ -1497,6 +1498,7 @@ class Widget extends \WP_Widget {
 				<?php echo $this->get_checkbox_block_html( $instance, 'enable_loadmore', esc_html__( 'Enable Load More', 'category-posts' ), false, true ); ?>
 				<div class="cpwp_ident loadmore-settings" style="display:<?php echo ( $instance['enable_loadmore'] ) ? 'block' : 'none'; ?>">
 					<?php echo $this->get_text_input_block_html( $instance, 'loadmore_text', esc_html__( 'Button text', 'category-posts' ), '', '', true ); ?>
+					<?php echo $this->get_text_input_block_html( $instance, 'loading_text', esc_html__( 'Loading text', 'category-posts' ), '', '', true ); ?>
 				</div>
 			</div>
 			<h4 data-panel="footer"><?php esc_html_e( 'Footer', 'category-posts' ); ?></h4>
