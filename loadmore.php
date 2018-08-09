@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 4.9
  */
 function embed_loadmore_scripts() {
-	echo '<script>';
+	echo '<script>{';
 	$suffix = 'min.js';
 	if ( defined( 'WP_DEBUG' ) ) {
 		$suffix = 'js';
@@ -28,7 +28,7 @@ function embed_loadmore_scripts() {
 	echo 'var tiptoppress = Array();';
 	echo 'tiptoppress["' . esc_js( __NAMESPACE__ ) . '"] = { json_root_url : "' . esc_js( rest_url( __NAMESPACE__ . '/loadmore' ) ) . '"};';
 	include __DIR__ . '/js/frontend/loadmore.' . $suffix;
-	echo '</script>';
+	echo '}</script>';
 }
 
 /**
