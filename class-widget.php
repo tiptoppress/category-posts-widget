@@ -437,12 +437,25 @@ class Widget extends \WP_Widget {
 			$preset_date_format = $instance['preset_date_format'];
 		}
 
+		$attr = '';
 		switch ( $preset_date_format ) {
 			case 'sitedateandtime':
 				$date = get_the_time( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) );
 				break;
+			case 'localsitedateandtime':
+				$date = get_the_time( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) ) . ' GMT';
+				$time = get_post_time( 'U', true );
+				$attr = ' data-publishtime="' . $time . '" data-format="time"';
+				add_action( 'wp_footer', __NAMESPACE__ . '\embed_date_scripts' );
+				break;
 			case 'sitedate':
 				$date = get_the_time( get_option( 'date_format' ) );
+				break;
+			case 'localsitedate':
+				$date = get_the_time( get_option( 'date_format' ) ) . ' GMT';
+				$time = get_post_time( 'U', true );
+				$attr = ' data-publishtime="' . $time . '" data-format="date"';
+				add_action( 'wp_footer', __NAMESPACE__ . '\embed_date_scripts' );
 				break;
 			case 'sincepublished':
 				$date = human_time_diff( get_the_time( 'U' ), current_time( 'timestamp' ) );
@@ -456,7 +469,7 @@ class Widget extends \WP_Widget {
 				$date = get_the_time( $date_format );
 				break;
 		}
-		$ret .= '<span class="cat-post-date">';
+		$ret .= '<span class="cat-post-date"' . $attr . '>';
 		if ( isset( $instance['date_link'] ) && $instance['date_link'] && ! $everything_is_link ) {
 			$ret .= '<a href="' . \get_the_permalink() . '">';
 		}
@@ -1426,10 +1439,12 @@ class Widget extends \WP_Widget {
 					<div class="cpwp_ident">
 						<?php
 						echo $this->get_select_block_html( $instance, 'preset_date_format', esc_html__( 'Date format', 'category-posts' ), array(
-							'sitedateandtime' => esc_html__( 'Site date and time', 'category-posts' ),
-							'sitedate'        => esc_html__( 'Site date', 'category-posts' ),
-							'sincepublished'  => esc_html__( 'Time since published', 'category-posts' ),
-							'other'           => esc_html__( 'PHP style format', 'category-posts' ),
+							'sitedateandtime'      => esc_html__( 'Site date and time', 'category-posts' ),
+							'sitedate'             => esc_html__( 'Site date', 'category-posts' ),
+							'sincepublished'       => esc_html__( 'Time since published', 'category-posts' ),
+							'localsitedateandtime' => esc_html__( 'Reader\'s local date and time', 'category-posts' ),
+							'localsitedate'        => esc_html__( 'Reader\'s local date', 'category-posts' ),
+							'other'                => esc_html__( 'PHP style format', 'category-posts' ),
 						), 'sitedateandtime', true );
 						echo $this->get_text_input_block_html( $instance, 'date_format', esc_html__( 'PHP Style Date format', 'category-posts' ), '', 'j M Y', 'other' === $preset_date_format );
 						?>
