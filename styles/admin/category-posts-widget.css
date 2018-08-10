@@ -11,6 +11,7 @@
 }
 .cpwp_ident > p {
 	margin: 5px 0;
+	clear: both;
 }
 .cpwp_ident > label {
 	line-height: 2.75;
@@ -20,10 +21,18 @@
 	margin-top:-1em;
 	padding-top:1em;
 }
-
+.category-widget-cont label.checkbox {
+    margin-left: -25px;
+    left: 25px;
+    position: relative;
+}
 .category-widget-cont input[type="number"] {
 	width:5em;
 	text-align:center;
+	float: right;
+	clear: both;
+	margin-top: 2px;
+	margin-bottom: 2px;
 }
 
 .categoryposts-template-help th {

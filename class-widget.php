@@ -1274,7 +1274,7 @@ class Widget extends \WP_Widget {
 				$value = false;
 			}
 		}
-		$ret = '<label for="' . esc_attr( $this->get_field_id( $key ) ) . "\">\n" .
+		$ret = '<label class="checkbox" for="' . esc_attr( $this->get_field_id( $key ) ) . "\">\n" .
 					'<input id="' . esc_attr( $this->get_field_id( $key ) ) . '" name="' . esc_attr( $this->get_field_name( $key ) ) . '" type="checkbox" ' . checked( $value, true, false ) . '/>' . "\n" .
 					$label .
 				"</label>\n";
