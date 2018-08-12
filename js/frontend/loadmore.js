@@ -32,6 +32,9 @@ if (typeof jQuery !== 'undefined')  {
 				// appened the returned data to the UL in the returned order.
 				jQuery.each(data, function (key, li) {
 					$ul.append(li);
+					// apend returns the $ul, therefor we need to actualy find
+					// the newly added item.
+					$ul.children().last().trigger('catposts.load_more');
 				});
 				if (data.length != number) {
 					$this.hide();
