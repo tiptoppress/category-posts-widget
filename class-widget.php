@@ -871,6 +871,14 @@ class Widget extends \WP_Widget {
 			echo $before_widget; // Xss ok. This is how widget actually expected to behave.
 			echo $this->titleHTML( $before_title, $after_title, $instance );
 
+			$thumb = isset( $this->instance['template'] ) && preg_match( '/%thumb%/', $this->instance['template'] );
+
+			if ( ! ( isset( $instance['is_shortcode'] ) && $instance['is_shortcode'] ) ) { // the internal id is needed only for widgets.
+				echo '<ul id="' . esc_attr( WIDGET_BASE_ID ) . '-' . esc_attr( $this->number ) . '-internal" class="' . esc_attr( WIDGET_BASE_ID ) . '-internal' . "\">\n";
+			} else {
+				echo '<ul>';
+			}
+
 			// image crop browser fallback and workaround, no polyfill
 			if ( $thumb ) {
 				if ( apply_filters( 'cpw_enqueue_resources', false ) ) {
