@@ -175,7 +175,11 @@ add_action( 'wp_head', __NAMESPACE__ . '\wp_head' );
  * @since 4.8
  */
 function frontend_script() {
-	wp_enqueue_script( 'cat-posts-frontend-js', plugins_url( 'js/frontend/category-posts-frontend.min.js', __FILE__ ), array( 'jquery' ), VERSION, true );
+	$suffix = 'min.js';
+	if ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) {
+		$suffix = 'js';
+	}
+	wp_enqueue_script( 'cat-posts-frontend-js', plugins_url( 'js/frontend/category-posts-frontend.' . $suffix, __FILE__ ), array( 'jquery' ), VERSION, true );
 }
 
 /**
@@ -184,8 +188,12 @@ function frontend_script() {
  * @since 4.9
  */
 function embed_front_end_scripts() {
+	$suffix = 'min.js';
+	if ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) {
+		$suffix = 'js';
+	}
 	echo '<script>';
-	include __DIR__ . '/js/frontend/category-posts-frontend.min.js';
+	include __DIR__ . '/js/frontend/category-posts-frontend.' . $suffix;
 	echo '</script>';
 }
 
@@ -204,7 +212,7 @@ function admin_scripts( $hook ) {
 
 		// Use unminified version of JS when debuging, and minified when not.
 		$suffix = 'min.js';
-		if ( defined( 'WP_DEBUG' ) ) {
+		if ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) {
 			$suffix = 'js';
 		}
 		wp_register_script( 'category-posts-widget-admin-js', plugins_url( 'js/admin/category-posts-widget.' . $suffix, __FILE__ ), array( 'jquery' ), VERSION, true );

@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function embed_loadmore_scripts() {
 	echo '<script>{';
 	$suffix = 'min.js';
-	if ( defined( 'WP_DEBUG' ) ) {
+	if ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) {
 		$suffix = 'js';
 	}
 	echo 'var tiptoppress = Array();';

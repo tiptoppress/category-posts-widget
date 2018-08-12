@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function embed_date_scripts() {
 	echo '<script>{';
 	$suffix = 'min.js';
-	if ( defined( 'WP_DEBUG' ) ) {
+	if ( defined( 'WP_DEBUG' ) && WP_DEBUG === true ) {
 		$suffix = 'js';
 	}
 	include __DIR__ . '/js/frontend/date.' . $suffix;
