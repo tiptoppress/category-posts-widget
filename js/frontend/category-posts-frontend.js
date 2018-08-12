@@ -69,6 +69,12 @@ if (typeof jQuery !== 'undefined')  {
 			jQuery('.cat-post-item figure').removeClass('cat-post-crop');
 			jQuery('.cat-post-item figure').addClass('cat-post-crop-not-supported');
 		}
+		if (document.documentMode || /Edge/.test(navigator.userAgent)) {
+			jQuery('.cat-post-item figure img').height('+=1');
+			window.setTimeout(function(){
+				jQuery('.cat-post-item figure img').height('-=1');
+			},0);
+		}
 
 		// var uid =1;
 		// // get all widgets as object
