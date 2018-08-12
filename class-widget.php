@@ -493,7 +493,6 @@ class Widget extends \WP_Widget {
 
 		if ( ( isset( $instance['default_thunmbnail'] ) && ( 0 !== $instance['default_thunmbnail'] ) ) || has_post_thumbnail() ) {
 			$class              = '';
-			$use_css_cropping   = isset( $this->instance['use_css_cropping'] ) && $this->instance['use_css_cropping'];
 			$disable_css        = isset( $instance['disable_css'] ) && $instance['disable_css'];
 
 			if ( isset( $this->instance['thumb_hover'] ) && ! $disable_css ) {
@@ -872,22 +871,7 @@ class Widget extends \WP_Widget {
 			echo $before_widget; // Xss ok. This is how widget actually expected to behave.
 			echo $this->titleHTML( $before_title, $after_title, $instance );
 
-			// image crop ratio.
-			$ratio = '';
-			$use_css_cropping = isset( $this->instance['use_css_cropping'] ) && $this->instance['use_css_cropping'];
-			$empty_dimensions = empty( $this->instance['thumb_w'] ) || empty( $this->instance['thumb_h'] );
-			$thumb = isset( $this->instance['template'] ) && preg_match( '/%thumb%/', $this->instance['template'] );
-
-			if ( $use_css_cropping && ! $empty_dimensions && $thumb ) {
-				$ratio = "data-cpw-image-ratio='" . ( $this->instance['thumb_w'] / $this->instance['thumb_h'] ) . "'";
-			}
-
-			if ( ! ( isset( $instance['is_shortcode'] ) && $instance['is_shortcode'] ) ) { // the internal id is needed only for widgets.
-				echo '<ul id="' . esc_attr( WIDGET_BASE_ID ) . '-' . esc_attr( $this->number ) . '-internal" ' . $ratio . ' class="' . esc_attr( WIDGET_BASE_ID ) . '-internal' . "\">\n";
-			} else {
-				echo '<ul ' . $ratio . '>';
-			}
-
+			// image crop browser fallback and workaround, no polyfill
 			if ( $thumb ) {
 				if ( apply_filters( 'cpw_enqueue_resources', false ) ) {
 					frontend_script();
