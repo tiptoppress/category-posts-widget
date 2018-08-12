@@ -91,14 +91,14 @@ class Widget extends \WP_Widget {
 				// . 'px);width:auto;max-width:initial;" ', $html );
 				// responds to the height and width of the content box
 				$html = str_replace( '<img ', '<img style="object-fit:cover;height:'.$this->instance['thumb_h'].'px;width:'.$this->instance['thumb_w']
-				.'px;max-width:100%;"', $html );				
+				.'px;max-width:100%;"', $html );
 				// wrap span with post format.
 				$show_post_format = isset( $this->instance['show_post_format'] ) && ( 'none' !== $this->instance['show_post_format'] );
 				if ( $show_post_format || $this->instance['thumb_hover'] ) {
 					$format = get_post_format() ? : 'standard';
 					$post_format_class = 'cat-post-format cat-post-format-' . $format;
 				}
-				$html = '<figure>' . $html . '</figure>';
+				$html = '<figure>' . $html . '</figure>'
 					. $html . '</span>';
 			} else {
 				// use_css_cropping is not used.
