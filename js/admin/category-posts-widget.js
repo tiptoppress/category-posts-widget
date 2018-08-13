@@ -273,7 +273,7 @@ jQuery(document).ready( function () {
 			cwp_namespace.toggleAssignedCategoriesTop(this);
 		});
 
-		jQuery(document).on('click', class_namespace+' .hide_title', function () {
+		jQuery(document).on('click', class_namespace+' .categoryPosts-hide_title input', function () {
 			cwp_namespace.toggleHideTitle(this);
 		});
 
