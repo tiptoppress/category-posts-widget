@@ -881,9 +881,7 @@ class Widget extends \WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 
-		if ( 0 === count( $instance ) ) {
-			$instance = default_settings();
-		}
+		$instance = upgrade_settings( $instance );
 
 		extract( $args );
 
@@ -1011,6 +1009,9 @@ class Widget extends \WP_Widget {
 		} else {
 			$instance['text'] = wp_kses_post( $new_instance['template'] );
 		}
+
+		// Set the version of the DB structure.
+		$new_instance['ver'] = VERSION;
 		return $new_instance;
 	}
 
@@ -1355,6 +1356,8 @@ class Widget extends \WP_Widget {
 				$instance['excerpt_filters'] = 'on';
 			}
 		}
+
+		$instance = upgrade_settings( $instance );
 
 		$instance = wp_parse_args( (array) $instance, array(
 			'hide_post_titles'       => '',

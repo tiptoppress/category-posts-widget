@@ -342,6 +342,29 @@ function get_template_regex() {
 }
 
 /**
+ * The convert old data structure to current one.
+ *
+ * @param array $settings The settings to upgrade.
+ *
+ * @return array The settings matching current version standard.
+ *
+ * @since 4.8
+ */
+function upgrade_settings( $settings ) {
+
+	if ( 0 === count( $settings ) ) {
+		return default_settings();
+	}
+
+	$settings['ver'] = VERSION;
+
+	// Make sure all "empty" settings have default value.
+	$settings = wp_parse_args( $settings, default_settings() );
+
+	return $settings;
+}
+
+/**
  * Convert pre 4.8 settings into template
  *
  * @param  array $instance Array which contains the various settings.
@@ -463,6 +486,7 @@ function shortcode_settings( $pid, $name ) {
 		$o = get_option( '_virtual-' . WIDGET_BASE_ID );
 		if ( is_array( $o ) ) {
 			$instance = $o[ $pid ][ $name ];
+			$instance['ver'] = VERSION;
 		}
 	}
 
@@ -471,6 +495,8 @@ function shortcode_settings( $pid, $name ) {
 	} else {
 		$instance['template'] = convert_settings_to_template( $instance );
 	}
+
+	$instance = upgrade_settings( $instance );
 
 	return $instance;
 }
@@ -584,6 +610,8 @@ function default_settings() {
 		'start_date'             => '',
 		'end_date'               => '',
 		'days_ago'               => 30,
+		'ver'                    => VERSION,
+
 	);
 }
 
@@ -697,6 +725,8 @@ function customize_register( $wp_customize ) {
 						$m['excerpt_filters'] = 'on';
 					}
 				}
+
+				$m = upgrade_settings( $m );
 
 				$section_title = $k;
 				if ( '' === $section_title ) {
