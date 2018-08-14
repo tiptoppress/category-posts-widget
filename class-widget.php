@@ -246,6 +246,35 @@ class Widget extends \WP_Widget {
 			) );
 		}
 
+		switch ( $instance['date_range'] ) {
+			case 'days_ago':
+				$ago = (int) $instance['days_ago'];
+
+				// If there is no valid integer value given, bail.
+				if ( 0 === $ago ) {
+					break;
+				}
+
+				$date = date( 'Y-m-d', strtotime( '-' . $ago . ' days' ) );
+				$args['date_query'] = array(
+					'after'     => $date,
+					'inclusive' => true,
+				);
+				break;
+			case 'between_dates':
+				// Validation note - not doing any, assuming the query will
+				// fail gracefully enough for now as it is not clear what Should
+				// the validation be right now.
+				$start_date = $instance['start_date'];
+				$end_date = $instance['end_date'];
+				$args['date_query'] = array(
+					'after'     => $start_date,
+					'before'    => $end_date,
+					'inclusive' => true,
+				);
+				break;
+		}
+
 		return $args;
 	}
 
@@ -1059,6 +1088,14 @@ class Widget extends \WP_Widget {
 			), 'default', true );
 			echo $this->get_number_input_block_html( $instance, 'num', esc_html__( 'Number of posts to show', 'category-posts' ), esc_attr( get_option( 'posts_per_page' ) ), 1, '', '', true );
 			echo $this->get_number_input_block_html( $instance, 'offset', esc_html__( 'Start with post', 'category-posts' ), 1, 1, '', '', true );
+			echo $this->get_select_block_html( $instance, 'date_range', esc_html__( 'Date Range', 'category-posts' ), array(
+				'off'           => esc_html__( 'Off', 'category-posts' ),
+				'days_ago'      => esc_html__( 'Days ago', 'category-posts' ),
+				'between_dates' => esc_html__( 'Between dates', 'category-posts' ),
+			), 'off', true );
+			echo $this->get_number_input_block_html( $instance, 'days_ago', esc_html__( 'Up to', 'category-posts' ), 30 , 1, '', '', true );
+			echo $this->get_date_input_block_html( $instance, 'start_date', esc_html__( 'After', 'category-posts' ), true );
+			echo $this->get_date_input_block_html( $instance, 'end_date', esc_html__( 'Before', 'category-posts' ), true );
 			echo $this->get_select_block_html( $instance, 'sort_by', esc_html__( 'Sort by', 'category-posts' ), array(
 				'date'          => esc_html__( 'Date', 'category-posts' ),
 				'title'         => esc_html__( 'Title', 'category-posts' ),
@@ -1231,6 +1268,35 @@ class Widget extends \WP_Widget {
 		$ret = '<label for="' . $this->get_field_id( $key ) . "\">\n" .
 					esc_html( $label ) . "\n" .
 					'<input placeholder="' . $placeholder . '" id="' . esc_attr( $this->get_field_id( $key ) ) . '" name="' . esc_attr( $this->get_field_name( $key ) ) . '" class="' . esc_attr( $key ) . '" type="number"' . $minmax . ' value="' . esc_attr( $value ) . '" autocomplete="off" />' . "\n" .
+				"</label>\n";
+
+		return $this->get_wrap_block_html( $ret, $key, $visible );
+	}
+
+	/**
+	 * Generate a form P element containing a date input
+	 *
+	 * @since 4.9
+	 * @param array  $instance  The instance.
+	 * @param string $key       The key in the instance array.
+	 * @param string $label     The label to display and associate with the input.
+	 *                          expected to be escaped.
+	 * @param bool   $visible   Indicates if the element should be visible when rendered.
+	 *
+	 * @return string HTML a P element containing the input, its label, class based on the key
+	 *                and style set to display:none if visibility is off.
+	 */
+	private function get_date_input_block_html( $instance, $key, $label, $visible ) {
+
+		$value = $default;
+
+		if ( isset( $instance[ $key ] ) ) {
+			$value = $instance[ $key ];
+		}
+
+		$ret = '<label for="' . $this->get_field_id( $key ) . "\">\n" .
+					esc_html( $label ) . "\n" .
+					'<input id="' . esc_attr( $this->get_field_id( $key ) ) . '" name="' . esc_attr( $this->get_field_name( $key ) ) . '" class="' . esc_attr( $key ) . '" type="date" value="' . esc_attr( $value ) . '" autocomplete="off" />' . "\n" .
 				"</label>\n";
 
 		return $this->get_wrap_block_html( $ret, $key, $visible );
