@@ -580,6 +580,10 @@ function default_settings() {
 		'enable_loadmore'        => false,
 		'loadmore_text'          => __( 'Load More', 'category-posts' ),
 		'loading_text'           => __( 'Loading...', 'category-posts' ),
+		'date_range'             => 'off',
+		'start_date'             => '',
+		'end_date'               => '',
+		'days_ago'               => 30,
 	);
 }
 
