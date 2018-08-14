@@ -1098,8 +1098,8 @@ class Widget extends \WP_Widget {
 			<div class="cpwp_ident categoryPosts-date-range" style="display:<?php echo 'off' === $instance['date_range'] ? 'none' : 'block'; ?>">
 			<?php
 			echo $this->get_number_input_block_html( $instance, 'days_ago', esc_html__( 'Up to', 'category-posts' ), 30 , 1, '', '', 'days_ago' === $instance['date_range'] );
-			echo $this->get_date_input_block_html( $instance, 'start_date', esc_html__( 'After', 'category-posts' ), 'between_dates' === $instance['date_range'] );
-			echo $this->get_date_input_block_html( $instance, 'end_date', esc_html__( 'Before', 'category-posts' ), 'between_dates' === $instance['date_range'] );
+			echo $this->get_date_input_block_html( $instance, 'start_date', esc_html__( 'After', 'category-posts' ), '', 'between_dates' === $instance['date_range'] );
+			echo $this->get_date_input_block_html( $instance, 'end_date', esc_html__( 'Before', 'category-posts' ), '', 'between_dates' === $instance['date_range'] );
 			?>
 			</div>
 			<?php
@@ -1288,12 +1288,13 @@ class Widget extends \WP_Widget {
 	 * @param string $key       The key in the instance array.
 	 * @param string $label     The label to display and associate with the input.
 	 *                          expected to be escaped.
+	 * @param string $default   The value to use if the key is not set in the instance.
 	 * @param bool   $visible   Indicates if the element should be visible when rendered.
 	 *
 	 * @return string HTML a P element containing the input, its label, class based on the key
 	 *                and style set to display:none if visibility is off.
 	 */
-	private function get_date_input_block_html( $instance, $key, $label, $visible ) {
+	private function get_date_input_block_html( $instance, $key, $label, $default, $visible ) {
 
 		$value = $default;
 
