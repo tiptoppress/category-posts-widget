@@ -74,6 +74,26 @@
             }
         },
 
+		// Show hide other date range settings
+		toggleDateRange: function(item) {
+            var value = jQuery(item).val();
+			var panel = item.parentElement.parentElement;
+			jQuery(panel).find('.categoryPosts-date-range p').hide();
+			jQuery(panel).find('.categoryPosts-date-range').show();
+            switch ( value ) {
+				case 'off':
+					jQuery(panel).find('.categoryPosts-date-range').hide();
+				break;
+				case 'days_ago':
+					jQuery(panel).find('.categoryPosts-days_ago').show();
+				break;
+				case 'between_dates':
+					jQuery(panel).find('.categoryPosts-start_date').show();
+					jQuery(panel).find('.categoryPosts-end_date').show();
+				break;
+            }
+        },
+
 		// Show template help
 		toggleTemplateHelp: function(item,event) {
 			event.preventDefault();
@@ -283,6 +303,10 @@ jQuery(document).ready( function () {
 
 		jQuery(document).on('change', class_namespace+' .categoryPosts-preset_date_format select', function () { // change date format
 			cwp_namespace.toggleDateFormat(this);
+		});
+
+		jQuery(document).on('change', class_namespace+' .categoryPosts-date_range select', function () { // change date range
+			cwp_namespace.toggleDateRange(this);
 		});
 
 		jQuery(document).off('click', class_namespace+' a.toggle-template-help').on('click', class_namespace+' a.toggle-template-help', function (event) { // show template help

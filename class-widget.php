@@ -1093,9 +1093,15 @@ class Widget extends \WP_Widget {
 				'days_ago'      => esc_html__( 'Days ago', 'category-posts' ),
 				'between_dates' => esc_html__( 'Between dates', 'category-posts' ),
 			), 'off', true );
-			echo $this->get_number_input_block_html( $instance, 'days_ago', esc_html__( 'Up to', 'category-posts' ), 30 , 1, '', '', true );
-			echo $this->get_date_input_block_html( $instance, 'start_date', esc_html__( 'After', 'category-posts' ), true );
-			echo $this->get_date_input_block_html( $instance, 'end_date', esc_html__( 'Before', 'category-posts' ), true );
+			?>
+			<div class="cpwp_ident categoryPosts-date-range" style="display:<?php echo 'off' === $instance['date_range'] ? 'none' : 'block'; ?>">
+			<?php
+			echo $this->get_number_input_block_html( $instance, 'days_ago', esc_html__( 'Up to', 'category-posts' ), 30 , 1, '', '', 'days_ago' === $instance['date_range'] );
+			echo $this->get_date_input_block_html( $instance, 'start_date', esc_html__( 'After', 'category-posts' ), 'between_dates' === $instance['date_range'] );
+			echo $this->get_date_input_block_html( $instance, 'end_date', esc_html__( 'Before', 'category-posts' ), 'between_dates' === $instance['date_range'] );
+			?>
+			</div>
+			<?php
 			echo $this->get_select_block_html( $instance, 'sort_by', esc_html__( 'Sort by', 'category-posts' ), array(
 				'date'          => esc_html__( 'Date', 'category-posts' ),
 				'title'         => esc_html__( 'Title', 'category-posts' ),
