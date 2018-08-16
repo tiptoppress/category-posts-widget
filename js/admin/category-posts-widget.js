@@ -219,11 +219,11 @@
 				var template = jQuery(elem).val();
 				var tags = tiptoppress[ this.php_settings_var ].template_tags;
 				var widget_cont = jQuery(elem.parentElement.parentElement.parentElement.parentElement);
-				for (var i = 0; i < tags.length; i++) {
-					if ( -1 !== template.indexOf( tags[i] ) ) {
-						widget_cont.find(this.template_panel_prefix + tags[i] ).show();
+				for (var key in tags) {
+					if ( -1 !== template.indexOf( tags[key] ) ) {
+						widget_cont.find(this.template_panel_prefix + tags[key] ).show();
 					} else {
-						widget_cont.find(this.template_panel_prefix + tags[i] ).hide();
+						widget_cont.find(this.template_panel_prefix + tags[key] ).hide();
 					}
 				}
 			}
