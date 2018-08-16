@@ -894,7 +894,7 @@ class Widget extends \WP_Widget {
 
 		$items = $this->get_elements_HTML( $instance, $current_post_id, 0, 0 );
 
-		if ( ! isset( $instance['hide_if_empty'] ) || ! $instance['hide_if_empty'] || ! empty( $items ) ) {
+		if ( ( 'nothing' === $instance['no_match_handling'] ) || ! empty( $items ) ) {
 			echo $before_widget; // Xss ok. This is how widget actually expected to behave.
 			echo $this->titleHTML( $before_title, $after_title, $instance );
 
@@ -906,7 +906,7 @@ class Widget extends \WP_Widget {
 				echo '<ul>';
 			}
 
-			// image crop browser fallback and workaround, no polyfill
+			// image crop browser fallback and workaround, no polyfill.
 			if ( $thumb ) {
 				if ( apply_filters( 'cpw_enqueue_resources', false ) ) {
 					frontend_script();
@@ -939,6 +939,12 @@ class Widget extends \WP_Widget {
 			}
 
 			wp_reset_postdata();
+		} elseif ( 'text' === $instance['no_match_handling'] ) {
+			echo $before_widget; // Xss ok. This is how widget actually expected to behave.
+			echo $this->titleHTML( $before_title, $after_title, $instance );
+			echo esc_html( $instance['no_match_text'] );
+			echo $this->footerHTML( $instance );
+			echo $after_widget; // Xss ok. This is how widget actually expected to behave.
 		}
 	}
 
@@ -1295,7 +1301,7 @@ class Widget extends \WP_Widget {
 	 */
 	private function get_date_input_block_html( $instance, $key, $label, $visible ) {
 
-		$value = $default;
+		$value = '';
 
 		if ( isset( $instance[ $key ] ) ) {
 			$value = $instance[ $key ];
@@ -1368,7 +1374,6 @@ class Widget extends \WP_Widget {
 			'date_format'            => '',
 			'disable_css'            => '',
 			'disable_font_styles'    => '',
-			'hide_if_empty'          => '',
 			'preset_date_format'     => 'other',
 			'thumb'                  => false,
 			'thumb_w'                => get_option( 'thumbnail_size_w', 150 ),
@@ -1376,6 +1381,7 @@ class Widget extends \WP_Widget {
 			'default_thunmbnail'     => 0,
 			'use_css_cropping'       => true,
 			'text_do_not_wrap_thumb' => false,
+			'no_match_handling'      => 'nothing',
 		) );
 
 		$hide_post_titles                = $instance['hide_post_titles'];
@@ -1386,7 +1392,6 @@ class Widget extends \WP_Widget {
 		$date_format                     = $instance['date_format'];
 		$disable_css                     = $instance['disable_css'];
 		$disable_font_styles             = $instance['disable_font_styles'];
-		$hide_if_empty                   = $instance['hide_if_empty'];
 		$preset_date_format              = $instance['preset_date_format'];
 		$thumb                           = ! empty( $instance['thumb'] );
 		$thumb_w                         = $instance['thumb_w'];
@@ -1577,8 +1582,19 @@ class Widget extends \WP_Widget {
 					<?php echo $this->get_checkbox_block_html( $instance, 'disable_css', esc_html__( 'Disable the built-in CSS', 'category-posts' ), false, true ); ?>
 					<?php echo $this->get_checkbox_block_html( $instance, 'disable_font_styles', esc_html__( 'Disable only font styles', 'category-posts' ), false, true ); ?>
 				</div>
-				<?php echo $this->get_checkbox_block_html( $instance, 'hide_if_empty', esc_html__( 'Hide if there are no matching posts', 'category-posts' ), false, true ); ?>
-				<?php echo $this->get_checkbox_block_html( $instance, 'enable_loadmore', esc_html__( 'Enable Load More', 'category-posts' ), false, true ); ?>
+				<?php
+					echo $this->get_select_block_html( $instance, 'no_match_handling', esc_html__( 'When there are no matches', 'category-posts' ), array(
+						'nothing' => esc_html__( 'Display empty widget', 'category-posts' ),
+						'hide'    => esc_html__( 'Hide Widget', 'category-posts' ),
+						'text'    => esc_html__( 'Show text', 'category-posts' ),
+					), 'nothing', true );
+				?>
+				<div class="cpwp_ident categoryPosts-no-match-text">
+					<?php echo $this->get_textarea_html( $instance, 'no_match_text', esc_html__( 'Text', 'category-posts' ), '', '', true, 8 ); ?>
+				</div>
+				<?php
+					echo $this->get_checkbox_block_html( $instance, 'enable_loadmore', esc_html__( 'Enable Load More', 'category-posts' ), false, true );
+				?>
 				<div class="cpwp_ident loadmore-settings" style="display:<?php echo ( $instance['enable_loadmore'] ) ? 'block' : 'none'; ?>">
 					<?php echo $this->get_text_input_block_html( $instance, 'loadmore_text', esc_html__( 'Button text', 'category-posts' ), '', '', true ); ?>
 					<?php echo $this->get_text_input_block_html( $instance, 'loading_text', esc_html__( 'Loading text', 'category-posts' ), '', '', true ); ?>

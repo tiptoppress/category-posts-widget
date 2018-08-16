@@ -356,6 +356,22 @@ function upgrade_settings( $settings ) {
 		return default_settings();
 	}
 
+	if ( ! isset( $settings['ver'] ) ) {
+		/*
+		 * Pre 4.9 version.
+		 */
+
+		// Upgrade the hide if empty option.
+		if ( isset( $settings['hide_if_empty'] ) && $settings['hide_if_empty'] ) {
+			$settings['no_match_handling'] = 'hide';
+		} else {
+			$settings['no_match_handling'] = 'nothing';
+		}
+		if ( isset( $settings['hide_if_empty'] ) ) {
+			unset( $settings['hide_if_empty'] );
+		}
+	}
+
 	$settings['ver'] = VERSION;
 
 	// Make sure all "empty" settings have default value.
@@ -596,7 +612,6 @@ function default_settings() {
 		'date_format'            => '',
 		'disable_css'            => false,
 		'disable_font_styles'    => false,
-		'hide_if_empty'          => false,
 		'show_post_format'       => 'none',
 		'no_cat_childs'          => false,
 		'everything_is_link'     => false,
@@ -610,6 +625,8 @@ function default_settings() {
 		'start_date'             => '',
 		'end_date'               => '',
 		'days_ago'               => 30,
+		'no_match_handling'      => 'nothing',
+		'no_match_text'          => '',
 		'ver'                    => VERSION,
 
 	);

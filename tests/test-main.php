@@ -1369,7 +1369,6 @@ function default_settings() {
 		'date_format'          => '',
 		'disable_css'          => false,
 		'disable_font_styles'  => false,
-		'hide_if_empty'        => false,
 		'offset'               => 1,
 		'hide_social_buttons'  => '',
 		'no_cat_childs'        => false,
