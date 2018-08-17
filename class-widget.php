@@ -293,14 +293,10 @@ class Widget extends \WP_Widget {
 	public function titleHTML( $before_title, $after_title, $instance ) {
 		$ret = '';
 
-		if ( ! isset( $instance['cat'] ) ) {
-			$instance['cat'] = 0;
-		}
-
 		// If no title, use the name of the category.
 		if ( ! isset( $instance['title'] ) || ! $instance['title'] ) {
 			$instance['title'] = '';
-			if ( 0 !== $instance['cat'] ) {
+			if ( 0 !== (int) $instance['cat'] ) {
 				$category_info = get_category( $instance['cat'] );
 				if ( $category_info && ! is_wp_error( $category_info ) ) {
 					$instance['title'] = $category_info->name;
@@ -1030,11 +1026,7 @@ class Widget extends \WP_Widget {
 	 * @since 4.6
 	 */
 	public function formTitlePanel( $instance ) {
-		if ( isset( $instance['cat'] ) ) {
-			$cat = $instance['cat'];
-		} else {
-			$cat = 0;
-		}
+		$cat = (int) $instance['cat'];
 
 		$hide_title = false;
 		if ( isset( $instance['hide_title'] ) && $instance['hide_title'] ) {
@@ -1351,8 +1343,6 @@ class Widget extends \WP_Widget {
 		$default_thunmbnail              = $instance['default_thunmbnail'];
 		$use_css_cropping                = $instance['use_css_cropping'];
 		$text_do_not_wrap_thumb          = $instance['text_do_not_wrap_thumb'];
-
-		$cat = $instance['cat'];
 		?>
 
 		<div class="category-widget-cont">
