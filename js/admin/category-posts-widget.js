@@ -94,6 +94,17 @@
             }
         },
 
+		// Show/hide no match related settings
+		toggleNoMatch: function(item) {
+            var value = jQuery(item).val();
+			var panel = item.parentElement.parentElement;
+			if ( 'text' == value ) {
+				jQuery(panel).find('.categoryPosts-no-match-text').show();
+			} else {
+				jQuery(panel).find('.categoryPosts-no-match-text').hide();
+			}
+        },
+
 		// Show template help
 		toggleTemplateHelp: function(item,event) {
 			event.preventDefault();
@@ -307,6 +318,10 @@ jQuery(document).ready( function () {
 
 		jQuery(document).on('change', class_namespace+' .categoryPosts-date_range select', function () { // change date range
 			cwp_namespace.toggleDateRange(this);
+		});
+
+		jQuery(document).on('change', class_namespace+' .categoryPosts-no_match_handling select', function () { // change date range
+			cwp_namespace.toggleNoMatch(this);
 		});
 
 		jQuery(document).off('click', class_namespace+' a.toggle-template-help').on('click', class_namespace+' a.toggle-template-help', function (event) { // show template help

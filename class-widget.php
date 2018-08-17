@@ -1590,7 +1590,7 @@ class Widget extends \WP_Widget {
 						'text'    => esc_html__( 'Show text', 'category-posts' ),
 					), 'nothing', true );
 				?>
-				<div class="cpwp_ident categoryPosts-no-match-text">
+				<div class="cpwp_ident categoryPosts-no-match-text" style="display:<?php echo ( 'text' === $instance['no_match_handling'] ) ? 'block' : 'none'; ?>">
 					<?php echo $this->get_textarea_html( $instance, 'no_match_text', esc_html__( 'Text', 'category-posts' ), '', '', true, 8 ); ?>
 				</div>
 				<?php
