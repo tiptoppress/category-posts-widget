@@ -66,7 +66,7 @@ class Virtual_Widget {
 	public function __construct( $id, $class, $args ) {
 		$this->id = $id;
 		$this->class = $class;
-		self::$collection[ $id ] = wp_parse_args( $args, default_settings() );
+		self::$collection[ $id ] = upgrade_settings( $args );
 	}
 
 	/**
