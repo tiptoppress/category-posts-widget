@@ -1062,7 +1062,6 @@ class Widget extends \WP_Widget {
 	 * @since 4.6
 	 */
 	public function formFilterPanel( $instance ) {
-		$instance = wp_parse_args( (array) $instance, array( 'cat' => 0 ) );
 		$cat = $instance['cat'];
 ?>
 	<h4 data-panel="filter"><?php esc_html_e( 'Filter', 'category-posts' ); ?></h4>
@@ -1365,25 +1364,6 @@ class Widget extends \WP_Widget {
 		}
 
 		$instance = upgrade_settings( $instance );
-
-		$instance = wp_parse_args( (array) $instance, array(
-			'hide_post_titles'       => '',
-			'excerpt'                => '',
-			'excerpt_more_text'      => '',
-			'excerpt_filters'        => '',
-			'date'                   => '',
-			'date_format'            => '',
-			'disable_css'            => '',
-			'disable_font_styles'    => '',
-			'preset_date_format'     => 'other',
-			'thumb'                  => false,
-			'thumb_w'                => get_option( 'thumbnail_size_w', 150 ),
-			'thumb_h'                => get_option( 'thumbnail_size_h', 150 ),
-			'default_thunmbnail'     => 0,
-			'use_css_cropping'       => true,
-			'text_do_not_wrap_thumb' => false,
-			'no_match_handling'      => 'nothing',
-		) );
 
 		$hide_post_titles                = $instance['hide_post_titles'];
 		$excerpt                         = $instance['excerpt'];

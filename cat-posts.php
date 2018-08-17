@@ -733,8 +733,6 @@ function customize_register( $wp_customize ) {
 					$m['template'] = convert_settings_to_template( $m );
 				}
 
-				$m = wp_parse_args( $m, default_settings() );
-
 				if ( 0 === count( $meta ) ) { // new widget, use defaults.
 					;
 				} else { // updated widgets come from =< 4.6 excerpt filter is on.
