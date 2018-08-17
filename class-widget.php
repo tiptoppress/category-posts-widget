@@ -1043,11 +1043,11 @@ class Widget extends \WP_Widget {
 ?>
 	<h4 data-panel="title"><?php esc_html_e( 'Title', 'category-posts' ); ?></h4>
 	<div>
-		<?php echo $this->get_checkbox_block_html( $instance, 'hide_title', esc_html__( 'Hide title', 'category-posts' ), false, true ); ?>
+		<?php echo $this->get_checkbox_block_html( $instance, 'hide_title', esc_html__( 'Hide title', 'category-posts' ), true ); ?>
 		<div class="cpwp_ident categoryposts-data-panel-title-settings" <?php echo ( $hide_title ) ? 'style="display:none"' : ''; ?>>
-			<?php echo $this->get_text_input_block_html( $instance, 'title', esc_html__( 'Title', 'category-posts' ), '', esc_attr__( 'Recent Posts', 'category-posts' ), true ); ?>
-			<?php echo $this->get_checkbox_block_html( $instance, 'title_link', esc_html__( 'Make widget title link', 'category-posts' ), false, 0 !== $cat ); ?>
-				<?php echo $this->get_text_input_block_html( $instance, 'title_link_url', esc_html__( 'Title link URL', 'category-posts' ), '', '', 0 === $cat ); ?>
+			<?php echo $this->get_text_input_block_html( $instance, 'title', esc_html__( 'Title', 'category-posts' ), '', true ); ?>
+			<?php echo $this->get_checkbox_block_html( $instance, 'title_link', esc_html__( 'Make widget title link', 'category-posts' ), 0 !== $cat ); ?>
+				<?php echo $this->get_text_input_block_html( $instance, 'title_link_url', esc_html__( 'Title link URL', 'category-posts' ), '', 0 === $cat ); ?>
 			</div>
 		</div>
 <?php
@@ -1081,7 +1081,7 @@ class Widget extends \WP_Widget {
 			</label>
 		</p>
 		<?php
-			echo $this->get_checkbox_block_html( $instance, 'no_cat_childs', esc_html__( 'Exclude child categories', 'category-posts' ), false, ! empty( $instance['cat'] ) );
+			echo $this->get_checkbox_block_html( $instance, 'no_cat_childs', esc_html__( 'Exclude child categories', 'category-posts' ), ! empty( $instance['cat'] ) );
 			echo $this->get_select_block_html( $instance, 'status', esc_html__( 'Status', 'category-posts' ), array(
 				'default'                => esc_html__( 'WordPress Default', 'category-posts' ),
 				'publish'                => esc_html__( 'Published', 'category-posts' ),
@@ -1092,8 +1092,8 @@ class Widget extends \WP_Widget {
 				'private,future'         => esc_html__( 'Private or Scheduled', 'category-posts' ),
 				'private,publish,future' => esc_html__( 'Published, Private or Scheduled', 'category-posts' ),
 			), 'default', true );
-			echo $this->get_number_input_block_html( $instance, 'num', esc_html__( 'Number of posts to show', 'category-posts' ), esc_attr( get_option( 'posts_per_page' ) ), 1, '', '', true );
-			echo $this->get_number_input_block_html( $instance, 'offset', esc_html__( 'Start with post', 'category-posts' ), 1, 1, '', '', true );
+			echo $this->get_number_input_block_html( $instance, 'num', esc_html__( 'Number of posts to show', 'category-posts' ), 1, '', '', true );
+			echo $this->get_number_input_block_html( $instance, 'offset', esc_html__( 'Start with post', 'category-posts' ), 1, '', '', true );
 			echo $this->get_select_block_html( $instance, 'date_range', esc_html__( 'Date Range', 'category-posts' ), array(
 				'off'           => esc_html__( 'Off', 'category-posts' ),
 				'days_ago'      => esc_html__( 'Days ago', 'category-posts' ),
@@ -1102,9 +1102,9 @@ class Widget extends \WP_Widget {
 			?>
 			<div class="cpwp_ident categoryPosts-date-range" style="display:<?php echo 'off' === $instance['date_range'] ? 'none' : 'block'; ?>">
 			<?php
-			echo $this->get_number_input_block_html( $instance, 'days_ago', esc_html__( 'Up to', 'category-posts' ), 30 , 1, '', '', 'days_ago' === $instance['date_range'] );
-			echo $this->get_date_input_block_html( $instance, 'start_date', esc_html__( 'After', 'category-posts' ), '', 'between_dates' === $instance['date_range'] );
-			echo $this->get_date_input_block_html( $instance, 'end_date', esc_html__( 'Before', 'category-posts' ), '', 'between_dates' === $instance['date_range'] );
+			echo $this->get_number_input_block_html( $instance, 'days_ago', esc_html__( 'Up to', 'category-posts' ), 1, '', '', 'days_ago' === $instance['date_range'] );
+			echo $this->get_date_input_block_html( $instance, 'start_date', esc_html__( 'After', 'category-posts' ), 'between_dates' === $instance['date_range'] );
+			echo $this->get_date_input_block_html( $instance, 'end_date', esc_html__( 'Before', 'category-posts' ), 'between_dates' === $instance['date_range'] );
 			?>
 			</div>
 			<?php
@@ -1114,9 +1114,9 @@ class Widget extends \WP_Widget {
 				'comment_count' => esc_html__( 'Number of comments', 'category-posts' ),
 				'rand'          => esc_html__( 'Random', 'category-posts' ),
 			), 'date', true );
-			echo $this->get_checkbox_block_html( $instance, 'asc_sort_order', esc_html__( 'Reverse sort order (ascending)', 'category-posts' ), false, true );
-			echo $this->get_checkbox_block_html( $instance, 'exclude_current_post', esc_html__( 'Exclude current post', 'category-posts' ), false, true );
-			echo $this->get_checkbox_block_html( $instance, 'hideNoThumb', esc_html__( 'Exclude posts which have no thumbnail', 'category-posts' ), false, true );
+			echo $this->get_checkbox_block_html( $instance, 'asc_sort_order', esc_html__( 'Reverse sort order (ascending)', 'category-posts' ), true );
+			echo $this->get_checkbox_block_html( $instance, 'exclude_current_post', esc_html__( 'Exclude current post', 'category-posts' ), true );
+			echo $this->get_checkbox_block_html( $instance, 'hideNoThumb', esc_html__( 'Exclude posts which have no thumbnail', 'category-posts' ), true );
 			?>
 		</div>
 <?php
@@ -1162,11 +1162,7 @@ class Widget extends \WP_Widget {
 	 *                and style set to display:none if visibility is off.
 	 */
 	private function get_select_block_html( $instance, $key, $label, $list, $default, $visible ) {
-		$value = $default;
-
-		if ( isset( $instance[ $key ] ) ) {
-			$value = $instance[ $key ];
-		}
+		$value = $instance[ $key ];
 
 		if ( ! array_key_exists( $value, $list ) ) {
 			$value = $default;
@@ -1191,7 +1187,6 @@ class Widget extends \WP_Widget {
 	 * @param array  $instance      The instance.
 	 * @param string $key           The key in the instance array.
 	 * @param string $label         The label to display and associate with the input (should be html escaped).
-	 * @param int    $default       The value to use if the key is not set in the instance.
 	 * @param string $placeholder   The placeholder to use in the input (should be attribute escaped).
 	 * @param bool   $visible       Indicates if the element should be visible when rendered.
 	 * @param int    $num_rows      Number of rows.
@@ -1199,13 +1194,9 @@ class Widget extends \WP_Widget {
 	 * @return string HTML a P element containing the input, its label, class based on the key
 	 *                and style set to display:none if visibility is off.
 	 */
-	private function get_textarea_html( $instance, $key, $label, $default, $placeholder, $visible, $num_rows ) {
+	private function get_textarea_html( $instance, $key, $label, $placeholder, $visible, $num_rows ) {
 
-		$value = $default;
-
-		if ( isset( $instance[ $key ] ) ) {
-			$value = $instance[ $key ];
-		}
+		$value = $instance[ $key ];
 
 		$ret = '<label for="' . esc_attr( $this->get_field_id( $key ) ) . '">' . $label . '</label>' .
 					'<textarea rows="' . esc_attr( $num_rows ) . '" placeholder="' . $placeholder . '" id="' . esc_attr( $this->get_field_id( $key ) ) . '" name="' . esc_attr( $this->get_field_name( $key ) ) . '" autocomplete="off">' . esc_textarea( $value ) . '</textarea>';
@@ -1221,20 +1212,15 @@ class Widget extends \WP_Widget {
 	 * @param string $key       The key in the instance array.
 	 * @param string $label     The label to display and associate with the input.
 	 *                          Should be html escaped.
-	 * @param int    $default   The value to use if the key is not set in the instance.
 	 * @param string $placeholder The placeholder to use in the input. should be attribute escaped.
 	 * @param bool   $visible   Indicates if the element should be visible when rendered.
 	 *
 	 * @return string HTML a P element contaning the input, its label, class based on the key
 	 *                and style set to display:none if visibility is off.
 	 */
-	private function get_text_input_block_html( $instance, $key, $label, $default, $placeholder, $visible ) {
+	private function get_text_input_block_html( $instance, $key, $label, $placeholder, $visible ) {
 
-		$value = $default;
-
-		if ( isset( $instance[ $key ] ) ) {
-			$value = $instance[ $key ];
-		}
+		$value = $instance[ $key ];
 
 		$ret = '<label for="' . $this->get_field_id( $key ) . "\">\n" .
 					$label .
@@ -1252,7 +1238,6 @@ class Widget extends \WP_Widget {
 	 * @param string $key       The key in the instance array.
 	 * @param string $label     The label to display and associate with the input.
 	 *                          expected to be escaped.
-	 * @param int    $default   The value to use if the key is not set in the instance.
 	 * @param int    $min       The minimum value allowed to be input.
 	 * @param int    $max       The maximum value allowed to be input.
 	 * @param string $placeholder The placeholder string to be used. expected to be escaped.
@@ -1261,13 +1246,9 @@ class Widget extends \WP_Widget {
 	 * @return string HTML a P element contaning the input, its label, class based on the key
 	 *                and style set to display:none if visibility is off.
 	 */
-	private function get_number_input_block_html( $instance, $key, $label, $default, $min, $max, $placeholder, $visible ) {
+	private function get_number_input_block_html( $instance, $key, $label, $min, $max, $placeholder, $visible ) {
 
-		$value = $default;
-
-		if ( isset( $instance[ $key ] ) ) {
-			$value = $instance[ $key ];
-		}
+		$value = $instance[ $key ];
 
 		$minmax = '';
 		if ( '' !== $min ) {
@@ -1293,19 +1274,14 @@ class Widget extends \WP_Widget {
 	 * @param string $key       The key in the instance array.
 	 * @param string $label     The label to display and associate with the input.
 	 *                          expected to be escaped.
-	 * @param string $default   The value to use if the key is not set in the instance.
 	 * @param bool   $visible   Indicates if the element should be visible when rendered.
 	 *
 	 * @return string HTML a P element containing the input, its label, class based on the key
 	 *                and style set to display:none if visibility is off.
 	 */
-	private function get_date_input_block_html( $instance, $key, $label, $default, $visible ) {
+	private function get_date_input_block_html( $instance, $key, $label, $visible ) {
 
-		$value = '';
-
-		if ( isset( $instance[ $key ] ) ) {
-			$value = $instance[ $key ];
-		}
+		$value = $instance[ $key ];
 
 		$ret = '<label for="' . $this->get_field_id( $key ) . "\">\n" .
 					esc_html( $label ) . "\n" .
@@ -1323,15 +1299,12 @@ class Widget extends \WP_Widget {
 	 * @param string $key       The key in the instance array.
 	 * @param string $label     The label to display and associate with the checkbox.
 	 *                          should be escaped string.
-	 * @param bool   $default   The value to use if the key is not set in the instance.
 	 * @param bool   $visible   Indicates if the element should be visible when rendered.
 	 *
 	 * @return string HTML a P element contaning the checkbox, its label, class based on the key
 	 *                and style set to display:none if visibility is off.
 	 */
-	private function get_checkbox_block_html( $instance, $key, $label, $default, $visible ) {
-
-		$value = $default;
+	private function get_checkbox_block_html( $instance, $key, $label, $visible ) {
 
 		if ( array_key_exists( $key, $instance ) ) {
 			if ( $instance[ $key ] ) {
@@ -1366,10 +1339,8 @@ class Widget extends \WP_Widget {
 		$instance = upgrade_settings( $instance );
 
 		$hide_post_titles                = $instance['hide_post_titles'];
-		$excerpt                         = $instance['excerpt'];
 		$excerpt_more_text               = $instance['excerpt_more_text'];
 		$excerpt_filters                 = $instance['excerpt_filters'];
-		$date                            = $instance['date'];
 		$date_format                     = $instance['date_format'];
 		$disable_css                     = $instance['disable_css'];
 		$disable_font_styles             = $instance['disable_font_styles'];
@@ -1405,7 +1376,7 @@ class Widget extends \WP_Widget {
 				<p><?php esc_html_e( 'Displayed parts', 'category-posts' ); ?></p>
 				<div class="cpwp_ident">
 					<?php
-					echo $this->get_textarea_html( $instance, 'template', esc_html__( 'Template', 'category-posts' ) . ' <a href="#" class="dashicons toggle-template-help dashicons-editor-help imgedit-help-toggle"><span class="screen-reader-text">' . esc_html__( 'Show template help', 'category-posts' ) . '</span></a>', $template, '', true, 8 );
+					echo $this->get_textarea_html( $instance, 'template', esc_html__( 'Template', 'category-posts' ) . ' <a href="#" class="dashicons toggle-template-help dashicons-editor-help imgedit-help-toggle"><span class="screen-reader-text">' . esc_html__( 'Show template help', 'category-posts' ) . '</span></a>', $template, true, 8 );
 					preg_match_all( get_template_regex(), $template, $matches );
 					$tags = array();
 					if ( ! empty( $matches[0] ) ) {
@@ -1476,7 +1447,7 @@ class Widget extends \WP_Widget {
 					<p><?php esc_html_e( 'Excerpt settings', 'category-posts' ); ?></p>
 					<div class="cpwp_ident">
 					<?php
-					echo $this->get_number_input_block_html( $instance, 'excerpt_length', esc_html__( 'Excerpt length (words):', 'category-posts' ), get_option( 'posts_per_page' ), 1, 200, '', true );
+					echo $this->get_number_input_block_html( $instance, 'excerpt_length', esc_html__( 'Excerpt length (words):', 'category-posts' ), 1, 200, '', true );
 					echo $this->get_text_input_block_html( $instance, 'excerpt_more_text', esc_html__( 'Excerpt \'more\' text:', 'category-posts' ), '', esc_attr__( '...', 'category-posts' ), true );
 					?>
 					</div>
@@ -1504,8 +1475,8 @@ class Widget extends \WP_Widget {
 					<div class="cpwp_ident">
 						<p><?php esc_html_e( 'Thumbnail dimensions (pixel)', 'category-posts' ); ?></p>
 						<?php
-						echo $this->get_number_input_block_html( $instance, 'thumb_w', esc_html__( 'Width:', 'category-posts' ), esc_attr( get_option( 'thumbnail_size_w', 150 ) ), 1, '', '', true );
-						echo $this->get_number_input_block_html( $instance, 'thumb_h', esc_html__( 'Height:', 'category-posts' ), esc_attr( get_option( 'thumbnail_size_h', 150 ) ), 1, '', '', true );
+						echo $this->get_number_input_block_html( $instance, 'thumb_w', esc_html__( 'Width:', 'category-posts' ), 1, '', '', true );
+						echo $this->get_number_input_block_html( $instance, 'thumb_h', esc_html__( 'Height:', 'category-posts' ), 1, '', '', true );
 
 						echo $this->get_checkbox_block_html( $instance, 'text_do_not_wrap_thumb', esc_html__( 'Do not wrap thumbnail with overflowing text', 'category-posts' ), false, true );
 						echo $this->get_checkbox_block_html( $instance, 'use_css_cropping', esc_html__( 'CSS crop to requested size', 'category-posts' ), false, false );
@@ -1560,8 +1531,8 @@ class Widget extends \WP_Widget {
 			<h4 data-panel="general"><?php esc_html_e( 'General', 'category-posts' ); ?></h4>
 			<div>
 				<div class="cpwp_ident">
-					<?php echo $this->get_checkbox_block_html( $instance, 'disable_css', esc_html__( 'Disable the built-in CSS', 'category-posts' ), false, true ); ?>
-					<?php echo $this->get_checkbox_block_html( $instance, 'disable_font_styles', esc_html__( 'Disable only font styles', 'category-posts' ), false, true ); ?>
+					<?php echo $this->get_checkbox_block_html( $instance, 'disable_css', esc_html__( 'Disable the built-in CSS', 'category-posts' ), true ); ?>
+					<?php echo $this->get_checkbox_block_html( $instance, 'disable_font_styles', esc_html__( 'Disable only font styles', 'category-posts' ), true ); ?>
 				</div>
 				<?php
 					echo $this->get_select_block_html( $instance, 'no_match_handling', esc_html__( 'When there are no matches', 'category-posts' ), array(
@@ -1571,20 +1542,20 @@ class Widget extends \WP_Widget {
 					), 'nothing', true );
 				?>
 				<div class="cpwp_ident categoryPosts-no-match-text" style="display:<?php echo ( 'text' === $instance['no_match_handling'] ) ? 'block' : 'none'; ?>">
-					<?php echo $this->get_textarea_html( $instance, 'no_match_text', esc_html__( 'Text', 'category-posts' ), '', '', true, 8 ); ?>
+					<?php echo $this->get_textarea_html( $instance, 'no_match_text', esc_html__( 'Text', 'category-posts' ), '', true, 8 ); ?>
 				</div>
 				<?php
-					echo $this->get_checkbox_block_html( $instance, 'enable_loadmore', esc_html__( 'Enable Load More', 'category-posts' ), false, true );
+					echo $this->get_checkbox_block_html( $instance, 'enable_loadmore', esc_html__( 'Enable Load More', 'category-posts' ), true );
 				?>
 				<div class="cpwp_ident loadmore-settings" style="display:<?php echo ( $instance['enable_loadmore'] ) ? 'block' : 'none'; ?>">
-					<?php echo $this->get_text_input_block_html( $instance, 'loadmore_text', esc_html__( 'Button text', 'category-posts' ), '', '', true ); ?>
-					<?php echo $this->get_text_input_block_html( $instance, 'loading_text', esc_html__( 'Loading text', 'category-posts' ), '', '', true ); ?>
+					<?php echo $this->get_text_input_block_html( $instance, 'loadmore_text', esc_html__( 'Button text', 'category-posts' ), '', true ); ?>
+					<?php echo $this->get_text_input_block_html( $instance, 'loading_text', esc_html__( 'Loading text', 'category-posts' ), '', true ); ?>
 				</div>
 			</div>
 			<h4 data-panel="footer"><?php esc_html_e( 'Footer', 'category-posts' ); ?></h4>
 			<div>
-				<?php echo $this->get_text_input_block_html( $instance, 'footer_link_text', esc_html__( 'Footer link text', 'category-posts' ), '', '', true ); ?>
-				<?php echo $this->get_text_input_block_html( $instance, 'footer_link', esc_html__( 'Footer link URL', 'category-posts' ), '', '', true ); ?>
+				<?php echo $this->get_text_input_block_html( $instance, 'footer_link_text', esc_html__( 'Footer link text', 'category-posts' ), '', true ); ?>
+				<?php echo $this->get_text_input_block_html( $instance, 'footer_link', esc_html__( 'Footer link URL', 'category-posts' ), '', true ); ?>
 			</div>
 			<p><a href="<?php echo esc_url( get_edit_user_link() ) . '#' . __NAMESPACE__; ?>"><?php esc_html_e( 'Widget admin behaviour settings', 'category-posts' ); ?></a></p>
 			<p><a target="_blank" href="<?php echo esc_url( DOC_URL ); ?>"><?php esc_html_e( 'Documentation', 'category-posts' ); ?></a></p>

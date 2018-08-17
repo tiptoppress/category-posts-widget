@@ -627,8 +627,8 @@ function default_settings() {
 		'days_ago'               => 30,
 		'no_match_handling'      => 'nothing',
 		'no_match_text'          => '',
+		'default_thunmbnail'     => 0,
 		'ver'                    => VERSION,
-
 	);
 }
 
