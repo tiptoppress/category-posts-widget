@@ -1190,8 +1190,9 @@ class Widget extends \WP_Widget {
 
 		$value = $instance[ $key ];
 
-		$ret = '<label for="' . esc_attr( $this->get_field_id( $key ) ) . '">' . $label . '</label>' .
-					'<textarea rows="' . esc_attr( $num_rows ) . '" placeholder="' . $placeholder . '" id="' . esc_attr( $this->get_field_id( $key ) ) . '" name="' . esc_attr( $this->get_field_name( $key ) ) . '" autocomplete="off">' . esc_textarea( $value ) . '</textarea>';
+		$ret = '<label for="' . esc_attr( $this->get_field_id( $key ) ) . '">' . $label .
+					'<textarea rows="' . esc_attr( $num_rows ) . '" placeholder="' . $placeholder . '" id="' . esc_attr( $this->get_field_id( $key ) ) . '" name="' . esc_attr( $this->get_field_name( $key ) ) . '" autocomplete="off">' . esc_textarea( $value ) . '</textarea>' .
+				'</label>';
 
 		return $this->get_wrap_block_html( $ret, $key, $visible );
 	}

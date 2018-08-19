@@ -35,16 +35,8 @@
 	margin-bottom: 2px;
 }
 
-.categoryposts-template-help th {
-	text-align:start;
-	font-weight:bold;
-}
-
-.categoryposts-template-help td {
-	padding:2px;
-}
-
-.categoryPosts-template textarea {
+.category-widget-cont textarea {
+	width:100%;
 	font-size:16px;
 	line-height:20px;
 }
@@ -96,9 +88,16 @@
 	text-align:start;
 }
 
-.cat-post-template-help {display:none;}
+.categoryposts-template-help th {
+	text-align:start;
+	font-weight:bold;
+}
 
-.categoryPosts-template textarea {width:100%}
+.categoryposts-template-help td {
+	padding:2px;
+}
+
+.cat-post-template-help {display:none;}
 
 .category-widget-cont .open-template-help {
 	border:0;
