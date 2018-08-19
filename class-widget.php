@@ -1355,7 +1355,7 @@ class Widget extends \WP_Widget {
 			$this->formFilterPanel( $instance );
 			?>
 			<h4 data-panel="details"><?php esc_html_e( 'Post details', 'category-posts' ); ?></h4>
-			<div>
+			<div class="cpwp-sub-panel">
 				<?php
 				$template = '';
 				if ( ! isset( $instance['template'] ) ) {
@@ -1432,9 +1432,8 @@ class Widget extends \WP_Widget {
 						<p><button type="button" class="button"><?php esc_html_e( 'Select this template', 'category-posts' ); ?></button></p>
 					</div>
 				</div>
-
 				<?php // Excerpt settings. ?>
-				<div class="categoryposts-data-panel-excerpt" style="display:<?php echo ( isset( $tags['%excerpt%'] ) ) ? 'block' : 'none'; ?>">
+				<div class="cpwp-sub-panel categoryposts-data-panel-excerpt" style="display:<?php echo ( isset( $tags['%excerpt%'] ) ) ? 'block' : 'none'; ?>">
 					<p><?php esc_html_e( 'Excerpt settings', 'category-posts' ); ?></p>
 					<div class="cpwp_ident">
 					<?php
@@ -1443,7 +1442,8 @@ class Widget extends \WP_Widget {
 					?>
 					</div>
 				</div>
-				<div class="categoryposts-data-panel-date" style="display:<?php echo ( isset( $tags['%date%'] ) ) ? 'block' : 'none'; ?>">
+				<?php // Data settings ?>
+				<div class="cpwp-sub-panel categoryposts-data-panel-date" style="display:<?php echo ( isset( $tags['%date%'] ) ) ? 'block' : 'none'; ?>">
 					<p><?php esc_html_e( 'Date format settings', 'category-posts' ); ?></p>
 					<div class="cpwp_ident">
 						<?php
@@ -1459,9 +1459,8 @@ class Widget extends \WP_Widget {
 						?>
 					</div>
 				</div>
-
 				<?php // Thumbnail settings. ?>
-				<div class="categoryposts-data-panel-thumb" style="display:<?php echo ( isset( $tags['%thumb%'] ) ) ? 'block' : 'none'; ?>">
+				<div class="cpwp-sub-panel categoryposts-data-panel-thumb" style="display:<?php echo ( isset( $tags['%thumb%'] ) ) ? 'block' : 'none'; ?>">
 					<p><?php esc_html_e( 'Thumbnail settings', 'category-posts' ); ?></p>
 					<div class="cpwp_ident">
 						<p><?php esc_html_e( 'Thumbnail dimensions (pixel)', 'category-posts' ); ?></p>

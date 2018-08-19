@@ -21,6 +21,18 @@
 	margin-top:-1em;
 	padding-top:1em;
 }
+.cpwp-sub-panel > p {
+    font-weight: 700;
+    padding: 10px;
+    margin-bottom: 0px;
+    text-align: center;
+}
+.cpwp-sub-panel > .cpwp_ident {
+	background: #f1f1f1;
+	border: 1px solid #c5c5c5;
+	color: #6A6A6A;
+	padding: 5px;
+}
 .category-widget-cont label.checkbox {
     margin-left: -25px;
     left: 25px;
