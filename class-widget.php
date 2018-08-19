@@ -1520,19 +1520,19 @@ class Widget extends \WP_Widget {
 			</div>
 			<h4 data-panel="general"><?php esc_html_e( 'General', 'category-posts' ); ?></h4>
 			<div>
+				<?php echo $this->get_checkbox_block_html( $instance, 'disable_css', esc_html__( 'Disable the built-in CSS', 'category-posts' ), true ); ?>
+				<?php echo $this->get_checkbox_block_html( $instance, 'disable_font_styles', esc_html__( 'Disable only font styles', 'category-posts' ), true ); ?>
 				<div class="cpwp_ident">
-					<?php echo $this->get_checkbox_block_html( $instance, 'disable_css', esc_html__( 'Disable the built-in CSS', 'category-posts' ), true ); ?>
-					<?php echo $this->get_checkbox_block_html( $instance, 'disable_font_styles', esc_html__( 'Disable only font styles', 'category-posts' ), true ); ?>
-				</div>
-				<?php
-					echo $this->get_select_block_html( $instance, 'no_match_handling', esc_html__( 'When there are no matches', 'category-posts' ), array(
-						'nothing' => esc_html__( 'Display empty widget', 'category-posts' ),
-						'hide'    => esc_html__( 'Hide Widget', 'category-posts' ),
-						'text'    => esc_html__( 'Show text', 'category-posts' ),
-					), 'nothing', true );
-				?>
-				<div class="cpwp_ident categoryPosts-no-match-text" style="display:<?php echo ( 'text' === $instance['no_match_handling'] ) ? 'block' : 'none'; ?>">
-					<?php echo $this->get_textarea_html( $instance, 'no_match_text', esc_html__( 'Text', 'category-posts' ), '', true, 8 ); ?>
+					<?php
+						echo $this->get_select_block_html( $instance, 'no_match_handling', esc_html__( 'When there are no matches', 'category-posts' ), array(
+							'nothing' => esc_html__( 'Display empty widget', 'category-posts' ),
+							'hide'    => esc_html__( 'Hide Widget', 'category-posts' ),
+							'text'    => esc_html__( 'Show text', 'category-posts' ),
+						), 'nothing', true );
+					?>
+					<div class="categoryPosts-no-match-text" style="display:<?php echo ( 'text' === $instance['no_match_handling'] ) ? 'block' : 'none'; ?>">
+						<?php echo $this->get_textarea_html( $instance, 'no_match_text', esc_html__( 'Text', 'category-posts' ), '', true, 4 ); ?>
+					</div>
 				</div>
 				<?php
 					echo $this->get_checkbox_block_html( $instance, 'enable_loadmore', esc_html__( 'Enable Load More', 'category-posts' ), true );
