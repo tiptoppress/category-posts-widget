@@ -5,6 +5,9 @@
 	background: #efefef;
 	padding: 5px;
 }
+.cpwp_ident ~ .cpwp_ident {
+    margin-top: 10px;
+}
 .cpwp_ident > .cpwp_ident {
 	border-left:5px solid #B3B3B3;
 	padding: 0 10px;
