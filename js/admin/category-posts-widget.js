@@ -174,8 +174,7 @@
 			}
             var textarea = jQuery(panel).find('textarea');
 			textarea.val(template);
-			textarea.trigger('input');
-			textarea.trigger('change');
+			textarea.trigger('input', 'change');
         },
 
 		// Close all open panels if open
@@ -246,6 +245,62 @@
 
 		},
 
+		thumbnailSizeChange : function (elem) {
+
+			var _that = jQuery(elem),
+				thumb_h,
+				thumb_w,
+				_input_thumb_h = _that.closest('.categoryposts-data-panel-thumb').find('.thumb_h'),
+				_input_thumb_w = _that.closest('.categoryposts-data-panel-thumb').find('.thumb_w');
+
+			if (_that.hasClass('smaller')) {
+				thumb_w = _input_thumb_w.val() / 1.015;
+				thumb_h = _input_thumb_h.val() / 1.015;
+			} else if (_that.hasClass('quarter')) {
+				thumb_w = _input_thumb_w.val() / 4;
+				thumb_h = _input_thumb_h.val() / 4;
+			} else if (_that.hasClass('half')){
+				thumb_h = _input_thumb_h.val() / 2;
+				thumb_w = _input_thumb_w.val() / 2;
+			} else if (_that.hasClass('double')){
+				thumb_h = _input_thumb_h.val() * 2;
+				thumb_w = _input_thumb_w.val() * 2;
+			} else if (_that.hasClass('bigger')) {
+				thumb_w = _input_thumb_w.val() * 1.02;
+				thumb_h = _input_thumb_h.val() * 1.02;
+			} else if (_that.hasClass('square')) {
+				thumb_w = _input_thumb_w.val();
+				thumb_h = _input_thumb_w.val();
+			} else if (_that.hasClass('standard')) {
+				if (_input_thumb_w.val() >= _input_thumb_h.val() ) {
+					thumb_w = _input_thumb_h.val() * 4 / 3;
+					thumb_h = _input_thumb_h.val();
+				} else {
+					thumb_w = _input_thumb_h.val() / 4 * 3
+					thumb_h = _input_thumb_h.val();
+				}
+			} else if (_that.hasClass('wide')) {
+				if (_input_thumb_w.val() >= _input_thumb_h.val() ) {
+					thumb_w = _input_thumb_h.val() * 16 / 9;
+					thumb_h = _input_thumb_h.val();
+				} else {
+					thumb_w = _input_thumb_h.val() / 16 * 9;
+					thumb_h = _input_thumb_h.val();
+				}
+			} else if (_that.hasClass('switch')){
+				thumb_h = _input_thumb_w.val();
+				thumb_w = _input_thumb_h.val();
+			} else {
+				thumb_w = _that.data("thumb-w");
+				thumb_h = _that.data("thumb-h");
+			}
+			_input_thumb_w.val(Math.floor(thumb_w));
+			_input_thumb_h.val(Math.floor(thumb_h));
+			_input_thumb_w.trigger('input', 'change');
+			_input_thumb_h.trigger('input', 'change');
+
+			return false;
+		},
     }
 
 jQuery(document).ready( function () {
@@ -339,6 +394,10 @@ jQuery(document).ready( function () {
 
 		jQuery(document).on('input', class_namespace+' .categoryPosts-template textarea', function () { // prevent refresh ontemplate selection
 			cwp_namespace.templateChange(this);
+		});
+
+		jQuery(document).on('click', class_namespace+' .cat-post-thumb-change-size button', function () { // find a thumbnail size
+			cwp_namespace.thumbnailSizeChange(this);
 		});
 	}
 

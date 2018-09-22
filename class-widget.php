@@ -1315,6 +1315,37 @@ class Widget extends \WP_Widget {
 	}
 
 	/**
+	 * Generate a form button element containing
+	 *
+	 * @since 4.9
+	 * @param array  $instance  The instance.
+	 * @param string $key       The key in the instance array.
+	 * @param string $label     The label to display and associate with the button.
+	 *                          should be escaped string.
+	 *
+	 * @return string HTML a button element and class based on the key.
+	 */
+	private function get_button_thumb_size_html( $instance, $key, $label ) {
+
+		$datas = "";
+
+		switch ( $key ) {
+			case "thumb":
+				$datas = 'data-thumb-w="' . get_option( "thumbnail_size_w" ) . '" data-thumb-h="' . get_option( "thumbnail_size_h" ) . '"';
+				break;
+			case "medium":
+				$datas = 'data-thumb-w="' . get_option( "medium_size_w" ) . '" data-thumb-h="' . get_option( "medium_size_h" ) . '"';
+				break;
+			case "large":
+				$datas = 'data-thumb-w="' . get_option( "large_size_w" ) . '" data-thumb-h="' . get_option( "large_size_h" ) . '"';
+				break;
+		}
+		$ret = '<button type="button" ' . $datas . ' class="' . $key . '">' . esc_html( $label ) . "</button>\n";
+
+		return $ret;
+	}
+
+	/**
 	 * The widget configuration form back end.
 	 *
 	 * @param  array $instance The parameters associated with the widget.
@@ -1467,7 +1498,37 @@ class Widget extends \WP_Widget {
 						<?php
 						echo $this->get_number_input_block_html( $instance, 'thumb_w', esc_html__( 'Width:', 'category-posts' ), 1, '', '', true );
 						echo $this->get_number_input_block_html( $instance, 'thumb_h', esc_html__( 'Height:', 'category-posts' ), 1, '', '', true );
-
+						?>
+						<div class="cat-post-thumb-change-size">
+							<p>
+								<label><?php esc_html_e( 'Change size', 'category-posts' ); ?>: </label>
+								<?php
+								echo $this->get_button_thumb_size_html( $instance, 'smaller', esc_html__( '-', 'category-posts' ) );
+								echo $this->get_button_thumb_size_html( $instance, 'quarter', esc_html__( '1/4', 'category-posts' ) );
+								echo $this->get_button_thumb_size_html( $instance, 'half', esc_html__( '1/2', 'category-posts' ) );
+								echo $this->get_button_thumb_size_html( $instance, 'double', esc_html__( '2x', 'category-posts' ) );
+								echo $this->get_button_thumb_size_html( $instance, 'bigger', esc_html__( '+', 'category-posts' ) );
+								?>
+							</p>
+							<p>
+								<label><?php esc_html_e( 'Ratio', 'category-posts' ); ?>: </label>
+								<?php
+								echo $this->get_button_thumb_size_html( $instance, 'square', esc_html__( '1:1', 'category-posts' ) );
+								echo $this->get_button_thumb_size_html( $instance, 'standard', esc_html__( '4:3', 'category-posts' ) );
+								echo $this->get_button_thumb_size_html( $instance, 'wide', esc_html__( '16:9', 'category-posts' ) );
+								echo $this->get_button_thumb_size_html( $instance, 'switch', esc_html__( 'switch', 'category-posts' ) );
+								?>
+							</p>
+							<p>
+								<label><?php esc_html_e( 'Available', 'category-posts' ); ?>: </label>
+								<?php
+								echo $this->get_button_thumb_size_html( $instance, 'thumb', esc_html__( 'Thumb', 'category-posts' ) );
+								echo $this->get_button_thumb_size_html( $instance, 'medium', esc_html__( 'Medium', 'category-posts' ) );
+								echo $this->get_button_thumb_size_html( $instance, 'large', esc_html__( 'Large', 'category-posts' ) );
+								?>
+							</p>
+						</div>
+						<?php
 						echo $this->get_checkbox_block_html( $instance, 'text_do_not_wrap_thumb', esc_html__( 'Do not wrap thumbnail with overflowing text', 'category-posts' ), false, true );
 						echo $this->get_checkbox_block_html( $instance, 'use_css_cropping', esc_html__( 'CSS crop to requested size', 'category-posts' ), false, false );
 						echo $this->get_select_block_html( $instance, 'thumb_hover', esc_html__( 'Animation on mouse hover:', 'category-posts' ), array(
