@@ -269,8 +269,13 @@
 				thumb_w = _input_thumb_w.val() * 1.02;
 				thumb_h = _input_thumb_h.val() * 1.02;
 			} else if (_that.hasClass('square')) {
-				thumb_w = _input_thumb_w.val();
-				thumb_h = _input_thumb_w.val();
+				if (_input_thumb_w.val() >= _input_thumb_h.val() ) {
+					thumb_w = _input_thumb_h.val();
+					thumb_h = _input_thumb_h.val();
+				} else{
+					thumb_w = _input_thumb_w.val();
+					thumb_h = _input_thumb_w.val();
+				}
 			} else if (_that.hasClass('standard')) {
 				if (_input_thumb_w.val() >= _input_thumb_h.val() ) {
 					thumb_w = _input_thumb_h.val() * 4 / 3;
