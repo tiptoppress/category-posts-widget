@@ -168,7 +168,7 @@
 					template += '%thumb%\n';
 					template += '<span class="dashicons dashicons-admin-comments"></span> %commentnum% ';
 					template += '<span class="dashicons dashicons-admin-users"></span> %author%\n';
-					template += '%excerpt%\n';
+					template += '%excerpt%';
 					template += 'Categories: %category% ';
 					template += '<span class="dashicons dashicons-tag"></span> %post_tag%';
 			}

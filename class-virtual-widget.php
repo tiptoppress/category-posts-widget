@@ -280,20 +280,24 @@ class Virtual_Widget {
 		// Regardless if css is disabled we need some styling for the thumbnail
 		// to make sure cropping is properly done, and they fit the allocated space.
 		if ( isset( $settings['template'] ) && preg_match( '/%thumb%/', $settings['template'], $m, PREG_OFFSET_CAPTURE ) ) {
-			if ( isset( $settings['use_css_cropping'] ) && $settings['use_css_cropping'] ) {
-				$ret['thumb_crop'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {object-fit: cover; width: '.$settings['thumb_w'].'px; height: '.$settings['thumb_h'].'px;max-width:100%;}';
-				$ret['thumb_crop_not_supported'] = '#' . $widget_id .' .cat-post-thumbnail .cat-post-crop-not-supported img {width:100%;}';
-			} else {
-				$ret['thumb_overflow'] = '#' . $widget_id . ' .cat-post-thumbnail span {overflow: hidden; display:inline-block}';
-			}
-			$ret['thumb_styling'] = '#' . $widget_id . ' .cat-post-item img {margin: initial;}';
-
 			// Thumbnail related positioning rules.
 			$wrap = isset( $settings['text_do_not_wrap_thumb'] ) && $settings['text_do_not_wrap_thumb'];
 			if ( $wrap ) {
 				$ret['thumb_flex'] = '#' . $widget_id . ' .cat-post-do-not-wrap-thumbnail {display:flex;}'; // Thumbnail container should flex.
 			}
 			$ret['text_do_not_wrap_thumb'] = '#' . $widget_id . ' .cat-post-thumbnail {float:left;}';
+
+			if ( isset( $settings['use_css_cropping'] ) && $settings['use_css_cropping'] ) {
+				if ( $wrap ) {
+					$ret['thumb_crop'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {object-fit: cover; width: '.$settings['thumb_w'].'px; height: '.$settings['thumb_h'].'px;}';
+				} else {
+					$ret['thumb_crop'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {object-fit: cover; width: '.$settings['thumb_w'].'px; height: '.$settings['thumb_h'].'px;max-width:100%;}';
+				}
+				$ret['thumb_crop_not_supported'] = '#' . $widget_id .' .cat-post-thumbnail .cat-post-crop-not-supported img {width:100%;}';
+			} else {
+				$ret['thumb_overflow'] = '#' . $widget_id . ' .cat-post-thumbnail span {overflow: hidden; display:inline-block}';
+			}
+			$ret['thumb_styling'] = '#' . $widget_id . ' .cat-post-item img {margin: initial;}';
 		}
 
 		// Some hover effect require css to work, add it even if CSS is disabled.
