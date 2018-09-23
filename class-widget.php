@@ -1216,7 +1216,7 @@ class Widget extends \WP_Widget {
 		$value = $instance[ $key ];
 
 		$ret = '<label for="' . $this->get_field_id( $key ) . "\">\n" .
-					$label .
+					$label . "\n" .
 					'<input placeholder="' . $placeholder . '" id="' . $this->get_field_id( $key ) . '" name="' . $this->get_field_name( $key ) . '" type="text" value="' . esc_attr( $value ) . '" autocomplete="off"/>' . "\n" .
 				"</label>\n";
 
@@ -1573,11 +1573,11 @@ class Widget extends \WP_Widget {
 								<?php esc_html_e( 'No default', 'category-posts' ); ?>
 							</button>
 						</p>
+						<?php
+						echo $this->get_checkbox_block_html( $instance, 'everything_is_link', esc_html__( 'Everything is a link', 'category-posts' ), true );
+						?>
 					</div>
 				</div>
-				<?php
-				echo $this->get_checkbox_block_html( $instance, 'everything_is_link', esc_html__( 'Everything is a link', 'category-posts' ), true );
-				?>
 			</div>
 			<h4 data-panel="general"><?php esc_html_e( 'General', 'category-posts' ); ?></h4>
 			<div>

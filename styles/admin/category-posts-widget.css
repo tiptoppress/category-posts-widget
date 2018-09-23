@@ -12,7 +12,7 @@
 	border-left:5px solid #B3B3B3;
 	padding: 0 10px;
 }
-.cpwp_ident > p {
+.cpwp_ident p {
 	margin: 5px 0;
 	clear: both;
 }
@@ -40,15 +40,21 @@
     left: 25px;
     position: relative;
 }
-.category-widget-cont input[type="number"] {
-	width:5em;
+.category-widget-cont [data-panel="filter"] + div label {
+    vertical-align: sub;
+}
+.category-widget-cont [data-panel="filter"] + div select,
+.category-widget-cont input[type="number"],
+.category-widget-cont input[type="text"] {
 	text-align:center;
 	float: right;
 	clear: both;
 	margin-top: 2px;
 	margin-bottom: 2px;
 }
-
+.category-widget-cont input[type="number"] {
+	width:5em;
+}
 .category-widget-cont textarea {
 	width:100%;
 	font-size:16px;
