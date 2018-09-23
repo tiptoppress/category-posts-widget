@@ -8,6 +8,12 @@
 .cpwp_ident ~ .cpwp_ident {
     margin-top: 10px;
 }
+.cpwp_ident:last-child {
+	display: inline-block;
+}
+.cpwp_ident div:last-child {
+	display: block;
+}
 .cpwp_ident > .cpwp_ident {
 	border-left:5px solid #B3B3B3;
 	padding: 0 10px;
@@ -40,7 +46,7 @@
     left: 25px;
     position: relative;
 }
-.category-widget-cont [data-panel="filter"] + div label {
+.category-widget-cont [data-panel] + div label {
     vertical-align: sub;
 }
 .category-widget-cont [data-panel="filter"] + div select,

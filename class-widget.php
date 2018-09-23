@@ -1595,7 +1595,7 @@ class Widget extends \WP_Widget {
 						<?php echo $this->get_textarea_html( $instance, 'no_match_text', esc_html__( 'Text', 'category-posts' ), '', true, 4 ); ?>
 					</div>
 				</div>
-				<div class="cpwp_ident">
+				<div>
 					<?php
 						echo $this->get_checkbox_block_html( $instance, 'enable_loadmore', esc_html__( 'Enable Load More', 'category-posts' ), true );
 					?>
