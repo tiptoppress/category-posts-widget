@@ -1469,7 +1469,7 @@ class Widget extends \WP_Widget {
 					<div class="cpwp_ident">
 					<?php
 					echo $this->get_number_input_block_html( $instance, 'excerpt_length', esc_html__( 'Excerpt length (words):', 'category-posts' ), 1, 200, '', true );
-					echo $this->get_text_input_block_html( $instance, 'excerpt_more_text', esc_html__( 'Excerpt \'more\' text:', 'category-posts' ), '', esc_attr__( '...', 'category-posts' ), true );
+					echo $this->get_text_input_block_html( $instance, 'excerpt_more_text', esc_html__( 'Excerpt \'more\' text:', 'category-posts' ), esc_attr__( '...', 'category-posts' ), true );
 					?>
 					</div>
 				</div>
@@ -1486,7 +1486,7 @@ class Widget extends \WP_Widget {
 							'localsitedate'        => esc_html__( 'Reader\'s local date', 'category-posts' ),
 							'other'                => esc_html__( 'PHP style format', 'category-posts' ),
 						), 'sitedateandtime', true );
-						echo $this->get_text_input_block_html( $instance, 'date_format', esc_html__( 'PHP Style Date format', 'category-posts' ), '', 'j M Y', 'other' === $preset_date_format );
+						echo $this->get_text_input_block_html( $instance, 'date_format', esc_html__( 'PHP Style Date format', 'category-posts' ), 'j M Y', 'other' === $preset_date_format );
 						?>
 					</div>
 				</div>
@@ -1529,8 +1529,8 @@ class Widget extends \WP_Widget {
 							</p>
 						</div>
 						<?php
-						echo $this->get_checkbox_block_html( $instance, 'text_do_not_wrap_thumb', esc_html__( 'Do not wrap thumbnail with overflowing text', 'category-posts' ), false, true );
-						echo $this->get_checkbox_block_html( $instance, 'use_css_cropping', esc_html__( 'CSS crop to requested size', 'category-posts' ), false, false );
+						echo $this->get_checkbox_block_html( $instance, 'text_do_not_wrap_thumb', esc_html__( 'Do not wrap thumbnail with overflowing text', 'category-posts' ), true );
+						echo $this->get_checkbox_block_html( $instance, 'use_css_cropping', esc_html__( 'CSS crop to requested size', 'category-posts' ), false );
 						echo $this->get_select_block_html( $instance, 'thumb_hover', esc_html__( 'Animation on mouse hover:', 'category-posts' ), array(
 							'none'  => esc_html__( 'None', 'category-posts' ),
 							'dark'  => esc_html__( 'Darker', 'category-posts' ),
@@ -1576,7 +1576,7 @@ class Widget extends \WP_Widget {
 					</div>
 				</div>
 				<?php
-				echo $this->get_checkbox_block_html( $instance, 'everything_is_link', esc_html__( 'Everything is a link', 'category-posts' ), false, true );
+				echo $this->get_checkbox_block_html( $instance, 'everything_is_link', esc_html__( 'Everything is a link', 'category-posts' ), true );
 				?>
 			</div>
 			<h4 data-panel="general"><?php esc_html_e( 'General', 'category-posts' ); ?></h4>
