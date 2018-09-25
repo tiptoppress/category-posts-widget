@@ -135,3 +135,10 @@
 	padding:0;
 	cursor: pointer;
 }
+
+.cat-post-thumb-change-size button.button {
+    line-height: normal;
+    height: auto;
+	padding: 2px 7px;
+	vertical-align: sub;
+}

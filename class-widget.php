@@ -1340,7 +1340,7 @@ class Widget extends \WP_Widget {
 				$datas = 'data-thumb-w="' . get_option( "large_size_w" ) . '" data-thumb-h="' . get_option( "large_size_h" ) . '"';
 				break;
 		}
-		$ret = '<button type="button" ' . $datas . ' class="' . $key . '">' . esc_html( $label ) . "</button>\n";
+		$ret = '<button type="button" ' . $datas . ' class="' . $key . ' button">' . esc_html( $label ) . "</button>\n";
 
 		return $ret;
 	}
