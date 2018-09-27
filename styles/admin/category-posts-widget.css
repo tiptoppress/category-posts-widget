@@ -9,8 +9,7 @@
     margin-top: 10px;
 }
 .cpwp_ident:last-child {
-	display: inline-block;
-	width: 100%;
+	display: block;
 }
 .cpwp_ident div:last-child {
 	display: block;
@@ -32,7 +31,7 @@
 	padding-top:1em;
 }
 .cpwp-sub-panel > p {
-    font-weight: 600;
+    font-weight: lighter;
     padding-bottom: 10px;
     margin-bottom: 0px;
     text-align: center;
@@ -52,20 +51,27 @@
 }
 .category-widget-cont [data-panel="filter"] + div select,
 .category-widget-cont input[type="number"],
-.category-widget-cont input[type="text"] {
+.category-widget-cont input[type="text"],
+.category-widget-cont input[type="range"] {
 	text-align:center;
 	float: right;
 	clear: both;
 	margin-top: 2px;
 	margin-bottom: 2px;
+	width: auto;
+}
+.category-widget-cont input[type="range"] {
+	padding-left: 0;
+	padding-right: 0;
+}
+.category-widget-cont .cpwp-right {
+	float: right;
 }
 .category-widget-cont input[type="number"] {
 	width:5em;
 }
 .category-widget-cont textarea {
 	width:100%;
-	font-size:16px;
-	line-height:20px;
 }
 
 .category-widget-cont .dashicons-editor-help {

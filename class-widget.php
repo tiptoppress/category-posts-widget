@@ -1438,18 +1438,6 @@ class Widget extends \WP_Widget {
 				?>
 				<p><?php esc_html_e( 'Displayed parts', 'category-posts' ); ?></p>
 				<div class="cpwp_ident">
-
-					<div class="cat-post-premade_templates">
-						<p><label><?php esc_html_e( 'Add a placeholder', 'category-posts' ); ?></label></p>
-						<select>
-							<option value="title"><?php esc_html_e( '%title%', 'category-posts' ); ?></option>
-							<option value="thumb"><?php esc_html_e( '%thumb%', 'category-posts' ); ?></option>
-							<option value="date"><?php esc_html_e( '%date%', 'category-posts' ); ?></option>
-							<option value="excerpt"><?php esc_html_e( '%excerpt%', 'category-posts' ); ?></option>
-							<option value="author"><?php esc_html_e( '%author%', 'category-posts' ); ?></option>
-						</select>
-					</div>
-
 					<?php
 					echo $this->get_textarea_html( $instance, 'template', esc_html__( 'Template', 'category-posts' ) . ' <a href="#" class="dashicons toggle-template-help dashicons-editor-help imgedit-help-toggle"><span class="screen-reader-text">' . esc_html__( 'Show template help', 'category-posts' ) . '</span></a>', '', true, 8 );
 					preg_match_all( get_template_regex(), $template, $matches );
@@ -1521,8 +1509,8 @@ class Widget extends \WP_Widget {
 					<p><?php esc_html_e( 'Excerpt settings', 'category-posts' ); ?></p>
 					<div class="cpwp_ident">
 					<?php
-					echo $this->get_number_input_block_html( $instance, 'excerpt_length', esc_html__( 'Excerpt length (words):', 'category-posts' ), 1, 200, '', true );
-					echo $this->get_text_input_block_html( $instance, 'excerpt_more_text', esc_html__( 'Excerpt \'more\' text:', 'category-posts' ), esc_attr__( '...', 'category-posts' ), true );
+					echo $this->get_number_input_block_html( $instance, 'excerpt_length', esc_html__( 'Length (words):', 'category-posts' ), 1, 200, '', true );
+					echo $this->get_text_input_block_html( $instance, 'excerpt_more_text', esc_html__( '\'More ...\' text:', 'category-posts' ), esc_attr__( '...', 'category-posts' ), true );
 					?>
 					</div>
 				</div>
@@ -1556,30 +1544,36 @@ class Widget extends \WP_Widget {
 						<div class="cat-post-thumb-change-size">
 							<p>
 								<label><?php esc_html_e( 'Change size', 'category-posts' ); ?>: </label>
-								<?php
-								echo $this->get_button_thumb_size_html( $instance, 'smaller', esc_html__( '-', 'category-posts' ) );
-								echo $this->get_button_thumb_size_html( $instance, 'quarter', esc_html__( '1/4', 'category-posts' ) );
-								echo $this->get_button_thumb_size_html( $instance, 'half', esc_html__( '1/2', 'category-posts' ) );
-								echo $this->get_button_thumb_size_html( $instance, 'double', esc_html__( '2x', 'category-posts' ) );
-								echo $this->get_button_thumb_size_html( $instance, 'bigger', esc_html__( '+', 'category-posts' ) );
-								?>
+								<span class="cpwp-right">
+									<?php
+									echo $this->get_button_thumb_size_html( $instance, 'smaller', esc_html__( '-', 'category-posts' ) );
+									echo $this->get_button_thumb_size_html( $instance, 'quarter', esc_html__( '1/4', 'category-posts' ) );
+									echo $this->get_button_thumb_size_html( $instance, 'half', esc_html__( '1/2', 'category-posts' ) );
+									echo $this->get_button_thumb_size_html( $instance, 'double', esc_html__( '2x', 'category-posts' ) );
+									echo $this->get_button_thumb_size_html( $instance, 'bigger', esc_html__( '+', 'category-posts' ) );
+									?>
+								</span>
 							</p>
 							<p>
 								<label><?php esc_html_e( 'Ratio', 'category-posts' ); ?>: </label>
-								<?php
-								echo $this->get_button_thumb_size_html( $instance, 'square', esc_html__( '1:1', 'category-posts' ) );
-								echo $this->get_button_thumb_size_html( $instance, 'standard', esc_html__( '4:3', 'category-posts' ) );
-								echo $this->get_button_thumb_size_html( $instance, 'wide', esc_html__( '16:9', 'category-posts' ) );
-								echo $this->get_button_thumb_size_html( $instance, 'switch', esc_html__( 'switch', 'category-posts' ) );
-								?>
+								<span class="cpwp-right">
+									<?php
+									echo $this->get_button_thumb_size_html( $instance, 'square', esc_html__( '1:1', 'category-posts' ) );
+									echo $this->get_button_thumb_size_html( $instance, 'standard', esc_html__( '4:3', 'category-posts' ) );
+									echo $this->get_button_thumb_size_html( $instance, 'wide', esc_html__( '16:9', 'category-posts' ) );
+									echo $this->get_button_thumb_size_html( $instance, 'switch', esc_html__( 'switch', 'category-posts' ) );
+									?>
+								</span>
 							</p>
 							<p>
 								<label><?php esc_html_e( 'Available', 'category-posts' ); ?>: </label>
-								<?php
-								echo $this->get_button_thumb_size_html( $instance, 'thumb', esc_html__( 'Thumb', 'category-posts' ) );
-								echo $this->get_button_thumb_size_html( $instance, 'medium', esc_html__( 'Medium', 'category-posts' ) );
-								echo $this->get_button_thumb_size_html( $instance, 'large', esc_html__( 'Large', 'category-posts' ) );
-								?>
+								<span class="cpwp-right">
+									<?php
+									echo $this->get_button_thumb_size_html( $instance, 'thumb', esc_html__( 'Thumb', 'category-posts' ) );
+									echo $this->get_button_thumb_size_html( $instance, 'medium', esc_html__( 'Medium', 'category-posts' ) );
+									echo $this->get_button_thumb_size_html( $instance, 'large', esc_html__( 'Large', 'category-posts' ) );
+									?>
+								</span>
 							</p>
 						</div>
 						<?php
