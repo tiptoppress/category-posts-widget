@@ -1224,6 +1224,46 @@ class Widget extends \WP_Widget {
 	}
 
 	/**
+	 * Generate a form P element containing a range input
+	 *
+	 * @since 4.8
+	 * @param array  $instance  The instance.
+	 * @param string $key       The key in the instance array.
+	 * @param string $label     The label to display and associate with the input.
+	 *                          expected to be escaped.
+	 * @param int    $min       The minimum value allowed to be input.
+	 * @param int    $max       The maximum value allowed to be input.
+	 * @param string $value     The start value
+	 * @param string $step      The range of each step
+	 * @param bool   $visible   Indicates if the element should be visible when rendered.
+	 *
+	 * @return string HTML a P element contaning the input, its label, class based on the key
+	 *                and style set to display:none if visibility is off.
+	 */
+	private function get_range_input_block_html( $instance, $key, $label, $min, $max, $value, $step, $visible ) {
+
+		$value = $instance[ $key ];
+
+		$minMaxStep = '';
+		if ( '' !== $min ) {
+			$minMaxStep .= ' min="' . $min . '"';
+		}
+		if ( '' !== $max ) {
+			$minMaxStep .= ' max="' . $max . '"';
+		}
+		if ( '' !== $step ) {
+			$minMaxStep .= ' step="' . $step . '"';
+		}
+
+		$ret = '<label for="' . $this->get_field_id( $key ) . "\">\n" .
+					esc_html( $label ) . " <span>" . $value . "%</span>\n" .
+					'<input id="' . esc_attr( $this->get_field_id( $key ) ) . '" value="' . $value . '" name="' . esc_attr( $this->get_field_name( $key ) ) . '" class="' . esc_attr( $key ) . '" type="range"' . $minMaxStep . ' />' . "\n" .
+				"</label>\n";
+
+		return $this->get_wrap_block_html( $ret, $key, $visible );
+	}
+
+	/**
 	 * Generate a form P element containing a number input
 	 *
 	 * @since 4.8
@@ -1371,6 +1411,7 @@ class Widget extends \WP_Widget {
 		$preset_date_format              = $instance['preset_date_format'];
 		$thumb                           = ! empty( $instance['thumb'] );
 		$thumb_w                         = $instance['thumb_w'];
+		$thumb_fluid_width               = $instance['thumb_fluid_width'];
 		$thumb_h                         = $instance['thumb_h'];
 		$default_thunmbnail              = $instance['default_thunmbnail'];
 		$use_css_cropping                = $instance['use_css_cropping'];
@@ -1397,6 +1438,18 @@ class Widget extends \WP_Widget {
 				?>
 				<p><?php esc_html_e( 'Displayed parts', 'category-posts' ); ?></p>
 				<div class="cpwp_ident">
+
+					<div class="cat-post-premade_templates">
+						<p><label><?php esc_html_e( 'Add a placeholder', 'category-posts' ); ?></label></p>
+						<select>
+							<option value="title"><?php esc_html_e( '%title%', 'category-posts' ); ?></option>
+							<option value="thumb"><?php esc_html_e( '%thumb%', 'category-posts' ); ?></option>
+							<option value="date"><?php esc_html_e( '%date%', 'category-posts' ); ?></option>
+							<option value="excerpt"><?php esc_html_e( '%excerpt%', 'category-posts' ); ?></option>
+							<option value="author"><?php esc_html_e( '%author%', 'category-posts' ); ?></option>
+						</select>
+					</div>
+
 					<?php
 					echo $this->get_textarea_html( $instance, 'template', esc_html__( 'Template', 'category-posts' ) . ' <a href="#" class="dashicons toggle-template-help dashicons-editor-help imgedit-help-toggle"><span class="screen-reader-text">' . esc_html__( 'Show template help', 'category-posts' ) . '</span></a>', '', true, 8 );
 					preg_match_all( get_template_regex(), $template, $matches );
@@ -1497,6 +1550,7 @@ class Widget extends \WP_Widget {
 						<p><?php esc_html_e( 'Thumbnail dimensions (pixel)', 'category-posts' ); ?></p>
 						<?php
 						echo $this->get_number_input_block_html( $instance, 'thumb_w', esc_html__( 'Width:', 'category-posts' ), 1, '', '', true );
+						echo $this->get_range_input_block_html( $instance, 'thumb_fluid_width', esc_html__( 'Max-width:', 'category-posts' ), 2, 100, 100, 2, true );
 						echo $this->get_number_input_block_html( $instance, 'thumb_h', esc_html__( 'Height:', 'category-posts' ), 1, '', '', true );
 						?>
 						<div class="cat-post-thumb-change-size">

@@ -280,16 +280,23 @@ class Virtual_Widget {
 		// Regardless if css is disabled we need some styling for the thumbnail
 		// to make sure cropping is properly done, and they fit the allocated space.
 		if ( isset( $settings['template'] ) && preg_match( '/%thumb%/', $settings['template'], $m, PREG_OFFSET_CAPTURE ) ) {
+			$wrap = isset( $settings['text_do_not_wrap_thumb'] ) && $settings['text_do_not_wrap_thumb'];
 			if ( isset( $settings['use_css_cropping'] ) && $settings['use_css_cropping'] ) {
 				$ret['thumb_crop'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {object-fit: cover; width: '.$settings['thumb_w'].'px; height: '.$settings['thumb_h'].'px;max-width:100%;}';
+				
 				$ret['thumb_crop_not_supported'] = '#' . $widget_id .' .cat-post-thumbnail .cat-post-crop-not-supported img {width:100%;}';
+
+				if ( ! $wrap ) {
+					$ret['thumb_fluid_width'] = '#' . $widget_id . ' .cat-post-thumbnail {max-width:' . $settings['thumb_fluid_width'] . '%;}';
+				} else {	
+					$ret['thumb_fluid_width'] = '#' . $widget_id . ' .cat-post-thumbnail {flex-basis:' . $settings['thumb_fluid_width'] . '%;}';
+				}
 			} else {
 				$ret['thumb_overflow'] = '#' . $widget_id . ' .cat-post-thumbnail span {overflow: hidden; display:inline-block}';
 			}
 			$ret['thumb_styling'] = '#' . $widget_id . ' .cat-post-item img {margin: initial;}';
 
 			// Thumbnail related positioning rules.
-			$wrap = isset( $settings['text_do_not_wrap_thumb'] ) && $settings['text_do_not_wrap_thumb'];
 			if ( $wrap ) {
 				$ret['thumb_flex'] = '#' . $widget_id . ' .cat-post-do-not-wrap-thumbnail {display:flex;}'; // Thumbnail container should flex.
 				$ret['thumb_flex_length'] = '#' . $widget_id . ' .cat-post-do-not-wrap-thumbnail > div {-webkit-flex: 1; -ms-flex: 1; flex: 1;}'; // Thumbnail container should flex.

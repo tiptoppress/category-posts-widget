@@ -306,6 +306,14 @@
 
 			return false;
 		},
+
+		thumbnailFluidWidthChange : function (elem) {
+
+			var _that = jQuery(elem);
+
+			_that.closest( 'label' ).find( 'span' ).html( _that.val() + '%' );
+			return false;
+		},
     }
 
 jQuery(document).ready( function () {
@@ -403,6 +411,10 @@ jQuery(document).ready( function () {
 
 		jQuery(document).on('click', class_namespace+' .cat-post-thumb-change-size button', function () { // find a thumbnail size
 			cwp_namespace.thumbnailSizeChange(this);
+		});
+
+		jQuery(document).on('change', class_namespace+' .thumb_fluid_width', function () { // select a thumbnail fluid size
+			cwp_namespace.thumbnailFluidWidthChange(this);
 		});
 	}
 
