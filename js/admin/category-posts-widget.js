@@ -314,6 +314,40 @@
 			_that.closest( 'label' ).find( 'span' ).html( _that.val() + '%' );
 			return false;
 		},
+
+		placeholderDropDownMenuOpen : function (elem) {
+
+			var _that = jQuery(elem);
+
+			_that.closest( '.cat-post-add_premade_templates' ).find( '.cpwp-placeholder-dropdown-menu' ).toggle();
+
+			_that.closest( '.cat-post-add_premade_templates' ).find( '.cpwp-placeholder-dropdown-menu span' ).click( function() {
+				var text = jQuery( this ).data( 'value' );
+				switch( text ){
+					case 'NewLine':
+						text = '\n';
+					break;
+					case 'EmptyLine':
+						text = '\n\n';
+					break;
+					default:
+						text = '%' + text + '%';
+					break;
+				}
+				var div = this.parentElement.parentElement.parentElement;
+				var textarea = jQuery( div ).find( 'textarea' );
+				var textareaPos = textarea[0].selectionStart;
+				var textareaTxt = textarea.val();
+				textarea.val( textareaTxt.substring(0, textareaPos) + text + textareaTxt.substring(textareaPos) );
+
+				textarea[0].selectionStart = textareaPos + text.length;
+				textarea[0].selectionEnd = textareaPos + text.length;
+				textarea.focus();
+				textarea.trigger('input', 'change');
+			});
+
+			return false;
+		},
     }
 
 jQuery(document).ready( function () {
@@ -415,6 +449,10 @@ jQuery(document).ready( function () {
 
 		jQuery(document).on('change', class_namespace+' .thumb_fluid_width', function () { // select a thumbnail fluid size
 			cwp_namespace.thumbnailFluidWidthChange(this);
+		});
+
+		jQuery(document).on('click', class_namespace+' .cpwp-open-placholder-dropdown-menu', function () { // select a thumbnail fluid size
+			cwp_namespace.placeholderDropDownMenuOpen(this);
 		});
 	}
 

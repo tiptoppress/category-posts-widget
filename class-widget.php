@@ -1439,7 +1439,27 @@ class Widget extends \WP_Widget {
 				<p><?php esc_html_e( 'Displayed parts', 'category-posts' ); ?></p>
 				<div class="cpwp_ident">
 					<?php
-					echo $this->get_textarea_html( $instance, 'template', esc_html__( 'Template', 'category-posts' ) . ' <a href="#" class="dashicons toggle-template-help dashicons-editor-help imgedit-help-toggle"><span class="screen-reader-text">' . esc_html__( 'Show template help', 'category-posts' ) . '</span></a>', '', true, 8 );
+					$label = esc_html__( 'Template', 'category-posts' ) . 
+								' <a href="#" class="dashicons toggle-template-help dashicons-editor-help imgedit-help-toggle"><span class="screen-reader-text">' . 
+								esc_html__( 'Show template help', 'category-posts' ) . '</span></a>';
+					$label .= '<div class="cat-post-add_premade_templates">' .
+								'<button type="button" class="button cpwp-open-placholder-dropdown-menu"> + ' . esc_html__( 'Add Placeholder', 'category-posts' ) . '</button>' .
+									'<div class="cpwp-placeholder-dropdown-menu">' .
+										'<span data-value="NewLine">' . esc_html__( 'New line', 'category-posts' ) . '</span>' .
+										'<span data-value="EmptyLine">' . esc_html__( 'Empty line', 'category-posts' ) . '</span>' .
+										'<span data-value="title">' . esc_html__( '%title%', 'category-posts' ) . '</span>' .
+										'<span data-value="thumb">' . esc_html__( '%thumb%', 'category-posts' ) . '</span>' .
+										'<span data-value="date">' . esc_html__( '%date%', 'category-posts' ) . '</span>' .
+										'<span data-value="excerpt">' . esc_html__( '%excerpt%', 'category-posts' ) . '</span>' .
+										'<span data-value="author">' . esc_html__( '%author%', 'category-posts' ) . '</span>' .
+										'<span data-value="commentnum">' . esc_html__( '%commentnum%', 'category-posts' ) . '</span>' .
+										'<span data-value="post_tag">' . esc_html__( '%post_tag%', 'category-posts' ) . '</span>' .
+										'<span data-value="category">' . esc_html__( '%category%', 'category-posts' ) . '</span>' .
+									'</div>' .
+								'</div>';
+					?>
+					<?php
+					echo $this->get_textarea_html( $instance, 'template', $label , '', true, 8 );
 					preg_match_all( get_template_regex(), $template, $matches );
 					$tags = array();
 					if ( ! empty( $matches[0] ) ) {
