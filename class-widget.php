@@ -50,11 +50,10 @@ class Widget extends \WP_Widget {
 	public function post_thumbnail_html( $html, $post_id, $post_thumbnail_id, $size, $attr ) {
 
 		$use_css_cropping = isset( $this->instance['use_css_cropping'] ) && $this->instance['use_css_cropping'];
-		$empty_dimensions = empty( $this->instance['thumb_w'] ) || empty( $this->instance['thumb_h'] );
 		$thumb = isset( $this->instance['template'] ) && preg_match( '/%thumb%/', $this->instance['template'] );
 
-		if ( ! ( $use_css_cropping && ! $empty_dimensions && $thumb ) ) {
-			return $html; // If no full dimensions defined, just do not cropping for that image.
+		if ( ! ( $use_css_cropping && $thumb ) ) {
+			return $html;
 		}
 		$meta = image_get_intermediate_size( $post_thumbnail_id, $size );
 
@@ -125,8 +124,7 @@ class Widget extends \WP_Widget {
 			if ( ( 0 === $size[0] ) && ( 0 === $size[1] ) ) { // Both values zero then revert to thumbnail.
 				$size = array( get_option( 'thumbnail_size_w', 150 ), get_option( 'thumbnail_size_h', 150 ) );
 			} elseif ( ( 0 === $size[0] ) && ( 0 !== $size[1] ) ) {
-				// if one value is zero make a square using the other value.
-				$size[0] = $size[1];
+				$size[0] = 9999; // if thumb width 0 set to infinit for rendering
 			} elseif ( ( 0 !== $size[0] ) && ( 0 === $size[1] ) ) {
 				$size[1] = $size[0];
 			}
