@@ -1440,7 +1440,13 @@ class Widget extends \WP_Widget {
 					$label = esc_html__( 'Template', 'category-posts' ) . 
 								' <a href="#" class="dashicons toggle-template-help dashicons-editor-help imgedit-help-toggle"><span class="screen-reader-text">' . 
 								esc_html__( 'Show template help', 'category-posts' ) . '</span></a>';
-					$label .= '<div class="cat-post-add_premade_templates">' .
+					$class_placement = "";
+					if ( is_customize_preview() ) {
+						$class_placement = "customizer";
+					} else {
+						$class_placement = "admin-panel";
+					}
+					$label .= '<div class="cat-post-add_premade_templates ' . $class_placement . '">' .
 								'<button type="button" class="button cpwp-open-placholder-dropdown-menu"> + ' . esc_html__( 'Add Placeholder', 'category-posts' ) . '</button>' .
 									'<div class="cpwp-placeholder-dropdown-menu">' .
 										'<span data-value="NewLine">' . esc_html__( 'New line', 'category-posts' ) . '</span>' .

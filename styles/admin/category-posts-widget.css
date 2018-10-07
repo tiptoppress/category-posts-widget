@@ -167,12 +167,17 @@
     right: 0;
 	top: 0;
 	z-index: 1000;
-    transform: translate3d(155px, 0px, 0px);
 	background-color: #fff;
 	padding: 15px 0;
     border-radius: .25rem;
     border: 1px solid rgba(0,0,0,.15);
 	white-space: nowrap;
+}
+.cat-post-add_premade_templates.customizer > div {
+	transform: translate3d(0px, -272px, 0px);
+}
+.cat-post-add_premade_templates.admin-panel > div {
+	transform: translate3d(155px, 0px, 0px);
 }
 .cpwp-placeholder-dropdown-menu > span {
 	display: block;
