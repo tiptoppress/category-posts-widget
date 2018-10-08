@@ -287,7 +287,10 @@ class Virtual_Widget {
 				} else {
 					$ret['thumb_empty_w'] = '#' . $widget_id .' .cat-post-thumbnail .cat-post-crop img {width: '.$settings['thumb_w'].'px;}';
 				}
-				$ret['thumb_crop'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {object-fit: cover; height: '.$settings['thumb_h'].'px;max-width:100%;}';
+				if ( isset( $settings['thumb_h'] ) && $settings['thumb_h'] != 0 ) {
+					$ret['thumb_crop'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {height: '.$settings['thumb_h'].'px;}';
+				}
+				$ret['thumb_crop'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {object-fit: cover;max-width:100%;}';
 				
 				$ret['thumb_crop_not_supported'] = '#' . $widget_id .' .cat-post-thumbnail .cat-post-crop-not-supported img {width:100%;}';
 

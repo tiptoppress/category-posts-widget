@@ -68,23 +68,6 @@ class Widget extends \WP_Widget {
 			list( $width, $height ) = getimagesize( $file );  // get actual size of the thumb file.
 
 			if ( isset( $this->instance['use_css_cropping'] ) && $this->instance['use_css_cropping'] ) {
-				$image = get_image_size( $this->instance['thumb_w'], $this->instance['thumb_h'], $width, $height );
-
-				// replace srcset.
-				$array = array();
-				preg_match( '/width="([^"]*)"/i', $html, $array );
-				$pattern = '/' . $array[1] . 'w/';
-				$html = preg_replace( $pattern, $image['image_w'] . 'w', $html );
-				// replace size.
-				$pattern = '/' . $array[1] . 'px/';
-				$html = preg_replace( $pattern, $image['image_w'] . 'px', $html );
-				// replace width.
-				$pattern = '/width="[0-9]*"/';
-				$html = preg_replace( $pattern, "width='" . $image['image_w'] . "'", $html );
-				// replace height.
-				$pattern = '/height="[0-9]*"/';
-				$html = preg_replace( $pattern, "height='" . $image['image_h'] . "'", $html );
-				// wrap span with post format.
 				$show_post_format = isset( $this->instance['show_post_format'] ) && ( 'none' !== $this->instance['show_post_format'] );
 				if ( $show_post_format || $this->instance['thumb_hover'] ) {
 					$format = get_post_format() ? : 'standard';
@@ -124,9 +107,14 @@ class Widget extends \WP_Widget {
 			if ( ( 0 === $size[0] ) && ( 0 === $size[1] ) ) { // Both values zero then revert to thumbnail.
 				$size = array( get_option( 'thumbnail_size_w', 150 ), get_option( 'thumbnail_size_h', 150 ) );
 			} elseif ( ( 0 === $size[0] ) && ( 0 !== $size[1] ) ) {
-				$size[0] = 9999; // if thumb width 0 set to infinit for rendering
+				$size[0] = 9999; // if thumb width 0 set to infinit for wp rendering
 			} elseif ( ( 0 !== $size[0] ) && ( 0 === $size[1] ) ) {
-				$size[1] = $size[0];
+				// if thumb height 0 get full thumb for ratio and calc height with ratio
+				$post_thumb = get_the_post_thumbnail( get_the_ID(), 'full' );
+				preg_match( '/(?<=width=")[\d]*/', $post_thumb, $thumb_full_w );
+				preg_match( '/(?<=height=")[\d]*/', $post_thumb, $thumb_full_h );
+				$ratio = $thumb_full_w[0] / $thumb_full_h[0];
+				$size[1] = intval( $size[0] * $ratio );
 			}
 		} else {
 			$size = array( get_option( 'thumbnail_size_w', 150 ), get_option( 'thumbnail_size_h', 150 ) ); // yet another form of junk.
