@@ -107,7 +107,10 @@ class Widget extends \WP_Widget {
 			if ( ( 0 === $size[0] ) && ( 0 === $size[1] ) ) { // Both values zero then revert to thumbnail.
 				$size = array( get_option( 'thumbnail_size_w', 150 ), get_option( 'thumbnail_size_h', 150 ) );
 			} elseif ( ( 0 === $size[0] ) && ( 0 !== $size[1] ) ) {
-				$size[0] = 9999; // if thumb width 0 set to infinit for wp rendering
+				 // if thumb width 0 set to max/full widths for wp rendering
+				$post_thumb = get_the_post_thumbnail( get_the_ID(), 'full' );
+				preg_match( '/(?<=width=")[\d]*/', $post_thumb, $thumb_full_w );
+				$size[0] = $thumb_full_w[0];
 			} elseif ( ( 0 !== $size[0] ) && ( 0 === $size[1] ) ) {
 				// if thumb height 0 get full thumb for ratio and calc height with ratio
 				$post_thumb = get_the_post_thumbnail( get_the_ID(), 'full' );
