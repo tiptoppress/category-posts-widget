@@ -282,13 +282,11 @@ class Virtual_Widget {
 		if ( isset( $settings['template'] ) && preg_match( '/%thumb%/', $settings['template'], $m, PREG_OFFSET_CAPTURE ) ) {
 			$wrap = isset( $settings['text_do_not_wrap_thumb'] ) && $settings['text_do_not_wrap_thumb'];
 			if ( isset( $settings['use_css_cropping'] ) && $settings['use_css_cropping'] ) {
-				if ( ! isset( $settings['thumb_w'] ) || $settings['thumb_w'] == 0 ) {
-					$ret['thumb_empty_w'] = '#' . $widget_id .' .cat-post-thumbnail .cat-post-crop img {width:100vw;}';
-				} else {
+				if ( isset( $settings['thumb_w'] ) && $settings['thumb_w'] != 0 ) {
 					$ret['thumb_empty_w'] = '#' . $widget_id .' .cat-post-thumbnail .cat-post-crop img {width: '.$settings['thumb_w'].'px;}';
 				}
 				if ( isset( $settings['thumb_h'] ) && $settings['thumb_h'] != 0 ) {
-					$ret['thumb_crop'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {height: '.$settings['thumb_h'].'px;}';
+					$ret['thumb_crop_h'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {height: '.$settings['thumb_h'].'px;}';
 				}
 				$ret['thumb_crop'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {object-fit: cover;max-width:100%;}';
 				
