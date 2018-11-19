@@ -568,7 +568,7 @@ class Widget extends \WP_Widget {
 	 */
 	public function itemTags( $instance, $everything_is_link ) {
 
-		$ret = '<span class="cat-post-tax-post_tag">';
+		$ret = '<span class="cat-post-tax-tag">';
 		$tag_ids = wp_get_post_tags( get_the_ID(), array( 'number' => 0 ) );
 		foreach ( $tag_ids as $tag_id ) {
 			if ( $everything_is_link ) {
