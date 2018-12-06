@@ -315,7 +315,7 @@
 			return false;
 		},
 
-		placeholderDropDownMenuOpen : function (elem) {
+		addPlaceholders : function (elem) {
 
 			var _that = jQuery(elem);
 
@@ -334,8 +334,8 @@
 						text = '%' + text + '%';
 					break;
 				}
-				var div = this.parentElement.parentElement.parentElement;
-				var textarea = jQuery( div ).find( 'textarea' );
+				var _div = this.parentElement.parentElement.parentElement;
+				var textarea = jQuery( _div ).find( 'textarea' );
 				var textareaPos = textarea[0].selectionStart;
 				var textareaTxt = textarea.val();
 				textarea.val( textareaTxt.substring(0, textareaPos) + text + textareaTxt.substring(textareaPos) );
@@ -346,6 +346,25 @@
 				textarea.trigger('input', 'change');
 			});
 
+			return false;
+		},
+
+		selectPlaceholders : function (elem) {
+
+			var textarea = jQuery(elem);
+			var textareaPos = textarea[0].selectionStart;
+			var textareaTxt = textarea.val();
+
+			var nStartSel = textareaTxt.substring(0, textareaPos).lastIndexOf( '%' );
+			var nEndSel = textareaPos + textareaTxt.substring(textareaPos).indexOf( '%' ) + 1;
+
+			var strSelTxt = textareaTxt.substring(nStartSel, nEndSel);
+			if( strSelTxt.indexOf( '\n' ) >= 0 || strSelTxt.indexOf( ' ' ) >= 0 || strSelTxt.length <=2 ) {
+				return false;
+			}
+
+			textarea[0].selectionStart = nStartSel;
+			textarea[0].selectionEnd = nEndSel;
 			return false;
 		},
     }
@@ -451,8 +470,14 @@ jQuery(document).ready( function () {
 			cwp_namespace.thumbnailFluidWidthChange(this);
 		});
 
-		jQuery(document).on('click', class_namespace+' .cpwp-open-placholder-dropdown-menu', function () { // select a thumbnail fluid size
-			cwp_namespace.placeholderDropDownMenuOpen(this);
+		jQuery(document).on('click', class_namespace+' .cpwp-open-placholder-dropdown-menu', function () { // open drop down and add placeholders
+			cwp_namespace.addPlaceholders(this);
+		});
+
+		jQuery(document).on('mousedown', class_namespace+' .categoryPosts-template ~ textarea', function () { // help to select the placeholders
+			var _that = this;
+			setTimeout(function(){ cwp_namespace.selectPlaceholders(_that); }, 0);
+			;
 		});
 	}
 
