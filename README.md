@@ -18,74 +18,46 @@ Adds a widget that shows the most recent posts from a single category.
 Category Posts Widget is a light widget designed to do one thing and do it well: display the most recent posts from a certain category.
 
 ### Term and Category based Posts Widget
-A premium version of this free widget here and available on <a href="http://tiptoppress.com/?utm_source=github&utm_campaign=premium_widget_cpw&utm_medium=web">tiptoppress.com</a> created for big Wordpress sites.
-We've also started creating free widget Add-ons for the Premium Widget here: <a href="http://tiptoppress.com/extensions/?utm_source=wordpress_org&utm_campaign=premium_widget_cpw&utm_medium=web">Widget extensions</a>.
+A premium version of that free widget available at<a href="http://tiptoppress.com/">tiptoppress.com</a> created for big Wordpress sites.
 
 ### Premium features
-* "Post List Alterations"
-* Masonry (Responsive grid layouts)
-* Grid and Column full page layouts
-* Slider (Vertical and horizontal)
-* More complex ways to filter (all, any, exclude, also childes, AND or just OR rule)
-* Categories, Custom Post Types, Taxonomies, Events, Products, ...
+* Image-Slider
+* Post List "Alterations"
 * Full background post images
-* Mouse hover effects for post thumbnail
-* <a target="_blank" href="http://tiptoppress.com/category/extensions/?utm_source=wordpress_org&utm_campaign=premium_features_extensions&utm_medium=web">Extensions</a>
-* E-Mail support
+* Masonry (responsive layouts), Grid and Column full page layouts
+* More complex ways to filter (ANY, NOT, AND, not include children)
+* Custom Post Types, Events, Products support
+* Add-ons
 * All free features
+* E-Mail support
 * Free trail on localhost
-* More [examples on the demo pages](http://demo.tiptoppress.com/?utm_source=wordpress_org&utm_campaign=premium_features_demo&utm_medium=web)
+* More examples on the [demo pages](http://demo.tiptoppress.com/)
 
 ### Features
-* SVG font-icon support for post formats
-* <a href="http://tiptoppress.com/template-arrange-post-details/">Template</a> to arrange the post details
-* Premade Templates
-* The Template text can be a post details placeholder, plain text, HTML or HTML for SVG font-icons
-* New date format: Time since plublished
-* Filter by post status: Published, scheduled, private
-* New hover effect: SVG font-icon
+* [Template](http://tiptoppress.com/template-arrange-post-details/) to arrange the post details.
+* The Template text can be a post details placeholder, plain text, HTML or a font-icons.
+* Font-icon support.
 * Shortcode (Easily change all Shortcode options in the customizer).
-* Support multiple shortcodes at the same post.
+* New date format: Time since plublished
+* Filter by post status: Published, scheduled, private.
+* Multiple shortcodes at the same site or post.
 * Add option for post offset (use two or more widgets after another).
 * Add UI buttons in the editor toolbar to insert shortcode.
 * Option to touch device friendly "everything is a link".
 * For editing shortcode adds a Customizer link to the admin-bar ("With one click to the Customizer").
-* Option to show post thumbnail & set dimensions by width & height.
-* Option for <a target="_blank" href="http://tiptoppress.com/css-image-crop/?utm_source=wordpress_org&utm_campaign=features_crop_cpw&utm_medium=web">client-side cropped thumbnail dimensions</a> by width & height.
+* Set thumbnail width & height.
 * Fluid images for Responsive Layouts.
 * Option to set mouse hover effects for post thumbnail.
-* Set a thumbnail as default thumbnail.
-* Add option to enable excerpt filters from Themes and plugins.
-* Jetpack 'Social buttons on posts' support.
-* Add option to disable social buttons, banner, ... in the excerpt.
-* Option to change ordering of posts.
-* Set which category the posts should come form.
-* Add dropdownbox entry for 'all' categories.
-* Option to filter by post status.
-* Set how many posts to show.
-* Option to hide widget, if category have currently no posts.
-* Add option to disable subcategories.
-* Option to put thumbnail on top.
+* Set a default thumbnail.
+* Hide widget text.
 * Option to hide posts which have no thumbnail.
 * Option exclude current post.
-* Option to hide the widget title and post titles.
-* Option to make the widget title link to the category page.
-* Option to show the post excerpt, set the length, allow HTML and change 'more' text.
-* Option show post author.
-* Option to show the comment count.
-* Option to show the post date.
-* Option to make the widget date link to the category page.
-* Option to format the outputted date string.
-* Option to link to the category page below posts list.
-* Option to disable the widget CSS or more granular control of default styling with not apply the font styles.
-* Multiple widgets.
+* Option show post author, comment's count, post date.
 * Multi sites support.
-* Support localization with translate.wordpress.org
-* Use WP user profile for settings ('auto close' and if the shortcode button appears in the editor toolbar).
 
 ### Documentation
-* Full documentation on [tiptoppress.com](http://tiptoppress.com/category-posts-widget/documentation-4-8/?utm_source=wordpress_org&utm_campaign=documentation_4_8_cpw&utm_medium=web)
-* Shortcode: Use [catposts] [in the content and edit options in the customizer](http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content/?utm_source=wordpress_org&utm_campaign=documentation_shortcode_cpw&utm_medium=web)
+* Full documentation on [tiptoppress.com](http://tiptoppress.com/category-posts-widget/documentation-4-8/)
+* Shortcode: Use [catposts] in the content and [edit in the customizer](http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content/)
 * Formatting date and time: See <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>
 
 ### Contribute
@@ -121,22 +93,15 @@ Here You can control the [Post Detail parts](http://tiptoppress.com/category-pos
 
 For more layout options please try our premium widget: [Term and Category based Posts Widget](http://tiptoppress.com/term-and-category-based-posts-widget/).
 
-= Use SVG font-icons =
+### Use SVG font-icons
 For SVG font-icon HTML we recommend the [WordPress Dashicons](https://developer.wordpress.org/resource/dashicons/), which are included as default and can be used without any icon-font including.
 
-= How Category Posts Widget work with SiteOrigin Page Builder =
-Please add the widget with shortcode [catposts] inside a editor widget which is placed to a SiteOrigin Page Builder row.
-We also create a YouTube video: [How Category Posts Widget work with SiteOrigin Page Builder](http://tiptoppress.com/how-category-posts-widget-work-with-siteorigin-page-builder/)
+### How to use Page Bilder plugins like Divi, SiteOrigin Page Builder or Elementor
+Please read more about Page Builder plugins at our [FAQs](http://tiptoppress.com/faqs/)
 
-= How Category Posts Widget work with Divi Builder =
-You can create a new Divi widget area and put our widgets into a Divi Sidebar Module: [How to put a widget into Divi Module](https://divibooster.com/how-to-put-a-widget-into-divi-module/).
+Use the [WP Custom Widget Area](https://wordpress.org/plugins/wp-custom-widget-area/) plugin and create a new custom area with this plugin and place the shortcode (from the new created widget area) to a post or page. Then add our widget to the new created custom widget area  the widgets admin site (Dashboard > Appearance > Widgets > ï¿½ ).
 
-= How our widgets works with other page builder plugins like Elementor, Thrive Architect etc. =
-We recommend for all other page builder plugins like Elementor or Thrive Architect to use the [WP Custom Widget Area](https://wordpress.org/plugins/wp-custom-widget-area/) plugin in additional.
-
-Use the [WP Custom Widget Area](https://wordpress.org/plugins/wp-custom-widget-area/) plugin and create a new custom area with this plugin and place the shortcode (from the new created widget area) to a post or page. Then add our widget to the new created custom widget area  the widgets admin site (Dashboard > Appearance > Widgets > … ).
-
-= The font-size is different from that of other widgets or Theme elements? =
+### The font-size is different from that of other widgets or Theme elements?
 Please use the option: "Disable widget CSS".
 
 ### I want the title as a link pointing to the selected Categorie page? =
