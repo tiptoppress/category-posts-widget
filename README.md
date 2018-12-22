@@ -30,7 +30,7 @@ A premium version of that free widget available at<a href="http://tiptoppress.co
 * Add-ons
 * All free features
 * E-Mail support
-* Free trail on localhost
+* Free trial on localhost
 * More examples on the [demo pages](http://demo.tiptoppress.com/)
 
 ### Features
