@@ -309,9 +309,14 @@
 
 		thumbnailFluidWidthChange : function (elem) {
 
-			var _that = jQuery(elem);
+			var _that = jQuery(elem),
+				_input_thumb_h = _that.closest('.categoryposts-data-panel-thumb').find('.thumb_h');
 
 			_that.closest( 'label' ).find( 'span' ).html( _that.val() + '%' );
+
+			_input_thumb_h.val(0);
+			_input_thumb_h.trigger('input', 'change');
+			
 			return false;
 		},
 

@@ -19,21 +19,5 @@ if (typeof jQuery !== 'undefined')  {
 				jQuery('.cat-post-item figure img').height('-=1');
 			},0);
 		}
-
-		// var uid =1;
-		// // get all widgets as object
-		// jQuery.each( jQuery('[data-cpw-image-ratio]'), function( indes ) {
-		// 	var num = uid++,
-		// 		ratio = jQuery(this).data("cpw-image-ratio");
-		// 	cwp_namespace.fluid_images.widget = jQuery(this);
-		// 	cwp_namespace.fluid_images.Widgets[num] = new cwp_namespace.fluid_images.WidgetPosts(cwp_namespace.fluid_images.widget, ratio);
-		// });
-
-		// // crop on page load or on resize the browser window
-		// jQuery(window).on('load resize', function() {
-		// 	for (var widget in cwp_namespace.fluid_images.Widgets) {
-		// 		cwp_namespace.fluid_images.Widgets[widget].changeImageSize();
-		// 	}
-		// });
 	});
 }
