@@ -72,6 +72,7 @@
 }
 .category-widget-cont textarea {
 	width:100%;
+	margin-top: 5px;
 }
 
 .category-widget-cont .dashicons-editor-help {
@@ -159,10 +160,10 @@
 .cat-post-add_premade_templates > button {
 	float: right;
 }
-.cat-post-add_premade_templates > div {
+.cat-post-add_premade_templates > .cpwp-placeholder-dropdown-menu {
 	display: none;
 }
-.cat-post-add_premade_templates > div {
+.cat-post-add_premade_templates > .cpwp-placeholder-dropdown-menu {
 	position: absolute;
     right: 0;
 	top: 0;
@@ -173,11 +174,11 @@
     border: 1px solid rgba(0,0,0,.15);
 	white-space: nowrap;
 }
-.cat-post-add_premade_templates.customizer > div {
-	transform: translate3d(0px, -272px, 0px);
+.cat-post-add_premade_templates.customizer > .cpwp-placeholder-dropdown-menu {
+	transform: translate3d(56px, -277px, 0px);
 }
-.cat-post-add_premade_templates.admin-panel > div {
-	transform: translate3d(155px, 0px, 0px);
+.cat-post-add_premade_templates.admin-panel > .cpwp-placeholder-dropdown-menu {
+	transform: translate3d(322px, -4px, 0px);
 }
 .cpwp-placeholder-dropdown-menu > span {
 	display: block;

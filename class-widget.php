@@ -1437,9 +1437,9 @@ class Widget extends \WP_Widget {
 					} else {
 						$class_placement = "admin-panel";
 					}
-					$label .= '<div class="cat-post-add_premade_templates ' . $class_placement . '">' .
+					$label .= '<span class="cat-post-add_premade_templates ' . $class_placement . '">' .
 								'<button type="button" class="button cpwp-open-placholder-dropdown-menu"> + ' . esc_html__( 'Add Placeholder', 'category-posts' ) . '</button>' .
-									'<div class="cpwp-placeholder-dropdown-menu">' .
+									'<span class="cpwp-placeholder-dropdown-menu">' .
 										'<span data-value="NewLine">' . esc_html__( 'New line', 'category-posts' ) . '</span>' .
 										'<span data-value="EmptyLine">' . esc_html__( 'Empty line', 'category-posts' ) . '</span>' .
 										'<span data-value="title">' . esc_html__( '%title%', 'category-posts' ) . '</span>' .
@@ -1450,8 +1450,8 @@ class Widget extends \WP_Widget {
 										'<span data-value="commentnum">' . esc_html__( '%commentnum%', 'category-posts' ) . '</span>' .
 										'<span data-value="post_tag">' . esc_html__( '%post_tag%', 'category-posts' ) . '</span>' .
 										'<span data-value="category">' . esc_html__( '%category%', 'category-posts' ) . '</span>' .
-									'</div>' .
-								'</div>';
+									'</span>' .
+								'</span>';
 					?>
 					<?php
 					echo $this->get_textarea_html( $instance, 'template', $label , '', true, 8 );

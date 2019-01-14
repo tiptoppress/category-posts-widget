@@ -320,13 +320,13 @@
 			return false;
 		},
 
-		addPlaceholders : function (elem) {
+		openAddPlaceholder : function (elem) {
 
 			var _that = jQuery(elem);
 
 			_that.closest( '.cat-post-add_premade_templates' ).find( '.cpwp-placeholder-dropdown-menu' ).toggle();
 
-			_that.closest( '.cat-post-add_premade_templates' ).find( '.cpwp-placeholder-dropdown-menu span' ).click( function() {
+			_that.closest( '.cat-post-add_premade_templates' ).find( '.cpwp-placeholder-dropdown-menu span' ).off('click').on('click', function() {
 				var text = jQuery( this ).data( 'value' );
 				switch( text ){
 					case 'NewLine':
@@ -349,12 +349,21 @@
 				textarea[0].selectionEnd = textareaPos + text.length;
 				textarea.focus();
 				textarea.trigger('input', 'change');
+
+				//_that.closest( '.cat-post-add_premade_templates' ).find( '.cpwp-placeholder-dropdown-menu' ).hide();
+			});
+
+			_that.closest( '.cat-post-add_premade_templates' ).find( '.cpwp-placeholder-dropdown-menu' ).on('mouseenter', function(){
+				jQuery(this).addClass('cpw-doNotClose');
+			});
+			_that.closest( '.cat-post-add_premade_templates' ).find( '.cpwp-placeholder-dropdown-menu' ).on('mouseleave', function(){
+				jQuery(this).removeClass('cpw-doNotClose');
 			});
 
 			return false;
 		},
 
-		selectPlaceholders : function (elem) {
+		selectPlaceholderHelper : function (elem) {
 
 			var textarea = jQuery(elem);
 			var textareaPos = textarea[0].selectionStart;
@@ -475,13 +484,17 @@ jQuery(document).ready( function () {
 			cwp_namespace.thumbnailFluidWidthChange(this);
 		});
 
-		jQuery(document).on('click', class_namespace+' .cpwp-open-placholder-dropdown-menu', function () { // open drop down and add placeholders
-			cwp_namespace.addPlaceholders(this);
+		jQuery(document).on('click', class_namespace+' .cpwp-open-placholder-dropdown-menu', function () { // open drop down and add placeholder
+			cwp_namespace.openAddPlaceholder(this);
 		});
 
-		jQuery(document).on('mousedown', class_namespace+' .categoryPosts-template ~ textarea', function () { // help to select the placeholders
+		jQuery(document).on('onfocusout, blur', class_namespace+' .cpwp-open-placholder-dropdown-menu,'+class_namespace+' .categoryPosts-template textarea', function () { // close drop down placeholder, if not used
+			jQuery(this).closest( class_namespace+' .categoryPosts-template' ).parent().find( '.cpwp-placeholder-dropdown-menu' ).not('.cpw-doNotClose').hide();
+		});
+
+		jQuery(document).on('mousedown', class_namespace+' .categoryPosts-template textarea', function () { // help to select the placeholder
 			var _that = this;
-			setTimeout(function(){ cwp_namespace.selectPlaceholders(_that); }, 0);
+			setTimeout(function(){ cwp_namespace.selectPlaceholderHelper(_that); }, 0);
 			;
 		});
 	}
