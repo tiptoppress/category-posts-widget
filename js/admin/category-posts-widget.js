@@ -459,7 +459,7 @@ jQuery(document).ready( function () {
 			cwp_namespace.toggleNoMatch(this);
 		});
 
-		jQuery(document).off('click', class_namespace+' a.toggle-template-help').on('click', class_namespace+' a.toggle-template-help', function (event) { // show template help
+		jQuery(class_namespace+' a.toggle-template-help').off('click').on('click', function (event) { // show template help
 			cwp_namespace.toggleTemplateHelp(this, event);
 		});
 
@@ -484,7 +484,7 @@ jQuery(document).ready( function () {
 			cwp_namespace.thumbnailFluidWidthChange(this);
 		});
 
-		jQuery(document).on('click', class_namespace+' .cpwp-open-placholder-dropdown-menu', function () { // open drop down and add placeholder
+		jQuery(class_namespace+' .cpwp-open-placholder-dropdown-menu').off('click').on('click', function () { // open drop down and add placeholder
 			cwp_namespace.openAddPlaceholder(this);
 		});
 
