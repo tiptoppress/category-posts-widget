@@ -196,6 +196,14 @@ class Virtual_Widget {
 				$styles['after_item'] = '.cat-post-item:after {content: ""; display: table;	clear: both;}';
 			}
 
+			
+			if ( isset( $settings['template'] ) && preg_match( '/%excerpt%/', $settings['template'] ) ) {
+				if ( isset( $settings['excerpt_lines_count'] ) && $settings['excerpt_lines_count'] != 0 ) {
+					$styles['excerpt_lines_count'] = '.cat-post-item p {overflow: hidden;text-overflow: ellipsis;white-space: initial;'.
+						'display: -webkit-box;-webkit-line-clamp: '.$settings['excerpt_lines_count'].';-webkit-box-orient: vertical;}';
+				}
+			}
+
 			// add post format css if needed.
 			if ( isset( $settings['template'] ) && preg_match( '/%thumb%/', $settings['template'] ) ) {
 				if ( ! isset( $settings['show_post_format'] ) || ( ( 'none' !== $settings['show_post_format'] ) && ( 'nocss' !== $settings['show_post_format'] ) ) ) {
