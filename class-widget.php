@@ -648,7 +648,7 @@ class Widget extends \WP_Widget {
 		if ( isset( $instance['excerpt_length'] ) && ( $instance['excerpt_length'] > 0 ) ) {
 			$length = (int) $instance['excerpt_length'];
 		} else {
-			$length = 55; // Use the wordpress default.
+			$length = 999; // Use the wordpress default.
 		}
 
 		if ( ! isset( $instance['excerpt_filters'] ) || $instance['excerpt_filters'] ) { // pre 4.7 widgets has filters on.
@@ -672,7 +672,8 @@ class Widget extends \WP_Widget {
 				// just force all functions depending on the_excerpt hook.
 				$excerpt = shortcode_unautop( wpautop( convert_chars( convert_smilies( wptexturize( $excerpt ) ) ) ) );
 			} else {
-				$excerpt = $post->post_excerpt . $excerpt_more_text;
+				$text = $post->post_excerpt;
+				$excerpt = \wp_trim_words( $text, $length, $excerpt_more_text );
 				$excerpt = shortcode_unautop( wpautop( convert_chars( convert_smilies( wptexturize( $excerpt ) ) ) ) );
 			}
 		}
@@ -1524,7 +1525,8 @@ class Widget extends \WP_Widget {
 					<p><?php esc_html_e( 'Excerpt settings', 'category-posts' ); ?></p>
 					<div class="cpwp_ident">
 					<?php
-					echo $this->get_number_input_block_html( $instance, 'excerpt_length', esc_html__( 'Length (words):', 'category-posts' ), 1, 200, '', true );
+					echo $this->get_number_input_block_html( $instance, 'excerpt_lines', esc_html__( 'Lines (responsive):', 'category-posts' ), 0, '', '', true );
+					echo $this->get_number_input_block_html( $instance, 'excerpt_length', esc_html__( 'Length (words):', 'category-posts' ), 0, '', '', true );
 					echo $this->get_text_input_block_html( $instance, 'excerpt_more_text', esc_html__( '\'More ...\' text:', 'category-posts' ), esc_attr__( '...', 'category-posts' ), true );
 					?>
 					</div>

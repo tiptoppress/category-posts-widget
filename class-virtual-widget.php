@@ -198,9 +198,9 @@ class Virtual_Widget {
 
 			
 			if ( isset( $settings['template'] ) && preg_match( '/%excerpt%/', $settings['template'] ) ) {
-				if ( isset( $settings['excerpt_lines_count'] ) && $settings['excerpt_lines_count'] != 0 ) {
-					$styles['excerpt_lines_count'] = '.cat-post-item p {overflow: hidden;text-overflow: ellipsis;white-space: initial;'.
-						'display: -webkit-box;-webkit-line-clamp: '.$settings['excerpt_lines_count'].';-webkit-box-orient: vertical;}';
+				if ( isset( $settings['excerpt_lines'] ) && $settings['excerpt_lines'] != 0 ) {
+					$styles['excerpt_lines'] = '.cat-post-item p {overflow: hidden;text-overflow: ellipsis;white-space: initial;'.
+						'display: -webkit-box;-webkit-line-clamp: '.$settings['excerpt_lines'].';-webkit-box-orient: vertical;}';
 				}
 			}
 
