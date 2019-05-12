@@ -1410,7 +1410,7 @@ class Widget extends \WP_Widget {
 
 		<div class="category-widget-cont">
 			<?php if ( ! class_exists( '\\termcategoryPostsPro\\Widget' ) ) { ?>
-			<p><a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=widget_cpw&utm_campaign=get_pro_cpw&utm_medium=form"><?php esc_html_e( 'Get the Pro version', 'category-posts' ); ?></a></p>
+			<p><a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/"><?php esc_html_e( 'Get the Pro version', 'category-posts' ); ?></a></p>
 			<?php
 			}
 			$this->formTitlePanel( $instance );

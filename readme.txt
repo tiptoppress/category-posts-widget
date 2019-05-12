@@ -1,10 +1,10 @@
 ﻿=== Category Posts Widget ===
 Contributors: mark-k, kometschuh, mkrdip
-Donate link: http://mkrdip.me/donate
+Donate link: https://wordpress.org/support/plugin/category-posts/reviews/
 Tags: category, categories, posts, widget, posts widget, recent posts, category recent posts, shortcode, sidebar, excerpt, multiple widgets
 Requires at least: 2.8
-Tested up to: 5.0
-Stable tag: 4.9.beta1
+Tested up to: 5.2
+Stable tag: 4.9.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,7 +52,7 @@ A premium version of that free widget available at [tiptoppress.com](http://tipt
 * Multi sites support.
 
 = Documentation =
-* Full [documentation](http://tiptoppress.com/category-posts-widget/documentation-4-8)
+* Full [documentation](http://tiptoppress.com/category-posts-widget/documentation-4-9)
 * Shortcode: Use [catposts] in the content and [edit in the customizer](http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content/)
 * Formatting date and time: See <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>
 
@@ -83,7 +83,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 == Frequently Asked Questions ==
 = Template, placeholder and post detail =
-Here You can control the [Post Detail parts](http://tiptoppress.com/category-posts-widget/documentation-4-8/#Post_details), which appears as part of the post item. All post detail will placed as placeholder. The text in the Template area can be a post details placeholder, plain text, HTML or HTML for SVG icons.
+Here You can control the [Post Detail parts](http://tiptoppress.com/category-posts-widget/documentation-4-9/#Post_details), which appears as part of the post item. All post detail will placed as placeholder. The text in the Template area can be a post details placeholder, plain text, HTML or HTML for SVG icons.
 
 [How it works? and examples.](http://tiptoppress.com/template-arrange-post-details/)
 
@@ -104,6 +104,11 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 = You check the PHP version with phpversion(), but the widget don't work =
 Check also the .htaccess file, if there is an entry for an older PHP version.
 
+= Excerpt length in lines don't work with FireFox and IE11 =
+We use for Excerpt length in lines a CSS feature called "line-clamp" which isn't supported in FireFox and IE11 at the moment.
+But since it is supported by all other browsers, we think it will be supported in FireFox and IE11 soon.
+The FireFox browser has a coverage of 5%, which we find little. For this 5%, we have included a polyfill in our [Excerpt Extension add-on](https://wordpress.org/plugins/excerpt-extension/).
+
 == Screenshots ==
 1. Front end of the widget with SVG font-icon support for post formats, hover effects and the Template text-area.
 2. Template to arrange the post details with placeholders.
@@ -114,6 +119,17 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget)
+
+= 4.9.1 - Mai 12th 2019 =
+* Load more Ajax API
+* Data range filter
+* Text, if there is no post
+* CSS excerpt length - line-clamp
+* CSS image crop - object-fit
+* Fluid image: Thumb width relative to the post width in percentage
+* One thumb dimension can be left empty
+* Admin UI: Button to add post details placeholder
+* Admin UI: Set / find thumbnail size buttons: +, ¼, ½, 2x, -, ratio and Media sizes
 
 = 4.8.5 - April 02nd 2018 =
 * Fixed Tabs not working
