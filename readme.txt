@@ -33,22 +33,28 @@ A premium version of that free widget available at [tiptoppress.com](http://tipt
 * [Template](http://tiptoppress.com/template-arrange-post-details/) to arrange the post details.
 * The Template text can be a post details placeholder, plain text, HTML or a font-icons.
 * Font-icon support.
+* 'Load more' button / Ajax API
 * Shortcode (Easily change all Shortcode options in the customizer).
+* Date range filter
 * New date format: Time since plublished
 * Filter by post status: Published, scheduled, private.
 * Multiple shortcodes at the same site or post.
 * Add option for post offset (use two or more widgets after another).
-* Add UI buttons in the editor toolbar to insert shortcode.
+* Admin UI: Buttons in the editor toolbar to insert shortcode.
+* Excerpt length in lines (line-clamp)
 * Option to touch device friendly "everything is a link".
 * For editing shortcode adds a Customizer link to the admin-bar ("With one click to the Customizer").
-* Set thumbnail width & height.
-* Fluid images for Responsive Layouts.
+* Set thumbnail width & height / image crop with CSS (object-fit).
+* Fluid images (max-width in %).
+* One thumb dimension can be left empty.
 * Option to set mouse hover effects for post thumbnail.
 * Set a default thumbnail.
-* Hide widget text.
+* Hide widget text or text, if there is no post.
 * Option to hide posts which have no thumbnail.
 * Option exclude current post.
 * Option show post author, comment's count, post date.
+* Admin UI: Set / find thumbnail size buttons: +, ¼, ½, 2x, -, ratio and Media sizes
+* Admin UI: Buttons to easy add post details placeholder.
 * Multi sites support.
 
 = Documentation =
@@ -104,9 +110,9 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 = You check the PHP version with phpversion(), but the widget don't work =
 Check also the .htaccess file, if there is an entry for an older PHP version.
 
-= Excerpt length in lines don't work with FireFox and IE11 =
-We use for Excerpt length in lines a CSS feature called "line-clamp" which isn't supported in FireFox and IE11 at the moment.
-But since it is supported by all other browsers, we think it will be supported in FireFox and IE11 soon.
+= Excerpt length in lines don't work with FireFox and IE =
+We use for Excerpt length in lines a CSS feature called "line-clamp" which isn't supported in FireFox and IE at the moment.
+But since it is supported by all other browsers, we think it will be supported in FireFox and IE soon.
 The FireFox browser has a coverage of 5%, which we find little. For this 5%, we have included a polyfill in our [Excerpt Extension add-on](https://wordpress.org/plugins/excerpt-extension/).
 
 == Screenshots ==
@@ -120,15 +126,15 @@ The FireFox browser has a coverage of 5%, which we find little. For this 5%, we 
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget)
 
-= 4.9.1 - Mai 12th 2019 =
-* Load more Ajax API
+= 4.9.1 - Mai 17th 2019 =
+* 'Load more' button / Ajax API
 * Data range filter
 * Text, if there is no post
-* CSS excerpt length - line-clamp
-* CSS image crop - object-fit
-* Fluid image: Thumb width relative to the post width in percentage
+* Excerpt length in lines (line-clamp)
+* Image crop with CSS (object-fit)
+* Fluid images (max-width in %).
 * One thumb dimension can be left empty
-* Admin UI: Button to add post details placeholder
+* Admin UI: Button to easy add post details placeholder
 * Admin UI: Set / find thumbnail size buttons: +, ¼, ½, 2x, -, ratio and Media sizes
 
 = 4.8.5 - April 02nd 2018 =
