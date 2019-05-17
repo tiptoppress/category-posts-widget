@@ -563,7 +563,7 @@ function default_settings() {
 		'use_css_cropping'       => true,
 		'thumb_hover'            => 'none',
 		'hide_post_titles'       => false,
-		'excerpt_lines'          => 5,
+		'excerpt_lines'          => 0,
 		'excerpt_length'         => 0,
 		'excerpt_more_text'      => __( '...', 'category-posts' ),
 		'excerpt_filters'        => false,
