@@ -73,7 +73,7 @@ class Widget extends \WP_Widget {
 					$format = get_post_format() ? : 'standard';
 					$post_format_class = 'cat-post-format cat-post-format-' . $format;
 				}
-				$html = '<figure class="cat-post-crop">' . $html . '</figure>';
+				$html = '<span class="cat-post-crop">' . $html . '</span>';
 			} else {
 				// use_css_cropping is not used.
 				// wrap span.

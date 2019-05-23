@@ -10,13 +10,13 @@
 if (typeof jQuery !== 'undefined')  {
 	jQuery( document ).ready(function () {
 		if ('objectFit' in document.documentElement.style === false) {
-			jQuery('.cat-post-item figure').removeClass('cat-post-crop');
-			jQuery('.cat-post-item figure').addClass('cat-post-crop-not-supported');
+			jQuery('.cat-post-item span').removeClass('cat-post-crop');
+			jQuery('.cat-post-item span').addClass('cat-post-crop-not-supported');
 		}
 		if (document.documentMode || /Edge/.test(navigator.userAgent)) {
-			jQuery('.cat-post-item figure img').height('+=1');
+			jQuery('.cat-post-item span img').height('+=1');
 			window.setTimeout(function(){
-				jQuery('.cat-post-item figure img').height('-=1');
+				jQuery('.cat-post-item span img').height('-=1');
 			},0);
 		}
 	});
