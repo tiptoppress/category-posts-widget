@@ -960,7 +960,9 @@ class Widget extends \WP_Widget {
 
 		$this->instance = $instance;
 
-		$instance['offset'] = $start;
+		if($start > 0) {
+			$instance['offset'] = $start;
+		}
 		$number = (int) $number; // sanitize number with the side effect of non
 								// numbers are converted to zero.
 		if ( 0 < $number ) {
