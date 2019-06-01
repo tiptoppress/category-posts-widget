@@ -505,7 +505,7 @@ class Widget extends \WP_Widget {
 	public function itemThumb( $instance, $no_link ) {
 		$ret = '';
 
-		if ( ( isset( $instance['default_thunmbnail'] ) && ( 0 !== $instance['default_thunmbnail'] ) ) || has_post_thumbnail() ) {
+		if ( ( isset( $instance['default_thunmbnail'] ) && ( 0 != $instance['default_thunmbnail'] ) ) || has_post_thumbnail() ) {
 			$class              = '';
 			$disable_css        = isset( $instance['disable_css'] ) && $instance['disable_css'];
 
