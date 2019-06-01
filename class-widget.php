@@ -117,7 +117,7 @@ class Widget extends \WP_Widget {
 				preg_match( '/(?<=width=")[\d]*/', $post_thumb, $thumb_full_w );
 				preg_match( '/(?<=height=")[\d]*/', $post_thumb, $thumb_full_h );
 				$ratio = $thumb_full_w[0] / $thumb_full_h[0];
-				$size[1] = intval( $size[0] * $ratio );
+				$size[1] = intval( $size[0] / $ratio );
 			}
 		} else {
 			$size = array( get_option( 'thumbnail_size_w', 150 ), get_option( 'thumbnail_size_h', 150 ) ); // yet another form of junk.
@@ -505,7 +505,7 @@ class Widget extends \WP_Widget {
 	public function itemThumb( $instance, $no_link ) {
 		$ret = '';
 
-		if ( ( isset( $instance['default_thunmbnail'] ) && ( 0 != $instance['default_thunmbnail'] ) ) || has_post_thumbnail() ) {
+		if ( ( isset( $instance['default_thunmbnail'] ) && ( $instance['default_thunmbnail'] ) ) || has_post_thumbnail() ) {
 			$class              = '';
 			$disable_css        = isset( $instance['disable_css'] ) && $instance['disable_css'];
 
