@@ -1520,6 +1520,9 @@ class Widget extends \WP_Widget {
 							<option value="everything"><?php esc_html_e( 'All with icons', 'category-posts' ); ?></option>
 						</select>
 						<p><button type="button" class="button"><?php esc_html_e( 'Select this template', 'category-posts' ); ?></button></p>
+						<?php
+						echo $this->get_checkbox_block_html( $instance, 'everything_is_link', esc_html__( 'Everything is a link', 'category-posts' ), true );
+						?>
 					</div>
 				</div>
 				<?php // Excerpt settings. ?>
@@ -1640,9 +1643,6 @@ class Widget extends \WP_Widget {
 								<?php esc_html_e( 'No default', 'category-posts' ); ?>
 							</button>
 						</p>
-						<?php
-						echo $this->get_checkbox_block_html( $instance, 'everything_is_link', esc_html__( 'Everything is a link', 'category-posts' ), true );
-						?>
 					</div>
 				</div>
 			</div>
