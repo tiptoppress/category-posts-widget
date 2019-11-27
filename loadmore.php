@@ -43,7 +43,7 @@ function get_next_elements( \WP_REST_Request $request ) {
 	$number = (int) $request['number'];
 	$context = (string) $request['context'];
 
-	$ret = [];
+	$ret = array();
 
 	$id_components = explode( '-', $id );
 	if ( 2 <= count( $id_components ) ) {
