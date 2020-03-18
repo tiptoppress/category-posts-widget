@@ -269,28 +269,28 @@
 				thumb_w = _input_thumb_w.val() * 1.02;
 				thumb_h = _input_thumb_h.val() * 1.02;
 			} else if (_that.hasClass('square')) {
-				if (_input_thumb_w.val() >= _input_thumb_h.val() ) {
-					thumb_w = _input_thumb_h.val();
-					thumb_h = _input_thumb_h.val();
-				} else{
-					thumb_w = _input_thumb_w.val();
+				if (parseInt(_input_thumb_w.val()) >= parseInt(_input_thumb_h.val()) ) {
 					thumb_h = _input_thumb_w.val();
+					thumb_w = _input_thumb_w.val();
+				} else{
+					thumb_h = _input_thumb_h.val();
+					thumb_w = _input_thumb_h.val();
 				}
 			} else if (_that.hasClass('standard')) {
-				if (_input_thumb_w.val() >= _input_thumb_h.val() ) {
-					thumb_w = _input_thumb_h.val() * 4 / 3;
-					thumb_h = _input_thumb_h.val();
+				if (parseInt(_input_thumb_w.val()) >= parseInt(_input_thumb_h.val()) ) {
+					thumb_h = _input_thumb_w.val() / 4 * 3
+					thumb_w = _input_thumb_w.val();
 				} else {
-					thumb_w = _input_thumb_h.val() / 4 * 3
-					thumb_h = _input_thumb_h.val();
+					thumb_h = _input_thumb_w.val() * 4 / 3;
+					thumb_w = _input_thumb_w.val();
 				}
 			} else if (_that.hasClass('wide')) {
-				if (_input_thumb_w.val() >= _input_thumb_h.val() ) {
-					thumb_w = _input_thumb_h.val() * 16 / 9;
-					thumb_h = _input_thumb_h.val();
+				if (parseInt(_input_thumb_w.val()) >= parseInt(_input_thumb_h.val()) ) {
+					thumb_h = _input_thumb_w.val() / 16 * 9;
+					thumb_w = _input_thumb_w.val();
 				} else {
-					thumb_w = _input_thumb_h.val() / 16 * 9;
-					thumb_h = _input_thumb_h.val();
+					thumb_h = _input_thumb_w.val() * 16 / 9;
+					thumb_w = _input_thumb_w.val();
 				}
 			} else if (_that.hasClass('switch')){
 				thumb_h = _input_thumb_w.val();
