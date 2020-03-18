@@ -242,17 +242,17 @@ class Virtual_Widget {
 							break;
 					}
 					$styles['post_format_thumb'] = '.cat-post-thumbnail span {position:relative}';
-					$styles['post_format_icon_styling'] = '.cat-post-format:before {font-family: "cat_post"; position:absolute; color:#FFFFFF; font-size:64px; line-height: 1; ' . $placement . '}';
+					$styles['post_format_icon_styling'] = '.cat-post-format:after {font-family: "cat_post"; position:absolute; color:#FFFFFF; font-size:64px; line-height: 1; ' . $placement . '}';
 
-					$styles['post_format_icon_aside'] = ".cat-post-format-aside:before { content: '\\f0f6'; }";
-					$styles['post_format_icon_chat'] = ".cat-post-format-chat:before { content: '\\e802'; }";
-					$styles['post_format_icon_gallery'] = ".cat-post-format-gallery:before { content: '\\e805'; }";
-					$styles['post_format_icon_link'] = ".cat-post-format-link:before { content: '\\e809'; }";
-					$styles['post_format_icon_image'] = ".cat-post-format-image:before { content: '\\e800'; }";
-					$styles['post_format_icon_quote'] = ".cat-post-format-quote:before { content: '\\f10d'; }";
-					$styles['post_format_icon_status'] = ".cat-post-format-status:before { content: '\\e80a'; }";
-					$styles['post_format_icon_video'] = ".cat-post-format-video:before { content: '\\e801'; }";
-					$styles['post_format_icon_audio'] = ".cat-post-format-audio:before { content: '\\e803'; }";
+					$styles['post_format_icon_aside'] = ".cat-post-format-aside:after { content: '\\f0f6'; }";
+					$styles['post_format_icon_chat'] = ".cat-post-format-chat:after { content: '\\e802'; }";
+					$styles['post_format_icon_gallery'] = ".cat-post-format-gallery:after { content: '\\e805'; }";
+					$styles['post_format_icon_link'] = ".cat-post-format-link:after { content: '\\e809'; }";
+					$styles['post_format_icon_image'] = ".cat-post-format-image:after { content: '\\e800'; }";
+					$styles['post_format_icon_quote'] = ".cat-post-format-quote:after { content: '\\f10d'; }";
+					$styles['post_format_icon_status'] = ".cat-post-format-status:after { content: '\\e80a'; }";
+					$styles['post_format_icon_video'] = ".cat-post-format-video:after { content: '\\e801'; }";
+					$styles['post_format_icon_audio'] = ".cat-post-format-audio:after { content: '\\e803'; }";
 
 				}
 			}
@@ -351,14 +351,14 @@ class Virtual_Widget {
 							" font-style: normal;\n" .
 							"}\n";
 
-					$ret['icon_hover_thumb'] = '#' . $widget_id . ' .cat-post-format-standard:before {opacity:0; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
-					$ret['icon_hover_transform'] = '#' . $widget_id . ' .cat-post-thumbnail:hover .cat-post-format-standard:before {opacity:1;}';
+					$ret['icon_hover_thumb'] = '#' . $widget_id . ' .cat-post-format-standard:after {opacity:0; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
+					$ret['icon_hover_transform'] = '#' . $widget_id . ' .cat-post-thumbnail:hover .cat-post-format-standard:after {opacity:1;}';
 					if ( isset( $settings['show_post_format'] ) && ( 'none' === $settings['show_post_format'] ) ) {
 						$ret[] = '#' . $widget_id . ' .cat-post-thumbnail {position:relative}';
-						$ret[] = '#' . $widget_id . ' .cat-post-icon .cat-post-format:before {font-family: "cat_post"; position:absolute; color:#FFFFFF; font-size:64px; line-height: 1; ' .
+						$ret[] = '#' . $widget_id . ' .cat-post-icon .cat-post-format:after {font-family: "cat_post"; position:absolute; color:#FFFFFF; font-size:64px; line-height: 1; ' .
 									'top:calc(50% - 34px); left:calc(50% - 34px);}';
 					}
-					$ret[] = '#' . $widget_id . " .cat-post-format-standard:before {padding-left:12px; content: '\\e806'; }";
+					$ret[] = '#' . $widget_id . " .cat-post-format-standard:after {padding-left:12px; content: '\\e806'; }";
 					break;
 			}
 

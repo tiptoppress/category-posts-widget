@@ -4,7 +4,7 @@ Donate link: https://wordpress.org/support/plugin/category-posts/reviews/
 Tags: category, categories, posts, widget, posts widget, recent posts, category recent posts, shortcode, sidebar, excerpt, multiple widgets
 Requires at least: 2.8
 Tested up to: 5.3
-Stable tag: 4.9.1
+Stable tag: 4.9.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -125,6 +125,9 @@ The FireFox browser has a coverage of 5%, which we find little. For this 5%, we 
 
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget)
+
+= 4.9.3 - March 18th 2020 =
+* Fixed Mouse over icon and post format indication
 
 = 4.9.2 - Mai 23th 2019 =
 * Fixed Starts with post

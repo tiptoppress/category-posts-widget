@@ -73,7 +73,7 @@ class Widget extends \WP_Widget {
 					$format = get_post_format() ? : 'standard';
 					$post_format_class = 'cat-post-format cat-post-format-' . $format;
 				}
-				$html = '<span class="cat-post-crop">' . $html . '</span>';
+				$html = '<span class="cat-post-crop ' . $post_format_class . '">' . $html . '</span>';
 			} else {
 				// use_css_cropping is not used.
 				// wrap span.
@@ -1530,7 +1530,7 @@ class Widget extends \WP_Widget {
 					<p><?php esc_html_e( 'Excerpt settings', 'category-posts' ); ?></p>
 					<div class="cpwp_ident">
 					<?php
-					echo $this->get_number_input_block_html( $instance, 'excerpt_lines', esc_html__( 'Max. lines (responsive):', 'category-posts' ), 0, '', '', true );
+					echo $this->get_number_input_block_html( $instance, 'excerpt_lines', esc_html__( 'Lines (responsive):', 'category-posts' ), 0, '', '', true );
 					echo $this->get_number_input_block_html( $instance, 'excerpt_length', esc_html__( 'Length (words):', 'category-posts' ), 0, '', '', true );
 					echo $this->get_text_input_block_html( $instance, 'excerpt_more_text', esc_html__( '\'More ...\' text:', 'category-posts' ), esc_attr__( '...', 'category-posts' ), true );
 					?>

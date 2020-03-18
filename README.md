@@ -138,6 +138,10 @@ The FireFox browser has a coverage of 5%, which we find little. For this 5%, we 
 
 ## Changelog
 #### [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
+
+#### 4.9.3 - March 18th 2020
+* Fixed Mouse over icon and post format indication
+
 #### 4.9.2 - Mai 23th 2019
 * Fixed Starts with post
 * Fixed Replace the figure-element
