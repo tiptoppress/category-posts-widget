@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const VERSION        = '4.9.2';
+const VERSION        = '4.9.4';
 const DOC_URL        = 'http://tiptoppress.com/category-posts-widget/documentation-4-9/';
 const PRO_URL        = 'http://tiptoppress.com/term-and-category-based-posts-widget/';
 const SUPPORT_URL    = 'https://wordpress.org/support/plugin/category-posts/';
