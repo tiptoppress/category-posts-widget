@@ -476,7 +476,7 @@ jQuery(document).ready( function () {
 			cwp_namespace.templateChange(this);
 		});
 
-		jQuery(document).off('click').on('click', class_namespace+' .cat-post-thumb-change-size button', function () { // find a thumbnail size
+		jQuery(class_namespace+' .cat-post-thumb-change-size button').off('click').on('click', function () { // find a thumbnail size
 			cwp_namespace.thumbnailSizeChange(this);
 		});
 
