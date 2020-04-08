@@ -303,7 +303,7 @@ class Widget extends \WP_Widget {
 			if ( isset( $instance['is_shortcode'] ) ) {
 				$title = esc_html( $instance['title'] );
 			} else {
-				$title = apply_filters( 'widget_title', $instance['title'], $instance, get_the_ID() );
+				$title = apply_filters( 'widget_title', $instance['title'], $instance, WIDGET_BASE_ID );
 			}
 
 			if ( isset( $instance['title_link'] ) && $instance['title_link'] ) {
