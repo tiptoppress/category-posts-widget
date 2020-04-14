@@ -364,7 +364,8 @@ class Widget extends \WP_Widget {
 			$context = get_the_ID();
 		}
 
-		add_action( 'wp_footer', __NAMESPACE__ . '\embed_loadmore_scripts' );
+		wp_enqueue_script( 'jquery' );
+		add_action( 'wp_footer', __NAMESPACE__ . '\embed_loadmore_scripts', 100 );
 
 		// We rely on the widget number to be properly set.
 		// but need a slight different handling for proper widgets.
@@ -897,7 +898,8 @@ class Widget extends \WP_Widget {
 				if ( apply_filters( 'cpw_enqueue_resources', false ) ) {
 					frontend_script();
 				} else {
-					add_action( 'wp_footer', __NAMESPACE__ . '\embed_front_end_scripts' );
+					wp_enqueue_script( 'jquery' );
+					add_action( 'wp_footer', __NAMESPACE__ . '\embed_front_end_scripts', 100 );
 				}
 			}
 
