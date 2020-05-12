@@ -139,6 +139,9 @@ The FireFox browser has a coverage of 5%, which we find little. For this 5%, we 
 ## Changelog
 #### [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
 
+#### 4.9.5 - May 12th 2020
+* Fixed Widget_Title filter missing parameters
+
 #### 4.9.4 - March 2th 2020
 * Fixed Delete global click event
 
