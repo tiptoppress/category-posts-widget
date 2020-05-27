@@ -16,9 +16,10 @@
     padding: 0 10px;
 }
 
-.cpwp_ident p {
+
+/* .cpwp_ident>p {
     display: flow-root;
-}
+} */
 
 .cpwp_ident>label {
     line-height: 2.75;
@@ -80,9 +81,10 @@
     width: 5em;
 }
 
-.category-widget-cont p {
+
+/* .category-widget-cont>p {
     display: flow-root;
-}
+} */
 
 .category-widget-cont textarea {
     width: 100%;
@@ -135,9 +137,7 @@
 
 .category-widget-cont>div {
     display: none;
-    overflow: hidden;
-    padding-left: 4px;
-    padding-right: 4px;
+    padding: 1px 4px;
 }
 
 .category-widget-cont>div.open {
