@@ -102,6 +102,13 @@
     border: 1px solid #ccd0d4;
 }
 
+.category-widget-cont-pro h4~div:before,
+.category-widget-cont-pro h4~div:after {
+    content: "";
+    padding: 1px;
+    display: block;
+}
+
 .category-widget-cont h4:first-child {
     margin-top: 10px;
 }
@@ -137,7 +144,8 @@
 
 .category-widget-cont>div {
     display: none;
-    padding: 1px 4px;
+    padding-left: 4px;
+    padding-right: 4px;
 }
 
 .category-widget-cont>div.open {
