@@ -360,6 +360,10 @@
 				jQuery(this).removeClass('cpw-doNotClose');
 			});
 
+			_that.closest('.cat-post-add_premade_templates').find('.cpwp-close-placeholder-dropdown-menu').off('click').on('click', function() {
+				_that.closest('.cat-post-add_premade_templates').find('.cpwp-placeholder-dropdown-menu').toggle();
+			});
+
 			return false;
 		},
 
