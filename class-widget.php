@@ -1533,7 +1533,8 @@ class Widget extends \WP_Widget {
 					<div class="cpwp_ident">
 					<?php
 					echo $this->get_number_input_block_html( $instance, 'excerpt_lines', esc_html__( 'Lines (responsive):', 'category-posts' ), 0, '', '', true );
-					echo $this->get_number_input_block_html( $instance, 'excerpt_length', esc_html__( 'Length (words):', 'category-posts' ), 0, '', '', true );
+					// Remove the UI since free 5.0
+					// echo $this->get_number_input_block_html( $instance, 'excerpt_length', esc_html__( 'Length (words):', 'category-posts' ), 0, '', '', true );
 					echo $this->get_text_input_block_html( $instance, 'excerpt_more_text', esc_html__( '\'More ...\' text:', 'category-posts' ), esc_attr__( '...', 'category-posts' ), true );
 					?>
 					</div>
