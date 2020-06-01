@@ -1445,7 +1445,7 @@ class Widget extends \WP_Widget {
 					$label .= '<span class="cat-post-add_premade_templates ' . $class_placement . '">' .
 								'<button type="button" class="button cpwp-open-placholder-dropdown-menu"> + ' . esc_html__( 'Add Placeholder', 'category-posts' ) . '</button>' .
 									'<span class="cpwp-placeholder-dropdown-menu">' .
-										'<i class="cpwp-close-placeholder-dropdown-menu dashicons dashicons-dismiss"></i>' .
+										'<i class="cpwp-close-placeholder-dropdown-menu dashicons dashicons-no-alt"></i>' .
 										'<span data-value="NewLine">' . esc_html__( 'New line', 'category-posts' ) . '</span>' .
 										'<span data-value="EmptyLine">' . esc_html__( 'Empty line', 'category-posts' ) . '</span>' .
 										'<span data-value="title">' . esc_html__( '%title%', 'category-posts' ) . '</span>' .
