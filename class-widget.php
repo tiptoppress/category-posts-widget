@@ -1467,7 +1467,7 @@ class Widget extends \WP_Widget {
 						$tags = array_flip( $matches[0] );
 					}
 					?>
-					<div class="cat-post-template-help">
+					<div class="cat-post-template-help" style="display:none;">
 						<p><?php esc_html_e( 'The following text will be replaced with the relevant information. In addition you can use any text and html (if you have the permisions) anywhere you want', 'category-posts' ); ?>
 						</p>
 						<table>
@@ -1561,7 +1561,7 @@ class Widget extends \WP_Widget {
 				<div class="cpwp-sub-panel categoryposts-data-panel-thumb" style="display:<?php echo ( isset( $tags['%thumb%'] ) ) ? 'block' : 'none'; ?>">
 					<p><?php esc_html_e( 'Thumbnail settings', 'category-posts' ); ?></p>
 					<div class="cpwp_ident">
-						<p><?php esc_html_e( 'Thumbnail dimensions (pixel)', 'category-posts' ); ?></p>
+						<p><?php esc_html_e( 'Dimensions (pixel)', 'category-posts' ); ?></p>
 						<?php
 						echo $this->get_number_input_block_html( $instance, 'thumb_w', esc_html__( 'Width:', 'category-posts' ), 1, '', '', true );
 						echo $this->get_range_input_block_html( $instance, 'thumb_fluid_width', esc_html__( 'Max-width:', 'category-posts' ), 2, 100, 100, 2, true );
