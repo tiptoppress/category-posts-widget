@@ -249,7 +249,7 @@ class Virtual_Widget {
 							$placement = 'bottom:10%; right:10%;';
 							break;
 					}
-					$styles['post_format_thumb'] = '.cat-post-thumbnail span {position:relative}';
+					$styles['post_format_thumb'] = '.cat-post-thumbnail span {position:relative; display:inline-block;}';
 					$styles['post_format_icon_styling'] = '.cat-post-format:after {font-family: "cat_post"; position:absolute; color:#FFFFFF; font-size:64px; line-height: 1; ' . $placement . '}';
 
 					$styles['post_format_icon_aside'] = ".cat-post-format-aside:after { content: '\\f0f6'; }";
@@ -361,7 +361,7 @@ class Virtual_Widget {
 					$ret['icon_hover_thumb'] = '#' . $widget_id . ' .cat-post-format-standard:after {opacity:0; -webkit-transition: all 0.3s ease; -moz-transition: all 0.3s ease; -ms-transition: all 0.3s ease; -o-transition: all 0.3s ease; transition: all 0.3s ease;}';
 					$ret['icon_hover_transform'] = '#' . $widget_id . ' .cat-post-thumbnail:hover .cat-post-format-standard:after {opacity:1;}';
 					if ( isset( $settings['show_post_format'] ) && ( 'none' === $settings['show_post_format'] ) ) {
-						$ret[] = '#' . $widget_id . ' .cat-post-thumbnail {position:relative}';
+						$ret[] = '#' . $widget_id . ' .cat-post-thumbnail span {position:relative; display:inline-block;}';
 						$ret[] = '#' . $widget_id . ' .cat-post-icon .cat-post-format:after {font-family: "cat_post"; position:absolute; color:#FFFFFF; font-size:64px; line-height: 1; ' .
 									'top:calc(50% - 34px); left:calc(50% - 34px);}';
 					}
