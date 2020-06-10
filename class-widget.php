@@ -68,6 +68,22 @@ class Widget extends \WP_Widget {
 			list( $width, $height ) = getimagesize( $file );  // get actual size of the thumb file.
 
 			if ( isset( $this->instance['use_css_cropping'] ) && $this->instance['use_css_cropping'] ) {
+
+				// replace srcset.
+				$array = array();
+				preg_match( '/width="([^"]*)"/i', $html, $array );
+				$pattern = '/' . $array[1] . 'w/';
+				$html = preg_replace( $pattern, $size[0] . 'w', $html );
+				// replace size.
+				$pattern = '/' . $array[1] . 'px/';
+				$html = preg_replace( $pattern, $size[0] . 'px', $html );
+				// widget width
+				$pattern = '/<img /';
+				$html = preg_replace( $pattern, "<img data-cat-posts-width='" . $size[0] . "'", $html );
+				// widget height
+				$pattern = '/<img /';
+				$html = preg_replace( $pattern, "<img data-cat-posts-height='" . $size[1] . "'", $html );
+
 				$show_post_format = isset( $this->instance['show_post_format'] ) && ( 'none' !== $this->instance['show_post_format'] );
 				if ( $show_post_format || $this->instance['thumb_hover'] ) {
 					$format = get_post_format() ? : 'standard';
@@ -130,6 +146,7 @@ class Widget extends \WP_Widget {
 
 		do_action( 'begin_fetch_post_thumbnail_html', get_the_ID(), $post_thumbnail_id, $size );
 		$html = wp_get_attachment_image( $post_thumbnail_id, $size, false, '' );
+
 		if ( ! $html ) {
 			$ret = '';
 		} else {
@@ -719,7 +736,7 @@ class Widget extends \WP_Widget {
 		global $post;
 
 		$everything_is_link = isset( $instance['everything_is_link'] ) && $instance['everything_is_link'];
-		$wrap = isset( $instance['text_do_not_wrap_thumb'] ) && $instance['text_do_not_wrap_thumb'];
+		$no_wrap = isset( $instance['text_do_not_wrap_thumb'] ) && $instance['text_do_not_wrap_thumb'];
 
 		$template = '';
 		if ( isset( $instance['template'] ) ) {
@@ -739,19 +756,6 @@ class Widget extends \WP_Widget {
 
 		if ( $everything_is_link ) {
 			$ret .= '<a class="cat-post-everything-is-link" href="' . get_the_permalink() . '" title="">';
-		}
-
-		// Try to do smart formatting for floating thumb based on its location.
-		if ( $wrap ) {
-			if ( preg_match( '#(\%thumb\%)#', $template ) && ! preg_match( '#(\%thumb\%$)#', $template ) ) {
-				$thumb_flex = explode( '%thumb%', $template );
-				if ( 1 === count( $thumb_flex ) ) {
-					$template = '<div class="cat-post-do-not-wrap-thumbnail">%thumb%<div>' . $thumb_flex[0] . '</div></div>';
-				}
-				if ( 2 === count( $thumb_flex ) ) {
-					$template = $thumb_flex[0] . '<div class="cat-post-do-not-wrap-thumbnail">%thumb%<div>' . $thumb_flex[1] . '</div></div>';
-				}
-			}
 		}
 
 		// Post details (Template).
@@ -781,9 +785,25 @@ class Widget extends \WP_Widget {
 
 		// Replace empty line with closing and opening DIV.
 		$template_res = trim( $template_res );
-		$template_res = str_replace( "\n\r", '</div><div>', $template_res ); // in widget areas.
-		$template_res = str_replace( "\n\n", '</div><div>', $template_res ); // as shortcode.
-		$template_res = '<div>' . $template_res . '</div>';
+
+		// wrap thumb and line-clamp: set the CSS two parent knotes higher (first parent for float, second parent is a browser hack for that float works well)
+		if ( isset( $instance['template'] ) && preg_match( '/%thumb%(\r)?\n%excerpt%/', $instance['template'] ) && 
+		! $no_wrap ) {
+			$count = max( substr_count($template_res, "\n\r"), substr_count($template_res, "\n\n"));
+			// in widget areas.
+			$first_pos = strpos($template_res, "\n\r");
+			$template_res = str_replace("\n\r", '</div><div class="cpwp-wrap-text-stage cpwp-wrap-text"><div>', substr($template_res, 0, $first_pos+2)) . substr($template_res, $first_pos+2); // replace just once, the first
+			$template_res = str_replace( "\n\r", '</div></div><div class="cpwp-wrap-text-stage cpwp-wrap-text"><div>', $template_res ); // all others
+			// as shortcode.
+			$first_pos = strpos($template_res, "\n\n");
+			$template_res = str_replace("\n\n", '</div><div class="cpwp-wrap-text-stage cpwp-wrap-text"><div>', substr($template_res, 0, $first_pos+2)) . substr($template_res, $first_pos+2); // replace just once, the first
+			$template_res = str_replace( "\n\n", '</div></div><div class="cpwp-wrap-text-stage cpwp-wrap-text"><div>', $template_res ); // all others
+			$template_res = '<div>' . $template_res . str_repeat('</div>', $count + 1);
+		} else {
+			$template_res = str_replace( "\n\r", '</div><div>', $template_res ); // in widget areas.
+			$template_res = str_replace( "\n\n", '</div><div>', $template_res ); // as shortcode.
+			$template_res = '<div>' . $template_res . '</div>';
+		}
 
 		// replace new lines with spaces.
 		$template_res = str_replace( "\n\r", ' ', $template_res ); // in widget areas.
@@ -927,6 +947,24 @@ class Widget extends \WP_Widget {
 			}
 
 			wp_reset_postdata();
+
+			$number = $this->number;
+			// a temporary hack to handle difference in the number in a true widget
+			// and the number format expected at the rest of the places.
+			if ( is_numeric( $number ) ) {
+				$number = WIDGET_BASE_ID . '-' . $number;
+			}
+
+			// enque relevant scripts and parameters to ensure correct image dimentions
+			if ( isset( $instance['template'] ) && preg_match( '/%thumb%/', $instance['template'] ) ) {
+				wp_enqueue_script( 'jquery' ); // just in case the theme or other plugins didn't enqueue it.
+				add_action(
+					'wp_footer', function () use ( $number, $instance ) {
+						__NAMESPACE__ . '\\' . equal_cover_content_height( $number, $instance );
+					}, 100
+				);
+			}
+
 		} elseif ( 'text' === $instance['no_match_handling'] ) {
 			echo $before_widget; // Xss ok. This is how widget actually expected to behave.
 			echo $this->titleHTML( $before_title, $after_title, $instance );
@@ -1536,7 +1574,8 @@ class Widget extends \WP_Widget {
 					echo $this->get_number_input_block_html( $instance, 'excerpt_lines', esc_html__( 'Lines (responsive):', 'category-posts' ), 0, '', '', true );
 					// Remove the UI since free 5.0
 					// echo $this->get_number_input_block_html( $instance, 'excerpt_length', esc_html__( 'Length (words):', 'category-posts' ), 0, '', '', true );
-					echo $this->get_text_input_block_html( $instance, 'excerpt_more_text', esc_html__( '\'More ...\' text:', 'category-posts' ), esc_attr__( '...', 'category-posts' ), true );
+					// Remove the UI since free 5.0
+					// echo $this->get_text_input_block_html( $instance, 'excerpt_more_text', esc_html__( '\'More ...\' text:', 'category-posts' ), esc_attr__( '...', 'category-posts' ), true );
 					?>
 					</div>
 				</div>

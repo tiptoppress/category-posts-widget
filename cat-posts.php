@@ -426,6 +426,69 @@ function register_widget() {
 
 add_action( 'widgets_init', __NAMESPACE__ . '\register_widget' );
 
+/**
+ * Output js code to set the image height if float text around image.
+ *
+ * @param int   $number         The widget number used to identify the specific list.
+ * @param array $widgetsettings The "instance" parameters of the widget.
+ *
+ * @since 4.9
+ **/
+function equal_cover_content_height( $number, $widgetsettings ) {
+
+	if ( isset( $widgetsettings['template'] ) && preg_match( '/%thumb%/', $widgetsettings['template'] ) ) : ?>
+		<script type="text/javascript">
+			if (typeof jQuery !== 'undefined') {
+				jQuery( document ).ready(function () {
+					var cat_posts_namespace              = window.cat_posts_namespace || {};
+					cat_posts_namespace.layout_wrap_text = cat_posts_namespace.layout_wrap_text || {};
+					cat_posts_namespace.layout_img_size  = cat_posts_namespace.layout_img_size || {};
+
+					cat_posts_namespace.layout_wrap_text = {
+						<?php	/* Handle post items */	echo "\r\n"; ?>
+						setHeight : function (widget) {
+							var _widget = jQuery(widget);
+							
+							<?php	/* wrap text around image */	echo "\r\n"; ?>
+							if (jQuery(_widget.find('.cat-post-item .cpwp-wrap-text-stage').has('.cat-post-thumbnail')[0]).height() <
+								jQuery(_widget.find('.cat-post-item .cat-post-thumbnail')[0]).height()) {
+								_widget.find('.cat-post-item p').addClass( "cpwp-wrap-text" );
+								_widget.find('.cat-post-item .cpwp-wrap-text-stage').removeClass( "cpwp-wrap-text" );
+							}else{
+								_widget.find('.cat-post-item p').removeClass( "cpwp-wrap-text" );
+								_widget.find('.cat-post-item .cpwp-wrap-text-stage').addClass( "cpwp-wrap-text" );
+							}
+						}
+					}
+					cat_posts_namespace.layout_img_size = {
+						setHeight : function (widget) {
+							var _widget = jQuery(widget),
+							resp_w = jQuery(_widget.find('.cat-post-item img')[0]).width(),
+							resp_h = jQuery(_widget.find('.cat-post-item img')[0]).height(),
+							orig_w = jQuery(_widget.find('.cat-post-item img')[0]).data('cat-posts-width'),
+							orig_h = jQuery(_widget.find('.cat-post-item img')[0]).data('cat-posts-height');
+
+							<?php	/* replace height */	echo "\r\n"; ?>
+							if( resp_w < orig_w ){
+								_widget.find('.cat-post-item img').height( resp_w * orig_h / orig_w );
+							}
+							return;
+						}
+					}
+
+					var widget = jQuery('#<?php echo esc_attr( $number ); ?>');
+
+					<?php	/* do on page load or on resize the browser window */	echo "\r\n"; ?>
+					jQuery(window).on('load resize', function() {
+						cat_posts_namespace.layout_wrap_text.setHeight(widget);
+						cat_posts_namespace.layout_img_size.setHeight(widget);
+					});
+				});
+			}
+		</script>
+	<?php endif;
+}
+
 /*
  * shortcode section.
  */

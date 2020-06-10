@@ -153,6 +153,8 @@ class Virtual_Widget {
 	public function getCSSRules( $is_shortcode, &$rules ) {
 		$ret = array();
 		$settings = self::$collection[ $this->id ];
+		$everything_is_link = isset( $settings['everything_is_link'] ) && $settings['everything_is_link'];
+
 		$widget_id = $this->id;
 		if ( ! $is_shortcode ) {
 			$widget_id .= '-internal';
@@ -190,18 +192,24 @@ class Virtual_Widget {
 
 			// everything link related styling
 			// if we are dealing with "everything is a link" option, we need to add the clear:both to the a element, not the div.
-			if ( isset( $settings['everything_is_link'] ) && $settings['everything_is_link'] ) {
+			if ( $everything_is_link ) {
 				$styles['after_item'] = '.cat-post-item a:after {content: ""; display: table;	clear: both;}';
 			} else {
 				$styles['after_item'] = '.cat-post-item:after {content: ""; display: table;	clear: both;}';
 			}
 
-			
+			// wrap text around image
 			if ( isset( $settings['template'] ) && preg_match( '/%excerpt%/', $settings['template'] ) ) {
-				if ( isset( $settings['excerpt_lines'] ) && $settings['excerpt_lines'] != 0 ) {
-					$styles['excerpt_lines'] = '.cat-post-item p {overflow: hidden;text-overflow: ellipsis;white-space: initial;'.
-						'display: -webkit-box;-webkit-line-clamp: '.$settings['excerpt_lines'].';-webkit-box-orient: vertical;}';
+				$styles['wrap_thumb'] = '.cpwp-wrap-text p {display: inline;}';
+				$no_wrap = isset( $settings['text_do_not_wrap_thumb'] ) && $settings['text_do_not_wrap_thumb'];
+				$selector_wrap_text = 'p';
+				// wrap thumb and line-clamp: set the CSS two parent knotes higher (first parent for float, second parent is a browser hack for that float works well)
+				if ( isset( $settings['template'] ) && preg_match( '/%thumb%(\r)?\n%excerpt%/', $settings['template'] ) && 
+					! $no_wrap ) {
+					$selector_wrap_text = '.cpwp-wrap-text';
 				}
+				$styles['excerpt_lines'] = '.cat-post-item ' . $selector_wrap_text . ' {overflow: hidden;text-overflow: ellipsis;white-space: initial;'.
+					'display: -webkit-box;-webkit-line-clamp: '.$settings['excerpt_lines'].';-webkit-box-orient: vertical;}';
 			}
 
 			// add post format css if needed.
@@ -257,6 +265,14 @@ class Virtual_Widget {
 				}
 			}
 
+			// everything link related styling
+			// if we are dealing with "everything is a link" option, we need to add the clear:both to the a element, not the div.
+			if ( $everything_is_link ) {
+				$styles['clear_previous_item'] = '.cat-post-item a:after {content: ""; clear: both;}';
+			} else {
+				$styles['clear_previous_item'] = '.cat-post-item:after {content: ""; display: table;	clear: both;}';
+			}
+
 			foreach ( $styles as $key => $style ) {
 				$ret[ $key ] = '#' . $widget_id . ' ' . $style;
 			}
@@ -276,6 +292,10 @@ class Virtual_Widget {
 				}
 			}
 
+			// localized widget CSS rules for the thumbnail
+			$ret['left'] = '#' . $widget_id . ' .cat-post-thumbnail {display:block; float:left; margin:5px 10px 5px 0;}';
+			$ret['crop'] = '#' . $widget_id . ' .cat-post-crop {overflow:hidden;}';
+
 			// probably all Themes have too much margin on their p element when used in the shortcode or widget.
 			$ret['p_styling'] = '#' . $widget_id . ' p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover
 																// bigger (add to the padding) use only top for now.
@@ -288,34 +308,21 @@ class Virtual_Widget {
 		// Regardless if css is disabled we need some styling for the thumbnail
 		// to make sure cropping is properly done, and they fit the allocated space.
 		if ( isset( $settings['template'] ) && preg_match( '/%thumb%/', $settings['template'], $m, PREG_OFFSET_CAPTURE ) ) {
-			$wrap = isset( $settings['text_do_not_wrap_thumb'] ) && $settings['text_do_not_wrap_thumb'];
 			if ( isset( $settings['use_css_cropping'] ) && $settings['use_css_cropping'] ) {
 				if ( isset( $settings['thumb_w'] ) && $settings['thumb_w'] != 0 ) {
-					$ret['thumb_empty_w'] = '#' . $widget_id .' .cat-post-thumbnail .cat-post-crop img {width: '.$settings['thumb_w'].'px;}';
+					$ret['thumb_crop_w'] = '#' . $widget_id .' .cat-post-thumbnail .cat-post-crop img {width: '.$settings['thumb_w'].'px;}';
 				}
 				if ( isset( $settings['thumb_h'] ) && $settings['thumb_h'] != 0 ) {
 					$ret['thumb_crop_h'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {height: '.$settings['thumb_h'].'px;}';
 				}
 				$ret['thumb_crop'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {object-fit: cover;max-width:100%;}';
-				
 				$ret['thumb_crop_not_supported'] = '#' . $widget_id .' .cat-post-thumbnail .cat-post-crop-not-supported img {width:100%;}';
-
-				if ( ! $wrap ) {
-					$ret['thumb_fluid_width'] = '#' . $widget_id . ' .cat-post-thumbnail {max-width:' . $settings['thumb_fluid_width'] . '%;}';
-				} else {	
-					$ret['thumb_fluid_width'] = '#' . $widget_id . ' .cat-post-thumbnail {flex-basis:' . $settings['thumb_fluid_width'] . '%;}';
-				}
+				$ret['thumb_fluid_width'] = '#' . $widget_id . ' .cat-post-thumbnail {max-width:' . $settings['thumb_fluid_width'] . '%;}'; 
+				$ret['thumb_styling'] = '#' . $widget_id . ' .cat-post-item img {margin: initial;}';
 			} else {
 				$ret['thumb_overflow'] = '#' . $widget_id . ' .cat-post-thumbnail span {overflow: hidden; display:inline-block}';
 			}
 			$ret['thumb_styling'] = '#' . $widget_id . ' .cat-post-item img {margin: initial;}';
-
-			// Thumbnail related positioning rules.
-			if ( $wrap ) {
-				$ret['thumb_flex'] = '#' . $widget_id . ' .cat-post-do-not-wrap-thumbnail {display:flex;}'; // Thumbnail container should flex.
-				$ret['thumb_flex_length'] = '#' . $widget_id . ' .cat-post-do-not-wrap-thumbnail > div {-webkit-flex: 1; -ms-flex: 1; flex: 1;}'; // Thumbnail container should flex.
-			}
-			$ret['text_do_not_wrap_thumb'] = '#' . $widget_id . ' .cat-post-thumbnail {float:left;}';
 		}
 
 		// Some hover effect require css to work, add it even if CSS is disabled.
@@ -362,10 +369,10 @@ class Virtual_Widget {
 					break;
 			}
 
-			if ( $settings['enable_loadmore'] ) {
-				// $this->id is ued over $widget_id because we need the id of the outer div, not the UL itself.
-				$ret['loadmore'] = '#' . $this->id . ' .' . __NAMESPACE__ . '-loadmore {text-align:center;margin-top:10px}';
-			}
+		}
+		if ( $settings['enable_loadmore'] ) {
+			// $this->id is ued over $widget_id because we need the id of the outer div, not the UL itself.
+			$ret['loadmore'] = '#' . $this->id . ' .' . __NAMESPACE__ . '-loadmore {text-align:center;margin-top:10px}';
 		}
 		$rules[] = $ret;
 	}
