@@ -791,13 +791,9 @@ class Widget extends \WP_Widget {
 		! $no_wrap ) {
 			$count = max( substr_count($template_res, "\n\r"), substr_count($template_res, "\n\n"));
 			// in widget areas.
-			$first_pos = strpos($template_res, "\n\r");
-			$template_res = str_replace("\n\r", '</div><div class="cpwp-wrap-text-stage cpwp-wrap-text"><div>', substr($template_res, 0, $first_pos+2)) . substr($template_res, $first_pos+2); // replace just once, the first
-			$template_res = str_replace( "\n\r", '</div></div><div class="cpwp-wrap-text-stage cpwp-wrap-text"><div>', $template_res ); // all others
+			$template_res = str_replace( "\n\r", '</div><div class="cpwp-wrap-text-stage cpwp-wrap-text"><div>', $template_res ); // all others
 			// as shortcode.
-			$first_pos = strpos($template_res, "\n\n");
-			$template_res = str_replace("\n\n", '</div><div class="cpwp-wrap-text-stage cpwp-wrap-text"><div>', substr($template_res, 0, $first_pos+2)) . substr($template_res, $first_pos+2); // replace just once, the first
-			$template_res = str_replace( "\n\n", '</div></div><div class="cpwp-wrap-text-stage cpwp-wrap-text"><div>', $template_res ); // all others
+			$template_res = str_replace( "\n\n", '</div><div class="cpwp-wrap-text-stage cpwp-wrap-text"><div>', $template_res ); // all others
 			$template_res = '<div>' . $template_res . str_repeat('</div>', $count + 1);
 		} else {
 			$template_res = str_replace( "\n\r", '</div><div>', $template_res ); // in widget areas.
