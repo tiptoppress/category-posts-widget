@@ -21,6 +21,9 @@ Category Posts Widget is a light widget designed to do one thing and do it well:
 A premium version of that free widget available at<a href="http://tiptoppress.com/">tiptoppress.com</a> created for big Wordpress sites.
 
 ### Premium features
+* Auto-sizing Grid
+* Custom field support
+* Shortcode support
 * Image-Slider
 * Post List "Alterations"
 * Full background post images
