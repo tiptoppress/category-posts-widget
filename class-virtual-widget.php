@@ -92,12 +92,15 @@ class Virtual_Widget {
 		ob_start();
 		$args = self::$collection[ $this->id ];
 		$args['is_shortcode'] = true;  // indicate that we are doing shortcode processing to outputting funtions.
-		$widget->widget(array(
-			'before_widget' => '',
-			'after_widget'  => '',
-			'before_title'  => '',
-			'after_title'   => '',
-		), $args);
+		$widget->widget(
+			array(
+				'before_widget' => '',
+				'after_widget'  => '',
+				'before_title'  => '',
+				'after_title'   => '',
+			),
+			$args
+		);
 		$ret = ob_get_clean();
 		$ret = '<div id="' . esc_attr( $this->id ) . '" class="' . esc_attr( $this->class ) . '">' . $ret . '</div>';
 		return $ret;
@@ -198,18 +201,18 @@ class Virtual_Widget {
 				$styles['after_item'] = '.cat-post-item:after {content: ""; display: table;	clear: both;}';
 			}
 
-			// wrap text around image
+			// wrap text around image.
 			if ( isset( $settings['template'] ) && preg_match( '/%excerpt%/', $settings['template'] ) ) {
 				$styles['wrap_thumb'] = '.cpwp-wrap-text p {display: inline;}';
 				$no_wrap = isset( $settings['text_do_not_wrap_thumb'] ) && $settings['text_do_not_wrap_thumb'];
 				$selector_wrap_text = 'p';
-				// wrap thumb and line-clamp: set the CSS two parent knotes higher (first parent for float, second parent is a browser hack for that float works well)
-				if ( isset( $settings['template'] ) && preg_match( '/%thumb%(\r)?\n%excerpt%/', $settings['template'] ) && 
+				// wrap thumb and line-clamp: set the CSS two parent knotes higher (first parent for float, second parent is a browser hack for that float works well).
+				if ( isset( $settings['template'] ) && preg_match( '/%thumb%(\r)?\n%excerpt%/', $settings['template'] ) &&
 					! $no_wrap ) {
 					$selector_wrap_text = '.cpwp-wrap-text';
 				}
-				$styles['excerpt_lines'] = '.cat-post-item ' . $selector_wrap_text . ' {overflow: hidden;text-overflow: ellipsis;white-space: initial;'.
-					'display: -webkit-box;-webkit-line-clamp: '.$settings['excerpt_lines'].';-webkit-box-orient: vertical;}';
+				$styles['excerpt_lines'] = '.cat-post-item ' . $selector_wrap_text . ' {overflow: hidden;text-overflow: ellipsis;white-space: initial;' .
+					'display: -webkit-box;-webkit-line-clamp: ' . $settings['excerpt_lines'] . ';-webkit-box-orient: vertical;}';
 			}
 
 			// add post format css if needed.
@@ -292,7 +295,7 @@ class Virtual_Widget {
 				}
 			}
 
-			// localized widget CSS rules for the thumbnail
+			// localized widget CSS rules for the thumbnail.
 			$ret['left'] = '#' . $widget_id . ' .cat-post-thumbnail {display:block; float:left; margin:5px 10px 5px 0;}';
 			$ret['crop'] = '#' . $widget_id . ' .cat-post-crop {overflow:hidden;}';
 
@@ -309,15 +312,15 @@ class Virtual_Widget {
 		// to make sure cropping is properly done, and they fit the allocated space.
 		if ( isset( $settings['template'] ) && preg_match( '/%thumb%/', $settings['template'], $m, PREG_OFFSET_CAPTURE ) ) {
 			if ( isset( $settings['use_css_cropping'] ) && $settings['use_css_cropping'] ) {
-				if ( isset( $settings['thumb_w'] ) && $settings['thumb_w'] != 0 ) {
-					$ret['thumb_crop_w'] = '#' . $widget_id .' .cat-post-thumbnail .cat-post-crop img {width: '.$settings['thumb_w'].'px;}';
+				if ( isset( $settings['thumb_w'] ) && 0 !== $settings['thumb_w'] ) {
+					$ret['thumb_crop_w'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {width: ' . $settings['thumb_w'] . 'px;}';
 				}
-				if ( isset( $settings['thumb_h'] ) && $settings['thumb_h'] != 0 ) {
-					$ret['thumb_crop_h'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {height: '.$settings['thumb_h'].'px;}';
+				if ( isset( $settings['thumb_h'] ) && 0 !== $settings['thumb_h'] ) {
+					$ret['thumb_crop_h'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {height: ' . $settings['thumb_h'] . 'px;}';
 				}
 				$ret['thumb_crop'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {object-fit: cover;max-width:100%;}';
-				$ret['thumb_crop_not_supported'] = '#' . $widget_id .' .cat-post-thumbnail .cat-post-crop-not-supported img {width:100%;}';
-				$ret['thumb_fluid_width'] = '#' . $widget_id . ' .cat-post-thumbnail {max-width:' . $settings['thumb_fluid_width'] . '%;}'; 
+				$ret['thumb_crop_not_supported'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop-not-supported img {width:100%;}';
+				$ret['thumb_fluid_width'] = '#' . $widget_id . ' .cat-post-thumbnail {max-width:' . $settings['thumb_fluid_width'] . '%;}';
 				$ret['thumb_styling'] = '#' . $widget_id . ' .cat-post-item img {margin: initial;}';
 			} else {
 				$ret['thumb_overflow'] = '#' . $widget_id . ' .cat-post-thumbnail span {overflow: hidden; display:inline-block}';
@@ -368,7 +371,6 @@ class Virtual_Widget {
 					$ret[] = '#' . $widget_id . " .cat-post-format-standard:after {padding-left:12px; content: '\\e806'; }";
 					break;
 			}
-
 		}
 		if ( $settings['enable_loadmore'] ) {
 			// $this->id is ued over $widget_id because we need the id of the outer div, not the UL itself.

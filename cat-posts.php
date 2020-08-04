@@ -67,14 +67,16 @@ function wp_admin_bar_customize_menu() {
 		return;
 	}
 
-	$wp_admin_bar->add_menu( array(
-		'id'    => 'customize',
-		'title' => __( 'Customize' ),
-		'href'  => $customize_url,
-		'meta'  => array(
-			'class' => 'hide-if-no-customize',
-		),
-	) );
+	$wp_admin_bar->add_menu(
+		array(
+			'id'    => 'customize',
+			'title' => __( 'Customize' ),
+			'href'  => $customize_url,
+			'meta'  => array(
+				'class' => 'hide-if-no-customize',
+			),
+		)
+	);
 	add_action( 'wp_before_admin_bar_render', 'wp_customize_support_script' );
 }
 
@@ -98,17 +100,17 @@ function wp_head() {
 	}
 
 	if ( ! empty( $styles ) ) {
-	?>
+		?>
 <style>
-	<?php
-	foreach ( $styles as $rules ) {
-		foreach ( $rules as $rule ) {
-			echo "$rule\n"; // Xss ok. raw css output, can not be html escaped.
+		<?php
+		foreach ( $styles as $rules ) {
+			foreach ( $rules as $rule ) {
+				echo "$rule\n"; // Xss ok. raw css output, can not be html escaped.
+			}
 		}
-	}
-	?>
+		?>
 </style>
-	<?php
+		<?php
 	}
 }
 
@@ -204,7 +206,7 @@ function embed_front_end_scripts() {
  */
 function admin_scripts( $hook ) {
 
-	if ( 'widgets.php' === $hook || 'post.php' === $hook  ) { // enqueue only for widget admin and customizer. (add if post.php: fix make widget SiteOrigin Page Builder plugin, GH issue #181)
+	if ( 'widgets.php' === $hook || 'post.php' === $hook ) { // enqueue only for widget admin and customizer. (add if post.php: fix make widget SiteOrigin Page Builder plugin, GH issue #181).
 
 		/*
 		 * Add script to control admin UX.
@@ -228,11 +230,15 @@ function admin_scripts( $hook ) {
 
 		wp_localize_script( 'category-posts-widget-admin-js', 'tiptoppress', $js_data );
 		wp_enqueue_media();
-		wp_localize_script( 'category-posts-widget-admin-js', 'cwp_default_thumb_selection', array(
-			'frame_title'  => __( 'Select a default thumbnail', 'category-posts' ),
-			'button_title' => __( 'Select', 'category-posts' ),
-			'none'         => __( 'None', 'category-posts' ),
-		) );
+		wp_localize_script(
+			'category-posts-widget-admin-js',
+			'cwp_default_thumb_selection',
+			array(
+				'frame_title'  => __( 'Select a default thumbnail', 'category-posts' ),
+				'button_title' => __( 'Select', 'category-posts' ),
+				'none'         => __( 'None', 'category-posts' ),
+			)
+		);
 	}
 }
 
@@ -262,8 +268,8 @@ function admin_styles() {
 
 add_action( 'admin_print_styles-widgets.php', __NAMESPACE__ . '\admin_styles' );
 
-// fix make widget SiteOrigin Page Builder plugin, GH issue #181
-add_action('siteorigin_panel_enqueue_admin_scripts', __NAMESPACE__ . '\admin_styles' );
+// fix make widget SiteOrigin Page Builder plugin, GH issue #181.
+add_action( 'siteorigin_panel_enqueue_admin_scripts', __NAMESPACE__ . '\admin_styles' );
 
 /**
  *  Get the tags which might be used in the template.
@@ -436,7 +442,8 @@ add_action( 'widgets_init', __NAMESPACE__ . '\register_widget' );
  **/
 function equal_cover_content_height( $number, $widgetsettings ) {
 
-	if ( isset( $widgetsettings['template'] ) && preg_match( '/%thumb%/', $widgetsettings['template'] ) ) : ?>
+	if ( isset( $widgetsettings['template'] ) && preg_match( '/%thumb%/', $widgetsettings['template'] ) ) :
+		?>
 		<script type="text/javascript">
 			if (typeof jQuery !== 'undefined') {
 				jQuery( document ).ready(function () {
@@ -445,11 +452,11 @@ function equal_cover_content_height( $number, $widgetsettings ) {
 					cat_posts_namespace.layout_img_size  = cat_posts_namespace.layout_img_size || {};
 
 					cat_posts_namespace.layout_wrap_text = {
-						<?php	/* Handle post items */	echo "\r\n"; ?>
+						<?php /* Handle post items */ echo "\r\n"; ?>
 						setHeight : function (widget) {
 							var _widget = jQuery(widget);
-							
-							<?php	/* wrap text around image */	echo "\r\n"; ?>
+
+							<?php /* wrap text around image */ echo "\r\n"; ?>
 							if (jQuery(_widget.find('.cat-post-item .cpwp-wrap-text-stage').has('.cat-post-thumbnail')[0]).height() <
 								jQuery(_widget.find('.cat-post-item .cat-post-thumbnail')[0]).height()) {
 								_widget.find('.cat-post-item p').addClass( "cpwp-wrap-text" );
@@ -468,7 +475,7 @@ function equal_cover_content_height( $number, $widgetsettings ) {
 							orig_w = jQuery(_widget.find('.cat-post-item img')[0]).data('cat-posts-width'),
 							orig_h = jQuery(_widget.find('.cat-post-item img')[0]).data('cat-posts-height');
 
-							<?php	/* replace height */	echo "\r\n"; ?>
+							<?php /* replace height */ echo "\r\n"; ?>
 							if( resp_w < orig_w ){
 								_widget.find('.cat-post-item img').height( resp_w * orig_h / orig_w );
 							}
@@ -478,7 +485,7 @@ function equal_cover_content_height( $number, $widgetsettings ) {
 
 					var widget = jQuery('#<?php echo esc_attr( $number ); ?>');
 
-					<?php	/* do on page load or on resize the browser window */	echo "\r\n"; ?>
+					<?php /* do on page load or on resize the browser window */ echo "\r\n"; ?>
 					jQuery(window).on('load resize', function() {
 						cat_posts_namespace.layout_wrap_text.setHeight(widget);
 						cat_posts_namespace.layout_img_size.setHeight(widget);
@@ -486,7 +493,8 @@ function equal_cover_content_height( $number, $widgetsettings ) {
 				});
 			}
 		</script>
-	<?php endif;
+		<?php
+	endif;
 }
 
 /*
@@ -731,11 +739,14 @@ function customize_register( $wp_customize ) {
 	$posts = get_posts( $args );
 
 	if ( count( $posts ) > 0 ) {
-		$wp_customize->add_panel( __NAMESPACE__, array(
-			'title'      => __( 'Category Posts Shortcode', 'category-posts' ),
-			'priority'   => 300,
-			'capability' => 'edit_theme_options',
-		) );
+		$wp_customize->add_panel(
+			__NAMESPACE__,
+			array(
+				'title'      => __( 'Category Posts Shortcode', 'category-posts' ),
+				'priority'   => 300,
+				'capability' => 'edit_theme_options',
+			)
+		);
 
 		foreach ( $posts as $p ) {
 			$widget = new Widget();
@@ -771,12 +782,15 @@ function customize_register( $wp_customize ) {
 					$section_title = __( '[shortcode]', 'category-posts' );
 				}
 
-				$wp_customize->add_section( __NAMESPACE__ . '-' . $p->id . '-' . $k, array(
-					'title'      => $section_title,
-					'priority'   => 10,
-					'capability' => 'edit_theme_options',
-					'panel'      => __NAMESPACE__,
-				) );
+				$wp_customize->add_section(
+					__NAMESPACE__ . '-' . $p->id . '-' . $k,
+					array(
+						'title'      => $section_title,
+						'priority'   => 10,
+						'capability' => 'edit_theme_options',
+						'panel'      => __NAMESPACE__,
+					)
+				);
 
 				ob_start();
 
@@ -789,16 +803,20 @@ function customize_register( $wp_customize ) {
 
 				$widget->form( $m );
 				$form = ob_get_clean();
-				$form = preg_replace_callback('/<(input|select|textarea)\s+.*name=("|\').*\[\w*\]\[([^\]]*)\][^>]*>/',
+				$form = preg_replace_callback(
+					'/<(input|select|textarea)\s+.*name=("|\').*\[\w*\]\[([^\]]*)\][^>]*>/',
 					function ( $matches ) use ( $p, $wp_customize, $m, $k ) {
 						$setting = '_virtual-' . WIDGET_BASE_ID . '[' . $p->ID . '][' . $k . '][' . $matches[3] . ']';
 						if ( ! isset( $m[ $matches[3] ] ) ) {
 							$m[ $matches[3] ] = null;
 						}
-						$wp_customize->add_setting( $setting, array(
-							'default' => $m[ $matches[3] ], // set default to current value.
-							'type'    => 'option',
-						) );
+						$wp_customize->add_setting(
+							$setting,
+							array(
+								'default' => $m[ $matches[3] ], // set default to current value.
+								'type'    => 'option',
+							)
+						);
 
 						return str_replace( '<' . $matches[1], '<' . $matches[1] . ' data-customize-setting-link="' . $setting . '"', $matches[0] );
 					},
@@ -956,7 +974,7 @@ function mce_external_languages( $locales ) {
 		if ( is_array( $meta ) && isset( $meta['editor'] ) ) {
 			;
 		} else {
-			$locales['cat-posts'] = plugin_dir_path( __FILE__ ) . 'tinymce_translations.php';
+			$locales['cat-posts'] = plugin_dir_path( __FILE__ ) . 'tinymce-translations.php';
 		}
 	}
 
@@ -1004,7 +1022,7 @@ function show_user_profile( $user ) {
 	if ( isset( $meta['editor'] ) ) {
 		$editor = true;
 	}
-?>
+	?>
 	<h3 id="<?php echo __NAMESPACE__; ?>"><?php esc_html_e( 'Category Posts Widget behaviour settings', 'category-posts' ); ?></h3>
 
 	<table class="form-table">
@@ -1023,7 +1041,7 @@ function show_user_profile( $user ) {
 			</td>
 		</tr>
 	</table>
-<?php
+	<?php
 }
 
 add_action( 'personal_options_update', __NAMESPACE__ . '\personal_options_update' );

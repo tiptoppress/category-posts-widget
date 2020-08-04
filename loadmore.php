@@ -81,10 +81,14 @@ function get_next_elements( \WP_REST_Request $request ) {
  * This function is where we register our routes for our example endpoint.
  */
 function register_route() {
-	register_rest_route( __NAMESPACE__, '/loadmore/(?P<id>[\w-]+)/(?P<start>[\d]+)/(?P<number>[\d]+)/(?P<context>[\w]+)', array(
-		'methods'  => 'GET',
-		'callback' => __NAMESPACE__ . '\get_next_elements',
-	) );
+	register_rest_route(
+		__NAMESPACE__,
+		'/loadmore/(?P<id>[\w-]+)/(?P<start>[\d]+)/(?P<number>[\d]+)/(?P<context>[\w]+)',
+		array(
+			'methods'  => 'GET',
+			'callback' => __NAMESPACE__ . '\get_next_elements',
+		)
+	);
 }
 
 add_action( 'rest_api_init', __NAMESPACE__ . '\register_route' );

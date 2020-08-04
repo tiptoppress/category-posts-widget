@@ -77,10 +77,10 @@ class Widget extends \WP_Widget {
 				// replace size.
 				$pattern = '/' . $array[1] . 'px/';
 				$html = preg_replace( $pattern, $size[0] . 'px', $html );
-				// widget width
+				// widget width.
 				$pattern = '/<img /';
 				$html = preg_replace( $pattern, "<img data-cat-posts-width='" . $size[0] . "'", $html );
-				// widget height
+				// widget height.
 				$pattern = '/<img /';
 				$html = preg_replace( $pattern, "<img data-cat-posts-height='" . $size[1] . "'", $html );
 
@@ -123,12 +123,12 @@ class Widget extends \WP_Widget {
 			if ( ( 0 === $size[0] ) && ( 0 === $size[1] ) ) { // Both values zero then revert to thumbnail.
 				$size = array( get_option( 'thumbnail_size_w', 150 ), get_option( 'thumbnail_size_h', 150 ) );
 			} elseif ( ( 0 === $size[0] ) && ( 0 !== $size[1] ) ) {
-				 // if thumb width 0 set to max/full widths for wp rendering
+				// if thumb width 0 set to max/full widths for wp rendering.
 				$post_thumb = get_the_post_thumbnail( get_the_ID(), 'full' );
 				preg_match( '/(?<=width=")[\d]*/', $post_thumb, $thumb_full_w );
 				$size[0] = $thumb_full_w[0];
 			} elseif ( ( 0 !== $size[0] ) && ( 0 === $size[1] ) ) {
-				// if thumb height 0 get full thumb for ratio and calc height with ratio
+				// if thumb height 0 get full thumb for ratio and calc height with ratio.
 				$post_thumb = get_the_post_thumbnail( get_the_ID(), 'full' );
 				preg_match( '/(?<=width=")[\d]*/', $post_thumb, $thumb_full_w );
 				preg_match( '/(?<=height=")[\d]*/', $post_thumb, $thumb_full_h );
@@ -242,14 +242,17 @@ class Widget extends \WP_Widget {
 		}
 
 		if ( isset( $instance['hideNoThumb'] ) && $instance['hideNoThumb'] ) {
-			$args = array_merge( $args, array(
-				'meta_query' => array(
-					array(
-						'key'     => '_thumbnail_id',
-						'compare' => 'EXISTS',
+			$args = array_merge(
+				$args,
+				array(
+					'meta_query' => array(
+						array(
+							'key'     => '_thumbnail_id',
+							'compare' => 'EXISTS',
+						),
 					),
-				),
-			) );
+				)
+			);
 		}
 
 		switch ( $instance['date_range'] ) {
@@ -760,41 +763,45 @@ class Widget extends \WP_Widget {
 
 		// Post details (Template).
 		$widget = $this;
-		$template_res = preg_replace_callback( get_template_regex(), function ( $matches ) use ( $widget, $instance, $everything_is_link ) {
-			switch ( $matches[0] ) {
-				case '%title%':
-					return $widget->itemTitle( $instance, $everything_is_link );
-				case '%author%':
-					return $widget->itemAuthor( $instance, $everything_is_link );
-				case '%commentnum%':
-					return $widget->itemCommentNum( $instance, $everything_is_link );
-				case '%date%':
-					return $widget->itemDate( $instance, $everything_is_link );
-				case '%thumb%':
-					return $widget->itemThumb( $instance, $everything_is_link );
-				case '%post_tag%':
-					return $widget->itemTags( $instance, $everything_is_link );
-				case '%category%':
-					return $widget->itemCategories( $instance, $everything_is_link );
-				case '%excerpt%':
-					return $widget->itemExcerpt( $instance, $everything_is_link );
-				default:
-					return $matches[0];
-			}
-		}, $template );
+		$template_res = preg_replace_callback(
+			get_template_regex(),
+			function ( $matches ) use ( $widget, $instance, $everything_is_link ) {
+				switch ( $matches[0] ) {
+					case '%title%':
+						return $widget->itemTitle( $instance, $everything_is_link );
+					case '%author%':
+						return $widget->itemAuthor( $instance, $everything_is_link );
+					case '%commentnum%':
+						return $widget->itemCommentNum( $instance, $everything_is_link );
+					case '%date%':
+						return $widget->itemDate( $instance, $everything_is_link );
+					case '%thumb%':
+						return $widget->itemThumb( $instance, $everything_is_link );
+					case '%post_tag%':
+						return $widget->itemTags( $instance, $everything_is_link );
+					case '%category%':
+						return $widget->itemCategories( $instance, $everything_is_link );
+					case '%excerpt%':
+						return $widget->itemExcerpt( $instance, $everything_is_link );
+					default:
+						return $matches[0];
+				}
+			},
+			$template
+		);
 
 		// Replace empty line with closing and opening DIV.
 		$template_res = trim( $template_res );
 
-		// wrap thumb and line-clamp: set the CSS two parent knotes higher (first parent for float, second parent is a browser hack for that float works well)
-		if ( isset( $instance['template'] ) && preg_match( '/%thumb%(\r)?\n%excerpt%/', $instance['template'] ) && 
+		// wrap thumb and line-clamp: set the CSS two parent knotes higher (first parent for float, second parent is a browser hack for that float works well).
+		if ( isset( $instance['template'] ) && preg_match( '/%thumb%(\r)?\n%excerpt%/', $instance['template'] ) &&
 		! $no_wrap ) {
-			$count = max( substr_count($template_res, "\n\r"), substr_count($template_res, "\n\n"));
+			$count = max( substr_count( $template_res, "\n\r" ), substr_count( $template_res, "\n\n" ) );
 			// in widget areas.
-			$template_res = str_replace( "\n\r", '</div><div class="cpwp-wrap-text-stage cpwp-wrap-text"><div>', $template_res ); // all others
+			$template_res = str_replace( "\n\r", '</div><div class="cpwp-wrap-text-stage cpwp-wrap-text"><div>', $template_res ); // all others.
 			// as shortcode.
-			$template_res = str_replace( "\n\n", '</div><div class="cpwp-wrap-text-stage cpwp-wrap-text"><div>', $template_res ); // all others
-			$template_res = '<div>' . $template_res . str_repeat('</div>', $count + 1);
+			$template_res = str_replace( "\n\n", '</div><div class="cpwp-wrap-text-stage cpwp-wrap-text"><div>', $template_res ); // all others.
+			$template_res = '<div>' . $template_res . str_repeat( '</div>', $count + 1 );
 		} else {
 			$template_res = str_replace( "\n\r", '</div><div>', $template_res ); // in widget areas.
 			$template_res = str_replace( "\n\n", '</div><div>', $template_res ); // as shortcode.
@@ -951,16 +958,17 @@ class Widget extends \WP_Widget {
 				$number = WIDGET_BASE_ID . '-' . $number;
 			}
 
-			// enque relevant scripts and parameters to ensure correct image dimentions
+			// enque relevant scripts and parameters to ensure correct image dimentions.
 			if ( isset( $instance['template'] ) && preg_match( '/%thumb%/', $instance['template'] ) ) {
 				wp_enqueue_script( 'jquery' ); // just in case the theme or other plugins didn't enqueue it.
 				add_action(
-					'wp_footer', function () use ( $number, $instance ) {
+					'wp_footer',
+					function () use ( $number, $instance ) {
 						__NAMESPACE__ . '\\' . equal_cover_content_height( $number, $instance );
-					}, 100
+					},
+					100
 				);
 			}
-
 		} elseif ( 'text' === $instance['no_match_handling'] ) {
 			echo $before_widget; // Xss ok. This is how widget actually expected to behave.
 			echo $this->titleHTML( $before_title, $after_title, $instance );
@@ -996,7 +1004,7 @@ class Widget extends \WP_Widget {
 
 		$this->instance = $instance;
 
-		if($start > 0) {
+		if ( $start > 0 ) {
 			$instance['offset'] = $start;
 		}
 		$number = (int) $number; // sanitize number with the side effect of non
@@ -1090,36 +1098,51 @@ class Widget extends \WP_Widget {
 			<label>
 				<?php esc_html_e( 'Category', 'category-posts' ); ?>:
 				<?php
-					wp_dropdown_categories( array(
-						'show_option_all' => __( 'All categories', 'category-posts' ),
-						'hide_empty'      => 0,
-						'name'            => $this->get_field_name( 'cat' ),
-						'selected'        => $instance['cat'],
-						'class'           => 'categoryposts-data-panel-filter-cat',
-					) );
+					wp_dropdown_categories(
+						array(
+							'show_option_all' => __( 'All categories', 'category-posts' ),
+							'hide_empty'      => 0,
+							'name'            => $this->get_field_name( 'cat' ),
+							'selected'        => $instance['cat'],
+							'class'           => 'categoryposts-data-panel-filter-cat',
+						)
+					);
 				?>
 			</label>
 		</p>
 		<?php
 			echo $this->get_checkbox_block_html( $instance, 'no_cat_childs', esc_html__( 'Exclude child categories', 'category-posts' ), ! empty( $instance['cat'] ) );
-			echo $this->get_select_block_html( $instance, 'status', esc_html__( 'Status', 'category-posts' ), array(
-				'default'                => esc_html__( 'WordPress Default', 'category-posts' ),
-				'publish'                => esc_html__( 'Published', 'category-posts' ),
-				'future'                 => esc_html__( 'Scheduled', 'category-posts' ),
-				'private'                => esc_html__( 'Private', 'category-posts' ),
-				'publish,future'         => esc_html__( 'Published or Scheduled', 'category-posts' ),
-				'private,publish'        => esc_html__( 'Published or Private', 'category-posts' ),
-				'private,future'         => esc_html__( 'Private or Scheduled', 'category-posts' ),
-				'private,publish,future' => esc_html__( 'Published, Private or Scheduled', 'category-posts' ),
-			), 'default', true );
+			echo $this->get_select_block_html(
+				$instance,
+				'status',
+				esc_html__( 'Status', 'category-posts' ), array(
+					'default'                => esc_html__( 'WordPress Default', 'category-posts' ),
+					'publish'                => esc_html__( 'Published', 'category-posts' ),
+					'future'                 => esc_html__( 'Scheduled', 'category-posts' ),
+					'private'                => esc_html__( 'Private', 'category-posts' ),
+					'publish,future'         => esc_html__( 'Published or Scheduled', 'category-posts' ),
+					'private,publish'        => esc_html__( 'Published or Private', 'category-posts' ),
+					'private,future'         => esc_html__( 'Private or Scheduled', 'category-posts' ),
+					'private,publish,future' => esc_html__( 'Published, Private or Scheduled', 'category-posts' ),
+				),
+				'default',
+				true
+			);
 			echo $this->get_number_input_block_html( $instance, 'num', esc_html__( 'Number of posts to show', 'category-posts' ), 1, '', '', true );
 			echo $this->get_number_input_block_html( $instance, 'offset', esc_html__( 'Start with post', 'category-posts' ), 1, '', '', true );
-			echo $this->get_select_block_html( $instance, 'date_range', esc_html__( 'Date Range', 'category-posts' ), array(
-				'off'           => esc_html__( 'Off', 'category-posts' ),
-				'days_ago'      => esc_html__( 'Days ago', 'category-posts' ),
-				'between_dates' => esc_html__( 'Between dates', 'category-posts' ),
-			), 'off', true );
-			?>
+			echo $this->get_select_block_html(
+				$instance,
+				'date_range',
+				esc_html__( 'Date Range', 'category-posts' ),
+				array(
+					'off'           => esc_html__( 'Off', 'category-posts' ),
+					'days_ago'      => esc_html__( 'Days ago', 'category-posts' ),
+					'between_dates' => esc_html__( 'Between dates', 'category-posts' ),
+				),
+				'off',
+				true
+			);
+		?>
 			<div class="cpwp_ident categoryPosts-date-range" style="display:<?php echo 'off' === $instance['date_range'] ? 'none' : 'block'; ?>">
 			<?php
 			echo $this->get_number_input_block_html( $instance, 'days_ago', esc_html__( 'Up to', 'category-posts' ), 1, '', '', 'days_ago' === $instance['date_range'] );
@@ -1128,18 +1151,25 @@ class Widget extends \WP_Widget {
 			?>
 			</div>
 			<?php
-			echo $this->get_select_block_html( $instance, 'sort_by', esc_html__( 'Sort by', 'category-posts' ), array(
-				'date'          => esc_html__( 'Date', 'category-posts' ),
-				'title'         => esc_html__( 'Title', 'category-posts' ),
-				'comment_count' => esc_html__( 'Number of comments', 'category-posts' ),
-				'rand'          => esc_html__( 'Random', 'category-posts' ),
-			), 'date', true );
+			echo $this->get_select_block_html(
+				$instance,
+				'sort_by',
+				esc_html__( 'Sort by', 'category-posts' ),
+				array(
+					'date'          => esc_html__( 'Date', 'category-posts' ),
+					'title'         => esc_html__( 'Title', 'category-posts' ),
+					'comment_count' => esc_html__( 'Number of comments', 'category-posts' ),
+					'rand'          => esc_html__( 'Random', 'category-posts' ),
+				),
+				'date',
+				true
+			);
 			echo $this->get_checkbox_block_html( $instance, 'asc_sort_order', esc_html__( 'Reverse sort order (ascending)', 'category-posts' ), true );
 			echo $this->get_checkbox_block_html( $instance, 'exclude_current_post', esc_html__( 'Exclude current post', 'category-posts' ), true );
 			echo $this->get_checkbox_block_html( $instance, 'hideNoThumb', esc_html__( 'Exclude posts which have no thumbnail', 'category-posts' ), true );
 			?>
 		</div>
-<?php
+		<?php
 	}
 
 	/**
@@ -1261,8 +1291,8 @@ class Widget extends \WP_Widget {
 	 *                          expected to be escaped.
 	 * @param int    $min       The minimum value allowed to be input.
 	 * @param int    $max       The maximum value allowed to be input.
-	 * @param string $value     The start value
-	 * @param string $step      The range of each step
+	 * @param string $value     The start value.
+	 * @param string $step      The range of each step.
 	 * @param bool   $visible   Indicates if the element should be visible when rendered.
 	 *
 	 * @return string HTML a P element contaning the input, its label, class based on the key
@@ -1284,7 +1314,7 @@ class Widget extends \WP_Widget {
 		}
 
 		$ret = '<label for="' . $this->get_field_id( $key ) . "\">\n" .
-					esc_html( $label ) . " <span>" . $value . "%</span>\n" .
+					esc_html( $label ) . ' <span>' . $value . "%</span>\n" .
 					'<input id="' . esc_attr( $this->get_field_id( $key ) ) . '" value="' . $value . '" name="' . esc_attr( $this->get_field_name( $key ) ) . '" class="' . esc_attr( $key ) . '" type="range"' . $minMaxStep . ' />' . "\n" .
 				"</label>\n";
 
@@ -1395,17 +1425,17 @@ class Widget extends \WP_Widget {
 	 */
 	private function get_button_thumb_size_html( $instance, $key, $label ) {
 
-		$datas = "";
+		$datas = '';
 
 		switch ( $key ) {
-			case "thumb":
-				$datas = 'data-thumb-w="' . get_option( "thumbnail_size_w" ) . '" data-thumb-h="' . get_option( "thumbnail_size_h" ) . '"';
+			case 'thumb':
+				$datas = 'data-thumb-w="' . get_option( 'thumbnail_size_w' ) . '" data-thumb-h="' . get_option( 'thumbnail_size_h' ) . '"';
 				break;
-			case "medium":
-				$datas = 'data-thumb-w="' . get_option( "medium_size_w" ) . '" data-thumb-h="' . get_option( "medium_size_h" ) . '"';
+			case 'medium':
+				$datas = 'data-thumb-w="' . get_option( 'medium_size_w' ) . '" data-thumb-h="' . get_option( 'medium_size_h' ) . '"';
 				break;
-			case "large":
-				$datas = 'data-thumb-w="' . get_option( "large_size_w" ) . '" data-thumb-h="' . get_option( "large_size_h" ) . '"';
+			case 'large':
+				$datas = 'data-thumb-w="' . get_option( 'large_size_w' ) . '" data-thumb-h="' . get_option( 'large_size_h' ) . '"';
 				break;
 		}
 		$ret = '<button type="button" ' . $datas . ' class="' . $key . ' button">' . esc_html( $label ) . "</button>\n";
@@ -1449,7 +1479,7 @@ class Widget extends \WP_Widget {
 		<div class="category-widget-cont">
 			<?php if ( ! class_exists( '\\termcategoryPostsPro\\Widget' ) ) { ?>
 			<p><a target="_blank" href="http://tiptoppress.com/term-and-category-based-posts-widget/"><?php esc_html_e( 'Get the Pro version', 'category-posts' ); ?></a></p>
-			<?php
+				<?php
 			}
 			$this->formTitlePanel( $instance );
 			$this->formFilterPanel( $instance );
@@ -1467,14 +1497,14 @@ class Widget extends \WP_Widget {
 				<p><?php esc_html_e( 'Displayed parts', 'category-posts' ); ?></p>
 				<div class="cpwp_ident">
 					<?php
-					$label = esc_html__( 'Template', 'category-posts' ) . 
+					$label = esc_html__( 'Template', 'category-posts' ) .
 								' <a href="#" class="dashicons toggle-template-help dashicons-editor-help imgedit-help-toggle"><span class="screen-reader-text">' . 
 								esc_html__( 'Show template help', 'category-posts' ) . '</span></a>';
-					$class_placement = "";
+					$class_placement = '';
 					if ( is_customize_preview() ) {
-						$class_placement = "customizer";
+						$class_placement = 'customizer';
 					} else {
-						$class_placement = "admin-panel";
+						$class_placement = 'admin-panel';
 					}
 					$label .= '<span class="cat-post-add_premade_templates ' . $class_placement . '">' .
 								'<button type="button" class="button cpwp-open-placholder-dropdown-menu"> + ' . esc_html__( 'Add Placeholder', 'category-posts' ) . '</button>' .
@@ -1494,7 +1524,7 @@ class Widget extends \WP_Widget {
 								'</span>';
 					?>
 					<?php
-					echo $this->get_textarea_html( $instance, 'template', $label , '', true, 8 );
+					echo $this->get_textarea_html( $instance, 'template', $label, '', true, 8 );
 					preg_match_all( get_template_regex(), $template, $matches );
 					$tags = array();
 					if ( ! empty( $matches[0] ) ) {
@@ -1575,19 +1605,26 @@ class Widget extends \WP_Widget {
 					?>
 					</div>
 				</div>
-				<?php // Data settings ?>
+				<?php // Data settings. ?>
 				<div class="cpwp-sub-panel categoryposts-data-panel-date" style="display:<?php echo ( isset( $tags['%date%'] ) ) ? 'block' : 'none'; ?>">
 					<p><?php esc_html_e( 'Date format settings', 'category-posts' ); ?></p>
 					<div class="cpwp_ident">
 						<?php
-						echo $this->get_select_block_html( $instance, 'preset_date_format', esc_html__( 'Date format', 'category-posts' ), array(
-							'sitedateandtime'      => esc_html__( 'Site date and time', 'category-posts' ),
-							'sitedate'             => esc_html__( 'Site date', 'category-posts' ),
-							'sincepublished'       => esc_html__( 'Time since published', 'category-posts' ),
-							'localsitedateandtime' => esc_html__( 'Reader\'s local date and time', 'category-posts' ),
-							'localsitedate'        => esc_html__( 'Reader\'s local date', 'category-posts' ),
-							'other'                => esc_html__( 'PHP style format', 'category-posts' ),
-						), 'sitedateandtime', true );
+						echo $this->get_select_block_html(
+							$instance,
+							'preset_date_format',
+							esc_html__( 'Date format', 'category-posts' ),
+							array(
+								'sitedateandtime'      => esc_html__( 'Site date and time', 'category-posts' ),
+								'sitedate'             => esc_html__( 'Site date', 'category-posts' ),
+								'sincepublished'       => esc_html__( 'Time since published', 'category-posts' ),
+								'localsitedateandtime' => esc_html__( 'Reader\'s local date and time', 'category-posts' ),
+								'localsitedate'        => esc_html__( 'Reader\'s local date', 'category-posts' ),
+								'other'                => esc_html__( 'PHP style format', 'category-posts' ),
+							),
+							'sitedateandtime',
+							true
+						);
 						echo $this->get_text_input_block_html( $instance, 'date_format', esc_html__( 'PHP Style Date format', 'category-posts' ), 'j M Y', 'other' === $preset_date_format );
 						?>
 					</div>
@@ -1648,15 +1685,22 @@ class Widget extends \WP_Widget {
 							'blur'  => esc_html__( 'Blur', 'category-posts' ),
 							'icon'  => esc_html__( 'Icon', 'category-posts' ),
 						), 'none', true);
-						echo $this->get_select_block_html( $instance, 'show_post_format', esc_html__( 'Indicate post format and position', 'category-posts' ), array(
-							'none'        => esc_html__( 'None', 'category-posts' ),
-							'topleft'     => esc_html__( 'Top left', 'category-posts' ),
-							'bottomleft'  => esc_html__( 'Bottom left', 'category-posts' ),
-							'ceter'       => esc_html__( 'Center', 'category-posts' ),
-							'topright'    => esc_html__( 'Top right', 'category-posts' ),
-							'bottomright' => esc_html__( 'Bottom right', 'category-posts' ),
-							'nocss'       => esc_html__( 'HTML without styling', 'category-posts' ),
-						), 'none', true );
+						echo $this->get_select_block_html(
+							$instance,
+							'show_post_format',
+							esc_html__( 'Indicate post format and position', 'category-posts' ),
+							array(
+								'none'        => esc_html__( 'None', 'category-posts' ),
+								'topleft'     => esc_html__( 'Top left', 'category-posts' ),
+								'bottomleft'  => esc_html__( 'Bottom left', 'category-posts' ),
+								'ceter'       => esc_html__( 'Center', 'category-posts' ),
+								'topright'    => esc_html__( 'Top right', 'category-posts' ),
+								'bottomright' => esc_html__( 'Bottom right', 'category-posts' ),
+								'nocss'       => esc_html__( 'HTML without styling', 'category-posts' ),
+							),
+							'none',
+							true
+						);
 						?>
 						<p>
 							<label style="display:block">
@@ -1691,11 +1735,18 @@ class Widget extends \WP_Widget {
 				<?php echo $this->get_checkbox_block_html( $instance, 'disable_font_styles', esc_html__( 'Disable only font styles', 'category-posts' ), true ); ?>
 				<div class="cpwp_ident">
 					<?php
-						echo $this->get_select_block_html( $instance, 'no_match_handling', esc_html__( 'When there are no matches', 'category-posts' ), array(
-							'nothing' => esc_html__( 'Display empty widget', 'category-posts' ),
-							'hide'    => esc_html__( 'Hide Widget', 'category-posts' ),
-							'text'    => esc_html__( 'Show text', 'category-posts' ),
-						), 'nothing', true );
+						echo $this->get_select_block_html(
+							$instance,
+							'no_match_handling',
+							esc_html__( 'When there are no matches', 'category-posts' ),
+							array(
+								'nothing' => esc_html__( 'Display empty widget', 'category-posts' ),
+								'hide'    => esc_html__( 'Hide Widget', 'category-posts' ),
+								'text'    => esc_html__( 'Show text', 'category-posts' ),
+							),
+							'nothing',
+							true
+						);
 					?>
 					<div class="categoryPosts-no-match-text" style="display:<?php echo ( 'text' === $instance['no_match_handling'] ) ? 'block' : 'none'; ?>">
 						<?php echo $this->get_textarea_html( $instance, 'no_match_text', esc_html__( 'Text', 'category-posts' ), '', true, 4 ); ?>
