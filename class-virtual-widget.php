@@ -212,7 +212,7 @@ class Virtual_Widget {
 					$selector_wrap_text = '.cpwp-wrap-text';
 				}
 				$styles['excerpt_lines'] = '.cat-post-item ' . $selector_wrap_text . ' {overflow: hidden;text-overflow: ellipsis;white-space: initial;' .
-					'display: -webkit-box;-webkit-line-clamp: ' . $settings['excerpt_lines'] . ';-webkit-box-orient: vertical;}';
+					'display: -webkit-box;-webkit-line-clamp: ' . $settings['excerpt_lines'] . ';-webkit-box-orient: vertical;padding-bottom: 0 !important;}';
 			}
 
 			// add post format css if needed.
