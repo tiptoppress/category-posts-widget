@@ -25,7 +25,7 @@ A premium version of that free widget available at<a href="http://tiptoppress.co
 * Custom field support in the Template
 * Shortcode support in the Template
 * Image-Slider (or News-Ticker)
-* Asymmetrical layouts (Post list alteration)
+* Asymmetrical list layouts
 * Full background images
 * Masonry responsive grid layout
 * More complex filter (ANY, NOT, AND, ...)
