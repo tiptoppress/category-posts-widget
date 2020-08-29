@@ -172,6 +172,7 @@ class Virtual_Widget {
 				'author_clenup' => '.cat-post-author {margin-bottom: 0;}',
 				'thumb'         => '.cat-post-thumbnail {margin: 5px 10px 5px 0;}',
 				'item_clenup'   => '.cat-post-item:before {content: ""; clear: both;}',
+				'more_link'     => '.cat-post-excerpt-more {display: inline-block;}',
 			);
 
 			if ( ! ( isset( $settings['disable_font_styles'] ) && $settings['disable_font_styles'] ) ) { // checks if disable font styles is not set.

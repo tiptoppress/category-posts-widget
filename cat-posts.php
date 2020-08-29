@@ -468,17 +468,38 @@ function equal_cover_content_height( $number, $widgetsettings ) {
 						}
 					}
 					cat_posts_namespace.layout_img_size = {
-						setHeight : function (widget) {
-							var _widget = jQuery(widget),
-							resp_w = jQuery(_widget.find('.cat-post-item img')[0]).width(),
-							resp_h = jQuery(_widget.find('.cat-post-item img')[0]).height(),
-							orig_w = jQuery(_widget.find('.cat-post-item img')[0]).data('cat-posts-width'),
-							orig_h = jQuery(_widget.find('.cat-post-item img')[0]).data('cat-posts-height');
-
-							<?php /* replace height */ echo "\r\n"; ?>
+						<?php	/* Handle replace */ echo "\r\n"; ?>
+						replace : function(_this){
+							var _that = jQuery(_this),
+							resp_w = _that.width(),
+							resp_h = _that.height(),
+							orig_w = _that.data('cat-posts-width'),
+							orig_h = _that.data('cat-posts-height');
+							<?php	/* replace height */ echo "\r\n"; ?>
 							if( resp_w < orig_w ){
-								_widget.find('.cat-post-item img').height( resp_w * orig_h / orig_w );
+								_that.height( resp_w * orig_h / orig_w );
+							} else {
+								_that.height( '' );
 							}
+							return;
+						},
+						<?php	/* Wait for image is loaded */ echo "\r\n"; ?>
+						handleLazyLoading : function(_this) {
+							var width = jQuery(_this).width();
+							<?php	/* image is loaded */ echo "\r\n"; ?>
+							if( 0 !== width ){
+								cat_posts_namespace.layout_img_size.replace(_this);
+							} else {
+								jQuery(_this).one("load", function(){
+									cat_posts_namespace.layout_img_size.replace(_this);
+								});
+							}
+							return;
+						},
+						setHeight : function (widget) {
+							jQuery(widget).find('.cat-post-item img').each(function(){
+								cat_posts_namespace.layout_img_size.handleLazyLoading(this);
+							});
 							return;
 						}
 					}
