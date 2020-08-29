@@ -698,6 +698,7 @@ class Widget extends \WP_Widget {
 				$excerpt = shortcode_unautop( wpautop( convert_chars( convert_smilies( wptexturize( $excerpt ) ) ) ) );
 			}
 		}
+		$excerpt = str_replace('<p>', '<p class="cpwp-excerpt-text">', $excerpt);
 		$ret = apply_filters( 'cpw_excerpt', $excerpt, $this );
 		return $ret;
 	}

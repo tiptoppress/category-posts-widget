@@ -459,7 +459,7 @@ function equal_cover_content_height( $number, $widgetsettings ) {
 							<?php /* wrap text around image */ echo "\r\n"; ?>
 							if (jQuery(_widget.find('.cat-post-item .cpwp-wrap-text-stage').has('.cat-post-thumbnail')[0]).height() <
 								jQuery(_widget.find('.cat-post-item .cat-post-thumbnail')[0]).height()) {
-								_widget.find('.cat-post-item p').addClass( "cpwp-wrap-text" );
+								_widget.find('.cat-post-item p.cpwp-wrap-text').addClass( "cpwp-wrap-text" );
 								_widget.find('.cat-post-item .cpwp-wrap-text-stage').removeClass( "cpwp-wrap-text" );
 							}else{
 								_widget.find('.cat-post-item p').removeClass( "cpwp-wrap-text" );

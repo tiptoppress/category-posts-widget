@@ -205,7 +205,7 @@ class Virtual_Widget {
 			if ( isset( $settings['template'] ) && preg_match( '/%excerpt%/', $settings['template'] ) ) {
 				$styles['wrap_thumb'] = '.cpwp-wrap-text p {display: inline;}';
 				$no_wrap = isset( $settings['text_do_not_wrap_thumb'] ) && $settings['text_do_not_wrap_thumb'];
-				$selector_wrap_text = 'p';
+				$selector_wrap_text = 'p.cpwp-wrap-text';
 				// wrap thumb and line-clamp: set the CSS two parent knotes higher (first parent for float, second parent is a browser hack for that float works well).
 				if ( isset( $settings['template'] ) && preg_match( '/%thumb%(\r)?\n%excerpt%/', $settings['template'] ) &&
 					! $no_wrap ) {
