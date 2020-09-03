@@ -452,19 +452,48 @@ function equal_cover_content_height( $number, $widgetsettings ) {
 					cat_posts_namespace.layout_img_size  = cat_posts_namespace.layout_img_size || {};
 
 					cat_posts_namespace.layout_wrap_text = {
-						<?php /* Handle post items */ echo "\r\n"; ?>
-						setHeight : function (widget) {
-							var _widget = jQuery(widget);
-
-							<?php /* wrap text around image */ echo "\r\n"; ?>
-							if (jQuery(_widget.find('.cat-post-item .cpwp-wrap-text-stage').has('.cat-post-thumbnail')[0]).height() <
-								jQuery(_widget.find('.cat-post-item .cat-post-thumbnail')[0]).height()) {
-								_widget.find('.cat-post-item p.cpwp-wrap-text').addClass( "cpwp-wrap-text" );
-								_widget.find('.cat-post-item .cpwp-wrap-text-stage').removeClass( "cpwp-wrap-text" );
-							}else{
-								_widget.find('.cat-post-item p').removeClass( "cpwp-wrap-text" );
-								_widget.find('.cat-post-item .cpwp-wrap-text-stage').addClass( "cpwp-wrap-text" );
+						<?php	/* Handle item */ echo "\r\n"; ?>
+						preWrap : function (widget) {
+							// var _widget = jQuery(widget);
+							jQuery(widget).find('.cat-post-item').each(function(){
+								var _that = jQuery(this);
+								_that.find('p.cpwp-excerpt-text').addClass('cpwp-wrap-text');
+								_that.find('p.cpwp-excerpt-text').closest('div').wrap('<div class="cpwp-wrap-text-stage"></div>');;
+							});
+							return;
+						},
+						<?php	/* Handle add class */ echo "\r\n"; ?>
+						add : function(_this){
+							var _that = jQuery(_this);
+							if (_that.find('p.cpwp-excerpt-text').height() < _that.find('.cat-post-thumbnail').height()) { <?php /* don't move class to do the CSS hack, line's height is smaller as thumb */ echo "\r\n"; ?>
+								_that.find('p.cpwp-excerpt-text').closest('.cpwp-wrap-text-stage').removeClass( "cpwp-wrap-text" );
+								_that.find('p.cpwp-excerpt-text').addClass( "cpwp-wrap-text" ); <?php /* don't do the CSS hack, just set the class */ echo "\r\n"; ?>
+							}else{ <?php /* add the CSS hack, it's needed, text is wrapping, line's height is higher as thumb */ echo "\r\n"; ?>
+								_that.find('p.cpwp-excerpt-text').removeClass( "cpwp-wrap-text" );
+								_that.find('p.cpwp-excerpt-text').closest('.cpwp-wrap-text-stage').addClass( "cpwp-wrap-text" ); <?php /* text is wrapping, do the CSS hack */ echo "\r\n"; ?>
 							}
+							return;
+						},
+						<?php	/* Wait for image is loaded */ echo "\r\n"; ?>
+						handleLazyLoading : function(_this) {
+							var width = jQuery(_this).find('img').width();
+							<?php	/* image is loaded */ echo "\r\n"; ?>
+							if( 0 !== width ){
+								cat_posts_namespace.layout_wrap_text.add(_this);
+							} else {
+								jQuery(_this).one("load", function(){
+									cat_posts_namespace.layout_wrap_text.add(_this);
+								});
+							}
+							return;
+						},
+						<?php /* Handle post items */ echo "\r\n"; ?>
+						setClass : function (widget) {
+							// var _widget = jQuery(widget);
+							jQuery(widget).find('.cat-post-item').each(function(){
+								cat_posts_namespace.layout_wrap_text.handleLazyLoading(this);
+							});
+							return;
 						}
 					}
 					cat_posts_namespace.layout_img_size = {
@@ -506,9 +535,12 @@ function equal_cover_content_height( $number, $widgetsettings ) {
 
 					var widget = jQuery('#<?php echo esc_attr( $number ); ?>');
 
+					<?php	/* do once on document ready */ echo "\r\n"; ?>
+					cat_posts_namespace.layout_wrap_text.preWrap(widget);
+
 					<?php /* do on page load or on resize the browser window */ echo "\r\n"; ?>
 					jQuery(window).on('load resize', function() {
-						cat_posts_namespace.layout_wrap_text.setHeight(widget);
+						cat_posts_namespace.layout_wrap_text.setClass(widget);
 						cat_posts_namespace.layout_img_size.setHeight(widget);
 					});
 				});

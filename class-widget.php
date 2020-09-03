@@ -760,20 +760,9 @@ class Widget extends \WP_Widget {
 		// Replace empty line with closing and opening DIV.
 		$template_res = trim( $template_res );
 
-		// wrap thumb and line-clamp: set the CSS two parent knotes higher (first parent for float, second parent is a browser hack for that float works well).
-		if ( isset( $instance['template'] ) && preg_match( '/%thumb%(\r)?\n%excerpt%/', $instance['template'] ) &&
-		! $no_wrap ) {
-			$count = max( substr_count( $template_res, "\n\r" ), substr_count( $template_res, "\n\n" ) );
-			// in widget areas.
-			$template_res = str_replace( "\n\r", '</div><div class="cpwp-wrap-text-stage cpwp-wrap-text"><div>', $template_res ); // all others.
-			// as shortcode.
-			$template_res = str_replace( "\n\n", '</div><div class="cpwp-wrap-text-stage cpwp-wrap-text"><div>', $template_res ); // all others.
-			$template_res = '<div>' . $template_res . str_repeat( '</div>', $count + 1 );
-		} else {
-			$template_res = str_replace( "\n\r", '</div><div>', $template_res ); // in widget areas.
-			$template_res = str_replace( "\n\n", '</div><div>', $template_res ); // as shortcode.
-			$template_res = '<div>' . $template_res . '</div>';
-		}
+		$template_res = str_replace( "\n\r", '</div><div>', $template_res ); // in widget areas.
+		$template_res = str_replace( "\n\n", '</div><div>', $template_res ); // as shortcode.
+		$template_res = '<div>' . $template_res . '</div>';
 
 		// replace new lines with spaces.
 		$template_res = str_replace( "\n\r", ' ', $template_res ); // in widget areas.
