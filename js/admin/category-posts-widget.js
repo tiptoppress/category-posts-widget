@@ -494,7 +494,7 @@ jQuery(document).ready(function () {
             cwp_namespace.thumbnailSizeChange(this);
         });
 
-        jQuery(document).on('input', class_namespace + ' .thumb_fluid_width input', function () { // select a thumbnail fluid size
+        jQuery(document).on('input', class_namespace + ' .thumb_fluid_width', function () { // select a thumbnail fluid size
             cwp_namespace.thumbnailFluidWidthChange(this);
         });
 
