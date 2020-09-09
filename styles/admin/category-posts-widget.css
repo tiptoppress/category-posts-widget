@@ -173,6 +173,7 @@
 
 .cat-post-template-help {
     display: none;
+    overflow-x: auto;
 }
 
 .category-widget-cont .open-template-help {

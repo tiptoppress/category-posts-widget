@@ -60,7 +60,7 @@ class Widget extends \WP_Widget {
 		$html = preg_replace( $pattern, $size[0] . 'w', $html );
 		// replace size.
 		$pattern = '/' . $array[1] . 'px/';
-		$html = preg_replace( $pattern, $size[0] . 'px', $html );echo $array[1];
+		$html = preg_replace( $pattern, $size[0] . 'px', $html );
 
 		$show_post_format = isset( $this->instance['show_post_format'] ) && ( 'none' !== $this->instance['show_post_format'] );
 		if ( $show_post_format || $this->instance['thumb_hover'] ) {
@@ -92,8 +92,8 @@ class Widget extends \WP_Widget {
 		} elseif ( is_array( $size ) && ( 2 === count( $size ) ) ) {  // good format at least.
 			// normalize to ints first.
 			list( $width, $height ) = array_map('intval', $size);
-			if ( ( 0 === $width ) && ( 0 === $height ) ) { // Both values zero then revert to thumbnail.
-				$size = array( get_option( 'thumbnail_size_w', 150 ), get_option( 'thumbnail_size_h', 150 ) );
+			if ( ( 0 === $width ) && ( 0 === $height ) ) { // Both values zero then revert to ratio from the orig with large.
+				$size = array( get_option( 'large_size_w', 150 ), get_option( 'large_size_h', 150 ) );
 			} elseif ( ( 0 === $width ) && ( 0 !== $height ) ) {
 				// if thumb width 0 set to max/full widths for wp rendering.
 				$post_thumb = get_the_post_thumbnail( get_the_ID(), 'full' );
@@ -1454,7 +1454,7 @@ class Widget extends \WP_Widget {
 				<div class="cpwp_ident">
 					<?php
 					$label = esc_html__( 'Template', 'category-posts' ) .
-								' <a href="#" class="dashicons toggle-template-help dashicons-editor-help imgedit-help-toggle"><span class="screen-reader-text">' . 
+								' <a href="#" class="dashicons toggle-template-help dashicons-editor-help"><span class="screen-reader-text">' . 
 								esc_html__( 'Show template help', 'category-posts' ) . '</span></a>';
 					$class_placement = '';
 					if ( is_customize_preview() ) {
@@ -1588,13 +1588,22 @@ class Widget extends \WP_Widget {
 				<?php // Thumbnail settings. ?>
 				<div class="cpwp-sub-panel categoryposts-data-panel-thumb" style="display:<?php echo ( isset( $tags['%thumb%'] ) ) ? 'block' : 'none'; ?>">
 					<p><?php esc_html_e( 'Thumbnail settings', 'category-posts' ); ?></p>
-					<div class="cpwp_ident">
-						<p><?php esc_html_e( 'Dimensions (pixel)', 'category-posts' ); ?></p>
+				<div class="cpwp_ident">
+					<p><?php esc_html_e( 'Dimensions (pixel)', 'category-posts' ); ?>
+						<a href="#" class="dashicons toggle-image-dimensions-help dashicons-editor-help">
+							<span class="screen-reader-text"><?php esc_html__( 'Show image dimension help', 'categorypostspro' ); ?></span>
+						</a>
+					</p>
 						<?php
 						echo $this->get_number_input_block_html( $instance, 'thumb_w', esc_html__( 'Width:', 'category-posts' ), 1, '', '', true );
 						echo $this->get_range_input_block_html( $instance, 'thumb_fluid_width', esc_html__( 'Max-width:', 'category-posts' ), 2, 100, 100, 2, true );
 						echo $this->get_number_input_block_html( $instance, 'thumb_h', esc_html__( 'Height:', 'category-posts' ), 1, '', '', true );
 						?>
+						<div class="cat-post-image-dimensions-help" style="display:none;">
+							<p><?php esc_html_e( 'Set one or more dimensions to 0 to have no ratio calculation.', 'categorypostspro' ); ?></p>
+							<p><?php esc_html_e( 'Set both to 0 will use the original image ratio.', 'categorypostspro' ); ?></p>
+							<p><?php esc_html_e( 'Max-width limits in terms of the total Post Details width.', 'categorypostspro' ); ?></p>
+						</div>
 						<div class="cat-post-thumb-change-size">
 							<p>
 								<label><?php esc_html_e( 'Change size', 'category-posts' ); ?>: </label>

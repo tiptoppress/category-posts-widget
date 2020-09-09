@@ -204,11 +204,11 @@ class Virtual_Widget {
 
 			// wrap text around image.
 			if ( isset( $settings['template'] ) && preg_match( '/%excerpt%/', $settings['template'] ) ) {
-				$styles['wrap_thumb'] = '.cpwp-wrap-text p {display: inline;}';
+				$selector_wrap_text = 'p.cpwp-excerpt-text';
 				$no_wrap = isset( $settings['text_do_not_wrap_thumb'] ) && $settings['text_do_not_wrap_thumb'];
-				$selector_wrap_text = 'p.cpwp-wrap-text';
 				// wrap thumb and line-clamp: set the CSS two parent knotes higher (first parent for float, second parent is a browser hack for that float works well).
 				if ( ! $no_wrap ) {
+					$styles['wrap_thumb'] = '.cpwp-wrap-text p {display: inline;}';
 					$selector_wrap_text = '.cpwp-wrap-text';
 				}
 				$styles['excerpt_lines'] = '.cat-post-item ' . $selector_wrap_text . ' {overflow: hidden;text-overflow: ellipsis;white-space: initial;' .
@@ -312,14 +312,11 @@ class Virtual_Widget {
 		// to make sure cropping is properly done, and they fit the allocated space.
 		if ( isset( $settings['template'] ) && preg_match( '/%thumb%/', $settings['template'], $m, PREG_OFFSET_CAPTURE ) ) {
 			if ( isset( $settings['use_css_cropping'] ) && $settings['use_css_cropping'] ) {
-				if ( isset( $settings['thumb_w'] ) && 0 !== $settings['thumb_w'] ) {
-					$ret['thumb_crop_w'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {width: ' . $settings['thumb_w'] . 'px;}';
-				}
-				if ( isset( $settings['thumb_h'] ) && 0 !== $settings['thumb_h'] ) {
+				if ( isset( $settings['thumb_h'] ) && 0 !== intval( $settings['thumb_h'] ) ) {
 					$ret['thumb_crop_h'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {height: ' . $settings['thumb_h'] . 'px;}';
 				}
-				$ret['thumb_crop'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {object-fit: cover;max-width:100%;}';
-				$ret['thumb_crop_not_supported'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop-not-supported img {width:100%;}';
+				$ret['thumb_crop'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {object-fit: cover; width: 100%; display: block;}';
+				$ret['thumb_crop_not_supported'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop-not-supported img {width: 100%;}';
 				$ret['thumb_fluid_width'] = '#' . $widget_id . ' .cat-post-thumbnail {max-width:' . $settings['thumb_fluid_width'] . '%;}';
 				$ret['thumb_styling'] = '#' . $widget_id . ' .cat-post-item img {margin: initial;}';
 			} else {
