@@ -206,13 +206,15 @@ class Virtual_Widget {
 			if ( isset( $settings['template'] ) && preg_match( '/%excerpt%/', $settings['template'] ) ) {
 				$selector_wrap_text = 'p.cpwp-excerpt-text';
 				$no_wrap = isset( $settings['text_do_not_wrap_thumb'] ) && $settings['text_do_not_wrap_thumb'];
-				// wrap thumb and line-clamp: set the CSS two parent knotes higher (first parent for float, second parent is a browser hack for that float works well).
 				if ( ! $no_wrap ) {
+					// wrap thumb and line-clamp: set the CSS two parent knotes higher (first parent for float, second parent is a browser hack for that float works well).
 					$styles['wrap_thumb'] = '.cpwp-wrap-text p {display: inline;}';
 					$selector_wrap_text = '.cpwp-wrap-text';
 				}
 				$styles['excerpt_lines'] = '.cat-post-item ' . $selector_wrap_text . ' {overflow: hidden;text-overflow: ellipsis;white-space: initial;' .
 					'display: -webkit-box;-webkit-line-clamp: ' . $settings['excerpt_lines'] . ';-webkit-box-orient: vertical;padding-bottom: 0 !important;}';
+				// float text instead wrap and don't hide the excerpt if there is no space
+				$styles['float_min_nowrap'] = 'p.cpwp-excerpt-text {min-width: 25px;}';
 			}
 
 			// add post format css if needed.
