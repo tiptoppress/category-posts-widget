@@ -87,6 +87,7 @@ function register_route() {
 		array(
 			'methods'  => 'GET',
 			'callback' => __NAMESPACE__ . '\get_next_elements',
+			'permission_callback' => '__return_true',
 		)
 	);
 }
