@@ -1423,6 +1423,10 @@ class Widget extends \WP_Widget {
 	public function form( $instance ) {
 		if ( 0 === count( $instance ) ) { // new widget, use defaults.
 			$instance = default_settings();
+
+			// set bool / checkbox default_values to true
+			$instance['use_css_cropping'] = true;
+
 		} else { // updated widgets come from =< 4.6 excerpt filter is on.
 			if ( ! isset( $instance['excerpt_filters'] ) ) {
 				$instance['excerpt_filters'] = 'on';
