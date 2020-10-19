@@ -14,11 +14,11 @@ var cwp_namespace = {
     php_settings_var: 'categoryPosts',
     widget_class: '.category-widget-cont',
     template_panel_prefix: '.categoryposts-data-panel-',
-    open_panels: {},  // holds an array of open panels per wiget id
+    open_panels: {}, // holds an array of open panels per wiget id
     template_change_timer: null, // Used for debouncing change events generate when template changes.
 
     // generic click handler on the panel title
-    clickHandler: function (element) {
+    clickHandler: function(element) {
         // open the div "below" the h4 title
         jQuery(element).toggleClass('open')
             .next().stop().slideToggle();
@@ -36,35 +36,32 @@ var cwp_namespace = {
     },
 
     // Show hide foote link URL
-    toggleCatSelection: function (item) {
+    toggleCatSelection: function(item) {
         var cat = jQuery(item).find("option:selected").attr('value');
         var panel = item.parentElement.parentElement.parentElement.parentElement;
         if (cat == '0') {
             jQuery(panel).find('.categoryPosts-title_link').hide();
             jQuery(panel).find('.categoryPosts-title_link_url').show();
             jQuery(panel).find('.categoryPosts-no_cat_childs').hide();
-        }
-        else {
+        } else {
             jQuery(panel).find('.categoryPosts-title_link').show();
             jQuery(panel).find('.categoryPosts-title_link_url').hide();
             jQuery(panel).find('.categoryPosts-no_cat_childs').show();
         }
     },
 
-    // Show hide disable font styles
-    toggleDisableFontStyles: function (item) {
-        var value = jQuery(item).find("input").attr('checked');
-        var panel = item.parentElement.parentElement;
-        if (value == 'checked') {
-            jQuery(panel).find('.categoryposts-data-panel-general-disable-font-styles').hide();
-        }
-        else {
-            jQuery(panel).find('.categoryposts-data-panel-general-disable-font-styles').show();
+    // Show hide font styles on disable CSS setting change
+    toggleDisableFontStyles: function(item) {
+        var panel = item.parentElement.parentElement.parentElement;
+        if (item.checked) {
+            jQuery(panel).find('.categoryPosts-disable_font_styles').hide();
+        } else {
+            jQuery(panel).find('.categoryPosts-disable_font_styles').show();
         }
     },
 
     // Show hide other date format
-    toggleDateFormat: function (item) {
+    toggleDateFormat: function(item) {
         var value = jQuery(item).val();
         var panel = item.parentElement.parentElement;
         if (value != 'other') {
@@ -75,7 +72,7 @@ var cwp_namespace = {
     },
 
     // Show hide other date range settings
-    toggleDateRange: function (item) {
+    toggleDateRange: function(item) {
         var value = jQuery(item).val();
         var panel = item.parentElement.parentElement;
         jQuery(panel).find('.categoryPosts-date-range p').hide();
@@ -95,7 +92,7 @@ var cwp_namespace = {
     },
 
     // Show/hide no match related settings
-    toggleNoMatch: function (item) {
+    toggleNoMatch: function(item) {
         var value = jQuery(item).val();
         var panel = item.parentElement.parentElement;
         if ('text' == value) {
@@ -106,51 +103,38 @@ var cwp_namespace = {
     },
 
     // Show template help
-    toggleTemplateHelp: function (item, event) {
+    toggleTemplateHelp: function(item, event) {
         event.preventDefault();
         var panel = item.parentElement.parentElement.parentElement.parentElement;
         jQuery(panel).find('.cat-post-template-help').toggle('slow');
     },
 
     // Show image dimensions help
-    toggleImageDimensionsHelp: function (item, event) {
+    toggleImageDimensionsHelp: function(item, event) {
         event.preventDefault();
         var panel = item.parentElement.parentElement.parentElement.parentElement;
         jQuery(panel).find('.cat-post-image-dimensions-help').toggle('slow');
     },
 
-    toggleAssignedCategoriesTop: function (item) {
-        var value = jQuery(item).find("input").attr('checked');
-        var panel = item.parentElement.parentElement;
-        if (value == 'checked') {
-            jQuery(panel).find('.categoryposts-details-panel-assigned-cat-top').show();
-        }
-        else {
-            jQuery(panel).find('.categoryposts-details-panel-assigned-cat-top').hide();
-        }
-    },
-
-    toggleHideTitle: function (item) {
-        var value = jQuery(item).attr('checked');
+    toggleHideTitle: function(item) {
         var panel = item.parentElement.parentElement.parentElement;
-        if (value != 'checked') {
-            jQuery(panel).find('.categoryposts-data-panel-title-settings').show();
-        } else {
+        if (item.checked) {
             jQuery(panel).find('.categoryposts-data-panel-title-settings').hide();
-        }
-    },
-
-    toggleLoadMore: function (item) {
-        var value = jQuery(item).attr('checked');
-        var panel = item.parentElement.parentElement.parentElement;
-        if (value != 'checked') {
-            jQuery(panel).find('.loadmore-settings').hide();
         } else {
-            jQuery(panel).find('.loadmore-settings').show();
+            jQuery(panel).find('.categoryposts-data-panel-title-settings').show();
         }
     },
 
-    selectPremadeTemplate: function (item) {
+    toggleLoadMore: function(item) {
+        var panel = item.parentElement.parentElement.parentElement;
+        if (item.checked) {
+            jQuery(panel).find('.loadmore-settings').show();
+        } else {
+            jQuery(panel).find('.loadmore-settings').hide();
+        }
+    },
+
+    selectPremadeTemplate: function(item) {
         var panel = item.parentElement.parentElement.parentElement;
         var div = item.parentElement.parentElement;
         var select = jQuery(div).find('select');
@@ -185,7 +169,7 @@ var cwp_namespace = {
     },
 
     // Close all open panels if open
-    autoCloseOpenPanels: function (_this) {
+    autoCloseOpenPanels: function(_this) {
         if (tiptoppress[this.php_settings_var].accordion) {
             if (!jQuery(_this).hasClass('open')) {
                 var jCloseElement = jQuery(_this).parent().find('.open');
@@ -194,7 +178,7 @@ var cwp_namespace = {
         }
     },
 
-    defaultThumbnailSelection: function (elem, title, button_title) {
+    defaultThumbnailSelection: function(elem, title, button_title) {
 
         var frame = wp.media({
             title: title,
@@ -204,7 +188,7 @@ var cwp_namespace = {
         });
 
         // Handle results from media manager.
-        frame.on('close', function () {
+        frame.on('close', function() {
             var attachments = frame.state().get('selection').toJSON();
             if (attachments.length == 1) {
                 var attachment = attachments[0];
@@ -222,7 +206,7 @@ var cwp_namespace = {
         return false;
     },
 
-    removeDefaultThumbnailSelection: function (elem) {
+    removeDefaultThumbnailSelection: function(elem) {
         jQuery(elem).parent().prev().find('.default_thumb_img').html(cwp_default_thumb_selection.none);
         jQuery(elem).hide();
         jQuery(elem).parent().prev().find('.default_thumb_id').val(0).change();
@@ -230,7 +214,7 @@ var cwp_namespace = {
         return false;
     },
 
-    templateChange: function (elem) {
+    templateChange: function(elem) {
 
         function adjustUiToTemplate() {
             var template = jQuery(elem).val();
@@ -252,7 +236,7 @@ var cwp_namespace = {
 
     },
 
-    thumbnailSizeChange: function (elem) {
+    thumbnailSizeChange: function(elem) {
 
         var _that = jQuery(elem),
             thumb_h,
@@ -314,7 +298,7 @@ var cwp_namespace = {
         return false;
     },
 
-    thumbnailFluidWidthChange: function (elem) {
+    thumbnailFluidWidthChange: function(elem) {
 
         var _that = jQuery(elem),
             _input_thumb_h = _that.closest('.categoryposts-data-panel-thumb').find('.thumb_h');
@@ -326,13 +310,13 @@ var cwp_namespace = {
         return false;
     },
 
-    openAddPlaceholder: function (elem) {
+    openAddPlaceholder: function(elem) {
 
         var _that = jQuery(elem);
 
         _that.closest('.cat-post-add_premade_templates').find('.cpwp-placeholder-dropdown-menu').toggle();
 
-        _that.closest('.cat-post-add_premade_templates').find('.cpwp-placeholder-dropdown-menu span').off('click').on('click', function () {
+        _that.closest('.cat-post-add_premade_templates').find('.cpwp-placeholder-dropdown-menu span').off('click').on('click', function() {
             var text = jQuery(this).data('value');
             switch (text) {
                 case 'NewLine':
@@ -359,21 +343,21 @@ var cwp_namespace = {
             //_that.closest( '.cat-post-add_premade_templates' ).find( '.cpwp-placeholder-dropdown-menu' ).hide();
         });
 
-        _that.closest('.cat-post-add_premade_templates').find('.cpwp-placeholder-dropdown-menu').on('mouseenter', function () {
+        _that.closest('.cat-post-add_premade_templates').find('.cpwp-placeholder-dropdown-menu').on('mouseenter', function() {
             jQuery(this).addClass('cpw-doNotClose');
         });
-        _that.closest('.cat-post-add_premade_templates').find('.cpwp-placeholder-dropdown-menu').on('mouseleave', function () {
+        _that.closest('.cat-post-add_premade_templates').find('.cpwp-placeholder-dropdown-menu').on('mouseleave', function() {
             jQuery(this).removeClass('cpw-doNotClose');
         });
 
-        _that.closest('.cat-post-add_premade_templates').find('.cpwp-close-placeholder-dropdown-menu').off('click').on('click', function () {
+        _that.closest('.cat-post-add_premade_templates').find('.cpwp-close-placeholder-dropdown-menu').off('click').on('click', function() {
             _that.closest('.cat-post-add_premade_templates').find('.cpwp-placeholder-dropdown-menu').toggle();
         });
 
         return false;
     },
 
-    selectPlaceholderHelper: function (elem) {
+    selectPlaceholderHelper: function(elem) {
 
         var textarea = jQuery(elem);
         var textareaPos = textarea[0].selectionStart;
@@ -393,29 +377,29 @@ var cwp_namespace = {
     },
 }
 
-jQuery(document).ready(function () {
+jQuery(document).ready(function() {
 
     var class_namespace = '.category-widget-cont';
 
-    jQuery('.category-widget-cont h4').click(function () { // for widgets page
+    jQuery('.category-widget-cont h4').click(function() { // for widgets page
         cwp_namespace.autoCloseOpenPanels(this);
         // toggle panel open/close
         cwp_namespace.clickHandler(this);
     });
 
     // needed to reassign click handlers after widget refresh
-    jQuery(document).on('widget-added widget-updated panelsopen', function (root, element) { // for customize and after save on widgets page (add panelsopen: fix make widget SiteOrigin Page Builder plugin, GH issue #181)
+    jQuery(document).on('widget-added widget-updated panelsopen', function(root, element) { // for customize and after save on widgets page (add panelsopen: fix make widget SiteOrigin Page Builder plugin, GH issue #181)
 
-        jQuery('.category-widget-cont h4').off('click').on('click', function () {
+        jQuery('.category-widget-cont h4').off('click').on('click', function() {
             cwp_namespace.autoCloseOpenPanels(this);
             // toggle panel open/close
             cwp_namespace.clickHandler(this);
         });
-        jQuery('.cwp_default_thumb_select').off('click').on('click', function () { // select default thumb
+        jQuery('.cwp_default_thumb_select').off('click').on('click', function() { // select default thumb
             cwp_namespace.defaultThumbnailSelection(this, cwp_default_thumb_selection.frame_title, cwp_default_thumb_selection.button_title);
         });
 
-        jQuery('.cwp_default_thumb_remove').off('click').on('click', function () { // remove default thumb
+        jQuery('.cwp_default_thumb_remove').off('click').on('click', function() { // remove default thumb
             cwp_namespace.removeDefaultThumbnailSelection(this);
         });
 
@@ -433,83 +417,83 @@ jQuery(document).ready(function () {
     });
 
     function setChangeHandlers() {
-        jQuery('.cwp_default_thumb_select').off('click').on('click', function () { // select default thumb
+        jQuery('.cwp_default_thumb_select').off('click').on('click', function() { // select default thumb
             cwp_namespace.defaultThumbnailSelection(this, cwp_default_thumb_selection.frame_title, cwp_default_thumb_selection.button_title);
         });
 
-        jQuery(document).on('change', class_namespace + ' .categoryposts-data-panel-filter-cat', function () { // change category filter
+        jQuery(document).on('change', class_namespace + ' .categoryposts-data-panel-filter-cat', function() { // change category filter
             cwp_namespace.toggleCatSelection(this);
         });
 
-        jQuery('.cwp_default_thumb_remove').off('click').on('click', function () { // remove default thumb
+        jQuery('.cwp_default_thumb_remove').off('click').on('click', function() { // remove default thumb
             cwp_namespace.removeDefaultThumbnailSelection(this);
         });
 
-        jQuery(class_namespace + '-assigned_categories').off('click').on('click', function () {
-            cwp_namespace.toggleAssignedCategoriesTop(this);
-        });
-
-        jQuery(document).on('click', class_namespace + ' .categoryPosts-hide_title input', function () {
+        jQuery(document).on('click', class_namespace + ' .categoryPosts-hide_title input', function() {
             cwp_namespace.toggleHideTitle(this);
         });
 
-        jQuery(document).on('click', class_namespace + ' .categoryPosts-enable_loadmore input', function () {
+        jQuery(document).on('click', class_namespace + ' .categoryPosts-enable_loadmore input', function() {
             cwp_namespace.toggleLoadMore(this);
         });
 
-        jQuery(document).on('change', class_namespace + ' .categoryPosts-preset_date_format select', function () { // change date format
+        jQuery(document).on('change', class_namespace + ' .categoryPosts-preset_date_format select', function() { // change date format
             cwp_namespace.toggleDateFormat(this);
         });
 
-        jQuery(document).on('change', class_namespace + ' .categoryPosts-date_range select', function () { // change date range
+        jQuery(document).on('change', class_namespace + ' .categoryPosts-date_range select', function() { // change date range
             cwp_namespace.toggleDateRange(this);
         });
 
-        jQuery(document).on('change', class_namespace + ' .categoryPosts-no_match_handling select', function () { // change date range
+        jQuery(document).on('change', class_namespace + ' .categoryPosts-no_match_handling select', function() { // change date range
             cwp_namespace.toggleNoMatch(this);
         });
 
-        jQuery(class_namespace + ' a.toggle-template-help').off('click').on('click', function (event) { // show template help
+        jQuery(class_namespace + ' a.toggle-template-help').off('click').on('click', function(event) { // show template help
             cwp_namespace.toggleTemplateHelp(this, event);
         });
 
-        jQuery(class_namespace + ' a.toggle-image-dimensions-help').off('click').on('click', function (event) { // show image dimensions help
-            cwp_namespace.toggleImageDimensionsHelp(this, event); console.log("tttt");
+        jQuery(class_namespace + ' a.toggle-image-dimensions-help').off('click').on('click', function(event) { // show image dimensions help
+            cwp_namespace.toggleImageDimensionsHelp(this, event);
+            console.log("tttt");
         });
 
-        jQuery(document).on('click', class_namespace + ' .cat-post-premade_templates button', function () { // select a pre made template
+        jQuery(document).on('click', class_namespace + ' .cat-post-premade_templates button', function() { // select a pre made template
             cwp_namespace.selectPremadeTemplate(this);
         });
 
-        jQuery(document).on('change', class_namespace + ' .cat-post-premade_templates select', function (event) { // prevent refresh ontemplate selection
+        jQuery(document).on('change', class_namespace + ' .cat-post-premade_templates select', function(event) { // prevent refresh ontemplate selection
             event.preventDefault();
             event.stopPropagation();
         });
 
-        jQuery(document).on('input', class_namespace + ' .categoryPosts-template textarea', function () { // prevent refresh ontemplate selection
+        jQuery(document).on('input', class_namespace + ' .categoryPosts-template textarea', function() { // prevent refresh ontemplate selection
             cwp_namespace.templateChange(this);
         });
 
-        jQuery(class_namespace + ' .cat-post-thumb-change-size button').off('click').on('click', function () { // find a thumbnail size
+        jQuery(class_namespace + ' .cat-post-thumb-change-size button').off('click').on('click', function() { // find a thumbnail size
             cwp_namespace.thumbnailSizeChange(this);
         });
 
-        jQuery(document).on('input', class_namespace + ' .thumb_fluid_width', function () { // select a thumbnail fluid size
+        jQuery(document).on('input', class_namespace + ' .thumb_fluid_width', function() { // select a thumbnail fluid size
             cwp_namespace.thumbnailFluidWidthChange(this);
         });
 
-        jQuery(class_namespace + ' .cpwp-open-placholder-dropdown-menu').off('click').on('click', function () { // open drop down and add placeholder
+        jQuery(document).on('click', class_namespace + ' .categoryPosts-disable_css input', function() { // toggle UI font styles on disable CSS setting change.
+            cwp_namespace.toggleDisableFontStyles(this);
+        });
+
+        jQuery(class_namespace + ' .cpwp-open-placholder-dropdown-menu').off('click').on('click', function() { // open drop down and add placeholder
             cwp_namespace.openAddPlaceholder(this);
         });
 
-        jQuery(document).on('onfocusout, blur', class_namespace + ' .cpwp-open-placholder-dropdown-menu,' + class_namespace + ' .categoryPosts-template textarea', function () { // close drop down placeholder, if not used
+        jQuery(document).on('onfocusout, blur', class_namespace + ' .cpwp-open-placholder-dropdown-menu,' + class_namespace + ' .categoryPosts-template textarea', function() { // close drop down placeholder, if not used
             jQuery(this).closest(class_namespace + ' .categoryPosts-template').parent().find('.cpwp-placeholder-dropdown-menu').not('.cpw-doNotClose').hide();
         });
 
-        jQuery(document).on('mousedown', class_namespace + ' .categoryPosts-template textarea', function () { // help to select the placeholder
+        jQuery(document).on('mousedown', class_namespace + ' .categoryPosts-template textarea', function() { // help to select the placeholder
             var _that = this;
-            setTimeout(function () { cwp_namespace.selectPlaceholderHelper(_that); }, 0);
-            ;
+            setTimeout(function() { cwp_namespace.selectPlaceholderHelper(_that); }, 0);;
         });
     }
 

@@ -1716,7 +1716,7 @@ class Widget extends \WP_Widget {
 			<h4 data-panel="general"><?php esc_html_e( 'General', 'category-posts' ); ?></h4>
 			<div>
 				<?php echo $this->get_checkbox_block_html( $instance, 'disable_css', esc_html__( 'Disable the built-in CSS', 'category-posts' ), true ); ?>
-				<?php echo $this->get_checkbox_block_html( $instance, 'disable_font_styles', esc_html__( 'Disable only font styles', 'category-posts' ), true ); ?>
+				<?php echo $this->get_checkbox_block_html( $instance, 'disable_font_styles', esc_html__( 'Disable only font styles', 'category-posts' ), ! ( isset( $instance['disable_css'] ) && $instance['disable_css'] ) ); ?>
 				<div class="cpwp_ident">
 					<?php
 						echo $this->get_select_block_html(
