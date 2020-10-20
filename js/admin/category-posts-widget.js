@@ -417,45 +417,23 @@ jQuery(document).ready(function() {
     });
 
     function setChangeHandlers() {
-        jQuery('.cwp_default_thumb_select').off('click').on('click', function() { // select default thumb
-            cwp_namespace.defaultThumbnailSelection(this, cwp_default_thumb_selection.frame_title, cwp_default_thumb_selection.button_title);
-        });
-
-        jQuery(document).on('change', class_namespace + ' .categoryposts-data-panel-filter-cat', function() { // change category filter
-            cwp_namespace.toggleCatSelection(this);
-        });
-
-        jQuery('.cwp_default_thumb_remove').off('click').on('click', function() { // remove default thumb
-            cwp_namespace.removeDefaultThumbnailSelection(this);
-        });
-
-        jQuery(document).on('click', class_namespace + ' .categoryPosts-hide_title input', function() {
+        // Title tab
+        jQuery(document).on('click', class_namespace + ' .categoryPosts-hide_title input[type=checkbox]', function() {
             cwp_namespace.toggleHideTitle(this);
         });
 
-        jQuery(document).on('click', class_namespace + ' .categoryPosts-enable_loadmore input', function() {
-            cwp_namespace.toggleLoadMore(this);
-        });
-
-        jQuery(document).on('change', class_namespace + ' .categoryPosts-preset_date_format select', function() { // change date format
-            cwp_namespace.toggleDateFormat(this);
+        // Filter tab
+        jQuery(document).on('change', class_namespace + ' .categoryposts-data-panel-filter-cat', function() { // change category filter
+            cwp_namespace.toggleCatSelection(this);
         });
 
         jQuery(document).on('change', class_namespace + ' .categoryPosts-date_range select', function() { // change date range
             cwp_namespace.toggleDateRange(this);
         });
 
-        jQuery(document).on('change', class_namespace + ' .categoryPosts-no_match_handling select', function() { // change date range
-            cwp_namespace.toggleNoMatch(this);
-        });
-
-        jQuery(class_namespace + ' a.toggle-template-help').off('click').on('click', function(event) { // show template help
-            cwp_namespace.toggleTemplateHelp(this, event);
-        });
-
-        jQuery(class_namespace + ' a.toggle-image-dimensions-help').off('click').on('click', function(event) { // show image dimensions help
-            cwp_namespace.toggleImageDimensionsHelp(this, event);
-            console.log("tttt");
+        // Post details tab
+        jQuery('.cwp_default_thumb_select').off('click').on('click', function() { // select default thumb
+            cwp_namespace.defaultThumbnailSelection(this, cwp_default_thumb_selection.frame_title, cwp_default_thumb_selection.button_title);
         });
 
         jQuery(document).on('click', class_namespace + ' .cat-post-premade_templates button', function() { // select a pre made template
@@ -471,6 +449,10 @@ jQuery(document).ready(function() {
             cwp_namespace.templateChange(this);
         });
 
+        jQuery(document).on('change', class_namespace + ' .categoryPosts-preset_date_format select', function() { // change date format
+            cwp_namespace.toggleDateFormat(this);
+        });
+
         jQuery(class_namespace + ' .cat-post-thumb-change-size button').off('click').on('click', function() { // find a thumbnail size
             cwp_namespace.thumbnailSizeChange(this);
         });
@@ -479,8 +461,16 @@ jQuery(document).ready(function() {
             cwp_namespace.thumbnailFluidWidthChange(this);
         });
 
-        jQuery(document).on('click', class_namespace + ' .categoryPosts-disable_css input', function() { // toggle UI font styles on disable CSS setting change.
-            cwp_namespace.toggleDisableFontStyles(this);
+        jQuery('.cwp_default_thumb_remove').off('click').on('click', function() { // remove default thumb
+            cwp_namespace.removeDefaultThumbnailSelection(this);
+        });
+
+        jQuery(class_namespace + ' a.toggle-template-help').off('click').on('click', function(event) { // show template help
+            cwp_namespace.toggleTemplateHelp(this, event);
+        });
+
+        jQuery(class_namespace + ' a.toggle-image-dimensions-help').off('click').on('click', function(event) { // show image dimensions help
+            cwp_namespace.toggleImageDimensionsHelp(this, event);
         });
 
         jQuery(class_namespace + ' .cpwp-open-placholder-dropdown-menu').off('click').on('click', function() { // open drop down and add placeholder
@@ -494,6 +484,19 @@ jQuery(document).ready(function() {
         jQuery(document).on('mousedown', class_namespace + ' .categoryPosts-template textarea', function() { // help to select the placeholder
             var _that = this;
             setTimeout(function() { cwp_namespace.selectPlaceholderHelper(_that); }, 0);;
+        });
+
+        // General tab
+        jQuery(document).on('click', class_namespace + ' .categoryPosts-disable_css input[type=checkbox]', function() { // toggle UI font styles on disable CSS setting change.
+            cwp_namespace.toggleDisableFontStyles(this);
+        });
+
+        jQuery(document).on('change', class_namespace + ' .categoryPosts-no_match_handling select', function() { // change date range
+            cwp_namespace.toggleNoMatch(this);
+        });
+
+        jQuery(document).on('click', class_namespace + ' .categoryPosts-enable_loadmore input[type=checkbox]', function() {
+            cwp_namespace.toggleLoadMore(this);
         });
     }
 
