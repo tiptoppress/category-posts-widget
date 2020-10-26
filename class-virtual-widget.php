@@ -317,7 +317,7 @@ class Virtual_Widget {
 				if ( isset( $settings['thumb_h'] ) && 0 !== intval( $settings['thumb_h'] ) ) {
 					$ret['thumb_crop_h'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {height: ' . $settings['thumb_h'] . 'px;}';
 				}
-				$ret['thumb_crop'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {object-fit: cover; width: 100%; display: block;}';
+				$ret['thumb_crop'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop img {object-fit: cover; max-width: 100%; display: block;}';
 				$ret['thumb_crop_not_supported'] = '#' . $widget_id . ' .cat-post-thumbnail .cat-post-crop-not-supported img {width: 100%;}';
 				$ret['thumb_fluid_width'] = '#' . $widget_id . ' .cat-post-thumbnail {max-width:' . $settings['thumb_fluid_width'] . '%;}';
 				$ret['thumb_styling'] = '#' . $widget_id . ' .cat-post-item img {margin: initial;}';
