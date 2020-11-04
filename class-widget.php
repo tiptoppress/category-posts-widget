@@ -1692,6 +1692,16 @@ class Widget extends \WP_Widget {
 								</span>
 							</p>
 							<p>
+								<label><?php esc_html_e( 'Image ratio', 'category-posts' ); ?>: </label>
+								<span class="cpwp-right">
+									<?php
+									echo $this->get_button_thumb_size_html( $instance, 'width', esc_html__( 'Width', 'category-posts' ) );
+									echo $this->get_button_thumb_size_html( $instance, 'height', esc_html__( 'Height', 'category-posts' ) );
+									echo $this->get_button_thumb_size_html( $instance, 'both', esc_html__( 'Both', 'category-posts' ) );
+									?>
+								</span>
+							</p>
+							<p>
 								<label><?php esc_html_e( 'Available', 'category-posts' ); ?>: </label>
 								<span class="cpwp-right">
 									<?php

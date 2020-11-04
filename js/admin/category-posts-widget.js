@@ -286,6 +286,15 @@ var cwp_namespace = {
         } else if (_that.hasClass('switch')) {
             thumb_h = _input_thumb_w.val();
             thumb_w = _input_thumb_h.val();
+        } else if (_that.hasClass('width')) {
+            _input_thumb_w.val() == 0 ? thumb_w = 300 : thumb_w = _input_thumb_w.val();
+            thumb_h = 0;
+        } else if (_that.hasClass('height')) {
+            _input_thumb_h.val() == 0 ? thumb_h = 300 : thumb_h = _input_thumb_h.val();
+            thumb_w = 0;
+        } else if (_that.hasClass('both')) {
+            thumb_h = 0;
+            thumb_w = 0;
         } else {
             thumb_w = _that.data("thumb-w");
             thumb_h = _that.data("thumb-h");
