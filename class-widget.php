@@ -685,6 +685,35 @@ class Widget extends \WP_Widget {
 	}
 
 	/**
+	 * Current post item More Link string
+	 *
+	 * @param  array $instance Array which contains the various settings.
+	 * @param  bool  $everything_is_link Indicates whether the return string should avoid links.
+	 *
+	 * @since 5.0
+	 */
+	public function itemMoreLink( $instance, $everything_is_link ) {
+		global $post;
+
+		$more_text = '[&hellip;]';
+
+		if ( isset( $instance['excerpt_more_text'] ) && '' !== $instance['excerpt_more_text'] ) {
+			$more_text = ltrim( $instance['excerpt_more_text'] );
+		}
+
+		if ( $everything_is_link ) {
+			$ret = ' <span class="cat-post-excerpt-more">' . $more_text . '</span>';
+		} else {
+			$ret = ' <a class="cat-post-excerpt-more" href="' . get_permalink() . '">' . $more_text . '</a>';
+		}
+
+		if ( isset( $instance['excerpt_more_text'] ) && '' === $instance['excerpt_more_text'] ) {
+			$ret = '' !== apply_filters( 'excerpt_more', '' ) ? apply_filters( 'excerpt_more', '' ) : $ret;
+		}
+		return $ret;
+	}
+
+	/**
 	 * Current post item title string
 	 *
 	 * @param  array $instance Array which contains the various settings.
@@ -765,6 +794,8 @@ class Widget extends \WP_Widget {
 						return $widget->itemCategories( $instance, $everything_is_link );
 					case '%excerpt%':
 						return $widget->itemExcerpt( $instance, $everything_is_link );
+					case '%more-link%':
+						return $widget->itemMoreLink( $instance, $everything_is_link );
 					default:
 						return $matches[0];
 				}
@@ -928,9 +959,12 @@ class Widget extends \WP_Widget {
 			if ( is_numeric( $number ) ) {
 				$number = WIDGET_BASE_ID . '-' . $number;
 			}
+			if ( ! ( isset( $instance['is_shortcode'] ) && $instance['is_shortcode'] ) ) { // the internal id is needed only for widgets.
+				$number .= '-internal';
+			}
 
 			// enque relevant scripts and parameters to ensure correct image dimentions.
-			if ( isset( $instance['template'] ) && preg_match( '/%thumb%/', $instance['template'] ) ) {
+			if ( isset( $instance['template'] ) && preg_match( '/%thumb%|%excerpt%/', $instance['template'] ) ) {
 				wp_enqueue_script( 'jquery' ); // just in case the theme or other plugins didn't enqueue it.
 				add_action(
 					'wp_footer',
@@ -1491,6 +1525,7 @@ class Widget extends \WP_Widget {
 										'<span data-value="thumb">' . esc_html__( '%thumb%', 'category-posts' ) . '</span>' .
 										'<span data-value="date">' . esc_html__( '%date%', 'category-posts' ) . '</span>' .
 										'<span data-value="excerpt">' . esc_html__( '%excerpt%', 'category-posts' ) . '</span>' .
+										'<span data-value="more-link">' . esc_html__( '%more-link%', 'category-posts' ) . '</span>' .
 										'<span data-value="author">' . esc_html__( '%author%', 'category-posts' ) . '</span>' .
 										'<span data-value="commentnum">' . esc_html__( '%commentnum%', 'category-posts' ) . '</span>' .
 										'<span data-value="post_tag">' . esc_html__( '%post_tag%', 'category-posts' ) . '</span>' .
@@ -1577,6 +1612,15 @@ class Widget extends \WP_Widget {
 					// echo $this->get_number_input_block_html( $instance, 'excerpt_length', esc_html__( 'Length (words):', 'category-posts' ), 0, '', '', true );
 					// Remove the UI since free 5.0
 					// echo $this->get_text_input_block_html( $instance, 'excerpt_more_text', esc_html__( '\'More ...\' text:', 'category-posts' ), esc_attr__( '...', 'category-posts' ), true );
+					?>
+					</div>
+				</div>
+				<?php // More link settings. ?>
+				<div class="cpwp-sub-panel categoryposts-data-panel-more-link" style="display:<?php echo ( isset( $tags['%more-link%'] ) ) ? 'block' : 'none'; ?>">
+					<p><?php esc_html_e( 'More Link settings', 'category-posts' ); ?></p>
+					<div class="cpwp_ident">
+					<?php
+					echo $this->get_text_input_block_html( $instance, 'excerpt_more_text', esc_html__( '\'Read more\' text:', 'category-posts' ), esc_attr__( '[&hellip;]', 'category-posts' ), true );
 					?>
 					</div>
 				</div>

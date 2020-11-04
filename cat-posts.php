@@ -279,7 +279,7 @@ add_action( 'siteorigin_panel_enqueue_admin_scripts', __NAMESPACE__ . '\admin_st
  *  @return array Array of strings of the tags.
  */
 function get_template_tags() {
-	return array( 'author', 'title', 'date', 'thumb', 'excerpt', 'commentnum', 'post_tag', 'category' );
+	return array( 'author', 'title', 'date', 'thumb', 'excerpt', 'commentnum', 'post_tag', 'category', 'more-link' );
 }
 
 /**
@@ -442,7 +442,7 @@ add_action( 'widgets_init', __NAMESPACE__ . '\register_widget' );
  **/
 function equal_cover_content_height( $number, $widgetsettings ) {
 
-	if ( isset( $widgetsettings['template'] ) && preg_match( '/%thumb%/', $widgetsettings['template'] ) ) :
+	if ( isset( $widgetsettings['template'] ) && preg_match( '/%thumb%|%excerpt%/', $widgetsettings['template'] ) ) :
 		?>
 		<script type="text/javascript">
 			if (typeof jQuery !== 'undefined') {
@@ -693,7 +693,7 @@ function default_settings() {
 		'hide_post_titles'       => false,
 		'excerpt_lines'          => 4,
 		'excerpt_length'         => 0,
-		'excerpt_more_text'      => __( '...', 'category-posts' ),
+		'excerpt_more_text'      => __( '', 'category-posts' ),
 		'excerpt_filters'        => false,
 		'comment_num'            => false,
 		'date_link'              => false,
