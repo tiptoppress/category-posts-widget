@@ -319,7 +319,42 @@ class Widget extends \WP_Widget {
 				$ret .= $title;
 			}
 
+			$ret = $this->add_heading_level( $instance, $ret, 'title_level' );
+
 			$ret .= $after_title;
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * Add a heading level
+	 *
+	 * @return string The title string
+	 *
+	 * @since 5.0
+	 */
+	public function add_heading_level( $instance, $ret, $key ) {
+
+		switch( $instance[ $key ] ) {
+			case 'H1':
+				$ret = '<h1>' . $ret . '</h1>';
+			break;
+			case 'H2':
+				$ret = '<h2>' . $ret . '</h2>';
+			break;
+			case 'H3':
+				$ret = '<h3>' . $ret . '</h3>';
+			break;
+			case 'H4':
+				$ret = '<h4>' . $ret . '</h4>';
+			break;
+			case 'H5':
+				$ret = '<h5>' . $ret . '</h5>';
+			break;
+			case 'H6':
+				$ret = '<h6>' . $ret . '</h6>';
+			break;
 		}
 
 		return $ret;
@@ -480,7 +515,7 @@ class Widget extends \WP_Widget {
 				$date = get_the_time( $date_format );
 				break;
 		}
-		$ret .= '<span class="cat-post-date"' . $attr . '>';
+		$ret .= '<span class="cat-post-date  post-date"' . $attr . '>';
 		if ( isset( $instance['date_link'] ) && $instance['date_link'] && ! $everything_is_link ) {
 			$ret .= '<a href="' . \get_the_permalink() . '">';
 		}
@@ -594,7 +629,7 @@ class Widget extends \WP_Widget {
 	public function itemCommentNum( $instance, $everything_is_link ) {
 		global $post;
 
-		$ret = '<span class="cat-post-comment-num">';
+		$ret = '<span class="cat-post-comment-num comment-meta">';
 
 		if ( $everything_is_link ) {
 			$ret .= '(' . \get_comments_number() . ')';
@@ -732,6 +767,9 @@ class Widget extends \WP_Widget {
 			$ret .= ' href="' . get_the_permalink() . '" rel="bookmark">' . get_the_title();
 			$ret .= '</a>';
 		}
+
+		$ret = $this->add_heading_level( $instance, $ret, 'item_title_level' );
+
 		return $ret;
 	}
 
@@ -821,7 +859,19 @@ class Widget extends \WP_Widget {
 		}
 
 		$ret .= '</li>';
-		return $ret;
+		return $this->xss_strip_js( $ret );
+	}
+
+	/**
+	 * Strip output from Javascript tags
+	 *
+	 * @param  string $out Render output
+	 * @return string Striped output
+	 *
+	 * @since 5.0
+	 */
+	public function xss_strip_js( $out ) {
+		return preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", $out);
 	}
 
 	/**
@@ -1081,6 +1131,7 @@ class Widget extends \WP_Widget {
 			<?php echo $this->get_text_input_block_html( $instance, 'title', esc_html__( 'Title', 'category-posts' ), '', true ); ?>
 			<?php echo $this->get_checkbox_block_html( $instance, 'title_link', esc_html__( 'Make widget title link', 'category-posts' ), 0 !== $cat ); ?>
 			<?php echo $this->get_text_input_block_html( $instance, 'title_link_url', esc_html__( 'Title link URL', 'category-posts' ), '', 0 === $cat ); ?>
+			<?php echo $this->get_radio_buttons_block_html( $instance, 'title_level', array( 'Inline', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6' ), esc_html__( 'Heading Level', 'category-posts' ), true ); ?>
 		</div>
 	</div>
 <?php
@@ -1225,7 +1276,7 @@ class Widget extends \WP_Widget {
 
 		$ret = '<label for="' . $this->get_field_id( $key ) . "\">\n" .
 					$label .
-				"</label>\n" .
+				":</label>\n" .
 				'<select id="' . $this->get_field_id( $key ) . '" name="' . $this->get_field_name( $key ) . '"  autocomplete="off">' . "\n";
 		foreach ( $list as $v => $l ) {
 			$ret .= '<option value="' . esc_attr( $v ) . '" ' . selected( $v, $value, false ) . '>' . $l . "</option>\n";
@@ -1279,7 +1330,7 @@ class Widget extends \WP_Widget {
 		$value = $instance[ $key ];
 
 		$ret = '<label for="' . $this->get_field_id( $key ) . "\">\n" .
-					$label . "\n" .
+					$label . ":\n" .
 					'<input placeholder="' . $placeholder . '" id="' . $this->get_field_id( $key ) . '" name="' . $this->get_field_name( $key ) . '" type="text" value="' . esc_attr( $value ) . '" autocomplete="off"/>' . "\n" .
 				"</label>\n";
 
@@ -1449,6 +1500,40 @@ class Widget extends \WP_Widget {
 	}
 
 	/**
+	* Generate a form element containing native styled radio buttons
+	*
+	* @since 5.0
+	* @param array  $instance   The instance.
+	* @param string $key        The key in the instance array.
+	* @param string $label      The label to display and associate with the checkbox.
+	*                           should be escaped string.
+	* @param bool   $visible    Indicates if the element should be visible when rendered.
+	*
+	* @return string HTML a element contaning the radio buttons, it's label, class based on the key
+	*                and style set to display:none if visibility is off.
+	*/
+	private function get_radio_buttons_block_html( $instance, $key, $values, $label, $visible ) {
+
+		$ret = '<label class="checkbox" for="' . esc_attr( $this->get_field_id( $key ) ) . "\">" . $label . ":</label>\n";
+		$ret .= '<span class="cpwp-right">';
+
+		array_map ( function( $value ) use ( &$ret, $instance, $key ) {
+			if ( $instance[ $key ] == $value ) {
+				$checked = true;
+			} else {
+				$checked = false;
+			}
+
+			$ret .= '<input class="' . $value . ' button" id="' . esc_attr( $this->get_field_id( $value ) ) . '" name="' . esc_attr( $this->get_field_name( $key ) ) . 
+					'" value="' . $value . '" type="radio" ' . checked( $checked, true, false ) . '/>' . "\n";
+		}, $values );
+
+		$ret .= "</span>\n";
+
+		return $this->get_wrap_block_html( $ret, $key, $visible );
+	}
+
+	/**
 	 * The widget configuration form back end.
 	 *
 	 * @param  array $instance The parameters associated with the widget.
@@ -1469,6 +1554,7 @@ class Widget extends \WP_Widget {
 
 		$instance = upgrade_settings( $instance );
 
+		$item_title_level                = $instance['item_title_level'];
 		$hide_post_titles                = $instance['hide_post_titles'];
 		$excerpt_more_text               = $instance['excerpt_more_text'];
 		$excerpt_filters                 = $instance['excerpt_filters'];
@@ -1542,7 +1628,8 @@ class Widget extends \WP_Widget {
 					}
 					?>
 					<div class="cat-post-template-help" style="display:none;">
-						<p><?php esc_html_e( 'The following text will be replaced with the relevant information. In addition you can use any text and html (if you have the permisions) anywhere you want', 'category-posts' ); ?>
+						<p><?php echo sprintf( __( 'The following placeholders will be replaced with the relevant information. In addition you can use text, HTML and <a target="_blank" href="%s">Dashicons</a>.', 'category-posts' ),
+							'https://developer.wordpress.org/resource/dashicons/'); ?>
 						</p>
 						<table>
 							<tr>
@@ -1570,6 +1657,10 @@ class Widget extends \WP_Widget {
 								<td><?php esc_html_e( 'Post excerpt', 'category-posts' ); ?></td>
 							</tr>
 							<tr>
+								<th>%more-link%</th>
+								<td><?php esc_html_e( 'Read more text', 'category-posts' ); ?></td>
+							</tr>
+							<tr>
 								<th>%author%</th>
 								<td><?php esc_html_e( 'Post author', 'category-posts' ); ?></td>
 							</tr>
@@ -1590,16 +1681,25 @@ class Widget extends \WP_Widget {
 					<div class="cat-post-premade_templates">
 						<p><label><?php esc_html_e( 'Select premade Template', 'category-posts' ); ?></label></p>
 						<select>
-							<option value="title"><?php esc_html_e( 'Only the title', 'category-posts' ); ?></option>
-							<option value="title_excerpt"><?php esc_html_e( 'Title and Excerpt', 'category-posts' ); ?></option>
-							<option value="title_thumb"><?php esc_html_e( 'Title and Thumbnail', 'category-posts' ); ?></option>
-							<option value="title_thum_excerpt"><?php esc_html_e( 'Title, Thumbnail and Excerpt', 'category-posts' ); ?></option>
+							<option value="title"><?php esc_html_e( 'Title', 'category-posts' ); ?></option>
+							<option value="title_excerpt"><?php esc_html_e( 'Title, Excerpt, More Link', 'category-posts' ); ?></option>
+							<option value="title_thumb"><?php esc_html_e( 'Title, Thumbnail', 'category-posts' ); ?></option>
+							<option value="title_thum_excerpt"><?php esc_html_e( 'Title, Thumbnail, Excerpt, More Link', 'category-posts' ); ?></option>
 							<option value="everything"><?php esc_html_e( 'All with icons', 'category-posts' ); ?></option>
 						</select>
 						<p><button type="button" class="button"><?php esc_html_e( 'Select this template', 'category-posts' ); ?></button></p>
 						<?php
 						echo $this->get_checkbox_block_html( $instance, 'everything_is_link', esc_html__( 'Everything is a link', 'category-posts' ), true );
 						?>
+					</div>
+				</div>
+				<?php // Title settings. ?>
+				<div class="cpwp-sub-panel categoryposts-data-panel-title" style="display:<?php echo ( isset( $tags['%title%'] ) ) ? 'block' : 'none'; ?>">
+					<p><?php esc_html_e( 'Title settings', 'category-posts' ); ?></p>
+					<div class="cpwp_ident">
+					<?php
+						echo $this->get_radio_buttons_block_html( $instance, 'item_title_level', array( 'Inline', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6' ), esc_html__( 'Heading Level', 'category-posts' ), true );
+					?>
 					</div>
 				</div>
 				<?php // Excerpt settings. ?>
@@ -1619,9 +1719,18 @@ class Widget extends \WP_Widget {
 				<div class="cpwp-sub-panel categoryposts-data-panel-more-link" style="display:<?php echo ( isset( $tags['%more-link%'] ) ) ? 'block' : 'none'; ?>">
 					<p><?php esc_html_e( 'More Link settings', 'category-posts' ); ?></p>
 					<div class="cpwp_ident">
-					<?php
-					echo $this->get_text_input_block_html( $instance, 'excerpt_more_text', esc_html__( '\'Read more\' text:', 'category-posts' ), esc_attr__( '[&hellip;]', 'category-posts' ), true );
-					?>
+						<?php
+						echo $this->get_text_input_block_html( $instance, 'excerpt_more_text',
+							esc_html__( '\'Read more\' text', 'category-posts' ) .
+							' <a href="#" class="dashicons toggle-more-link-help dashicons-editor-help">' .
+								'<span class="screen-reader-text">' . esc_html__( 'Show More Link help', 'category-posts' ) . '</span>' .
+							'</a>', esc_attr__( '[&hellip;]', 'category-posts' ), true );
+						?>
+						<div class="cat-post-more-link-help" style="display:none;">
+							<p><?php echo sprintf( __( 'Text in the \'more\' link. Can be text, HTML and <a target="_blank" href="%s">Dashicons</a>.', 'category-posts' ),
+								'https://developer.wordpress.org/resource/dashicons/'); ?>
+							</p>
+						</div>
 					</div>
 				</div>
 				<?php // Data settings. ?>
@@ -1654,7 +1763,7 @@ class Widget extends \WP_Widget {
 				<div class="cpwp_ident">
 					<p><?php esc_html_e( 'Dimensions (pixel)', 'category-posts' ); ?>
 						<a href="#" class="dashicons toggle-image-dimensions-help dashicons-editor-help">
-							<span class="screen-reader-text"><?php esc_html__( 'Show image dimension help', 'categorypostspro' ); ?></span>
+							<span class="screen-reader-text"><?php esc_html__( 'Show image dimension help', 'category-posts' ); ?></span>
 						</a>
 					</p>
 						<?php
@@ -1663,9 +1772,9 @@ class Widget extends \WP_Widget {
 						echo $this->get_number_input_block_html( $instance, 'thumb_h', esc_html__( 'Height:', 'category-posts' ), 1, '', '', true );
 						?>
 						<div class="cat-post-image-dimensions-help" style="display:none;">
-							<p><?php esc_html_e( 'Set one or more dimensions to 0 to have no ratio calculation.', 'categorypostspro' ); ?></p>
-							<p><?php esc_html_e( 'Set both to 0 will use the original image ratio.', 'categorypostspro' ); ?></p>
-							<p><?php esc_html_e( 'Max-width limits in terms of the total Post Details width.', 'categorypostspro' ); ?></p>
+							<p><?php esc_html_e( 'Set one or more dimensions to 0 to have no ratio calculation.', 'category-posts' ); ?></p>
+							<p><?php esc_html_e( 'Set both to 0 will use the original image ratio.', 'category-posts' ); ?></p>
+							<p><?php esc_html_e( 'Max-width limits in terms of the total Post Details width.', 'category-posts' ); ?></p>
 						</div>
 						<div class="cat-post-thumb-change-size">
 							<p>
@@ -1715,7 +1824,7 @@ class Widget extends \WP_Widget {
 						<?php
 						echo $this->get_checkbox_block_html( $instance, 'text_do_not_wrap_thumb', esc_html__( 'Do not wrap thumbnail with overflowing text', 'category-posts' ), true );
 						echo $this->get_checkbox_block_html( $instance, 'use_css_cropping', esc_html__( 'CSS crop to requested size', 'category-posts' ), false );
-						echo $this->get_select_block_html( $instance, 'thumb_hover', esc_html__( 'Animation on mouse hover:', 'category-posts' ), array(
+						echo $this->get_select_block_html( $instance, 'thumb_hover', esc_html__( 'Animation on mouse hover', 'category-posts' ), array(
 							'none'  => esc_html__( 'None', 'category-posts' ),
 							'dark'  => esc_html__( 'Darker', 'category-posts' ),
 							'white' => esc_html__( 'Brighter', 'category-posts' ),

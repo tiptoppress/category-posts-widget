@@ -177,10 +177,9 @@ class Virtual_Widget {
 
 			if ( ! ( isset( $settings['disable_font_styles'] ) && $settings['disable_font_styles'] ) ) { // checks if disable font styles is not set.
 				// add general styles which apply to font styling.
-				$styles['title_font'] = '.cat-post-title {font-size: 15px;}';
 				$styles['current_title_font'] = '.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}';
-				$styles['date_font'] = '.cat-post-date {font-size: 14px; line-height: 18px; font-style: italic; margin-bottom: 5px;}';
-				$styles['comment_num_font'] = '.cat-post-comment-num {font-size: 14px; line-height: 18px;}';
+				$styles['date_font']          = '.cat-post-date {font-style: italic;}';
+				$styles['post-taxs']          = '[class*=cat-post-tax] {font-size: 0.85em; font-weight: 700;}';
 			}
 
 			/*

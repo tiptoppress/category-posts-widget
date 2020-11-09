@@ -673,6 +673,7 @@ function default_settings() {
 	return array(
 		'title'                  => __( 'Recent Posts', 'category-posts' ),
 		'title_link'             => false,
+		'title_level'            => 'H5',
 		'title_link_url'         => '',
 		'hide_title'             => false,
 		'cat'                    => 0,
@@ -685,6 +686,7 @@ function default_settings() {
 		'hideNoThumb'            => false,
 		'footer_link_text'       => '',
 		'footer_link'            => '',
+		'item_title_level'       => 'Inline',
 		'thumb_w'                => get_option( 'thumbnail_size_w', 150 ),
 		'thumb_fluid_width'      => 100,
 		'thumb_h'                => get_option( 'thumbnail_size_h', 150 ),

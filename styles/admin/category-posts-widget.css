@@ -73,6 +73,32 @@
     width: 110px;
 }
 
+.category-widget-cont input[type=radio] {
+    width: 26px;
+}
+
+.category-widget-cont input[type=radio].Inline {
+    width: 40px;
+}
+
+.category-widget-cont input[type="radio"]:before {
+    content: attr(value);
+    float: left;
+    line-height: 1.7;
+    height: calc(100% - 4px);
+    margin: 2px;
+    width: calc(100% - 4px);
+}
+
+.category-widget-cont input[type=radio]:checked::before {
+    color: white;
+    border-radius: 5%;
+}
+
+.category-widget-cont [data-panel="title"]+div p {
+    display: flow-root;
+}
+
 .category-widget-cont select {
     width: 100%;
 }
