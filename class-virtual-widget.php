@@ -178,8 +178,8 @@ class Virtual_Widget {
 			if ( ! ( isset( $settings['disable_font_styles'] ) && $settings['disable_font_styles'] ) ) { // checks if disable font styles is not set.
 				// add general styles which apply to font styling.
 				$styles['current_title_font'] = '.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}';
-				$styles['date_font']          = '.cat-post-date {font-style: italic;}';
-				$styles['post-taxs']          = '[class*=cat-post-tax] {font-size: 0.85em; font-weight: 700;}';
+				$styles['post-taxs']          = '[class*=cat-post-tax] {font-size: 0.85em;}';
+				$styles['post-tax-childs']    = '[class*=cat-post-tax] * {display:inline-block;}';
 			}
 
 			/*
@@ -187,9 +187,9 @@ class Virtual_Widget {
 			 *	so remove our border if we detect its use to avoid conflicting styling.
 			 */
 			if ( ! $is_shortcode && function_exists( 'twentyseventeen_setup' ) ) {
-				$styles['item_style'] = '.cat-post-item {list-style: none; list-style-type: none; margin: 0; padding: 3px 0;}';
+				$styles['item_style'] = '.cat-post-item {list-style: none; list-style-type: none; margin: 0; padding: 3px 0 10px;}';
 			} else {
-				$styles['item_style'] = '.cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0;	padding: 3px 0;}';
+				$styles['item_style'] = '.cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0 10px;	padding: 3px 0;}';
 				$styles['last_item_style'] = '.cat-post-item:last-child {border-bottom: none;}';
 			}
 

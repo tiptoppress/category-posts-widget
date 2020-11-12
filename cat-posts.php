@@ -481,7 +481,7 @@ function equal_cover_content_height( $number, $widgetsettings ) {
 							if( 0 !== width ){
 								cat_posts_namespace.layout_wrap_text.add(_this);
 							} else {
-								jQuery(_this).one("load", function(){
+								jQuery(_this).find('img').one("load", function(){
 									cat_posts_namespace.layout_wrap_text.add(_this);
 								});
 							}
@@ -702,6 +702,7 @@ function default_settings() {
 		'date_format'            => '',
 		'disable_css'            => false,
 		'disable_font_styles'    => false,
+		'disable_theme_styles'   => false,
 		'show_post_format'       => 'none',
 		'no_cat_childs'          => false,
 		'everything_is_link'     => false,

@@ -515,7 +515,10 @@ class Widget extends \WP_Widget {
 				$date = get_the_time( $date_format );
 				break;
 		}
-		$ret .= '<span class="cat-post-date  post-date"' . $attr . '>';
+
+		$post_date_class = ( isset( $instance[ 'disable_theme_styles' ] ) && $instance[ 'disable_theme_styles' ] ) ? "" : " post-date";
+
+		$ret .= '<span class="cat-post-date' . $post_date_class . '"' . $attr . '>';
 		if ( isset( $instance['date_link'] ) && $instance['date_link'] && ! $everything_is_link ) {
 			$ret .= '<a href="' . \get_the_permalink() . '">';
 		}
@@ -582,7 +585,9 @@ class Widget extends \WP_Widget {
 	 */
 	public function itemCategories( $instance, $everything_is_link ) {
 
-		$ret = '<span class="cat-post-tax-category">';
+		$post_category_class = ( isset( $instance[ 'disable_theme_styles' ] ) && $instance[ 'disable_theme_styles' ] ) ? "" : " entry-categories post-categories";
+
+		$ret = '<span class="cat-post-tax-category' . $post_category_class . '">';
 		$cat_ids = wp_get_post_categories( get_the_ID(), array( 'number' => 0 ) );
 		foreach ( $cat_ids as $cat_id ) {
 			if ( $everything_is_link ) {
@@ -605,7 +610,9 @@ class Widget extends \WP_Widget {
 	 */
 	public function itemTags( $instance, $everything_is_link ) {
 
-		$ret = '<span class="cat-post-tax-tag">';
+		$post_tag_class = ( isset( $instance[ 'disable_theme_styles' ] ) && $instance[ 'disable_theme_styles' ] ) ? "" : " widget_tag_cloud tagcloud post-tags";
+
+		$ret = '<span class="cat-post-tax-tag' . $post_tag_class . '">';
 		$tag_ids = wp_get_post_tags( get_the_ID(), array( 'number' => 0 ) );
 		foreach ( $tag_ids as $tag_id ) {
 			if ( $everything_is_link ) {
@@ -657,7 +664,9 @@ class Widget extends \WP_Widget {
 	 */
 	public function itemAuthor( $instance, $everything_is_link ) {
 
-		$ret = '<span class="cat-post-author">';
+		$post_author_class = ( isset( $instance[ 'disable_theme_styles' ] ) && $instance[ 'disable_theme_styles' ] ) ? "" : " post-author";
+
+		$ret = '<span class="cat-post-author' . $post_author_class . '">';
 
 		if ( $everything_is_link ) {
 			$ret .= get_the_author();
@@ -736,10 +745,12 @@ class Widget extends \WP_Widget {
 			$more_text = ltrim( $instance['excerpt_more_text'] );
 		}
 
+		$more_link_class = ( isset( $instance[ 'disable_theme_styles' ] ) && $instance[ 'disable_theme_styles' ] ) ? "" : " more-link";
+
 		if ( $everything_is_link ) {
-			$ret = ' <span class="cat-post-excerpt-more">' . $more_text . '</span>';
+			$ret = ' <span class="cat-post-excerpt-more' . $more_link_class . '">' . $more_text . '</span>';
 		} else {
-			$ret = ' <a class="cat-post-excerpt-more" href="' . get_permalink() . '">' . $more_text . '</a>';
+			$ret = ' <a class="cat-post-excerpt-more' . $more_link_class . '" href="' . get_permalink() . '">' . $more_text . '</a>';
 		}
 
 		if ( isset( $instance['excerpt_more_text'] ) && '' === $instance['excerpt_more_text'] ) {
@@ -1274,9 +1285,13 @@ class Widget extends \WP_Widget {
 			$value = $default;
 		}
 
+		if ( '' !== $label ) {
+			$label .= $label . ':';
+		}
+
 		$ret = '<label for="' . $this->get_field_id( $key ) . "\">\n" .
 					$label .
-				":</label>\n" .
+				"</label>\n" .
 				'<select id="' . $this->get_field_id( $key ) . '" name="' . $this->get_field_name( $key ) . '"  autocomplete="off">' . "\n";
 		foreach ( $list as $v => $l ) {
 			$ret .= '<option value="' . esc_attr( $v ) . '" ' . selected( $v, $value, false ) . '>' . $l . "</option>\n";
@@ -1524,7 +1539,7 @@ class Widget extends \WP_Widget {
 				$checked = false;
 			}
 
-			$ret .= '<input class="' . $value . ' button" id="' . esc_attr( $this->get_field_id( $value ) ) . '" name="' . esc_attr( $this->get_field_name( $key ) ) . 
+			$ret .= '<input class="' . $value . ' button" id="' . esc_attr( $this->get_field_id( $key . $value ) ) . '" name="' . esc_attr( $this->get_field_name( $key ) ) . 
 					'" value="' . $value . '" type="radio" ' . checked( $checked, true, false ) . '/>' . "\n";
 		}, $values );
 
@@ -1880,6 +1895,7 @@ class Widget extends \WP_Widget {
 			<div>
 				<?php echo $this->get_checkbox_block_html( $instance, 'disable_css', esc_html__( 'Disable the built-in CSS', 'category-posts' ), true ); ?>
 				<?php echo $this->get_checkbox_block_html( $instance, 'disable_font_styles', esc_html__( 'Disable only font styles', 'category-posts' ), ! ( isset( $instance['disable_css'] ) && $instance['disable_css'] ) ); ?>
+				<?php echo $this->get_checkbox_block_html( $instance, 'disable_theme_styles', esc_html__( 'Disable Theme\'s styles', 'category-posts' ), true ); ?>
 				<div class="cpwp_ident">
 					<?php
 						echo $this->get_select_block_html(
