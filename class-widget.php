@@ -1557,10 +1557,6 @@ class Widget extends \WP_Widget {
 	public function form( $instance ) {
 		if ( 0 === count( $instance ) ) { // new widget, use defaults.
 			$instance = default_settings();
-
-			// set bool / checkbox default_values to true
-			$instance['use_css_cropping'] = true;
-
 		} else { // updated widgets come from =< 4.6 excerpt filter is on.
 			if ( ! isset( $instance['excerpt_filters'] ) ) {
 				$instance['excerpt_filters'] = 'on';
@@ -1582,7 +1578,6 @@ class Widget extends \WP_Widget {
 		$thumb_fluid_width               = $instance['thumb_fluid_width'];
 		$thumb_h                         = $instance['thumb_h'];
 		$default_thunmbnail              = $instance['default_thunmbnail'];
-		$use_css_cropping                = $instance['use_css_cropping'];
 		$text_do_not_wrap_thumb          = $instance['text_do_not_wrap_thumb'];
 		?>
 
@@ -1838,7 +1833,6 @@ class Widget extends \WP_Widget {
 						</div>
 						<?php
 						echo $this->get_checkbox_block_html( $instance, 'text_do_not_wrap_thumb', esc_html__( 'Do not wrap thumbnail with overflowing text', 'category-posts' ), true );
-						echo $this->get_checkbox_block_html( $instance, 'use_css_cropping', esc_html__( 'CSS crop to requested size', 'category-posts' ), false );
 						echo $this->get_select_block_html( $instance, 'thumb_hover', esc_html__( 'Animation on mouse hover', 'category-posts' ), array(
 							'none'  => esc_html__( 'None', 'category-posts' ),
 							'dark'  => esc_html__( 'Darker', 'category-posts' ),
