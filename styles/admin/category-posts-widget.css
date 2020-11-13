@@ -3,10 +3,6 @@
     background: #f1f1f1;
 }
 
-.cpwp_ident~.cpwp_ident {
-    margin-top: 10px;
-}
-
 .cpwp_ident:last-child {
     display: block;
 }

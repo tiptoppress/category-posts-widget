@@ -690,7 +690,6 @@ function default_settings() {
 		'thumb_w'                => get_option( 'thumbnail_size_w', 150 ),
 		'thumb_fluid_width'      => 100,
 		'thumb_h'                => get_option( 'thumbnail_size_h', 150 ),
-		'use_css_cropping'       => false,
 		'thumb_hover'            => 'none',
 		'hide_post_titles'       => false,
 		'excerpt_lines'          => 4,

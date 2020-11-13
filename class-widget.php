@@ -1286,7 +1286,7 @@ class Widget extends \WP_Widget {
 		}
 
 		if ( '' !== $label ) {
-			$label .= $label . ':';
+			$label .= ':';
 		}
 
 		$ret = '<label for="' . $this->get_field_id( $key ) . "\">\n" .
@@ -1886,10 +1886,14 @@ class Widget extends \WP_Widget {
 				</div>
 			</div>
 			<h4 data-panel="general"><?php esc_html_e( 'General', 'category-posts' ); ?></h4>
-			<div>
-				<?php echo $this->get_checkbox_block_html( $instance, 'disable_css', esc_html__( 'Disable the built-in CSS', 'category-posts' ), true ); ?>
-				<?php echo $this->get_checkbox_block_html( $instance, 'disable_font_styles', esc_html__( 'Disable only font styles', 'category-posts' ), ! ( isset( $instance['disable_css'] ) && $instance['disable_css'] ) ); ?>
-				<?php echo $this->get_checkbox_block_html( $instance, 'disable_theme_styles', esc_html__( 'Disable Theme\'s styles', 'category-posts' ), true ); ?>
+			<div class="cpwp-sub-panel">
+				<p><?php esc_html_e( 'Inherited CSS', 'categorypostspro' ); ?></p>
+				<div class="cpwp_ident">
+					<?php echo $this->get_checkbox_block_html( $instance, 'disable_css', esc_html__( 'Disable the built-in CSS', 'category-posts' ), true ); ?>
+					<?php echo $this->get_checkbox_block_html( $instance, 'disable_font_styles', esc_html__( 'Disable only font styles', 'category-posts' ), ! ( isset( $instance['disable_css'] ) && $instance['disable_css'] ) ); ?>
+					<?php echo $this->get_checkbox_block_html( $instance, 'disable_theme_styles', esc_html__( 'Disable Theme\'s styles', 'category-posts' ), true ); ?>
+				</div>
+				<p><?php esc_html_e( 'Interim text', 'categorypostspro' ); ?></p>
 				<div class="cpwp_ident">
 					<?php
 						echo $this->get_select_block_html(
@@ -1909,10 +1913,9 @@ class Widget extends \WP_Widget {
 						<?php echo $this->get_textarea_html( $instance, 'no_match_text', esc_html__( 'Text', 'category-posts' ), '', true, 4 ); ?>
 					</div>
 				</div>
-				<div>
-					<?php
-						echo $this->get_checkbox_block_html( $instance, 'enable_loadmore', esc_html__( 'Enable Load More', 'category-posts' ), true );
-					?>
+				<p><?php esc_html_e( 'Ajax API', 'categorypostspro' ); ?></p>
+				<div class="cpwp_ident">
+					<?php echo $this->get_checkbox_block_html( $instance, 'enable_loadmore', esc_html__( 'Enable Load More', 'category-posts' ), true ); ?>
 					<div class="loadmore-settings" style="display:<?php echo ( $instance['enable_loadmore'] ) ? 'block' : 'none'; ?>">
 						<?php echo $this->get_text_input_block_html( $instance, 'loadmore_text', esc_html__( 'Button text', 'category-posts' ), '', true ); ?>
 						<?php echo $this->get_text_input_block_html( $instance, 'loading_text', esc_html__( 'Loading text', 'category-posts' ), '', true ); ?>
