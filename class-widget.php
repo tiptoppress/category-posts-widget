@@ -1529,7 +1529,7 @@ class Widget extends \WP_Widget {
 	*/
 	private function get_radio_buttons_block_html( $instance, $key, $values, $label, $visible ) {
 
-		$ret = '<label class="checkbox" for="' . esc_attr( $this->get_field_id( $key ) ) . "\">" . $label . ":</label>\n";
+		$ret = '<label for="' . esc_attr( $this->get_field_id( $key ) ) . "\">" . $label . ":</label>\n";
 		$ret .= '<span class="cpwp-right">';
 
 		array_map ( function( $value ) use ( &$ret, $instance, $key ) {

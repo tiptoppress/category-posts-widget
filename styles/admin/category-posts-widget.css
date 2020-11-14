@@ -61,12 +61,18 @@
 
 .category-widget-cont [data-panel="filter"]+div select,
 .category-widget-cont input[type="number"],
-.category-widget-cont input[type="text"],
 .category-widget-cont input[type="range"] {
     text-align: center;
     float: right;
     clear: both;
     width: 110px;
+}
+
+.category-widget-cont input[type="text"] {
+    text-align: center;
+    float: right;
+    clear: both;
+    width: 100%;
 }
 
 .category-widget-cont input[type=radio] {
