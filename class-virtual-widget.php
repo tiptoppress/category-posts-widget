@@ -298,7 +298,7 @@ class Virtual_Widget {
 
 			// localized widget CSS rules for the thumbnail.
 			$ret['left'] = '#' . $widget_id . ' .cat-post-thumbnail {display:block; float:left; margin:5px 10px 5px 0;}';
-			$ret['crop'] = '#' . $widget_id . ' .cat-post-crop {overflow:hidden;}';
+			$ret['crop'] = '#' . $widget_id . ' .cat-post-crop {overflow:hidden;display:block;}';
 
 			// probably all Themes have too much margin on their p element when used in the shortcode or widget.
 			$ret['p_styling'] = '#' . $widget_id . ' p {margin:5px 0 0 0}'; // since on bottom it will make the spacing on cover

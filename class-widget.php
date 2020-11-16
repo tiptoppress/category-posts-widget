@@ -319,8 +319,6 @@ class Widget extends \WP_Widget {
 				$ret .= $title;
 			}
 
-			$ret = $this->add_heading_level( $instance, $ret, 'title_level' );
-
 			$ret .= $after_title;
 		}
 
@@ -1142,7 +1140,6 @@ class Widget extends \WP_Widget {
 			<?php echo $this->get_text_input_block_html( $instance, 'title', esc_html__( 'Title', 'category-posts' ), '', true ); ?>
 			<?php echo $this->get_checkbox_block_html( $instance, 'title_link', esc_html__( 'Make widget title link', 'category-posts' ), 0 !== $cat ); ?>
 			<?php echo $this->get_text_input_block_html( $instance, 'title_link_url', esc_html__( 'Title link URL', 'category-posts' ), '', 0 === $cat ); ?>
-			<?php echo $this->get_radio_buttons_block_html( $instance, 'title_level', array( 'Inline', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6' ), esc_html__( 'Heading Level', 'category-posts' ), true ); ?>
 		</div>
 	</div>
 <?php

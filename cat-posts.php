@@ -673,7 +673,6 @@ function default_settings() {
 	return array(
 		'title'                  => __( 'Recent Posts', 'category-posts' ),
 		'title_link'             => false,
-		'title_level'            => 'H5',
 		'title_link_url'         => '',
 		'hide_title'             => false,
 		'cat'                    => 0,
