@@ -3,8 +3,8 @@ Contributors: mark-k, kometschuh, mkrdip
 Donate link: https://wordpress.org/support/plugin/category-posts/reviews/
 Tags: category, categories, posts, widget, posts widget, recent posts, category recent posts, shortcode, sidebar, excerpt, multiple widgets
 Requires at least: 2.8
-Tested up to: 5.4
-Stable tag: 4.9.5
+Tested up to: 5.5
+Stable tag: 4.9.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -127,7 +127,10 @@ The FireFox browser has a coverage of 5%, which we find little. For this 5%, we 
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget)
 
-= 5.0.1 - June 10th 2020 =
+= 4.9.6 - November 16th 2020 =
+* Title and Item Title heading level buttons
+* Excerpt-more link placeholder
+* Native WordPress filter CSS classes
 * Rework thumb handling
 
 = 4.9.5 - May 12th 2020 =
