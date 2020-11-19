@@ -68,14 +68,20 @@ class Widget extends \WP_Widget {
 			return '';
 		}
 
-		// replace srcset.
+		// replace size.
 		$array = array();
 		preg_match( '/width="([^"]*)"/i', $html, $array );
-		$pattern = '/' . $array[1] . 'w/';
-		$html = preg_replace( $pattern, $size[0] . 'w', $html );
-		// replace size.
-		$pattern = '/' . $array[1] . 'px/';
-		$html = preg_replace( $pattern, $size[0] . 'px', $html );
+		$pattern = '/\s' . $array[1] . 'px/';
+		$html = preg_replace( $pattern, ' ' . $size[0] . 'px', $html );
+		// replace width.
+		$pattern = '/width="' . $array[1] . '"/';
+		$html = preg_replace( $pattern, 'width="' . $size[0] . '"', $html );
+
+		// replace height
+		$array = array();
+		preg_match( '/height="([^"]*)"/i', $html, $array );
+		$pattern = '/height="' . $array[1] . '"/';
+		$html = preg_replace( $pattern, 'height="' . $size[1] . '"', $html );
 
 		$show_post_format = isset( $this->instance['show_post_format'] ) && ( 'none' !== $this->instance['show_post_format'] );
 		if ( $show_post_format || $this->instance['thumb_hover'] ) {
