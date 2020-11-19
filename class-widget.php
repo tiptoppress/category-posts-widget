@@ -174,8 +174,10 @@ class Widget extends \WP_Widget {
 	 * @since 4.6
 	 */
 	public function queryArgs( $instance ) {
+		$valid_sort_orders = array(
+								'date', 'title', 'comment_count', 'rand'
+							);
 
-		$valid_sort_orders = array( 'date', 'title', 'comment_count', 'rand' );
 		if ( isset( $instance['sort_by'] ) && in_array( $instance['sort_by'], $valid_sort_orders, true ) ) {
 			$sort_by = $instance['sort_by'];
 		} else {
