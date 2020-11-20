@@ -1713,6 +1713,7 @@ class Widget extends \WP_Widget {
 					<p><?php esc_html_e( 'Title settings', 'category-posts' ); ?></p>
 					<div class="cpwp_ident">
 					<?php
+						echo $this->get_number_input_block_html( $instance, 'item_title_lines', esc_html__( 'Lines (responsive):', 'category-posts' ), 0, '', '', true );
 						echo $this->get_radio_buttons_block_html( $instance, 'item_title_level', array( 'Inline', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6' ), esc_html__( 'Heading Level', 'category-posts' ), true );
 					?>
 					</div>

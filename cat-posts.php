@@ -686,6 +686,7 @@ function default_settings() {
 		'footer_link_text'       => '',
 		'footer_link'            => '',
 		'item_title_level'       => 'Inline',
+		'item_title_lines'       => 1,
 		'thumb_w'                => get_option( 'thumbnail_size_w', 150 ),
 		'thumb_fluid_width'      => 100,
 		'thumb_h'                => get_option( 'thumbnail_size_h', 150 ),

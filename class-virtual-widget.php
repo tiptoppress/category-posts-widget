@@ -201,6 +201,12 @@ class Virtual_Widget {
 				$styles['after_item'] = '.cat-post-item:after {content: ""; display: table;	clear: both;}';
 			}
 
+			// title height in lines.
+			if ( isset( $settings['template'] ) && preg_match( '/%title%/', $settings['template'] ) ) {
+				$styles['item_title_lines'] = '.cat-post-item .cat-post-title {overflow: hidden;text-overflow: ellipsis;white-space: initial;' .
+					'display: -webkit-box;-webkit-line-clamp: ' . $settings['item_title_lines'] . ';-webkit-box-orient: vertical;padding-bottom: 0 !important;}';
+			}
+
 			// wrap text around image.
 			if ( isset( $settings['template'] ) && preg_match( '/%excerpt%/', $settings['template'] ) ) {
 				$selector_wrap_text = 'p.cpwp-excerpt-text';
