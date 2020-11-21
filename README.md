@@ -39,6 +39,8 @@ A premium version of that free widget available at<a href="http://tiptoppress.co
 * The Template text can be a post details placeholder, plain text, HTML or a font-icons.
 * Font-icon support.
 * 'Load more' button / Ajax API
+* Item Title heading level buttons
+* Excerpt length and item title in lines (line-clamp)
 * Shortcode (Easily change all Shortcode options in the customizer).
 * Date range filter
 * New date format: Time since plublished
@@ -46,7 +48,6 @@ A premium version of that free widget available at<a href="http://tiptoppress.co
 * Multiple shortcodes at the same site or post.
 * Add option for post offset (use two or more widgets after another).
 * Admin UI: Buttons in the editor toolbar to insert shortcode.
-* Excerpt length in lines (line-clamp)
 * Option to touch device friendly "everything is a link".
 * For editing shortcode adds a Customizer link to the admin-bar ("With one click to the Customizer").
 * Set thumbnail width & height / image crop with CSS (object-fit).
@@ -140,8 +141,13 @@ The FireFox browser has a coverage of 5%, which we find little. For this 5%, we 
 ## Changelog
 #### [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
 
+#### 4.9.7 - November 21th 2020
+* Item title in lines (line-clamp)
+* Fixed Column layout
+* Fixed Image Html rendering
+
 #### 4.9.6 - November 16th 2020
-* Item Title heading level buttons
+* Item title heading level buttons
 * Excerpt-more link placeholder
 * Native WordPress filter CSS classes
 * Rework thumb handling

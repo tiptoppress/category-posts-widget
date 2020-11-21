@@ -4,7 +4,7 @@ Donate link: https://wordpress.org/support/plugin/category-posts/reviews/
 Tags: category, categories, posts, widget, posts widget, recent posts, category recent posts, shortcode, sidebar, excerpt, multiple widgets
 Requires at least: 2.8
 Tested up to: 5.5
-Stable tag: 4.9.6
+Stable tag: 4.9.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,8 @@ A premium version of that free widget available at [tiptoppress.com](http://tipt
 * The Template text can be a post details placeholder, plain text, HTML or a font-icons.
 * Font-icon support.
 * 'Load more' button / Ajax API
+* Item Title heading level buttons
+* Excerpt length and item title in lines (line-clamp)
 * Shortcode (Easily change all Shortcode options in the customizer).
 * Date range filter
 * New date format: Time since plublished
@@ -42,7 +44,6 @@ A premium version of that free widget available at [tiptoppress.com](http://tipt
 * Multiple shortcodes at the same site or post.
 * Add option for post offset (use two or more widgets after another).
 * Admin UI: Buttons in the editor toolbar to insert shortcode.
-* Excerpt length in lines (line-clamp)
 * Option to touch device friendly "everything is a link".
 * For editing shortcode adds a Customizer link to the admin-bar ("With one click to the Customizer").
 * Set thumbnail width & height / image crop with CSS (object-fit).
@@ -127,8 +128,13 @@ The FireFox browser has a coverage of 5%, which we find little. For this 5%, we 
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget)
 
+= 4.9.7 - November 21th 2020 =
+* Item title in lines (line-clamp)
+* Fixed Column layout
+* Fixed Image Html rendering
+
 = 4.9.6 - November 16th 2020 =
-* Item Title heading level buttons
+* Item title heading level buttons
 * Excerpt-more link placeholder
 * Native WordPress filter CSS classes
 * Rework thumb handling
