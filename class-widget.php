@@ -509,9 +509,6 @@ class Widget extends \WP_Widget {
 				$attr = ' data-publishtime="' . $time . '" data-format="date"';
 				add_action( 'wp_footer', __NAMESPACE__ . '\embed_date_scripts' );
 				break;
-			case 'sincepublished':
-				$date = human_time_diff( get_the_time( 'U' ), current_time( 'timestamp' ) );
-				break;
 			default:
 				if ( isset( $instance['date_format'] ) && strlen( trim( $instance['date_format'] ) ) > 0 ) {
 					$date_format = $instance['date_format'];
@@ -522,18 +519,22 @@ class Widget extends \WP_Widget {
 				break;
 		}
 
+		if ( isset( $instance['date_past_time'] ) && 0 < $instance['date_past_time'] ) {
+			$post_date            = get_the_time( get_option( 'date_format' ) );
+			$current_date         = current_time( "Y-m-d" );
+			$past_days = date_diff(
+								date_create( $post_date ),
+								date_create( $current_date )
+							)->days;
+			if ( $past_days <= $instance['date_past_time'] ) {
+				$date = human_time_diff( get_the_time( 'U' ), current_time( 'timestamp' ) );
+				$attr = ' data-publishtime="" data-format="sincepublished"';
+			}
+		}
+
 		$post_date_class = ( isset( $instance[ 'disable_theme_styles' ] ) && $instance[ 'disable_theme_styles' ] ) ? "" : " post-date";
+		$ret .= '<span class="cat-post-date' . $post_date_class . '"' . $attr . '>' . $date . '</span>';
 
-		$ret .= '<span class="cat-post-date' . $post_date_class . '"' . $attr . '>';
-		if ( isset( $instance['date_link'] ) && $instance['date_link'] && ! $everything_is_link ) {
-			$ret .= '<a href="' . \get_the_permalink() . '">';
-		}
-		$ret .= $date;
-
-		if ( isset( $instance['date_link'] ) && $instance['date_link'] && ! $everything_is_link ) {
-			$ret .= '</a>';
-		}
-		$ret .= '</span>';
 		return $ret;
 	}
 
@@ -1761,7 +1762,6 @@ class Widget extends \WP_Widget {
 							array(
 								'sitedateandtime'      => esc_html__( 'Site date and time', 'category-posts' ),
 								'sitedate'             => esc_html__( 'Site date', 'category-posts' ),
-								'sincepublished'       => esc_html__( 'Time since published', 'category-posts' ),
 								'localsitedateandtime' => esc_html__( 'Reader\'s local date and time', 'category-posts' ),
 								'localsitedate'        => esc_html__( 'Reader\'s local date', 'category-posts' ),
 								'other'                => esc_html__( 'PHP style format', 'category-posts' ),
@@ -1770,6 +1770,7 @@ class Widget extends \WP_Widget {
 							true
 						);
 						echo $this->get_text_input_block_html( $instance, 'date_format', esc_html__( 'PHP Style Date format', 'category-posts' ), 'j M Y', 'other' === $preset_date_format );
+						echo $this->get_number_input_block_html( $instance, 'date_past_time', esc_html__( 'Show past time up to x-days:', 'category-posts' ), 0, '', '' , true );
 						?>
 					</div>
 				</div>

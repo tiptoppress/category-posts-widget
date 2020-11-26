@@ -334,6 +334,13 @@ function upgrade_settings( $settings ) {
 		if ( isset( $settings['hide_if_empty'] ) ) {
 			unset( $settings['hide_if_empty'] );
 		}
+	} else {
+		if ( version_compare( '4.9.8', $settings['ver']) ) {
+			if ( isset( $settings['preset_date_format'] ) && 'sincepublished' === $settings['preset_date_format'] ) {
+				$settings['date_past_time']     = 999;
+				$settings['preset_date_format'] = 'sitedate';
+			}
+		}
 	}
 
 	$settings['ver'] = VERSION;
@@ -697,15 +704,15 @@ function default_settings() {
 		'excerpt_more_text'      => __( '', 'category-posts' ),
 		'excerpt_filters'        => false,
 		'comment_num'            => false,
-		'date_link'              => false,
-		'date_format'            => '',
 		'disable_css'            => false,
 		'disable_font_styles'    => false,
 		'disable_theme_styles'   => false,
 		'show_post_format'       => 'none',
 		'no_cat_childs'          => false,
 		'everything_is_link'     => false,
-		'preset_date_format'     => 'sitedateandtime',
+		'preset_date_format'     => 'sitedate',
+		'date_format'            => '',
+		'date_past_time'         => '0',
 		'template'               => "%title%\n\n%thumb%",
 		'text_do_not_wrap_thumb' => false,
 		'enable_loadmore'        => false,
@@ -938,6 +945,8 @@ function customize_save_after() {
 			foreach ( $instance as $name => $new ) {
 				if ( isset( $meta[ $name ] ) ) { // unlikely but maybe that short code was deleted by other session.
 					$meta[ $name ] = array_merge( $meta[ $name ], $new );
+
+					$meta[ $name ] = upgrade_settings( $meta[ $name ] );
 				}
 			}
 		}
