@@ -1789,9 +1789,9 @@ class Widget extends \WP_Widget {
 						echo $this->get_number_input_block_html( $instance, 'thumb_h', esc_html__( 'Height:', 'category-posts' ), 1, '', '', true );
 						?>
 						<div class="cat-post-image-dimensions-help" style="display:none;">
-							<p><?php esc_html_e( 'Set one or more dimensions to 0 to have no ratio calculation.', 'category-posts' ); ?></p>
+							<p><?php esc_html_e( 'Set one or more dimensions to 0 to not perform a ratio calculation.', 'category-posts' ); ?></p>
 							<p><?php esc_html_e( 'Set both to 0 will use the original image ratio.', 'category-posts' ); ?></p>
-							<p><?php esc_html_e( 'Max-width limits in terms of the total Post Details width.', 'category-posts' ); ?></p>
+							<p><?php esc_html_e( 'Max-width limits in terms of the total Post width.', 'category-posts' ); ?></p>
 						</div>
 						<div class="cat-post-thumb-change-size">
 							<p>

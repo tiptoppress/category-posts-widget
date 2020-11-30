@@ -158,7 +158,7 @@ var cwp_namespace = {
                 template = '%title%\n\n%thumb%';
                 break;
             case 'title_thum_excerpt':
-                template = '%title%\n\n%thumb%\n%excerpt%%more-link%';
+                template = '%title%\n\n%thumb%\n%excerpt%\n\n%more-link%';
                 break;
             case 'everything':
                 template = '%title%\n\n';
@@ -166,7 +166,7 @@ var cwp_namespace = {
                 template += '%thumb%\n';
                 template += '<span class="dashicons dashicons-admin-comments"></span> %commentnum% ';
                 template += '<span class="dashicons dashicons-admin-users"></span> %author%\n';
-                template += '%excerpt%';
+                template += '%excerpt%\n\n';
                 template += '%more-link%\n\n';
                 template += 'Categories: %category% ';
                 template += '<span class="dashicons dashicons-tag"></span> %post_tag%';

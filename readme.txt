@@ -3,8 +3,8 @@ Contributors: mark-k, kometschuh, mkrdip
 Donate link: https://wordpress.org/support/plugin/category-posts/reviews/
 Tags: category, categories, posts, widget, posts widget, recent posts, category recent posts, shortcode, sidebar, excerpt, multiple widgets
 Requires at least: 2.8
-Tested up to: 5.5
-Stable tag: 4.9.7
+Tested up to: 5.6
+Stable tag: 4.9.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -101,7 +101,14 @@ For more layout options please try our premium widget: [Term and Category based 
 For SVG font-icon HTML we recommend the [WordPress Dashicons](https://developer.wordpress.org/resource/dashicons/), which are included as default and can be used without any font-icon including.
 
 = How to use Page Bilder plugins like Divi, SiteOrigin Page Builder or Elementor =
-Please read more about Page Builder plugins at our [FAQs](http://tiptoppress.com/faqs/)
+Read more about Page Builder plugins at our [FAQs](http://tiptoppress.com/faqs/)
+
+= The font-size is different from that of other widgets or Theme elements? =
+Use the option: 'Disable only font style' in the General panel.
+
+= I want the title as a link pointing to the selected Categorie page? =
+Is just a single category selected in the Filter panel: Enable the check box "Make widget title link".
+Is 'All categories' selected in the Filter panel: Use the text field 'Title link URL'.
 
 = Parse error: syntax error, unexpected T_FUNCTION in /home/www/blog/wp-content/plugins/category-posts/cat-posts.php on line 58 =
 Some of the features that were used in that version needs PHP 5.3+.
@@ -111,11 +118,6 @@ We know there are peopel how use PHP 5.2 [wordpress.org/about/stats](https://wor
 
 = You check the PHP version with phpversion(), but the widget don't work =
 Check also the .htaccess file, if there is an entry for an older PHP version.
-
-= Excerpt length in lines don't work with FireFox and IE =
-We use for Excerpt length in lines a CSS feature called "line-clamp" which isn't supported in FireFox and IE at the moment.
-But since it is supported by all other browsers, we think it will be supported in FireFox and IE soon.
-The FireFox browser has a coverage of 5%, which we find little. For this 5%, we have included a polyfill in our [Excerpt Extension add-on](https://wordpress.org/plugins/excerpt-extension/).
 
 == Screenshots ==
 1. Front end of the widget with SVG font-icon support for post formats, hover effects and the Template text-area.
@@ -127,6 +129,9 @@ The FireFox browser has a coverage of 5%, which we find little. For this 5%, we 
 
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget)
+
+= 4.9.8 - November 30th 2020 =
+* Date since published for n-days
 
 = 4.9.7 - November 21th 2020 =
 * Item title in lines (line-clamp)
