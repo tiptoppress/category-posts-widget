@@ -4,7 +4,7 @@ Donate link: https://wordpress.org/support/plugin/category-posts/reviews/
 Tags: category, categories, posts, widget, posts widget, recent posts, category recent posts, shortcode, sidebar, excerpt, multiple widgets
 Requires at least: 2.8
 Tested up to: 5.6
-Stable tag: 4.9.8
+Stable tag: 4.9.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -129,6 +129,9 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 
 == Changelog ==
 [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget)
+
+= 4.9.9 - December 9th 2020 =
+* Load more placeholders
 
 = 4.9.8 - November 30th 2020 =
 * Date since published for n-days

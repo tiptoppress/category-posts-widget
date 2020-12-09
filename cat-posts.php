@@ -12,7 +12,7 @@ Plugin Name: Category Posts Widget
 Plugin URI: https://wordpress.org/plugins/category-posts/
 Description: Adds a widget that shows the most recent posts from a single category.
 Author: TipTopPress
-Version: 4.9.8
+Version: 4.9.9
 Author URI: http://tiptoppress.com
 Text Domain: category-posts
 Domain Path: /languages
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const VERSION        = '4.9.8';
+const VERSION        = '4.9.9';
 const DOC_URL        = 'http://tiptoppress.com/category-posts-widget/documentation-4-9/';
 const PRO_URL        = 'http://tiptoppress.com/term-and-category-based-posts-widget/';
 const SUPPORT_URL    = 'https://wordpress.org/support/plugin/category-posts/';
@@ -453,93 +453,94 @@ function equal_cover_content_height( $number, $widgetsettings ) {
 		?>
 		<script type="text/javascript">
 			if (typeof jQuery !== 'undefined') {
-				jQuery( document ).ready(function () {
-					var cat_posts_namespace              = window.cat_posts_namespace || {};
-					cat_posts_namespace.layout_wrap_text = cat_posts_namespace.layout_wrap_text || {};
-					cat_posts_namespace.layout_img_size  = cat_posts_namespace.layout_img_size || {};
 
-					cat_posts_namespace.layout_wrap_text = {
-						<?php	/* Handle item */ echo "\r\n"; ?>
-						preWrap : function (widget) {
-							// var _widget = jQuery(widget);
-							jQuery(widget).find('.cat-post-item').each(function(){
-								var _that = jQuery(this);
-								_that.find('p.cpwp-excerpt-text').addClass('cpwp-wrap-text');
-								_that.find('p.cpwp-excerpt-text').closest('div').wrap('<div class="cpwp-wrap-text-stage"></div>');;
-							});
-							return;
-						},
-						<?php	/* Handle add class */ echo "\r\n"; ?>
-						add : function(_this){
-							var _that = jQuery(_this);
-							if (_that.find('p.cpwp-excerpt-text').height() < _that.find('.cat-post-thumbnail').height()) { <?php /* don't move class to do the CSS hack, line's height is smaller as thumb */ echo "\r\n"; ?>
-								_that.find('p.cpwp-excerpt-text').closest('.cpwp-wrap-text-stage').removeClass( "cpwp-wrap-text" );
-								_that.find('p.cpwp-excerpt-text').addClass( "cpwp-wrap-text" ); <?php /* don't do the CSS hack, just set the class */ echo "\r\n"; ?>
-							}else{ <?php /* add the CSS hack, it's needed, text is wrapping, line's height is higher as thumb */ echo "\r\n"; ?>
-								_that.find('p.cpwp-excerpt-text').removeClass( "cpwp-wrap-text" );
-								_that.find('p.cpwp-excerpt-text').closest('.cpwp-wrap-text-stage').addClass( "cpwp-wrap-text" ); <?php /* text is wrapping, do the CSS hack */ echo "\r\n"; ?>
-							}
-							return;
-						},
-						<?php	/* Wait for image is loaded */ echo "\r\n"; ?>
-						handleLazyLoading : function(_this) {
-							var width = jQuery(_this).find('img').width();
-							<?php	/* image is loaded */ echo "\r\n"; ?>
-							if( 0 !== width ){
+				var cat_posts_namespace              = window.cat_posts_namespace || {};
+				cat_posts_namespace.layout_wrap_text = cat_posts_namespace.layout_wrap_text || {};
+				cat_posts_namespace.layout_img_size  = cat_posts_namespace.layout_img_size || {};
+
+				cat_posts_namespace.layout_wrap_text = {
+					<?php	/* Handle item */ echo "\r\n"; ?>
+					preWrap : function (widget) {
+						// var _widget = jQuery(widget);
+						jQuery(widget).find('.cat-post-item').each(function(){
+							var _that = jQuery(this);
+							_that.find('p.cpwp-excerpt-text').addClass('cpwp-wrap-text');
+							_that.find('p.cpwp-excerpt-text').closest('div').wrap('<div class="cpwp-wrap-text-stage"></div>');;
+						});
+						return;
+					},
+					<?php	/* Handle add class */ echo "\r\n"; ?>
+					add : function(_this){
+						var _that = jQuery(_this);
+						if (_that.find('p.cpwp-excerpt-text').height() < _that.find('.cat-post-thumbnail').height()) { <?php /* don't move class to do the CSS hack, line's height is smaller as thumb */ echo "\r\n"; ?>
+							_that.find('p.cpwp-excerpt-text').closest('.cpwp-wrap-text-stage').removeClass( "cpwp-wrap-text" );
+							_that.find('p.cpwp-excerpt-text').addClass( "cpwp-wrap-text" ); <?php /* don't do the CSS hack, just set the class */ echo "\r\n"; ?>
+						}else{ <?php /* add the CSS hack, it's needed, text is wrapping, line's height is higher as thumb */ echo "\r\n"; ?>
+							_that.find('p.cpwp-excerpt-text').removeClass( "cpwp-wrap-text" );
+							_that.find('p.cpwp-excerpt-text').closest('.cpwp-wrap-text-stage').addClass( "cpwp-wrap-text" ); <?php /* text is wrapping, do the CSS hack */ echo "\r\n"; ?>
+						}
+						return;
+					},
+					<?php	/* Wait for image is loaded */ echo "\r\n"; ?>
+					handleLazyLoading : function(_this) {
+						var width = jQuery(_this).find('img').width();
+						<?php	/* image is loaded */ echo "\r\n"; ?>
+						if( 0 !== width ){
+							cat_posts_namespace.layout_wrap_text.add(_this);
+						} else {
+							jQuery(_this).find('img').one("load", function(){
 								cat_posts_namespace.layout_wrap_text.add(_this);
-							} else {
-								jQuery(_this).find('img').one("load", function(){
-									cat_posts_namespace.layout_wrap_text.add(_this);
-								});
-							}
-							return;
-						},
-						<?php /* Handle post items */ echo "\r\n"; ?>
-						setClass : function (widget) {
-							// var _widget = jQuery(widget);
-							jQuery(widget).find('.cat-post-item').each(function(){
-								cat_posts_namespace.layout_wrap_text.handleLazyLoading(this);
 							});
-							return;
 						}
+						return;
+					},
+					<?php /* Handle post items */ echo "\r\n"; ?>
+					setClass : function (widget) {
+						// var _widget = jQuery(widget);
+						jQuery(widget).find('.cat-post-item').each(function(){
+							cat_posts_namespace.layout_wrap_text.handleLazyLoading(this);
+						});
+						return;
 					}
-					cat_posts_namespace.layout_img_size = {
-						<?php	/* Handle replace */ echo "\r\n"; ?>
-						replace : function(_this){
-							var _that = jQuery(_this),
-							resp_w = _that.width(),
-							resp_h = _that.height(),
-							orig_w = _that.data('cat-posts-width'),
-							orig_h = _that.data('cat-posts-height');
-							<?php	/* replace height */ echo "\r\n"; ?>
-							if( resp_w < orig_w ){
-								_that.height( resp_w * orig_h / orig_w );
-							} else {
-								_that.height( '' );
-							}
-							return;
-						},
-						<?php	/* Wait for image is loaded */ echo "\r\n"; ?>
-						handleLazyLoading : function(_this) {
-							var width = jQuery(_this).width();
-							<?php	/* image is loaded */ echo "\r\n"; ?>
-							if( 0 !== width ){
+				}
+				cat_posts_namespace.layout_img_size = {
+					<?php	/* Handle replace */ echo "\r\n"; ?>
+					replace : function(_this){
+						var _that = jQuery(_this),
+						resp_w = _that.width(),
+						resp_h = _that.height(),
+						orig_w = _that.data('cat-posts-width'),
+						orig_h = _that.data('cat-posts-height');
+						<?php	/* replace height */ echo "\r\n"; ?>
+						if( resp_w < orig_w ){
+							_that.height( resp_w * orig_h / orig_w );
+						} else {
+							_that.height( '' );
+						}
+						return;
+					},
+					<?php	/* Wait for image is loaded */ echo "\r\n"; ?>
+					handleLazyLoading : function(_this) {
+						var width = jQuery(_this).width();
+						<?php	/* image is loaded */ echo "\r\n"; ?>
+						if( 0 !== width ){
+							cat_posts_namespace.layout_img_size.replace(_this);
+						} else {
+							jQuery(_this).one("load", function(){
 								cat_posts_namespace.layout_img_size.replace(_this);
-							} else {
-								jQuery(_this).one("load", function(){
-									cat_posts_namespace.layout_img_size.replace(_this);
-								});
-							}
-							return;
-						},
-						setHeight : function (widget) {
-							jQuery(widget).find('.cat-post-item img').each(function(){
-								cat_posts_namespace.layout_img_size.handleLazyLoading(this);
 							});
-							return;
 						}
+						return;
+					},
+					setHeight : function (widget) {
+						jQuery(widget).find('.cat-post-item img').each(function(){
+							cat_posts_namespace.layout_img_size.handleLazyLoading(this);
+						});
+						return;
 					}
+				}
 
+				jQuery( document ).ready(function () {
 					var widget = jQuery('#<?php echo esc_attr( $number ); ?>');
 
 					<?php	/* do once on document ready */ echo "\r\n"; ?>
@@ -716,7 +717,7 @@ function default_settings() {
 		'template'               => "%title%\n\n%thumb%",
 		'text_do_not_wrap_thumb' => false,
 		'enable_loadmore'        => false,
-		'loadmore_text'          => __( 'Load More', 'category-posts' ),
+		'loadmore_text'          => sprintf( __( 'Load More (%s/%s)', 'category-posts' ), '%step%', '%all%'),
 		'loading_text'           => __( 'Loading...', 'category-posts' ),
 		'date_range'             => 'off',
 		'start_date'             => '',

@@ -13,7 +13,8 @@
 }
 
 .cpwp_ident>p,
-.cpwp_ident>div {
+.cpwp_ident>div,
+.cpwp_ident>div>p {
     display: flow-root;
 }
 
@@ -70,7 +71,6 @@
 
 .category-widget-cont input[type="text"] {
     text-align: center;
-    float: right;
     clear: both;
     width: 100%;
 }

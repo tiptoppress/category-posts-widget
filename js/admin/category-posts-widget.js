@@ -123,6 +123,13 @@ var cwp_namespace = {
         jQuery(panel).find('.cat-post-more-link-help').toggle('slow');
     },
 
+    // Show Load More button text help
+    toggleButtonTextHelp: function(item, event) {
+        event.preventDefault();
+        var panel = item.parentElement.parentElement.parentElement.parentElement;
+        jQuery(panel).find('.cat-post-button-text-help').toggle('slow');
+    },
+
     toggleHideTitle: function(item) {
         var panel = item.parentElement.parentElement.parentElement;
         if (item.checked) {
@@ -492,6 +499,10 @@ jQuery(document).ready(function() {
 
         jQuery(class_namespace + ' a.toggle-more-link-help').off('click').on('click', function(event) { // show image dimensions help
             cwp_namespace.toggleMoreLinkHelp(this, event);
+        });
+
+        jQuery(class_namespace + ' a.toggle-button-text-help').off('click').on('click', function(event) { // show load more button text help
+            cwp_namespace.toggleButtonTextHelp(this, event);
         });
 
         jQuery(class_namespace + ' .cpwp-open-placholder-dropdown-menu').off('click').on('click', function() { // open drop down and add placeholder

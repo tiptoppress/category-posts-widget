@@ -173,6 +173,7 @@ class Virtual_Widget {
 				'thumb'         => '.cat-post-thumbnail {margin: 5px 10px 5px 0;}',
 				'item_clenup'   => '.cat-post-item:before {content: ""; clear: both;}',
 				'more_link'     => '.cat-post-excerpt-more {display: inline-block;}',
+				'item_style'    => '.cat-post-item {list-style: none; margin: 3px 0 10px; padding: 3px 0;}',
 			);
 
 			if ( ! ( isset( $settings['disable_font_styles'] ) && $settings['disable_font_styles'] ) ) { // checks if disable font styles is not set.
@@ -180,17 +181,6 @@ class Virtual_Widget {
 				$styles['current_title_font'] = '.cat-post-current .cat-post-title {font-weight: bold; text-transform: uppercase;}';
 				$styles['post-taxs']          = '[class*=cat-post-tax] {font-size: 0.85em;}';
 				$styles['post-tax-childs']    = '[class*=cat-post-tax] * {display:inline-block;}';
-			}
-
-			/*
-			 *	The twenty seventeen theme have a border between the LI elements of a widget,
-			 *	so remove our border if we detect its use to avoid conflicting styling.
-			 */
-			if ( ! $is_shortcode && function_exists( 'twentyseventeen_setup' ) ) {
-				$styles['item_style'] = '.cat-post-item {list-style: none; list-style-type: none; margin: 0; padding: 3px 0 10px;}';
-			} else {
-				$styles['item_style'] = '.cat-post-item {border-bottom: 1px solid #ccc;	list-style: none; list-style-type: none; margin: 3px 0 10px;	padding: 3px 0;}';
-				$styles['last_item_style'] = '.cat-post-item:last-child {border-bottom: none;}';
 			}
 
 			// everything link related styling
