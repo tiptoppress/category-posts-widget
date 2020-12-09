@@ -443,7 +443,7 @@ class Widget extends \WP_Widget {
 
 		$ret .= '<button type="button" data-loading="' . esc_attr( $loading ) . '" data-id="' . esc_attr( $id ) .
 					'" data-start="' . esc_attr( $start ) . '" data-context="' . esc_attr( $context ) . '" data-number="' . 
-					esc_attr( $number ) . '" data-postCount="' . esc_attr( $post_count ) . '" data-placeholder="' . esc_attr( $placeholder_text ) . '">' . 
+					esc_attr( $number ) . '" data-post-count="' . esc_attr( $post_count ) . '" data-placeholder="' . esc_attr( $placeholder_text ) . '">' . 
 					esc_html( $loadmore_text ) .
 				'</button>';
 		$ret .= '</div>';

@@ -23,7 +23,7 @@ if (typeof jQuery !== 'undefined') {
                 url = tiptoppress[php_settings_var].json_root_url,
                 _ul = jQuery(this.parentElement.parentElement).find('ul'), // The UL of the widget.
                 origText = _this.text(),
-                postCount = _this.data('postCount'),
+                postCount = _this.data('post-count'),
                 loadingText = _this.data('loading'),
                 loadmoreText = _this.data('placeholder'),
                 widgetNumber = jQuery(this).closest("[id*='" + id + "']").attr('id');
