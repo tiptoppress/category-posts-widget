@@ -49,9 +49,9 @@ function get_next_elements( \WP_REST_Request $request ) {
 	if ( 2 <= count( $id_components ) ) {
 		switch ( $id_components[0] ) {
 			case 'shortcode':
-				if ( 3 === count( $id_components ) ) {
+				if ( 2 === count( $id_components ) || 3 === count( $id_components ) ) {
 					$pid = $id_components[1];  // The ID of the relevant post.
-					$name = $id_components[2]; // The shortcode "name".
+					$name = isset( $id_components[2] ) ? $id_components[2] : ''; // The shortcode "name".
 					$settings = shortcode_settings( $pid, $name );
 					if ( ! empty( $settings ) ) {
 						$virtual_widget = new Virtual_Widget( '', '', $settings );
