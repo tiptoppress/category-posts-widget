@@ -134,6 +134,9 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 ## Changelog
 #### [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
 
+#### 4.9.10 - December 15th 2020
+* Fixed Missing load more button
+
 #### 4.9.9 - December 9th 2020
 * Load more placeholders
 

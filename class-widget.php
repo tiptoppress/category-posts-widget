@@ -1115,6 +1115,7 @@ class Widget extends \WP_Widget {
 
 		if( isset( $instance['enable_loadmore'] ) && $instance['enable_loadmore'] ) {
 			$args['showposts'] = 0;
+			$args['nopaging'] = true;
 			$post_count = ( new \WP_Query( $args ) )->post_count; // May there is a better workflow to count the loadable items
 		}
 
