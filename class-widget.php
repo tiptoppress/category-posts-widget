@@ -83,15 +83,24 @@ class Widget extends \WP_Widget {
 		preg_match( '/width="([^"]*)"/i', $html, $array );
 		$pattern = '/\s' . $array[1] . 'px/';
 		$html = preg_replace( $pattern, ' ' . $size[0] . 'px', $html );
+
 		// replace width.
 		$pattern = '/width="' . $array[1] . '"/';
-		$html = preg_replace( $pattern, 'width="' . $size[0] . '"', $html );
+		if ( 0 != $this->instance['thumb_w'] ) {
+			$html = preg_replace( $pattern, 'width="' . $size[0] . '"', $html );
+		} else {
+			$html = preg_replace( $pattern, '', $html );
+		}
 
 		// replace height
 		$array = array();
 		preg_match( '/height="([^"]*)"/i', $html, $array );
 		$pattern = '/height="' . $array[1] . '"/';
-		$html = preg_replace( $pattern, 'height="' . $size[1] . '"', $html );
+		if ( 0 != $this->instance['thumb_h'] ) {
+			$html = preg_replace( $pattern, 'height="' . $size[1] . '"', $html );
+		} else {
+			$html = preg_replace( $pattern, '', $html );
+		}
 
 		$show_post_format = isset( $this->instance['show_post_format'] ) && ( 'none' !== $this->instance['show_post_format'] );
 		if ( $show_post_format || $this->instance['thumb_hover'] ) {
@@ -1825,9 +1834,9 @@ class Widget extends \WP_Widget {
 						echo $this->get_number_input_block_html( $instance, 'thumb_h', esc_html__( 'Height:', 'category-posts' ), 1, '', '', true );
 						?>
 						<div class="cat-post-image-dimensions-help" style="display:none;">
-							<p><?php esc_html_e( 'Set one or more dimensions to 0 to not perform a ratio calculation.', 'category-posts' ); ?></p>
-							<p><?php esc_html_e( 'Set both to 0 will use the original image ratio.', 'category-posts' ); ?></p>
-							<p><?php esc_html_e( 'Max-width limits in terms of the total Post width.', 'category-posts' ); ?></p>
+							<p><?php esc_html_e( 'Set one dimensions to 0 the set dimension will be used with the original image ratio.', 'category-posts' ); ?></p>
+							<p><?php esc_html_e( 'Set both dimensions to 0 the original image ratio will be used.', 'category-posts' ); ?></p>
+							<p><?php esc_html_e( 'Max-width limits in relation of the total Post width.', 'category-posts' ); ?></p>
 						</div>
 						<div class="cat-post-thumb-change-size">
 							<p>
