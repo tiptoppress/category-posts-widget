@@ -209,7 +209,7 @@ class Virtual_Widget {
 				$styles['excerpt_lines'] = '.cat-post-item ' . $selector_wrap_text . ' {overflow: hidden;text-overflow: ellipsis;white-space: initial;' .
 					'display: -webkit-box;-webkit-line-clamp: ' . $settings['excerpt_lines'] . ';-webkit-box-orient: vertical;padding-bottom: 0 !important;}';
 				// float text instead wrap and don't hide the excerpt if there is no space
-				$styles['float_min_nowrap'] = 'p.cpwp-excerpt-text {min-width: 25px;}';
+				$styles['float_min_nowrap'] = 'p.cpwp-excerpt-text {min-width: 120px;}';
 			}
 
 			// add post format css if needed.
