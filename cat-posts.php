@@ -316,7 +316,7 @@ function get_template_regex() {
  */
 function upgrade_settings( $settings ) {
 
-	if ( is_countable( $setting ) && 0 === count( $settings ) ) {
+	if ( isset( $setting ) && is_countable( $setting ) && 0 === count( $settings ) ) {
 		return default_settings();
 	}
 
