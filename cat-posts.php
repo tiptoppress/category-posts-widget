@@ -679,7 +679,7 @@ function shortcode_names( $shortcode_name, $content ) {
  */
 function default_settings() {
 	return array(
-		'title'                  => __( 'Recent Posts', 'category-posts' ),
+		'title'                  => __( 'Category Posts', 'category-posts' ),
 		'title_link'             => false,
 		'title_link_url'         => '',
 		'hide_title'             => false,

@@ -319,10 +319,10 @@ class Widget extends \WP_Widget {
 					$instance['title'] = $category_info->name;
 				} else {
 					$instance['cat'] = 0; // For further processing treat it like "all categories".
-					$instance['title'] = __( 'Recent Posts', 'category-posts' );
+					$instance['title'] = __( 'Category Posts', 'category-posts' );
 				}
 			} else {
-				$instance['title'] = __( 'Recent Posts', 'category-posts' );
+				$instance['title'] = __( 'Category Posts', 'category-posts' );
 			}
 		}
 
