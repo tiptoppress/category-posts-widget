@@ -116,6 +116,13 @@ var cwp_namespace = {
         jQuery(panel).find('.cat-post-image-dimensions-help').toggle('slow');
     },
 
+    // Show title level help
+    toggleTitleLevelHelp: function(item, event) {
+        event.preventDefault();
+        var panel = item.parentElement.parentElement.parentElement.parentElement;
+        jQuery(panel).find('.cat-post-title-level-help').toggle('slow');
+    },
+
     // Show More Link help
     toggleMoreLinkHelp: function(item, event) {
         event.preventDefault();
@@ -495,6 +502,10 @@ jQuery(document).ready(function() {
 
         jQuery(class_namespace + ' a.toggle-image-dimensions-help').off('click').on('click', function(event) { // show image dimensions help
             cwp_namespace.toggleImageDimensionsHelp(this, event);
+        });
+
+        jQuery(class_namespace + ' a.toggle-title-level-help').off('click').on('click', function(event) { // show title level help
+            cwp_namespace.toggleTitleLevelHelp(this, event);
         });
 
         jQuery(class_namespace + ' a.toggle-more-link-help').off('click').on('click', function(event) { // show image dimensions help

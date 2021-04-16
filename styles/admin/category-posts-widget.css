@@ -79,6 +79,7 @@
     width: 26px;
 }
 
+.category-widget-cont input[type=radio].Initial,
 .category-widget-cont input[type=radio].Inline {
     width: 40px;
 }

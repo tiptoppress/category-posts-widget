@@ -681,6 +681,7 @@ function default_settings() {
 	return array(
 		'title'                  => __( 'Category Posts', 'category-posts' ),
 		'title_link'             => false,
+		'title_level'            => 'Initial',
 		'title_link_url'         => '',
 		'hide_title'             => false,
 		'cat'                    => 0,

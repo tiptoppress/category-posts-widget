@@ -310,6 +310,11 @@ class Widget extends \WP_Widget {
 	public function titleHTML( $before_title, $after_title, $instance ) {
 		$ret = '';
 
+		if( in_array( $instance['title_level'], array( 'H1','H2', 'H3', 'H6', 'H5', 'H6') ) ) {
+			$before_title = '';
+			$after_title  = '';
+		}
+
 		// If no title, use the name of the category.
 		if ( ! isset( $instance['title'] ) || ! $instance['title'] ) {
 			$instance['title'] = '';
@@ -349,6 +354,8 @@ class Widget extends \WP_Widget {
 			$ret .= $after_title;
 		}
 
+		$ret = $this->add_heading_level( $instance, $ret, 'title_level' );
+
 		return $ret;
 	}
 
@@ -361,24 +368,26 @@ class Widget extends \WP_Widget {
 	 */
 	public function add_heading_level( $instance, $ret, $key ) {
 
+		$class = ( isset( $instance[ 'disable_theme_styles' ] ) && $instance[ 'disable_theme_styles' ] ) ? '' : ' class="widget-title"';
+
 		switch( $instance[ $key ] ) {
 			case 'H1':
-				$ret = '<h1>' . $ret . '</h1>';
+				$ret = '<h1' . $class . '>' . $ret . '</h1>';
 			break;
 			case 'H2':
-				$ret = '<h2>' . $ret . '</h2>';
+				$ret = '<h2' . $class . '>' . $ret . '</h2>';
 			break;
 			case 'H3':
-				$ret = '<h3>' . $ret . '</h3>';
+				$ret = '<h3' . $class . '>' . $ret . '</h3>';
 			break;
 			case 'H4':
-				$ret = '<h4>' . $ret . '</h4>';
+				$ret = '<h4' . $class . '>' . $ret . '</h4>';
 			break;
 			case 'H5':
-				$ret = '<h5>' . $ret . '</h5>';
+				$ret = '<h5' . $class . '>' . $ret . '</h5>';
 			break;
 			case 'H6':
-				$ret = '<h6>' . $ret . '</h6>';
+				$ret = '<h6' . $class . '>' . $ret . '</h6>';
 			break;
 		}
 
@@ -1008,6 +1017,7 @@ class Widget extends \WP_Widget {
 
 		if ( ( 'nothing' === $instance['no_match_handling'] ) || ! empty( $items ) ) {
 			echo $before_widget; // Xss ok. This is how widget actually expected to behave.
+
 			echo $this->titleHTML( $before_title, $after_title, $instance );
 
 			$thumb = isset( $this->instance['template'] ) && preg_match( '/%thumb%/', $this->instance['template'] );
@@ -1190,6 +1200,13 @@ class Widget extends \WP_Widget {
 			<?php echo $this->get_text_input_block_html( $instance, 'title', esc_html__( 'Title', 'category-posts' ), '', true ); ?>
 			<?php echo $this->get_checkbox_block_html( $instance, 'title_link', esc_html__( 'Make widget title link', 'category-posts' ), 0 !== $cat ); ?>
 			<?php echo $this->get_text_input_block_html( $instance, 'title_link_url', esc_html__( 'Title link URL', 'category-posts' ), '', 0 === $cat ); ?>
+			<?php echo $this->get_radio_buttons_block_html( $instance, 'title_level', array( 'Initial', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6' ), esc_html__( 'Heading Level', 'category-posts' ) . ":" .
+				' <a href="#" class="dashicons toggle-title-level-help dashicons-paperclip"><span class="screen-reader-text">' . 
+				esc_html__( 'Show title level help', 'category-posts' ) . '</span></a>', true ); ?>
+			<div class="cat-post-title-level-help" style="display:none;">
+				<p><?php echo __( 'Also, try \'Disable Theme\'s styles\' on General tab to avoid rendering commonly used CSS classes such here widget-title, which often used in Themes to write their CSS selectors and may affect the design.', 'category-posts' ); ?>
+				</p>
+			</div>
 		</div>
 	</div>
 <?php
@@ -1576,7 +1593,7 @@ class Widget extends \WP_Widget {
 	*/
 	private function get_radio_buttons_block_html( $instance, $key, $values, $label, $visible ) {
 
-		$ret = '<label for="' . esc_attr( $this->get_field_id( $key ) ) . "\">" . $label . ":</label>\n";
+		$ret = '<label for="' . esc_attr( $this->get_field_id( $key ) ) . "\">" . $label . "</label>\n";
 		$ret .= '<span class="cpwp-right">';
 
 		array_map ( function( $value ) use ( &$ret, $instance, $key ) {
@@ -1756,7 +1773,7 @@ class Widget extends \WP_Widget {
 					<div class="cpwp_ident">
 					<?php
 						echo $this->get_number_input_block_html( $instance, 'item_title_lines', esc_html__( 'Lines (responsive):', 'category-posts' ), 0, '', '', true );
-						echo $this->get_radio_buttons_block_html( $instance, 'item_title_level', array( 'Inline', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6' ), esc_html__( 'Heading Level', 'category-posts' ), true );
+						echo $this->get_radio_buttons_block_html( $instance, 'item_title_level', array( 'Inline', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6' ), esc_html__( 'Heading Level:', 'category-posts' ), true );
 					?>
 					</div>
 				</div>
