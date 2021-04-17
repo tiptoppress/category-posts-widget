@@ -1,6 +1,6 @@
 /**
  * Category Posts Widget
- * http://mkrdip.me/category-posts-widget
+ * https://github.com/tiptoppress/category-posts-widget
  *
  * Adds a widget that shows the most recent posts from a single category.
  *

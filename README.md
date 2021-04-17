@@ -18,7 +18,7 @@ Adds a widget that shows the most recent posts from a single category.
 Category Posts Widget is a light widget designed to do one thing and do it well: display the most recent posts from a certain category.
 
 ### Term and Category based Posts Widget
-A premium version of that free widget available at<a href="http://tiptoppress.com/">tiptoppress.com</a> created for big Wordpress sites.
+A premium version of that free widget available at<a href="https://tiptoppress.com/">tiptoppress.com</a> created for big Wordpress sites.
 
 ### Premium features
 * Auto-sizing Grid layout
@@ -32,10 +32,10 @@ A premium version of that free widget available at<a href="http://tiptoppress.co
 * Custom Post Types, Events, Products support
 * All free features
 * E-Mail support
-* More examples on the [demo pages](http://demo.tiptoppress.com/)
+* More examples on the [demo pages](https://demo.tiptoppress.com/)
 
 ### Features
-* [Template](http://tiptoppress.com/template-arrange-post-details/) to arrange the post details.
+* [Template](https://tiptoppress.com/template-arrange-post-details/) to arrange the post details.
 * The Template text can be a post details placeholder, plain text, HTML or a font-icons.
 * Font-icon support.
 * 'Load more' button / Ajax API
@@ -64,8 +64,8 @@ A premium version of that free widget available at<a href="http://tiptoppress.co
 * Multi sites support.
 
 ### Documentation
-* Full documentation on [tiptoppress.com](http://tiptoppress.com/category-posts-widget/documentation-4-9/)
-* Shortcode: Use [catposts] in the content and [edit in the customizer](http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content/)
+* Full documentation on [tiptoppress.com](https://tiptoppress.com/category-posts-widget/documentation-4-9/)
+* Shortcode: Use [catposts] in the content and [edit in the customizer](https://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content/)
 * Formatting date and time: See <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>
 
 ### Contribute
@@ -95,17 +95,17 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 ## Frequently Asked Questions
 = Template, placeholder and post detail =
-Here You can control the [Post Detail parts](http://tiptoppress.com/category-posts-widget/documentation-4-9/#Post_details), which appears as part of the post item. All post detail will placed as placeholder. The text in the Template area can be a post details placeholder, plain text, HTML or HTML for SVG font-icons.
+Here You can control the [Post Detail parts](https://tiptoppress.com/category-posts-widget/documentation-4-9/#Post_details), which appears as part of the post item. All post detail will placed as placeholder. The text in the Template area can be a post details placeholder, plain text, HTML or HTML for SVG font-icons.
 
-<a href="http://tiptoppress.com/template-arrange-post-details/">How it works? and examples.</a>
+<a href="https://tiptoppress.com/template-arrange-post-details/">How it works? and examples.</a>
 
-For more layout options please try our premium widget: [Term and Category based Posts Widget](http://tiptoppress.com/term-and-category-based-posts-widget/).
+For more layout options please try our premium widget: [Term and Category based Posts Widget](https://tiptoppress.com/term-and-category-based-posts-widget/).
 
 ### Use SVG font-icons
 For SVG font-icon HTML we recommend the [WordPress Dashicons](https://developer.wordpress.org/resource/dashicons/), which are included as default and can be used without any icon-font including.
 
 ### How to use Page Bilder plugins like Divi, SiteOrigin Page Builder or Elementor
-Read more about Page Builder plugins at our [FAQs](http://tiptoppress.com/faqs/)
+Read more about Page Builder plugins at our [FAQs](https://tiptoppress.com/faqs/)
 
 #### The font-size is different from that of other widgets or Theme elements?
 Use the option: 'Disable only font style' in the General panel.
@@ -132,7 +132,11 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 6. Widget behaviour settings for each user.
 
 ## Changelog
-#### [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget/)
+#### [Read more on our blog ...](https://tiptoppress.com/category/category-posts-widget/)
+
+#### 4.9.11 - April 15th 2021
+* Wiget title heading level buttons
+* Add sticky posts at start
 
 #### 4.9.10 - December 15th 2020
 * Fixed Missing load more button
