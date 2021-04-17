@@ -210,11 +210,14 @@ class Widget extends \WP_Widget {
 		}
 		$sort_order = ( isset( $instance['asc_sort_order'] ) && $instance['asc_sort_order'] ) ? 'ASC' : 'DESC';
 
+		// start sticky posts
+		$ignore_sticky = isset( $instance['sticky'] ) && $instance['sticky'] ? false : true;
+
 		// Get array of post info.
 		$args = array(
 			'orderby'             => $sort_by,
 			'order'               => $sort_order,
-			'ignore_sticky_posts' => 1, // Make sure we do not get stickies out of order.
+			'ignore_sticky_posts' => $ignore_sticky, // Make sure we do not get stickies out of order.
 			'no_found_rows'       => true, // Do not count the total numbers of rows by default.
 		);
 
@@ -1298,6 +1301,7 @@ class Widget extends \WP_Widget {
 			echo $this->get_checkbox_block_html( $instance, 'asc_sort_order', esc_html__( 'Reverse sort order (ascending)', 'category-posts' ), true );
 			echo $this->get_checkbox_block_html( $instance, 'exclude_current_post', esc_html__( 'Exclude current post', 'category-posts' ), true );
 			echo $this->get_checkbox_block_html( $instance, 'hideNoThumb', esc_html__( 'Exclude posts which have no thumbnail', 'category-posts' ), true );
+			echo $this->get_checkbox_block_html( $instance, 'sticky', esc_html__( 'Start with sticky posts', 'category-posts' ), true );
 			?>
 		</div>
 		<?php

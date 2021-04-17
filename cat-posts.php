@@ -692,6 +692,7 @@ function default_settings() {
 		'asc_sort_order'         => false,
 		'exclude_current_post'   => false,
 		'hideNoThumb'            => false,
+		'sticky'                 => false,
 		'footer_link_text'       => '',
 		'footer_link'            => '',
 		'item_title_level'       => 'Inline',
