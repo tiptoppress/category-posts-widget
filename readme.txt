@@ -1,10 +1,15 @@
 ﻿=== Category Posts Widget ===
 Contributors: mark-k, kometschuh, mkrdip
-Donate link: http://mkrdip.me/donate
+Donate link: https://wordpress.org/support/plugin/category-posts/reviews/
 Tags: category, categories, posts, widget, posts widget, recent posts, category recent posts, shortcode, sidebar, excerpt, multiple widgets
 Requires at least: 2.8
+<<<<<<< HEAD
 Tested up to: 4.9
 Stable tag: 4.8.5
+=======
+Tested up to: 5.7
+Stable tag: 4.9.11
+>>>>>>> 5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,75 +19,54 @@ Adds a widget that shows the most recent posts from a single category.
 Category Posts Widget is a light widget designed to do one thing and do it well: display the most recent posts from a certain category.
 
 = Term and Category based Posts Widget =
-A premium version of this free widget here and available on [tiptoppress.com](http://tiptoppress.com/?utm_source=wordpress_org&utm_campaign=premium_widget_cpw&utm_medium=web) created for big Wordpress sites.
-We've also started creating free widget Add-ons for the Premium Widget here: [Widget extensions](http://tiptoppress.com/extensions/?utm_source=wordpress_org&utm_campaign=premium_widget_cpw&utm_medium=web).
+A premium version of that free widget available at [tiptoppress.com](https://tiptoppress.com/) created for big Wordpress sites.
 
 = Premium features =
-* "Post List Alterations"
-* Masonry (Responsive grid layouts)
-* Grid and Column full page layouts
-* Slider (Vertical and horizontal)
-* More complex ways to filter (all, any, exclude, also childes, AND or just OR rule)
-* Categories, Custom Post Types, Taxonomies, Events, Products, ...
-* Full background post images
-* Mouse hover effects for post thumbnail
-* All Category Posts Widget features
-* E-Mail support
-* Free trail on localhost
-* E-Mail support
+* Auto-sizing Grid layout
+* Custom field support in the Template
+* Shortcode support in the Template
+* Image-Slider (or News-Ticker)
+* Asymmetrical list layouts
+* Full background images
+* Masonry responsive grid layout
+* More complex filter (ANY, NOT, AND, ...)
+* Custom Post Types, Events, Products support
 * All free features
-* More examples on the [demo pages](http://demo.tiptoppress.com/?utm_source=wordpress_org&utm_campaign=demo_cpw&utm_medium=web)
+* E-Mail support
+* More examples on the [demo pages](https://demo.tiptoppress.com/)
 
 = Features =
-* SVG font-icon support for post formats
-* [Template](http://tiptoppress.com/template-arrange-post-details/) to arrange the post details
-* Premade Templates
-* The Template text can be a post details placeholder, plain text, HTML or HTML for SVG font-icons
-* New date format: Time since plublished
-* Filter by post status: Published, scheduled, private
-* New hover effect: SVG font-icon
+* [Template](https://tiptoppress.com/template-arrange-post-details/) to arrange the post details.
+* The Template text can be a post details placeholder, plain text, HTML or a font-icons.
+* Font-icon support.
+* 'Load more' button / Ajax API
+* Item Title heading level buttons
+* Excerpt length and item title in lines (line-clamp)
 * Shortcode (Easily change all Shortcode options in the customizer).
-* Support multiple shortcodes at the same post.
+* Date range filter
+* New date format: Time since plublished
+* Filter by post status: Published, scheduled, private.
+* Multiple shortcodes at the same site or post.
 * Add option for post offset (use two or more widgets after another).
-* Add UI buttons in the editor toolbar to insert shortcode.
+* Admin UI: Buttons in the editor toolbar to insert shortcode.
 * Option to touch device friendly "everything is a link".
 * For editing shortcode adds a Customizer link to the admin-bar ("With one click to the Customizer").
-* Option to show post thumbnail & set dimensions by width & height.
-* Option for <a target="_blank" href="http://tiptoppress.com/css-image-crop/?utm_source=wordpress_org&utm_campaign=features_crop_cpw&utm_medium=web">client-side cropped thumbnail dimensions</a> by width & height.
-* Fluid images for Responsive Layouts.
+* Set thumbnail width & height / image crop with CSS (object-fit).
+* Fluid images (max-width in %).
+* One thumb dimension can be left empty.
 * Option to set mouse hover effects for post thumbnail.
-* Set a thumbnail as default thumbnail.
-* Add option to enable excerpt filters from Themes and plugins.
-* Jetpack 'Social buttons on posts' support.
-* Add option to disable social buttons, banner, ... in the excerpt.
-* Option to change ordering of posts.
-* Set which category the posts should come form.
-* Add dropdownbox entry for 'all' categories.
-* Option to filter by post status.
-* Set how many posts to show.
-* Option to hide widget, if category have currently no posts.
-* Add option to disable subcategories.
-* Option to put thumbnail on top.
+* Set a default thumbnail.
+* Hide widget text or text, if there is no post.
 * Option to hide posts which have no thumbnail.
 * Option exclude current post.
-* Option to hide the widget title and post titles.
-* Option to make the widget title link to the category page.
-* Option to show the post excerpt, set the length, allow HTML and change 'more' text.
-* Option show post author.
-* Option to show the comment count.
-* Option to show the post date.
-* Option to make the widget date link to the category page.
-* Option to format the outputted date string.
-* Option to link to the category page below posts list.
-* Option to disable the widget CSS or more granular control of default styling with not apply the font styles.
-* Multiple widgets.
+* Option show post author, comment's count, post date.
+* Admin UI: Set / find thumbnail size buttons: +, ¼, ½, 2x, -, ratio and Media sizes
+* Admin UI: Buttons to easy add post details placeholder.
 * Multi sites support.
-* Support localization with translate.wordpress.org
-* Use WP user profile for settings ('auto close' and if the shortcode button appears in the editor toolbar).
 
 = Documentation =
-* Full [documentation](http://tiptoppress.com/category-posts-widget/documentation-4-8/?utm_source=wordpress_org&utm_campaign=documentation_4_8_cpw&utm_medium=web)
-* Shortcode: Use [catposts] [in the content and edit options in the customizer](http://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content/?utm_source=wordpress_org&utm_campaign=documentation_shortcode_cpw&utm_medium=web)
+* Full [documentation](https://tiptoppress.com/category-posts-widget/documentation-4-9)
+* Shortcode: Use [catposts] in the content and [edit in the customizer](https://tiptoppress.com/use-shortcode-to-add-category-posts-widget-to-the-content/)
 * Formatting date and time: See <a target="_blank" href="https://codex.wordpress.org/Formatting_Date_and_Time">Formatting Date and Time</a>
 
 = Contribute =
@@ -112,32 +96,24 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 == Frequently Asked Questions ==
 = Template, placeholder and post detail =
-Here You can control the [Post Detail parts](http://tiptoppress.com/category-posts-widget/documentation-4-8/#Post_details), which appears as part of the post item. All post detail will placed as placeholder. The text in the Template area can be a post details placeholder, plain text, HTML or HTML for SVG icons.
+Here You can control the [Post Detail parts](https://tiptoppress.com/category-posts-widget/documentation-4-9/#Post_details), which appears as part of the post item. All post detail will placed as placeholder. The text in the Template area can be a post details placeholder, plain text, HTML or HTML for SVG icons.
 
-[How it works? and examples.](http://tiptoppress.com/template-arrange-post-details/)
+[How it works? and examples.](https://tiptoppress.com/template-arrange-post-details/)
 
-For more layout options please try our premium widget: [Term and Category based Posts Widget](http://tiptoppress.com/term-and-category-based-posts-widget/).
+For more layout options please try our premium widget: [Term and Category based Posts Widget](https://tiptoppress.com/term-and-category-based-posts-widget/).
 
 = Use SVG icons =
 For SVG font-icon HTML we recommend the [WordPress Dashicons](https://developer.wordpress.org/resource/dashicons/), which are included as default and can be used without any font-icon including.
 
-= How Category Posts Widget work with SiteOrigin Page Builder =
-Please add the widget with shortcode [catposts] inside a editor widget which is placed to a SiteOrigin Page Builder row.
-We also create a YouTube video: [How Category Posts Widget work with SiteOrigin Page Builder](http://tiptoppress.com/how-category-posts-widget-work-with-siteorigin-page-builder/)
-
-= How Category Posts Widget work with Divi Builder =
-You can create a new Divi widget area and put our widgets into a Divi Sidebar Module: [How to put a widget into Divi Module](https://divibooster.com/how-to-put-a-widget-into-divi-module/).
-
-= How our widgets works with other page builder plugins like Elementor, Thrive Architect etc. =
-We recommend for all other page builder plugins like Elementor or Thrive Architect to use the [WP Custom Widget Area](https://wordpress.org/plugins/wp-custom-widget-area/) plugin in additional.
-
-Use the [WP Custom Widget Area](https://wordpress.org/plugins/wp-custom-widget-area/) plugin and create a new custom area with this plugin and place the shortcode (from the new created widget area) to a post or page. Then add our widget to the new created custom widget area  the widgets admin site (Dashboard > Appearance > Widgets > … ).
+= How to use Page Bilder plugins like Divi, SiteOrigin Page Builder or Elementor =
+Read more about Page Builder plugins at our [FAQs](https://tiptoppress.com/faqs/)
 
 = The font-size is different from that of other widgets or Theme elements? =
-Please use the option: "Disable widget CSS".
+Use the option: 'Disable only font style' in the General panel.
 
 = I want the title as a link pointing to the selected Categorie page? =
-Enable the check box "Make widget title link".
+Is just a single category selected in the Filter panel: Enable the check box "Make widget title link".
+Is 'All categories' selected in the Filter panel: Use the text field 'Title link URL'.
 
 = Parse error: syntax error, unexpected T_FUNCTION in /home/www/blog/wp-content/plugins/category-posts/cat-posts.php on line 58 =
 Some of the features that were used in that version needs PHP 5.3+.
@@ -157,7 +133,61 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 6. Widget behaviour settings for each user.
 
 == Changelog ==
-[Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=wordpress_org&utm_campaign=changelog_cpw&utm_medium=web)
+[Read more on our blog ...](https://tiptoppress.com/category/category-posts-widget)
+
+= 4.9.11 - April 15th 2021 =
+* Wiget title heading level buttons
+* Add sticky posts at start
+
+= 4.9.10 - December 15th 2020 =
+* Fixed Missing load more button
+
+= 4.9.9 - December 9th 2020 =
+* Load more placeholders
+
+= 4.9.8 - November 30th 2020 =
+* Date since published for n-days
+
+= 4.9.7 - November 21th 2020 =
+* Item title in lines (line-clamp)
+* Fixed Column layout
+* Fixed Image Html rendering
+
+= 4.9.6 - November 16th 2020 =
+* Item title heading level buttons
+* Excerpt-more link placeholder
+* Native WordPress filter CSS classes
+* Rework thumb handling
+
+= 4.9.5 - May 12th 2020 =
+* Fixed Widget_Title filter missing parameters
+
+= 4.9.4 - March 2th 2020 =
+* Fixed Delete global click event
+
+= 4.9.3 - March 18th 2020 =
+* Fixed Mouse hover icon and post format indication
+
+= 4.9.2 - Mai 23th 2019 =
+* Fixed Starts with post
+* Fixed Replace the figure-element
+
+= 4.9.1 - Mai 17th 2019 =
+* 'Load more' button / Ajax API
+* Data range filter
+* Text, if there is no post
+* Excerpt length in lines (line-clamp)
+* Image crop with CSS (object-fit)
+* Fluid images (max-width in %).
+* One thumb dimension can be left empty
+* Admin UI: Button to easy add post details placeholder
+* Admin UI: Set / find thumbnail size buttons: +, ¼, ½, 2x, -, ratio and Media sizes
+
+= 4.8.5 - April 02nd 2018 =
+* Fixed Tabs not working
+
+= 4.8.4 - April 02nd 2018 =
+* Fixed Make widget SiteOrigin Page Builder Compatible
 
 = 4.8.5 - April 02nd 2018 =
 * Fixed Tabs not working
