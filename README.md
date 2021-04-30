@@ -132,9 +132,6 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 6. Widget behaviour settings for each user.
 
 ## Changelog
-<<<<<<< HEAD
-#### [Read more on our blog ...](http://tiptoppress.com/category/category-posts-widget?utm_source=github&utm_campaign=changelog_cpw&utm_medium=web)
-=======
 #### [Read more on our blog ...](https://tiptoppress.com/category/category-posts-widget/)
 
 #### 4.9.11 - April 15th 2021
@@ -185,7 +182,6 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 * Admin UI: Button to easy add post details placeholder
 * Admin UI: Set / find thumbnail size buttons: +, ¼, ½, 2x, -, ratio and Media sizes
 
->>>>>>> 5.0
 #### 4.8.5 - April 02nd 2018
 * Fixed Tabs not working
 

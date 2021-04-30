@@ -12,13 +12,8 @@ Plugin Name: Category Posts Widget
 Plugin URI: https://wordpress.org/plugins/category-posts/
 Description: Adds a widget that shows the most recent posts from a single category.
 Author: TipTopPress
-<<<<<<< HEAD
-Version: 4.8.5
-Author URI: http://tiptoppress.com
-=======
 Version: 4.9.11
 Author URI: https://tiptoppress.com
->>>>>>> 5.0
 Text Domain: category-posts
 Domain Path: /languages
 */
@@ -30,17 +25,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-<<<<<<< HEAD
-const VERSION        = '4.8.5';
-const DOC_URL        = 'http://tiptoppress.com/category-posts-widget/documentation-4-8?utm_source=widget_cpw&utm_campaign=documentation_4_8_cpw&utm_medium=form';
-const PRO_URL        = 'http://tiptoppress.com/term-and-category-based-posts-widget/?utm_source=widget_cpw&utm_campaign=get_pro_cpw&utm_medium=action_link';
-const SUPPORT_URL    = 'https://wordpress.org/support/plugin/category-posts';
-=======
 const VERSION        = '4.9.11';
 const DOC_URL        = 'https://tiptoppress.com/category-posts-widget/documentation-4-9/';
 const PRO_URL        = 'https://tiptoppress.com/term-and-category-based-posts-widget/';
 const SUPPORT_URL    = 'https://wordpress.org/support/plugin/category-posts/';
->>>>>>> 5.0
 const SHORTCODE_NAME = 'catposts';
 const SHORTCODE_META = 'categoryPosts-shorcode';
 const WIDGET_BASE_ID = 'category-posts';
@@ -218,15 +206,11 @@ function embed_front_end_scripts() {
  */
 function admin_scripts( $hook ) {
 
-<<<<<<< HEAD
-	if ( 'widgets.php' === $hook || 'post.php' === $hook  ) { // enqueue only for widget admin and customizer. (add if post.php: fix make widget SiteOrigin Page Builder plugin, GH issue #181)
-=======
 	if ( 'widgets.php' === $hook || 'post.php' === $hook ) { // enqueue only for widget admin and customizer. (add if post.php: fix make widget SiteOrigin Page Builder plugin, GH issue #181).
 
 		/*
 		 * Add script to control admin UX.
 		 */
->>>>>>> 5.0
 
 		// Use unminified version of JS when debuging, and minified when not.
 		$suffix = 'min.js';
@@ -273,18 +257,6 @@ function load_textdomain() {
 	load_plugin_textdomain( 'category-posts', false, plugin_basename( dirname( __FILE__ ) ) . '/languages' );
 }
 
-<<<<<<< HEAD
-/*
- * Add styles for widget sections
- */
-
-add_action( 'admin_print_styles-widgets.php', __NAMESPACE__ . '\admin_styles' );
-
-// fix make widget SiteOrigin Page Builder plugin, GH issue #181
-add_action('siteorigin_panel_enqueue_admin_scripts', __NAMESPACE__ . '\admin_styles' );
-
-=======
->>>>>>> 5.0
 /**
  * Add styles for widget admin sections
  *

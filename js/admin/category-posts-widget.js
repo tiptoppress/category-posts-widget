@@ -336,12 +336,7 @@ var cwp_namespace = {
 
         _that.closest('label').find('span').html(_that.val() + '%');
 
-<<<<<<< HEAD
-	// needed to reassign click handlers after widget refresh
-	jQuery(document).on('widget-added widget-updated panelsopen', function(root,element){ // for customize and after save on widgets page (add panelsopen: fix make widget SiteOrigin Page Builder plugin, GH issue #181)
-=======
         _input_thumb_h.trigger('input', 'change');
->>>>>>> 5.0
 
         return false;
     },
@@ -426,11 +421,6 @@ jQuery(document).ready(function() {
     // needed to reassign click handlers after widget refresh
     jQuery(document).on('widget-added widget-updated panelsopen', function(root, element) { // for customize and after save on widgets page (add panelsopen: fix make widget SiteOrigin Page Builder plugin, GH issue #181)
 
-<<<<<<< HEAD
-		jQuery(document).off('click', class_namespace+' a.toggle-template-help').on('click', class_namespace+' a.toggle-template-help', function (event) { // show template help
-			cwp_namespace.toggleTemplateHelp(this, event);
-		});
-=======
         jQuery('.category-widget-cont h4').off('click').on('click', function() {
             cwp_namespace.autoCloseOpenPanels(this);
             // toggle panel open/close
@@ -439,7 +429,6 @@ jQuery(document).ready(function() {
         jQuery('.cwp_default_thumb_select').off('click').on('click', function() { // select default thumb
             cwp_namespace.defaultThumbnailSelection(this, cwp_default_thumb_selection.frame_title, cwp_default_thumb_selection.button_title);
         });
->>>>>>> 5.0
 
         jQuery('.cwp_default_thumb_remove').off('click').on('click', function() { // remove default thumb
             cwp_namespace.removeDefaultThumbnailSelection(this);

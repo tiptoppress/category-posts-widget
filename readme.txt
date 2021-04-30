@@ -3,13 +3,8 @@ Contributors: mark-k, kometschuh, mkrdip
 Donate link: https://wordpress.org/support/plugin/category-posts/reviews/
 Tags: category, categories, posts, widget, posts widget, recent posts, category recent posts, shortcode, sidebar, excerpt, multiple widgets
 Requires at least: 2.8
-<<<<<<< HEAD
-Tested up to: 4.9
-Stable tag: 4.8.5
-=======
 Tested up to: 5.7
 Stable tag: 4.9.11
->>>>>>> 5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -182,12 +177,6 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 * One thumb dimension can be left empty
 * Admin UI: Button to easy add post details placeholder
 * Admin UI: Set / find thumbnail size buttons: +, ¼, ½, 2x, -, ratio and Media sizes
-
-= 4.8.5 - April 02nd 2018 =
-* Fixed Tabs not working
-
-= 4.8.4 - April 02nd 2018 =
-* Fixed Make widget SiteOrigin Page Builder Compatible
 
 = 4.8.5 - April 02nd 2018 =
 * Fixed Tabs not working
