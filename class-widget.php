@@ -1147,7 +1147,16 @@ class Widget extends \WP_Widget {
 			$current_post_id = (int) $singular_id;
 		}
 
+		$postCount = 0;
+
 		while ( $cat_posts->have_posts() ) {
+			$postCount++;
+
+			// If sticky posts are added, break anyway after the set number of posts.
+			if ( isset( $instance['sticky'] ) && $instance['sticky'] && $postCount > $instance['num'] ) {
+				break;
+			}
+
 			$cat_posts->the_post();
 			$ret[] = $this->itemHTML( $instance, $current_post_id );
 		}
