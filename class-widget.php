@@ -458,13 +458,14 @@ class Widget extends \WP_Widget {
 		$loadmore_text    = preg_replace( $pattern,  $post_count, $loadmore_text );
 
 		// Load more
-		$number  = $instance['num'];
-		$start   = $instance['offset'] + $number;
-		$loading = $instance['loading_text'] !== '' ? $instance['loading_text'] : esc_attr__( 'Loading...', 'category-posts' );
+		$number   = $instance['num'];
+		$start    = $instance['offset'] + $number;
+		$loading  = $instance['loading_text'] !== '' ? $instance['loading_text'] : esc_attr__( 'Loading...', 'category-posts' );
+		$scrollTo = isset( $instance['loadmore_scrollTo'] ) && $instance['loadmore_scrollTo'];
 
 		$ret .= '<button type="button" data-loading="' . esc_attr( $loading ) . '" data-id="' . esc_attr( $id ) .
-					'" data-start="' . esc_attr( $start ) . '" data-context="' . esc_attr( $context ) . '" data-number="' . 
-					esc_attr( $number ) . '" data-post-count="' . esc_attr( $post_count ) . '" data-placeholder="' . esc_attr( $placeholder_text ) . '">' . 
+					'" data-start="' . esc_attr( $start ) . '" data-context="' . esc_attr( $context ) . '" data-number="' . esc_attr( $number ) . 
+					'" data-post-count="' . esc_attr( $post_count ) . '" data-placeholder="' . esc_attr( $placeholder_text ) . '" data-scrollto="' . esc_html( $scrollTo ) . '">' . 
 					esc_html( $loadmore_text ) .
 				'</button>';
 		$ret .= '</div>';
@@ -1991,6 +1992,7 @@ class Widget extends \WP_Widget {
 					<?php echo $this->get_checkbox_block_html( $instance, 'enable_loadmore', esc_html__( 'Enable Load More', 'category-posts' ), true ); ?>
 					<div class="loadmore-settings" style="display:<?php echo ( $instance['enable_loadmore'] ) ? 'block' : 'none'; ?>">
 						<?php 
+						echo $this->get_checkbox_block_html( $instance, 'loadmore_scrollTo', esc_html__( 'Scrollbar', 'category-posts' ), true );
 						echo $this->get_text_input_block_html( $instance, 'loadmore_text', 
 							esc_html__( 'Button text', 'category-posts' ) .
 							' <a href="#" class="dashicons toggle-button-text-help dashicons-editor-help">' .

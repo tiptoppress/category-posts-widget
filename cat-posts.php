@@ -719,6 +719,7 @@ function default_settings() {
 		'template'               => "%title%\n\n%thumb%",
 		'text_do_not_wrap_thumb' => false,
 		'enable_loadmore'        => false,
+		'loadmore_scrollTo'      => false,
 		'loadmore_text'          => sprintf( __( 'Load More (%s/%s)', 'category-posts' ), '%step%', '%all%'),
 		'loading_text'           => __( 'Loading...', 'category-posts' ),
 		'date_range'             => 'off',
