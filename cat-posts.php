@@ -540,22 +540,27 @@ function equal_cover_content_height( $number, $widgetsettings ) {
 					}
 				}
 
+				var widget = jQuery('#<?php echo esc_attr( $number ); ?>');
+
 				jQuery( document ).ready(function () {
-					var widget = jQuery('#<?php echo esc_attr( $number ); ?>');
-
-					<?php	/* do once on document ready */ echo "\r\n"; ?>
 					cat_posts_namespace.layout_wrap_text.preWrap(widget);
-
-					<?php /* do on page load or on resize the browser window */ echo "\r\n"; ?>
-					jQuery(window).on('load resize', function() {
-						cat_posts_namespace.layout_wrap_text.setClass(widget);
-						<?php	/* No ratio calculation if one or more dimensions is set to 0 */ echo "\r\n"; ?>
-						<?php	if ( isset( $widgetsettings['thumb_w'] ) && 0 !== intval( $widgetsettings['thumb_w'] ) &&
-						 			isset( $widgetsettings['thumb_h'] ) && 0 !== intval( $widgetsettings['thumb_h'] ) ) : echo "\r\n"; ?>
-							cat_posts_namespace.layout_img_size.setHeight(widget);
-						<?php	endif; echo "\r\n"; ?>
-					});
+					cat_posts_namespace.layout_wrap_text.setClass(widget);
+					<?php	/* No ratio calculation if one or more dimensions is set to 0 */ echo "\r\n"; ?>
+					<?php	if ( isset( $widgetsettings['thumb_w'] ) && 0 !== intval( $widgetsettings['thumb_w'] ) &&
+								isset( $widgetsettings['thumb_h'] ) && 0 !== intval( $widgetsettings['thumb_h'] ) ) : echo "\r\n"; ?>
+						cat_posts_namespace.layout_img_size.setHeight(widget);
+					<?php	endif; echo "\r\n"; ?>
 				});
+
+				jQuery(window).on('load resize', function() {
+					cat_posts_namespace.layout_wrap_text.setClass(widget);
+					<?php	/* No ratio calculation if one or more dimensions is set to 0 */ echo "\r\n"; ?>
+					<?php	if ( isset( $widgetsettings['thumb_w'] ) && 0 !== intval( $widgetsettings['thumb_w'] ) &&
+								isset( $widgetsettings['thumb_h'] ) && 0 !== intval( $widgetsettings['thumb_h'] ) ) : echo "\r\n"; ?>
+						cat_posts_namespace.layout_img_size.setHeight(widget);
+					<?php	endif; echo "\r\n"; ?>
+				});
+
 			}
 		</script>
 		<?php
