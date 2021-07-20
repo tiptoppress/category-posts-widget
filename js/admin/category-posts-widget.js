@@ -412,7 +412,7 @@ jQuery(document).ready(function() {
 
     var class_namespace = '.category-widget-cont';
 
-    jQuery('.category-widget-cont h4').click(function() { // for widgets page
+    jQuery('.category-widget-cont h4').on('click', function() { // for widgets page
         cwp_namespace.autoCloseOpenPanels(this);
         // toggle panel open/close
         cwp_namespace.clickHandler(this);

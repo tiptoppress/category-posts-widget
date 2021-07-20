@@ -134,6 +134,9 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 ## Changelog
 #### [Read more on our blog ...](https://tiptoppress.com/category/category-posts-widget/)
 
+#### 4.9.12 - July 20 2021
+* Deprecated jQuery warnings
+
 #### 4.9.11 - April 15th 2021
 * Wiget title heading level buttons
 * Add sticky posts at start
