@@ -540,7 +540,7 @@ function equal_cover_content_height( $number, $widgetsettings ) {
 					}
 				}
 
-				var widget = jQuery('#<?php echo esc_attr( $number ); ?>');
+				let widget = jQuery('#<?php echo esc_attr( $number ); ?>');
 
 				jQuery( document ).ready(function () {
 					cat_posts_namespace.layout_wrap_text.preWrap(widget);
