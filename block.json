@@ -1,0 +1,16 @@
+{
+	"apiVersion": 2,
+	"name": "tiptip/category-posts-block",
+	"title": "Category Posts",
+	"category": "widgets",
+	"icon": "admin-post",
+	"description": "Adds a widget that shows the most recent posts from a single category.",
+	"textdomain": "category-posts",
+	"supports": {
+		"align": true,
+		"html": false
+	},
+	"editorScript": "file:./build/index.js",
+	"editorStyle": "file:./build/style-index.css",
+	"style": "file:./build/style-index.css"
+}

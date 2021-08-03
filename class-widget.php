@@ -26,6 +26,7 @@ class Widget extends \WP_Widget {
 	 */
 	public function __construct() {
 		$widget_ops = array(
+			'show_instance_in_rest' => true,
 			'classname'   => 'cat-post-widget',
 			'description' => __( 'List single category posts', 'category-posts' ),
 		);

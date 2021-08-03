@@ -1,10 +1,10 @@
 ﻿=== Category Posts Widget ===
 Contributors: mark-k, kometschuh, mkrdip
 Donate link: https://wordpress.org/support/plugin/category-posts/reviews/
-Tags: category, categories, posts, widget, posts widget, recent posts, category recent posts, shortcode, sidebar, excerpt, multiple widgets
+Tags: block, category, categories, posts, recent posts
 Requires at least: 2.8
 Tested up to: 5.8
-Stable tag: 4.9.12
+Stable tag: 4.9.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -129,6 +129,9 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 
 == Changelog ==
 [Read more on our blog ...](https://tiptoppress.com/category/category-posts-widget)
+
+= 4.9.13 - July 22 2021 =
+* Fixed Line number with WordPress 5.8
 
 = 4.9.12 - July 20 2021 =
 * Deprecated jQuery warnings
