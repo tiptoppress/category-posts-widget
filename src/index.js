@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
 import './style.scss';
 
 import Edit from './edit';
-import save from './save';
+import Save from './save';
 
 import metadata from './../block.json';
 const { name } = metadata;
@@ -41,7 +41,16 @@ registerBlockType( name, {
 	example: {
 		attributes: {
 			values:
-				'<ul><a>January 2021</a><a>December 2020</a><a>November 2020</a><a>October 2020</a></ul>',
+				'<ul>' + 
+					'<li>' +
+						'<div><a class="cat-post-title">dolorem eum fugiat quo voluptas</a><div>' + 
+						'<p class="cpwp-excerpt-text">But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?</p>' + 
+					'</li>' + 
+					'<li>' +
+						'<div><a class="cat-post-title">gummies tootsie roll</a><div>' + 
+						'<p class="cpwp-excerpt-text">Cake jujubes jelly beans. Marzipan soufflé gummies gummi bears oat cake chocolate jelly icing. Cotton candy croissant wafer cake apple pie juj.</p>' + 
+					'</li>' + 
+				'</ul>',
 			showPostCounts: 
 				true,
 		},
@@ -59,7 +68,7 @@ registerBlockType( name, {
 					}
 					return idBase === 'category-posts';
 				},
-				transform: ( { instance } ) => { console.log(instance);
+				transform: ( { instance } ) => {
 					return createBlock( 'tiptip/category-posts-block', {
 						instance,
 						order: instance.raw.asc_sort_order ? 'asc' : 'desc',
@@ -78,8 +87,9 @@ registerBlockType( name, {
 	/**
 	 * @see ./save.js
 	 */
-	save: () => {
-		const blockProps = useBlockProps.save();
-		return <div { ...blockProps }> Hello in Save.</div>;
-	},
+	//save: Save,
+	// save: () => {
+	// 	const blockProps = useBlockProps.save();
+	// 	return <div { ...blockProps }> Hello in Save.</div>;
+	// },
 } );

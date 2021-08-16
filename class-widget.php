@@ -1006,6 +1006,7 @@ class Widget extends \WP_Widget {
 	 * @since 4.1
 	 */
 	public function widget( $args, $instance ) {
+		global $before_title, $after_title;
 
 		$instance = upgrade_settings( $instance );
 

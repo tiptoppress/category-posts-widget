@@ -19,7 +19,7 @@ namespace categoryPosts;
  * @return string Returns the post content with archives added.
  */
 function render_category_posts_block( $attributes ) {
-	global $attr;
+	global $attr, $before_title, $after_title;
 
 	$attr = $attributes;
 
@@ -114,6 +114,7 @@ function render_category_posts_block( $attributes ) {
 	$instance = array();
 
 	$instance['asc_sort_order'] = $attributes['order'] === 'desc' ? false : true;
+	$instance['title']          = $attributes['title'];
 
 	$instance = upgrade_settings( $instance );
 	
@@ -124,8 +125,11 @@ function render_category_posts_block( $attributes ) {
 
 	$items = $widget->get_elements_HTML( $instance, $current_post_id, 0, 0 );
 
-	return "<ul>" . implode( $items ) . "</ul>";
+	$ret = $widget->titleHTML( $before_title, $after_title, $instance );
 
+	$ret .= "<ul>" . implode( $items ) . "</ul>";
+
+	return $ret;
 }
 
 /**
@@ -176,17 +180,42 @@ function category_posts_block_init() {
 			'editor_style'  => 'tiptip-category-posts-block-editor',
 			'style'         => 'tiptip-category-posts-block',
 			'attributes'    => array(
+				'hideTitle' => array(
+					'type'    => 'boolean',
+					'default' => false,
+				),
+				'title' => array(
+					'type'    => 'string',
+					'default' => __( 'Category Posts', 'category-posts' ),
+				),
+				'titleLink' => array(
+					'type'    => 'boolean',
+					'default' => false,
+				),
+				'disableCSS' => array(
+					'type'           => 'boolean',
+					'default'        => false,
+				),
+				'disableFontStyles' => array(
+					'type'           => 'boolean',
+					'default'        => false,
+				),
+				'disableThemeStyles' => array(
+					'type'           => 'boolean',
+					'default'        => false,
+				),
+
 				'showPostCounts' => array(
-				'type'           => 'boolean',
-				'default'        => false,
+					'type'           => 'boolean',
+					'default'        => false,
 				),
 				'displayAsDropdown' => array(
-				'type'           => 'boolean',
-				'default'        => false,
+					'type'           => 'boolean',
+					'default'        => false,
 				),
 				'groupBy' => array(
-				'type'    => 'string',
-				'default' => 'monthly',
+					'type'    => 'string',
+					'default' => 'monthly',
 				),
 				'order' => array(
 					'type'    => 'string',

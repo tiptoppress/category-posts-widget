@@ -2,16 +2,17 @@
  * External dependencies
  */
 import { includes } from 'lodash';
+import classnames from 'classnames';
 
 /**
  * WordPress dependencies
  */
 import { useState, useEffect, useRef } from '@wordpress/element';
-import { PanelBody, ToggleControl, RadioControl, QueryControls, Disabled } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import { __ } from '@wordpress/i18n';
-import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
+import { TextControl, ToggleControl, PanelBody, RadioControl, QueryControls, Disabled } from '@wordpress/components';
+import { InspectorControls, RichText, useBlockProps } from '@wordpress/block-editor';
 import ServerSideRender from '@wordpress/server-side-render';
 
 /**
@@ -22,7 +23,19 @@ const CATEGORIES_LIST_QUERY = {
 };
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { showPostCounts, displayAsDropdown, groupBy, order, orderBy, categories } = attributes;
+	const {
+		hideTitle, title, titleLink, titleLevel,
+		disableThemeStyles,
+		showPostCounts,
+		displayAsDropdown,
+		groupBy,
+		order, orderBy,
+		categories 
+	} = attributes;
+	const titleTagName = 'h' + titleLevel;
+	const blockProps = useBlockProps( {
+		className:  disableThemeStyles ? 'widget-title' : '',
+	} );
 	const [ categoriesList, setCategoriesList ] = useState( [] );
 	const categorySuggestions = categoriesList.reduce(
 		( accumulator, category ) => ( {
@@ -54,6 +67,7 @@ export default function Edit( { attributes, setAttributes } ) {
 		setAttributes( { categories: allCategories } );
 	};
 
+	// Suggestion list
 	const isStillMounted = useRef();
 
 	useEffect( () => {
@@ -78,9 +92,45 @@ export default function Edit( { attributes, setAttributes } ) {
 		};
 	}, [] );
 
+	const coreBlocks = wp.blocks.getBlockTypes().filter( ( block ) => {
+		return (
+			block.name === 'core/query'
+		);
+	} )
+	//console.log(coreBlocks[0].settings.edit);
+	//return coreBlocks[0].edit;
+
 	return (
 		<>
 			<InspectorControls>
+				<PanelBody title={ __( 'Title' ) }>
+					<ToggleControl
+						label={ __( 'Hide title' ) }
+						checked={ hideTitle }
+						onChange={ () =>
+							setAttributes( {
+								hideTitle: ! hideTitle,
+							} )
+						}
+					/>
+					<TextControl
+						label={ __( 'Title' ) }
+						value={ title }
+						onChange={ ( title ) =>
+							setAttributes( {
+								title,
+							} ) }
+					/>
+					<ToggleControl
+						label={ __( 'Make widget title link' ) }
+						checked={ titleLink }
+						onChange={ () =>
+							setAttributes( {
+								titleLink: ! titleLink,
+							} )
+						}
+					/>
+				</PanelBody>
 				<PanelBody title={ __( 'Filter' ) }>
 					<RadioControl
 						label={ __( 'Group by' ) }
@@ -126,8 +176,44 @@ export default function Edit( { attributes, setAttributes } ) {
 						selectedCategories={ categories }
 					/>
 				</PanelBody>
+				<PanelBody title={ __( 'Post details' ) }>
+				</PanelBody>
+				<PanelBody title={ __( 'General' ) }>
+					<ToggleControl
+						label={ __( 'Disable the built-in CSS' ) }
+						checked={ disableThemeStyles }
+						onChange={ () =>
+							setAttributes( {
+								disableThemeStyles: ! disableThemeStyles,
+							} )
+						}
+					/>
+					<ToggleControl
+						label={ __( 'Disable only font styles' ) }
+						checked={ disableThemeStyles }
+						onChange={ () =>
+							setAttributes( {
+								disableThemeStyles: ! disableThemeStyles,
+							} )
+						}
+					/>
+					<ToggleControl
+						label={ __( 'Disable Theme\'s styles' ) }
+						checked={ disableThemeStyles }
+						onChange={ () =>
+							setAttributes( {
+								disableThemeStyles: ! disableThemeStyles,
+							} )
+						}
+					/>
+				</PanelBody>
+				<PanelBody title={ __( 'Footer' ) }>
+				</PanelBody>
 			</InspectorControls>
-			<div { ...useBlockProps() }>
+			<div 
+				{ ...useBlockProps() } 
+				className={ blockProps.className }
+			>
 				<Disabled>
 					<ServerSideRender
 						block="tiptip/category-posts-block"
