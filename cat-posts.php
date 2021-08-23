@@ -543,7 +543,6 @@ function equal_cover_content_height( $number, $widgetsettings ) {
 				let widget = jQuery('#<?php echo esc_attr( $number ); ?>');
 
 				jQuery( document ).ready(function () {
-					cat_posts_namespace.layout_wrap_text.preWrap(widget);
 					cat_posts_namespace.layout_wrap_text.setClass(widget);
 					<?php	/* No ratio calculation if one or more dimensions is set to 0 */ echo "\r\n"; ?>
 					<?php	if ( isset( $widgetsettings['thumb_w'] ) && 0 !== intval( $widgetsettings['thumb_w'] ) &&
@@ -553,7 +552,6 @@ function equal_cover_content_height( $number, $widgetsettings ) {
 				});
 
 				jQuery(window).on('load resize', function() {
-					cat_posts_namespace.layout_wrap_text.preWrap(widget);
 					cat_posts_namespace.layout_wrap_text.setClass(widget);
 					<?php	/* No ratio calculation if one or more dimensions is set to 0 */ echo "\r\n"; ?>
 					<?php	if ( isset( $widgetsettings['thumb_w'] ) && 0 !== intval( $widgetsettings['thumb_w'] ) &&
@@ -561,6 +559,15 @@ function equal_cover_content_height( $number, $widgetsettings ) {
 						cat_posts_namespace.layout_img_size.setHeight(widget);
 					<?php	endif; echo "\r\n"; ?>
 				});
+
+				// low-end mobile 
+				cat_posts_namespace.layout_wrap_text.preWrap(widget);
+				cat_posts_namespace.layout_wrap_text.setClass(widget);
+				<?php	/* No ratio calculation if one or more dimensions is set to 0 */ echo "\r\n"; ?>
+				<?php	if ( isset( $widgetsettings['thumb_w'] ) && 0 !== intval( $widgetsettings['thumb_w'] ) &&
+							isset( $widgetsettings['thumb_h'] ) && 0 !== intval( $widgetsettings['thumb_h'] ) ) : echo "\r\n"; ?>
+					cat_posts_namespace.layout_img_size.setHeight(widget);
+				<?php	endif; echo "\r\n"; ?>
 
 			}
 		</script>
