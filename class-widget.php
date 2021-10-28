@@ -344,7 +344,7 @@ class Widget extends \WP_Widget {
 			}
 
 			if ( isset( $instance['title_link'] ) && $instance['title_link'] ) {
-				if ( 0 !== $instance['cat'] ) {
+				if ( 0 !== (int) $instance['cat'] ) {
 					$ret .= '<a href="' . get_category_link( $instance['cat'] ) . '">' . $title . '</a>';
 				} elseif ( isset( $instance['title_link_url'] ) && $instance['title_link_url'] ) {
 					$ret .= '<a href="' . esc_url( $instance['title_link_url'] ) . '">' . $title . '</a>';
@@ -504,7 +504,7 @@ class Widget extends \WP_Widget {
 		// category archive for categories filter and home page or blog page when "all categories"
 		// is used.
 		if ( ! empty( $text ) && empty( $url ) ) {
-			if ( isset( $instance['cat'] ) && ( 0 !== $instance['cat'] ) && ( null !== get_category( $instance['cat'] ) ) ) {
+			if ( isset( $instance['cat'] ) && ( 0 !== (int) $instance['cat'] ) && ( null !== get_category( $instance['cat'] ) ) ) {
 				$url = get_category_link( $instance['cat'] );
 			} else {
 				$url = $this->blog_page_url();
@@ -1236,7 +1236,7 @@ class Widget extends \WP_Widget {
 	 * @since 4.6
 	 */
 	public function formFilterPanel( $instance ) {
-		$cat = $instance['cat'];
+		$cat = (int) $instance['cat'];
 ?>
 	<h4 data-panel="filter"><?php esc_html_e( 'Filter', 'category-posts' ); ?></h4>
 	<div>
