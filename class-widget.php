@@ -79,6 +79,9 @@ class Widget extends \WP_Widget {
 			return '';
 		}
 
+		// normalize style
+		$html = preg_replace( '/style="([^"]*)"/i', '', $html );
+
 		// replace size.
 		$array = array();
 		preg_match( '/width="([^"]*)"/i', $html, $array );
