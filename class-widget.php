@@ -26,6 +26,7 @@ class Widget extends \WP_Widget {
 	 */
 	public function __construct() {
 		$widget_ops = array(
+			'show_instance_in_rest' => true,
 			'classname'   => 'cat-post-widget',
 			'description' => __( 'List single category posts', 'category-posts' ),
 		);
@@ -77,6 +78,9 @@ class Widget extends \WP_Widget {
 		if ( ! $html ) {
 			return '';
 		}
+
+		// normalize style
+		$html = preg_replace( '/style="([^"]*)"/i', '', $html );
 
 		// replace size.
 		$array = array();
@@ -343,7 +347,7 @@ class Widget extends \WP_Widget {
 			}
 
 			if ( isset( $instance['title_link'] ) && $instance['title_link'] ) {
-				if ( 0 !== $instance['cat'] ) {
+				if ( 0 !== (int) $instance['cat'] ) {
 					$ret .= '<a href="' . get_category_link( $instance['cat'] ) . '">' . $title . '</a>';
 				} elseif ( isset( $instance['title_link_url'] ) && $instance['title_link_url'] ) {
 					$ret .= '<a href="' . esc_url( $instance['title_link_url'] ) . '">' . $title . '</a>';
@@ -458,13 +462,14 @@ class Widget extends \WP_Widget {
 		$loadmore_text    = preg_replace( $pattern,  $post_count, $loadmore_text );
 
 		// Load more
-		$number  = $instance['num'];
-		$start   = $instance['offset'] + $number;
-		$loading = $instance['loading_text'] !== '' ? $instance['loading_text'] : esc_attr__( 'Loading...', 'category-posts' );
+		$number   = $instance['num'];
+		$start    = $instance['offset'] + $number;
+		$loading  = $instance['loading_text'] !== '' ? $instance['loading_text'] : esc_attr__( 'Loading...', 'category-posts' );
+		$scrollTo = isset( $instance['loadmore_scrollTo'] ) && $instance['loadmore_scrollTo'];
 
 		$ret .= '<button type="button" data-loading="' . esc_attr( $loading ) . '" data-id="' . esc_attr( $id ) .
-					'" data-start="' . esc_attr( $start ) . '" data-context="' . esc_attr( $context ) . '" data-number="' . 
-					esc_attr( $number ) . '" data-post-count="' . esc_attr( $post_count ) . '" data-placeholder="' . esc_attr( $placeholder_text ) . '">' . 
+					'" data-start="' . esc_attr( $start ) . '" data-context="' . esc_attr( $context ) . '" data-number="' . esc_attr( $number ) . 
+					'" data-post-count="' . esc_attr( $post_count ) . '" data-placeholder="' . esc_attr( $placeholder_text ) . '" data-scrollto="' . esc_html( $scrollTo ) . '">' . 
 					esc_html( $loadmore_text ) .
 				'</button>';
 		$ret .= '</div>';
@@ -502,7 +507,7 @@ class Widget extends \WP_Widget {
 		// category archive for categories filter and home page or blog page when "all categories"
 		// is used.
 		if ( ! empty( $text ) && empty( $url ) ) {
-			if ( isset( $instance['cat'] ) && ( 0 !== $instance['cat'] ) && ( null !== get_category( $instance['cat'] ) ) ) {
+			if ( isset( $instance['cat'] ) && ( 0 !== (int) $instance['cat'] ) && ( null !== get_category( $instance['cat'] ) ) ) {
 				$url = get_category_link( $instance['cat'] );
 			} else {
 				$url = $this->blog_page_url();
@@ -564,8 +569,8 @@ class Widget extends \WP_Widget {
 		}
 
 		if ( isset( $instance['date_past_time'] ) && 0 < $instance['date_past_time'] ) {
-			$post_date            = get_the_time( get_option( 'date_format' ) );
-			$current_date         = current_time( "Y-m-d" );
+			$post_date            = get_the_time( "Y-m-d H:i:s" );
+			$current_date         = current_time( "Y-m-d H:i:s" );
 			$past_days = date_diff(
 								date_create( $post_date ),
 								date_create( $current_date )
@@ -1004,6 +1009,7 @@ class Widget extends \WP_Widget {
 	 * @since 4.1
 	 */
 	public function widget( $args, $instance ) {
+		global $before_title, $after_title;
 
 		$instance = upgrade_settings( $instance );
 
@@ -1146,7 +1152,16 @@ class Widget extends \WP_Widget {
 			$current_post_id = (int) $singular_id;
 		}
 
+		$postCount = 0;
+
 		while ( $cat_posts->have_posts() ) {
+			$postCount++;
+
+			// If sticky posts are added, break anyway after the set number of posts.
+			if ( isset( $instance['sticky'] ) && $instance['sticky'] && $postCount > $instance['num'] ) {
+				break;
+			}
+
 			$cat_posts->the_post();
 			$ret[] = $this->itemHTML( $instance, $current_post_id );
 		}
@@ -1224,7 +1239,7 @@ class Widget extends \WP_Widget {
 	 * @since 4.6
 	 */
 	public function formFilterPanel( $instance ) {
-		$cat = $instance['cat'];
+		$cat = (int) $instance['cat'];
 ?>
 	<h4 data-panel="filter"><?php esc_html_e( 'Filter', 'category-posts' ); ?></h4>
 	<div>
@@ -1991,6 +2006,7 @@ class Widget extends \WP_Widget {
 					<?php echo $this->get_checkbox_block_html( $instance, 'enable_loadmore', esc_html__( 'Enable Load More', 'category-posts' ), true ); ?>
 					<div class="loadmore-settings" style="display:<?php echo ( $instance['enable_loadmore'] ) ? 'block' : 'none'; ?>">
 						<?php 
+						echo $this->get_checkbox_block_html( $instance, 'loadmore_scrollTo', esc_html__( 'Scrollbar', 'category-posts' ), true );
 						echo $this->get_text_input_block_html( $instance, 'loadmore_text', 
 							esc_html__( 'Button text', 'category-posts' ) .
 							' <a href="#" class="dashicons toggle-button-text-help dashicons-editor-help">' .

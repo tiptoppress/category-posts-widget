@@ -13,6 +13,16 @@ if (typeof jQuery !== 'undefined') {
 
     jQuery(document).ready(function() {
 
+        // scrollbar
+        jQuery('.' + php_settings_var + '-loadmore button').each(function() {
+            if ( jQuery(this).data('scrollto') ) {
+                var _ul = jQuery(this.parentElement.parentElement).find('ul'); // The UL of the widget.
+                _ul.css({
+                    "height":_ul.prop('scrollHeight'),
+                });
+            }
+        });
+
         // Handle the click of load more.
         jQuery(document).on('click', '.' + php_settings_var + '-loadmore button', function() {
             var _this = jQuery(this),
@@ -26,7 +36,9 @@ if (typeof jQuery !== 'undefined') {
                 postCount = _this.data('post-count'),
                 loadingText = _this.data('loading'),
                 loadmoreText = _this.data('placeholder'),
-                widgetNumber = jQuery(this).closest("[id*='" + id + "']").attr('id');
+                widgetNumber = jQuery(this).closest("[id*='" + id + "']").attr('id'),
+                scrollHeight = _ul.prop('scrollHeight'), // Scrollbar
+                useScrollTo = _this.data('scrollto'); // Scrollbar
 
             // Change the button text to indicate loading.
             _this.text(loadingText);
@@ -48,6 +60,14 @@ if (typeof jQuery !== 'undefined') {
                     _this.data('start', start + number);
                 }
             }).done(function() {
+
+                // Scrollbar
+                if (useScrollTo) {
+                    _ul.stop().animate({
+                        scrollTop:scrollHeight,
+                    }, 1000, 'swing');
+                }
+
                 var widget = jQuery('#' + widgetNumber);
                 var widgetImage = jQuery(widget).find('.cat-post-item img').first();
 

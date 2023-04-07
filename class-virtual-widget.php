@@ -365,8 +365,13 @@ class Virtual_Widget {
 			}
 		}
 		if ( $settings['enable_loadmore'] ) {
-			// $this->id is ued over $widget_id because we need the id of the outer div, not the UL itself.
+			// $this->id is used over $widget_id because we need the id of the outer div, not the UL itself.
 			$ret['loadmore'] = '#' . $this->id . ' .' . __NAMESPACE__ . '-loadmore {text-align:center;margin-top:10px}';
+
+			// Scrollbar
+			if ( isset( $settings['loadmore_scrollTo'] ) && $settings['loadmore_scrollTo'] ) {
+				$ret['loadmore_scrollTo'] = '#' . $widget_id . ' {overflow-y:scroll;}';
+			}
 		}
 		$rules[] = $ret;
 	}

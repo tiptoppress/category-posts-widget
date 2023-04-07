@@ -12,7 +12,7 @@ Plugin Name: Category Posts Widget
 Plugin URI: https://wordpress.org/plugins/category-posts/
 Description: Adds a widget that shows the most recent posts from a single category.
 Author: TipTopPress
-Version: 4.9.11
+Version: 4.9.13
 Author URI: https://tiptoppress.com
 Text Domain: category-posts
 Domain Path: /languages
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const VERSION        = '4.9.11';
+const VERSION        = '4.9.13';
 const DOC_URL        = 'https://tiptoppress.com/category-posts-widget/documentation-4-9/';
 const PRO_URL        = 'https://tiptoppress.com/term-and-category-based-posts-widget/';
 const SUPPORT_URL    = 'https://wordpress.org/support/plugin/category-posts/';
@@ -38,6 +38,7 @@ require_once __DIR__ . '/class-virtual-widgets-repository.php';
 require_once __DIR__ . '/class-widget.php';
 require_once __DIR__ . '/loadmore.php';
 require_once __DIR__ . '/localizeddate.php';
+require_once __DIR__ . '/cat-posts-block.php';
 
 /**
  *  Adds the "Customize" link to the Toolbar on edit mode.
@@ -461,11 +462,10 @@ function equal_cover_content_height( $number, $widgetsettings ) {
 				cat_posts_namespace.layout_wrap_text = {
 					<?php	/* Handle item */ echo "\r\n"; ?>
 					preWrap : function (widget) {
-						// var _widget = jQuery(widget);
 						jQuery(widget).find('.cat-post-item').each(function(){
 							var _that = jQuery(this);
 							_that.find('p.cpwp-excerpt-text').addClass('cpwp-wrap-text');
-							_that.find('p.cpwp-excerpt-text').closest('div').wrap('<div class="cpwp-wrap-text-stage"></div>');;
+							_that.find('p.cpwp-excerpt-text').closest('div').wrap('<div class="cpwp-wrap-text-stage"></div>');
 						});
 						return;
 					},
@@ -540,22 +540,35 @@ function equal_cover_content_height( $number, $widgetsettings ) {
 					}
 				}
 
+				let widget = jQuery('#<?php echo esc_attr( $number ); ?>');
+
 				jQuery( document ).ready(function () {
-					var widget = jQuery('#<?php echo esc_attr( $number ); ?>');
-
-					<?php	/* do once on document ready */ echo "\r\n"; ?>
-					cat_posts_namespace.layout_wrap_text.preWrap(widget);
-
-					<?php /* do on page load or on resize the browser window */ echo "\r\n"; ?>
-					jQuery(window).on('load resize', function() {
-						cat_posts_namespace.layout_wrap_text.setClass(widget);
-						<?php	/* No ratio calculation if one or more dimensions is set to 0 */ echo "\r\n"; ?>
-						<?php	if ( isset( $widgetsettings['thumb_w'] ) && 0 !== intval( $widgetsettings['thumb_w'] ) &&
-						 			isset( $widgetsettings['thumb_h'] ) && 0 !== intval( $widgetsettings['thumb_h'] ) ) : echo "\r\n"; ?>
-							cat_posts_namespace.layout_img_size.setHeight(widget);
-						<?php	endif; echo "\r\n"; ?>
-					});
+					cat_posts_namespace.layout_wrap_text.setClass(widget);
+					<?php	/* No ratio calculation if one or more dimensions is set to 0 */ echo "\r\n"; ?>
+					<?php	if ( isset( $widgetsettings['thumb_w'] ) && 0 !== intval( $widgetsettings['thumb_w'] ) &&
+								isset( $widgetsettings['thumb_h'] ) && 0 !== intval( $widgetsettings['thumb_h'] ) ) : echo "\r\n"; ?>
+						cat_posts_namespace.layout_img_size.setHeight(widget);
+					<?php	endif; echo "\r\n"; ?>
 				});
+
+				jQuery(window).on('load resize', function() {
+					cat_posts_namespace.layout_wrap_text.setClass(widget);
+					<?php	/* No ratio calculation if one or more dimensions is set to 0 */ echo "\r\n"; ?>
+					<?php	if ( isset( $widgetsettings['thumb_w'] ) && 0 !== intval( $widgetsettings['thumb_w'] ) &&
+								isset( $widgetsettings['thumb_h'] ) && 0 !== intval( $widgetsettings['thumb_h'] ) ) : echo "\r\n"; ?>
+						cat_posts_namespace.layout_img_size.setHeight(widget);
+					<?php	endif; echo "\r\n"; ?>
+				});
+
+				// low-end mobile 
+				cat_posts_namespace.layout_wrap_text.preWrap(widget);
+				cat_posts_namespace.layout_wrap_text.setClass(widget);
+				<?php	/* No ratio calculation if one or more dimensions is set to 0 */ echo "\r\n"; ?>
+				<?php	if ( isset( $widgetsettings['thumb_w'] ) && 0 !== intval( $widgetsettings['thumb_w'] ) &&
+							isset( $widgetsettings['thumb_h'] ) && 0 !== intval( $widgetsettings['thumb_h'] ) ) : echo "\r\n"; ?>
+					cat_posts_namespace.layout_img_size.setHeight(widget);
+				<?php	endif; echo "\r\n"; ?>
+
 			}
 		</script>
 		<?php
@@ -719,6 +732,7 @@ function default_settings() {
 		'template'               => "%title%\n\n%thumb%",
 		'text_do_not_wrap_thumb' => false,
 		'enable_loadmore'        => false,
+		'loadmore_scrollTo'      => false,
 		'loadmore_text'          => sprintf( __( 'Load More (%s/%s)', 'category-posts' ), '%step%', '%all%'),
 		'loading_text'           => __( 'Loading...', 'category-posts' ),
 		'date_range'             => 'off',
@@ -1053,6 +1067,23 @@ function mce_external_languages( $locales ) {
 }
 
 add_filter( 'mce_external_languages', __NAMESPACE__ . '\mce_external_languages' );
+
+/**
+ *  The Legacy Widget block widget-type filter
+ *
+ *  @param array Excluded widget-types.
+ *
+ *  @return array Widgets which are not available.
+ *
+ *  @since 5.0
+ */
+function hide_as_legacy_widget( $widget_types ) {
+    $widget_types[] = 'category-posts';
+	
+    return $widget_types;
+}
+
+add_filter( 'widget_types_to_hide_from_legacy_widget_block', __NAMESPACE__ . '\hide_as_legacy_widget' );
 
 /*
  * user profile related functions.
