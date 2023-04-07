@@ -569,8 +569,8 @@ class Widget extends \WP_Widget {
 		}
 
 		if ( isset( $instance['date_past_time'] ) && 0 < $instance['date_past_time'] ) {
-			$post_date            = get_the_time( get_option( 'date_format' ) );
-			$current_date         = current_time( "Y-m-d" );
+			$post_date            = get_the_time( "Y-m-d H:i:s" );
+			$current_date         = current_time( "Y-m-d H:i:s" );
 			$past_days = date_diff(
 								date_create( $post_date ),
 								date_create( $current_date )

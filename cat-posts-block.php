@@ -109,12 +109,15 @@ function render_category_posts_block( $attributes ) {
 		);
 	}
 
-	// Get HTML from old code
+	// Get HTML
 	$widget = new Widget();
 	$instance = array();
 
-	$instance['asc_sort_order'] = $attributes['order'] === 'desc' ? false : true;
-	$instance['title']          = $attributes['title'];
+	$instance['asc_sort_order']      = $attributes['order'] === 'desc' ? false : true;
+	$instance['title']               = $attributes['title'];
+
+	$instance['footer_link_text']    = $attributes['footerLinkText'];
+	$instance['footer_link']         = $attributes['footerLink'];
 
 	$instance = upgrade_settings( $instance );
 	
@@ -192,6 +195,14 @@ function category_posts_block_init() {
 					'type'    => 'boolean',
 					'default' => false,
 				),
+				'titleLinkUrl' => array(
+					'type'    => 'string',
+					'default' => __( '', 'category-posts' ),
+				),
+				'titleLevel' => array(
+					'type'    => 'string',
+					'default' => __( 'initial', 'category-posts' ),
+				),
 				'disableCSS' => array(
 					'type'           => 'boolean',
 					'default'        => false,
@@ -204,7 +215,6 @@ function category_posts_block_init() {
 					'type'           => 'boolean',
 					'default'        => false,
 				),
-
 				'showPostCounts' => array(
 					'type'           => 'boolean',
 					'default'        => false,
@@ -236,6 +246,14 @@ function category_posts_block_init() {
 				'categories' => array(
 					'type'    => 'array',
 					'default' => [],
+				),
+				'footerLinkText' => array(
+					'type'    => 'string',
+					'default' => '',
+				),
+				'footerLink' => array(
+					'type'    => 'string',
+					'default' => '',
 				),
 			),
 			'render_callback' => __NAMESPACE__ . '\render_category_posts_block',

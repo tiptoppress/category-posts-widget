@@ -11,9 +11,21 @@ import { useState, useEffect, useRef } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import { __ } from '@wordpress/i18n';
-import { TextControl, ToggleControl, PanelBody, RadioControl, QueryControls, Disabled } from '@wordpress/components';
+import { 
+	TextControl, 
+	ToggleControl, 
+	PanelBody, 
+	RadioControl, 
+	QueryControls, 
+	Disabled,
+	__experimentalToggleGroupControl, ToggleGroupControl as stableToggleGroupControl,
+	__experimentalToggleGroupControlOption, ToggleGroupControlOption as stableToggleGroupControlOption
+} from '@wordpress/components';
 import { InspectorControls, RichText, useBlockProps } from '@wordpress/block-editor';
 import ServerSideRender from '@wordpress/server-side-render';
+
+export const ToggleGroupControl       = __experimentalToggleGroupControl || stableToggleGroupControl;
+export const ToggleGroupControlOption = __experimentalToggleGroupControlOption || stableToggleGroupControlOption;
 
 /**
  * Module Constants
@@ -24,13 +36,15 @@ const CATEGORIES_LIST_QUERY = {
 
 export default function Edit( { attributes, setAttributes } ) {
 	const {
-		hideTitle, title, titleLink, titleLevel,
+		hideTitle, title, titleLink, titleLinkUrl, titleLevel,
 		disableThemeStyles,
 		showPostCounts,
 		displayAsDropdown,
 		groupBy,
 		order, orderBy,
-		categories 
+		categories,
+		footerLinkText,
+		footerLink
 	} = attributes;
 	const titleTagName = 'h' + titleLevel;
 	const blockProps = useBlockProps( {
@@ -103,9 +117,9 @@ export default function Edit( { attributes, setAttributes } ) {
 	return (
 		<>
 			<InspectorControls>
-				<PanelBody title={ __( 'Title' ) }>
+				<PanelBody title={ __( 'Title', 'category-posts' ) }>
 					<ToggleControl
-						label={ __( 'Hide title' ) }
+						label={ __( 'Hide title', 'category-posts' ) }
 						checked={ hideTitle }
 						onChange={ () =>
 							setAttributes( {
@@ -114,7 +128,7 @@ export default function Edit( { attributes, setAttributes } ) {
 						}
 					/>
 					<TextControl
-						label={ __( 'Title' ) }
+						label={ __( 'Title', 'category-posts' ) }
 						value={ title }
 						onChange={ ( title ) =>
 							setAttributes( {
@@ -122,7 +136,7 @@ export default function Edit( { attributes, setAttributes } ) {
 							} ) }
 					/>
 					<ToggleControl
-						label={ __( 'Make widget title link' ) }
+						label={ __( 'Make widget title link', 'category-posts' ) }
 						checked={ titleLink }
 						onChange={ () =>
 							setAttributes( {
@@ -130,10 +144,37 @@ export default function Edit( { attributes, setAttributes } ) {
 							} )
 						}
 					/>
+					<TextControl
+						label={ __( 'Title link URL', 'category-posts' ) }
+						value={ titleLinkUrl  }
+						onChange={ ( titleLinkUrl ) =>
+							setAttributes( {
+								titleLinkUrl,
+							} ) }
+					/>
+					<ToggleGroupControl 
+						label="Heading level" 
+						value={ titleLevel }
+						isBlock 
+						isAdaptiveWidth 
+						help={"Also, try 'Disable Theme's styles' on General tab to avoid rendering commonly used CSS classes such here widget-title, which often used in Themes to write their CSS selectors and may affect the design."}
+						onChange={ ( titleLevel ) =>
+							setAttributes( {
+								titleLevel,
+							} ) }
+						>
+						<ToggleGroupControlOption value="initial" label="Initial" />
+						<ToggleGroupControlOption value="h1" label="H1" />
+						<ToggleGroupControlOption value="h2" label="H2" />
+						<ToggleGroupControlOption value="h3" label="H3" />
+						<ToggleGroupControlOption value="h4" label="H4" />
+						<ToggleGroupControlOption value="h5" label="H5" />
+						<ToggleGroupControlOption value="h6" label="H6" />
+					</ToggleGroupControl>
 				</PanelBody>
-				<PanelBody title={ __( 'Filter' ) }>
+				<PanelBody title={ __( 'Filter', 'category-posts', 'category-posts' ) }>
 					<RadioControl
-						label={ __( 'Group by' ) }
+						label={ __( 'Group by', 'category-posts' ) }
 						selected={ groupBy }
 						options={ [
 							{ label: 'Month', value: 'monthly' },
@@ -146,7 +187,7 @@ export default function Edit( { attributes, setAttributes } ) {
 						}
 					/>
 					<ToggleControl
-						label={ __( 'Display as dropdown' ) }
+						label={ __( 'Display as dropdown', 'category-posts' ) }
 						checked={ displayAsDropdown }
 						onChange={ () =>
 							setAttributes( {
@@ -155,7 +196,7 @@ export default function Edit( { attributes, setAttributes } ) {
 						}
 					/>
 					<ToggleControl
-						label={ __( 'Show post counts' ) }
+						label={ __( 'Show post counts', 'category-posts' ) }
 						checked={ showPostCounts }
 						onChange={ () =>
 							setAttributes( {
@@ -176,11 +217,11 @@ export default function Edit( { attributes, setAttributes } ) {
 						selectedCategories={ categories }
 					/>
 				</PanelBody>
-				<PanelBody title={ __( 'Post details' ) }>
+				<PanelBody title={ __( 'Post details', 'category-posts' ) }>
 				</PanelBody>
-				<PanelBody title={ __( 'General' ) }>
+				<PanelBody title={ __( 'General', 'category-posts' ) }>
 					<ToggleControl
-						label={ __( 'Disable the built-in CSS' ) }
+						label={ __( 'Disable the built-in CSS', 'category-posts' ) }
 						checked={ disableThemeStyles }
 						onChange={ () =>
 							setAttributes( {
@@ -189,7 +230,7 @@ export default function Edit( { attributes, setAttributes } ) {
 						}
 					/>
 					<ToggleControl
-						label={ __( 'Disable only font styles' ) }
+						label={ __( 'Disable only font styles', 'category-posts' ) }
 						checked={ disableThemeStyles }
 						onChange={ () =>
 							setAttributes( {
@@ -198,7 +239,7 @@ export default function Edit( { attributes, setAttributes } ) {
 						}
 					/>
 					<ToggleControl
-						label={ __( 'Disable Theme\'s styles' ) }
+						label={ __( 'Disable Theme\'s styles', 'category-posts' ) }
 						checked={ disableThemeStyles }
 						onChange={ () =>
 							setAttributes( {
@@ -207,7 +248,23 @@ export default function Edit( { attributes, setAttributes } ) {
 						}
 					/>
 				</PanelBody>
-				<PanelBody title={ __( 'Footer' ) }>
+				<PanelBody title={ __( 'Footer', 'category-posts' ) }>
+					<TextControl
+						label={ __( 'Footer link text', 'category-posts' ) }
+						value={ footerLinkText  }
+						onChange={ ( footerLinkText ) =>
+							setAttributes( {
+								footerLinkText,
+							} ) }
+					/>
+					<TextControl
+						label={ __( 'Footer link URL', 'category-posts' ) }
+						value={ footerLink  }
+						onChange={ ( footerLink ) =>
+							setAttributes( {
+								footerLink,
+							} ) }
+					/>
 				</PanelBody>
 			</InspectorControls>
 			<div 
