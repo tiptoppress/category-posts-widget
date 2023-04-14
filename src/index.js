@@ -20,14 +20,6 @@ const { name } = metadata;
 registerBlockType( name, {
 	...metadata,
 
-	/**
-	 * This is a short description for your block, can be translated with `i18n` functions.
-	 * It will be shown in the Block Tab in the Settings Sidebar.
-	 */
-	description: __(
-		'Adds a widget that shows the most recent posts from a single category.',
-		'category-posts'
-	),
 
 	keywords: [
 		__( 'category' ),
