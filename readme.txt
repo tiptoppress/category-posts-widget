@@ -130,6 +130,10 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 == Changelog ==
 [Read more on our blog ...](https://tiptoppress.com/category/category-posts-widget)
 
+= 4.9.14 - May 1 2023 =
+* Fixed Array string keys
+* Fixed Date since published
+
 = 4.9.13 - July 22 2021 =
 * Fixed Line number with WordPress 5.8
 
