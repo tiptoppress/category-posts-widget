@@ -3,8 +3,8 @@ Contributors: mark-k, kometschuh, mkrdip
 Donate link: https://wordpress.org/support/plugin/category-posts/reviews/
 Tags: block, category, categories, posts, recent posts
 Requires at least: 2.8
-Tested up to: 5.9
-Stable tag: 4.9.13
+Tested up to: 6.2
+Stable tag: 4.9.15
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -129,6 +129,9 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 
 == Changelog ==
 [Read more on our blog ...](https://tiptoppress.com/category/category-posts-widget)
+
+= 4.9.15 - May 2 2023 =
+* Fixed Image size
 
 = 4.9.14 - May 1 2023 =
 * Fixed Array string keys
