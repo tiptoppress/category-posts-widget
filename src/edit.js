@@ -12,6 +12,7 @@ import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import { __ } from '@wordpress/i18n';
 import {
+	ComboboxControl,
 	TextControl,
 	ToggleControl,
 	PanelBody,
@@ -37,7 +38,7 @@ const CATEGORIES_LIST_QUERY = {
 export default function Edit({ attributes, setAttributes }) {
 	const {
 		hideTitle, title, titleLink, titleLinkUrl, titleLevel,
-		order, orderBy, categories, excludeCurrentPost,
+		order, orderBy, status, categories, excludeCurrentPost, hideNoThumb, sticky,
 		disableThemeStyles,
 		footerLinkText, footerLink
 	} = attributes;
@@ -99,6 +100,41 @@ export default function Edit({ attributes, setAttributes }) {
 			isStillMounted.current = false;
 		};
 	}, []);
+
+	const statusOptions = [
+		{
+			value: 'default',
+			label: 'WordPress Default',
+		},
+		{
+			value: 'publish',
+			label: 'Published',
+		},
+		{
+			value: 'future',
+			label: 'Scheduled',
+		},
+		{
+			value: 'private',
+			label: 'Private',
+		},
+		{
+			value: 'publish,future',
+			label: 'Published or Scheduled',
+		},
+		{
+			value: 'private,publish',
+			label: 'Published or Private',
+		},
+		{
+			value: 'private,future',
+			label: 'Private or Scheduled',
+		},
+		{
+			value: 'private,publish,future',
+			label: 'Published, Private or Scheduled',
+		},
+	];
 
 	// const coreBlocks = wp.blocks.getBlockTypes().filter((block) => {
 	// 	return (
@@ -179,12 +215,41 @@ export default function Edit({ attributes, setAttributes }) {
 						onCategoryChange={selectCategories}
 						selectedCategories={categories}
 					/>
+					<ComboboxControl
+						label={ __( 'Status' ) }
+						options={ statusOptions }
+						value={ status }
+						onChange={( newStatus) =>
+							setAttributes({
+								status: newStatus,
+							})
+						}
+						allowReset={ false }
+					/>
 					<ToggleControl
 						label={__('Exclude current post', 'category-posts')}
+						checked={hideNoThumb}
+						onChange={() =>
+							setAttributes({
+								hideNoThumb: !hideNoThumb,
+							})
+						}
+					/>
+					<ToggleControl
+						label={__('Exclude posts which have no thumbnail', 'category-posts')}
 						checked={excludeCurrentPost}
 						onChange={() =>
 							setAttributes({
 								excludeCurrentPost: !excludeCurrentPost,
+							})
+						}
+					/>
+					<ToggleControl
+						label={__('Start with sticky posts', 'category-posts')}
+						checked={sticky}
+						onChange={() =>
+							setAttributes({
+								sticky: !sticky,
 							})
 						}
 					/>

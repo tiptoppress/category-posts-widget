@@ -61,7 +61,7 @@ function render_category_posts_block( $attributes ) {
 	$instance['disable_font_styles']    = $attributes['disableFontStyles'];
 	$instance['disable_theme_styles']   = $attributes['disableThemeStyles'];
 	$instance['show_post_format']       = $attributes['showPostFormat'];
-	$instance['noCat_childs']           = $attributes['noCatChilds'];
+	$instance['no_cat_childs']           = $attributes['noCatChilds'];
 	$instance['everything_is_link']     = $attributes['everythingIsLink'];
 	$instance['preset_date_format']     = $attributes['presetDateFormat'];
 	$instance['date_format']            = $attributes['dateFormat'];
