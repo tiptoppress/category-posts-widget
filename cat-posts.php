@@ -992,7 +992,7 @@ function uninstall() {
 	delete_metadata( 'user', 0, __NAMESPACE__, '', true );  // delete all user metadata.
 }
 
-register_uninstall_hook( __FILE__, __NAMESPACE__ . 'uninstall' );
+register_uninstall_hook( __FILE__, __NAMESPACE__ . '\uninstall' );
 
 /**
  *  Register the tinymce shortcode plugin
