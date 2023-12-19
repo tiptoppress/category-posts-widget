@@ -20,13 +20,20 @@ import {
 	QueryControls,
 	Disabled,
 	__experimentalToggleGroupControl, ToggleGroupControl as stableToggleGroupControl,
-	__experimentalToggleGroupControlOption, ToggleGroupControlOption as stableToggleGroupControlOption
+	__experimentalToggleGroupControlOption, ToggleGroupControlOption as stableToggleGroupControlOption,
+	__experimentalNumberControl, NumberControl as stableNumberControl,
+	DatePicker,
+	Popover,
+	Button,
+	PanelRow,
 } from '@wordpress/components';
 import { InspectorControls, RichText, useBlockProps } from '@wordpress/block-editor';
 import ServerSideRender from '@wordpress/server-side-render';
+import { dateI18n } from '@wordpress/date';
 
 export const ToggleGroupControl = __experimentalToggleGroupControl || stableToggleGroupControl;
 export const ToggleGroupControlOption = __experimentalToggleGroupControlOption || stableToggleGroupControlOption;
+export const NumberControl = __experimentalNumberControl || stableNumberControl;
 
 /**
  * Module Constants
@@ -38,7 +45,7 @@ const CATEGORIES_LIST_QUERY = {
 export default function Edit({ attributes, setAttributes }) {
 	const {
 		hideTitle, title, titleLink, titleLinkUrl, titleLevel,
-		order, orderBy, status, categories, excludeCurrentPost, hideNoThumb, sticky,
+		order, orderBy, status, categories, num, offset, dateRange, startDate, endDate, daysAgo, excludeCurrentPost, hideNoThumb, sticky,
 		disableThemeStyles,
 		footerLinkText, footerLink
 	} = attributes;
@@ -136,13 +143,23 @@ export default function Edit({ attributes, setAttributes }) {
 		},
 	];
 
-	// const coreBlocks = wp.blocks.getBlockTypes().filter((block) => {
-	// 	return (
-	// 		block.name === 'core/query'
-	// 	);
-	// })
-	//console.log(coreBlocks[0].settings.edit);
-	//return coreBlocks[0].edit;
+	const dateRangeOptions = [
+		{
+			value: 'off',
+			label: 'Off',
+		},
+		{
+			value: 'days_ago',
+			label: 'Days ago',
+		},
+		{
+			value: 'between_dates',
+			label: 'Between dates',
+		},
+	];
+
+	const [openStartDatePopup, setOpenStartDatePopup] = useState( false );
+	const [openEndDatePopup, setOpenEndDatePopup] = useState( false );
 
 	return (
 		<>
@@ -215,6 +232,7 @@ export default function Edit({ attributes, setAttributes }) {
 						onCategoryChange={selectCategories}
 						selectedCategories={categories}
 					/>
+					<br />
 					<ComboboxControl
 						label={ __( 'Status' ) }
 						options={ statusOptions }
@@ -226,6 +244,95 @@ export default function Edit({ attributes, setAttributes }) {
 						}
 						allowReset={ false }
 					/>
+					<NumberControl
+						label={ __( 'Number of posts to show' ) }
+						onChange={( newNum) =>
+							setAttributes({
+								num: newNum,
+							})
+						}
+						value={ num }
+						min={1}
+						allowReset={ false }
+					/>
+					<NumberControl
+						label={ __( 'Start with post' ) }
+						onChange={( newOffset) =>
+							setAttributes({
+								offset: newOffset,
+							})
+						}
+						value={ offset }
+						min={1}
+						allowReset={ false }
+					/>
+					<ComboboxControl
+						label={ __( 'Date Range' ) }
+						options={ dateRangeOptions }
+						value={ dateRange }
+						onChange={( newDateRange) =>
+							setAttributes({
+								dateRange: newDateRange,
+							})
+						}
+						allowReset={ false }
+					/>
+					{dateRange === 'days_ago' && (
+						<NumberControl
+							label={ __( 'Up to' ) }
+							onChange={( newDaysAgo) =>
+								setAttributes({
+									daysAgo: newDaysAgo,
+								})
+							}
+							value={ daysAgo }
+							min={1}
+							allowReset={ false }
+						/>
+					)}
+					{dateRange === 'between_dates' && (
+						<>
+							<PanelRow>
+								<label>After</label>
+								<Button isLink={true} onClick={() => setOpenStartDatePopup( ! openStartDatePopup )}>
+									{ startDate ? dateI18n( 'j.m.Y', startDate ) : "tt.mm.jjjj" }
+								</Button>
+								{ openStartDatePopup && (
+									<Popover onClose={ setOpenStartDatePopup.bind( null, false )}>
+										<DatePicker
+											onChange={( newStartDate) =>
+												setAttributes({
+													startDate: newStartDate,
+												})
+											}
+											currentDate={ startDate }
+											startOfWeek={1}
+										/>
+									</Popover>
+								) }
+							</PanelRow>
+							<PanelRow>
+								<label>Before</label>
+								<Button isLink={true} onClick={() => setOpenEndDatePopup( ! openEndDatePopup )}>
+									{ endDate ? dateI18n( 'j.m.Y', endDate ) : "tt.mm.jjjj" }
+								</Button>
+								{ openEndDatePopup && (
+									<Popover onClose={ setOpenEndDatePopup.bind( null, false )}>
+										<DatePicker
+											onChange={( newEndDate) =>
+												setAttributes({
+													endDate: newEndDate,
+												})
+											}
+											currentDate={ endDate }
+											startOfWeek={1}
+										/>
+									</Popover>
+								) }
+							</PanelRow>
+						</>
+					)}
+					<br />
 					<ToggleControl
 						label={__('Exclude current post', 'category-posts')}
 						checked={hideNoThumb}
