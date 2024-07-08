@@ -785,7 +785,7 @@ class Widget extends \WP_Widget {
 		$more_text = '[&hellip;]';
 
 		if ( isset( $instance['excerpt_more_text'] ) && '' !== $instance['excerpt_more_text'] ) {
-			$more_text = ltrim( $instance['excerpt_more_text'] );
+			$more_text = sanitize_text_field( $instance['excerpt_more_text'] );
 		}
 
 		$more_link_class = ( isset( $instance[ 'disable_theme_styles' ] ) && $instance[ 'disable_theme_styles' ] ) ? "" : " more-link";

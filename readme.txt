@@ -4,7 +4,7 @@ Donate link: https://wordpress.org/support/plugin/category-posts/reviews/
 Tags: block, category, categories, posts, recent posts
 Requires at least: 2.8
 Tested up to: 6.4
-Stable tag: 4.9.16
+Stable tag: 4.9.17
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -129,6 +129,9 @@ Check also the .htaccess file, if there is an entry for an older PHP version.
 
 == Changelog ==
 [Read more on our blog ...](https://tiptoppress.com/category/category-posts-widget)
+
+= 4.9.17 - Juli 08th 2024 =
+* Fixed Sanitize text field
 
 = 4.9.16 - March 26th 2024 =
 * Fixed Deletion failed
