@@ -23,101 +23,63 @@ function render_category_posts_block( $attributes ) {
 
 	$attr = $attributes;
 
-	$show_post_count = ! empty( $attributes['showPostCounts'] );
-
-	$class = '';
-
-	if ( ! empty( $attributes['displayAsDropdown'] ) ) {
-
-		$class .= ' category-posts-block-dropdown';
-
-		$dropdown_id = esc_attr( uniqid( 'category-posts-block-' ) );
-		$title       = __( 'Archives' );
-
-		/** This filter is documented in wp-includes/widgets/class-wp-widget-archives.php */
-		$dropdown_args = apply_filters(
-			'widget_archives_dropdown_args',
-			array(
-				'type'            => $attributes['groupBy'],
-				'format'          => 'option',
-				'show_post_count' => $show_post_count,
-				'order'           => $attributes['order'],
-			)
-		);
-
-		$dropdown_args['echo'] = 0;
-
-		$archives = wp_get_archives( $dropdown_args );
-
-		switch ( $dropdown_args['type'] ) {
-			case 'yearly':
-				$label = __( 'Select Year' );
-				break;
-			case 'monthly':
-				$label = __( 'Select Month' );
-				break;
-			case 'daily':
-				$label = __( 'Select Day' );
-				break;
-			case 'weekly':
-				$label = __( 'Select Week' );
-				break;
-			default:
-				$label = __( 'Select Post' );
-				break;
-		}
-
-		$label = esc_html( $label );
-
-		$block_content = '<label class="screen-reader-text" for="' . $dropdown_id . '">' . $title . '</label>
-	<select id="' . $dropdown_id . '" name="archive-dropdown" onchange="document.location.href=this.options[this.selectedIndex].value;">
-	<option value="">' . $label . '</option>' . $archives . '</select>';
-
-		return sprintf(
-			'<div class="%1$s">%2$s</div>',
-			esc_attr( $class ),
-			$block_content
-		);
-	}
-
-	$class .= ' category-posts-block-list';
-
-	/** This filter is documented in wp-includes/widgets/class-wp-widget-archives.php */
-	$archives_args = apply_filters(
-		'widget_archives_args',
-		array(
-			'type'            => $attributes['groupBy'],
-			'format'          => 'custom',
-			'show_post_count' => $show_post_count,
-			'order'           => $attributes['order'],
-		)
-	);
-
-	$archives_args['echo'] = 0;
-	
-	$archives = wp_get_archives( $archives_args );
-
-	$classnames = esc_attr( $class );
-
-	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => $classnames ) );
-
-	if ( empty( $archives ) ) {
-		return sprintf(
-			'<div %1$s>%2$s</div>',
-			$wrapper_attributes,
-			__( 'No archives to show.' )
-		);
-	}
-
 	// Get HTML
 	$widget = new Widget();
 	$instance = array();
 
-	$instance['asc_sort_order']      = $attributes['order'] === 'desc' ? false : true;
-	$instance['title']               = $attributes['title'];
-
-	$instance['footer_link_text']    = $attributes['footerLinkText'];
-	$instance['footer_link']         = $attributes['footerLink'];
+	$instance['title']                  = $attributes['title'];
+	$instance['title_link']             = $attributes['titleLink'];
+	$instance['title_level']            = $attributes['titleLevel'];
+	$instance['title_link_url']         = $attributes['titleLinkUrl'];
+	$instance['hide_title']             = $attributes['hideTitle'];
+	$instance['category_suggestions']   = $attributes['categorySuggestions'];
+	$instance['select_categories']      = $attributes['selectCategories'];
+	$instance['cat']                    = $attributes['categories'];
+	$instance['num']                    = $attributes['num'];
+	$instance['offset']                 = $attributes['offset'];
+	$instance['sort_by']                = $attributes['orderBy'];
+	$instance['status']                 = $attributes['status'];
+	$instance['asc_sort_order']         = $attributes['order'] === 'desc' ? false : true;
+	$instance['exclude_current_post']   = $attributes['excludeCurrentPost'];
+	$instance['hide_no_thumb']          = $attributes['hideNoThumb'];
+	$instance['sticky']                 = $attributes['sticky'];
+	$instance['footer_link_text']       = $attributes['footerLinkText'];
+	$instance['footer_link']            = $attributes['footerLink'];
+	$instance['item_title_level']       = $attributes['itemTitleLevel'];
+	$instance['item_title_lines']       = $attributes['itemTitleLines'];
+	$instance['thumb_w']                = $attributes['thumbW'];
+	$instance['thumb_fluid_width']      = $attributes['thumbFluidWidth'];
+	$instance['thumb_h']                = $attributes['thumbH'];
+	$instance['thumb_hover']            = $attributes['thumbHover'];
+	$instance['hide_post_titles']       = $attributes['hidePostTitles'];
+	$instance['excerpt_lines']          = $attributes['excerptLines'];
+	$instance['excerpt_length']         = $attributes['excerptLength'];
+	$instance['excerpt_more_text']      = $attributes['excerptMoreText'];
+	$instance['excerpt_filters']        = $attributes['excerptFilters'];
+	$instance['comment_num']            = $attributes['commentNum'];
+	$instance['disable_css']            = $attributes['disableCss'];
+	$instance['disable_font_styles']    = $attributes['disableFontStyles'];
+	$instance['disable_theme_styles']   = $attributes['disableThemeStyles'];
+	$instance['show_post_format']       = $attributes['showPostFormat'];
+	$instance['no_cat_childs']           = $attributes['noCatChilds'];
+	$instance['everything_is_link']     = $attributes['everythingIsLink'];
+	$instance['preset_date_format']     = $attributes['presetDateFormat'];
+	$instance['date_format']            = $attributes['dateFormat'];
+	$instance['date_past_time']         = $attributes['datePastTime'];
+	$instance['template']               = $attributes['template'];
+	$instance['text_do_not_wrap_thumb'] = $attributes['textDoNotWrapThumb'];
+	$instance['enable_loadmore']        = $attributes['enableLoadmore'];
+	$instance['loadmore_scroll_to']     = $attributes['loadmoreScrollTo'];
+	$instance['loadmore_text']          = $attributes['loadmoreText'];
+	$instance['loading_text']           = $attributes['loadingText'];
+	$instance['date_range']             = $attributes['dateRange'];
+	$instance['start_date']             = $attributes['startDate'];
+	$instance['end_date']               = $attributes['endDate'];
+	$instance['days_ago']               = $attributes['daysAgo'];
+	$instance['no_match_handling']      = $attributes['noMatchHandling'];
+	$instance['no_match_text']          = $attributes['noMatchText'];
+	$instance['default_thunmbnail']     = $attributes['defaultThunmbnail'];
+	$instance['ver']                    = $attributes['ver'];
 
 	$instance = upgrade_settings( $instance );
 	
@@ -176,86 +138,9 @@ function category_posts_block_init() {
 		filemtime( "$dir/$style_css" )
 	);
 
-	register_block_type(
-		'tiptip/category-posts-block',
+	register_block_type_from_metadata(
+		__DIR__,
 		array(
-			'editor_script' => 'tiptip-category-posts-block-editor',
-			'editor_style'  => 'tiptip-category-posts-block-editor',
-			'style'         => 'tiptip-category-posts-block',
-			'attributes'    => array(
-				'hideTitle' => array(
-					'type'    => 'boolean',
-					'default' => false,
-				),
-				'title' => array(
-					'type'    => 'string',
-					'default' => __( 'Category Posts', 'category-posts' ),
-				),
-				'titleLink' => array(
-					'type'    => 'boolean',
-					'default' => false,
-				),
-				'titleLinkUrl' => array(
-					'type'    => 'string',
-					'default' => __( '', 'category-posts' ),
-				),
-				'titleLevel' => array(
-					'type'    => 'string',
-					'default' => __( 'initial', 'category-posts' ),
-				),
-				'disableCSS' => array(
-					'type'           => 'boolean',
-					'default'        => false,
-				),
-				'disableFontStyles' => array(
-					'type'           => 'boolean',
-					'default'        => false,
-				),
-				'disableThemeStyles' => array(
-					'type'           => 'boolean',
-					'default'        => false,
-				),
-				'showPostCounts' => array(
-					'type'           => 'boolean',
-					'default'        => false,
-				),
-				'displayAsDropdown' => array(
-					'type'           => 'boolean',
-					'default'        => false,
-				),
-				'groupBy' => array(
-					'type'    => 'string',
-					'default' => 'monthly',
-				),
-				'order' => array(
-					'type'    => 'string',
-					'default' => 'desc',
-				),
-				'orderBy' => array(
-					'type'    => 'string',
-					'default' => 'date',
-				),
-				'categorySuggestions' => array(
-					'type'    => 'array',
-					'default' => [],
-				),
-				'selectCategories' => array(
-					'type'    => 'array',
-					'default' => '',
-				),
-				'categories' => array(
-					'type'    => 'array',
-					'default' => [],
-				),
-				'footerLinkText' => array(
-					'type'    => 'string',
-					'default' => '',
-				),
-				'footerLink' => array(
-					'type'    => 'string',
-					'default' => '',
-				),
-			),
 			'render_callback' => __NAMESPACE__ . '\render_category_posts_block',
 		)
 	);

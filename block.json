@@ -6,6 +6,220 @@
 	"icon": "admin-post",
 	"description": "Adds a widget that shows the most recent posts from a single category.",
 	"textdomain": "category-posts",
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": "Category Posts"
+		},
+		"titleLink": {
+			"type": "boolean",
+			"default": false
+		},
+		"titleLevel": {
+			"type": "string",
+			"default": "Initial"
+		},
+		"titleLinkUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"hideTitle": {
+			"type": "boolean",
+			"default": false
+		},
+		"categorySuggestions": {
+			"type": "array",
+			"default": []
+		},
+		"selectCategories": {
+			"type": "array",
+			"default": []
+		},
+		"categories": {
+			"type": "array",
+			"default": []
+		},
+		"num": {
+			"type": "integer",
+			"default": 10
+		},
+		"offset": {
+			"type": "integer",
+			"default": 1
+		},
+		"orderBy": {
+			"type": "string",
+			"default": "date"
+		},
+		"status": {
+			"type": "string",
+			"default": "publish"
+		},
+		"order": {
+			"type": "string",
+			"default": "desc"
+		},
+		"excludeCurrentPost": {
+			"type": "boolean",
+			"default": false
+		},
+		"hideNoThumb": {
+			"type": "boolean",
+			"default": false
+		},
+		"sticky": {
+			"type": "boolean",
+			"default": false
+		},
+		"footerLinkText": {
+			"type": "string",
+			"default": ""
+		},
+		"footerLink": {
+			"type": "string",
+			"default": ""
+		},
+		"itemTitleLevel": {
+			"type": "string",
+			"default": "Inline"
+		},
+		"itemTitleLines": {
+			"type": "integer",
+			"default": 2
+		},
+		"thumbW": {
+			"type": "integer",
+			"default": 150
+		},
+		"thumbFluidWidth": {
+			"type": "integer",
+			"default": 100
+		},
+		"thumbH": {
+			"type": "integer",
+			"default": 150
+		},
+		"thumbHover": {
+			"type": "string",
+			"default": "none"
+		},
+		"hidePostTitles": {
+			"type": "boolean",
+			"default": false
+		},
+		"excerptLines": {
+			"type": "integer",
+			"default": 4
+		},
+		"excerptLength": {
+			"type": "integer",
+			"default": 0
+		},
+		"excerptMoreText": {
+			"type": "string",
+			"default": ""
+		},
+		"excerptFilters": {
+			"type": "boolean",
+			"default": false
+		},
+		"commentNum": {
+			"type": "boolean",
+			"default": false
+		},
+		"disableCss": {
+			"type": "boolean",
+			"default": false
+		},
+		"disableFontStyles": {
+			"type": "boolean",
+			"default": false
+		},
+		"disableThemeStyles": {
+			"type": "boolean",
+			"default": false
+		},
+		"showPostFormat": {
+			"type": "string",
+			"default": "none"
+		},
+		"noCatChilds": {
+			"type": "boolean",
+			"default": false
+		},
+		"everythingIsLink": {
+			"type": "boolean",
+			"default": false
+		},
+		"presetDateFormat": {
+			"type": "string",
+			"default": "sitedate"
+		},
+		"dateFormat": {
+			"type": "string",
+			"default": ""
+		},
+		"datePastTime": {
+			"type": "string",
+			"default": "0"
+		},
+		"template": {
+			"type": "string",
+			"default": "%title%\n\n%thumb%"
+		},
+		"textDoNotWrapThumb": {
+			"type": "boolean",
+			"default": false
+		},
+		"enableLoadmore": {
+			"type": "boolean",
+			"default": false
+		},
+		"loadmoreScrollTo": {
+			"type": "boolean",
+			"default": false
+		},
+		"loadmoreText": {
+			"type": "string",
+			"default": "Load More (%s/%s)"
+		},
+		"loadingText": {
+			"type": "string",
+			"default": "Loading..."
+		},
+		"dateRange": {
+			"type": "string",
+			"default": "off"
+		},
+		"startDate": {
+			"type": "string",
+			"default": ""
+		},
+		"endDate": {
+			"type": "string",
+			"default": ""
+		},
+		"daysAgo": {
+			"type": "integer",
+			"default": 30
+		},
+		"noMatchHandling": {
+			"type": "string",
+			"default": "nothing"
+		},
+		"noMatchText": {
+			"type": "string",
+			"default": ""
+		},
+		"defaultThunmbnail": {
+			"type": "integer",
+			"default": 0
+		},
+		"ver": {
+			"type": "string",
+			"default": "4.9.13"
+		}
+	},
 	"supports": {
 		"align": true,
 		"html": false
